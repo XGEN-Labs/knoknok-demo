@@ -1,0 +1,248 @@
+/* v7: an intimate, living field of light. Load after the legacy scene themes. */
+:root{
+  --klin-ink:#242b38;--klin-muted:#647183;--klin-paper:#f4f7fb;--klin-surface:#fff;
+  --klin-line:#dfe6ef;--klin-blue:#303c50;--klin-blue-ink:#405573;--klin-blue-soft:#eef5fc;
+  --klin-focus:#5278a41c;--action-hover:#38475c;
+}
+.phone,[data-character="soft"] .phone{background:#edf5fc}
+.phone #app>.page{color:var(--klin-ink)}
+.phone .status-bar{color:#202631}
+.phone .status-bar>img,.phone .page .brand-logo{filter:brightness(0)}
+.phone .page-top h2,.phone .landing-intro h2,.phone .onboard-copy h3,
+.phone .initializing-content h3,.phone .portal-intro h3,.phone .shared-welcome h3,
+.phone .growth-story h2,.phone .connection-name h3,.phone .companion-signature,
+.phone .object-caption strong,.phone .shared-person strong{color:var(--klin-ink)}
+.phone .page-top .meta,.phone .landing-intro p,.phone .landing-intro .eyebrow,
+.phone .landing-invitation>span,.phone .initializing-content>p,
+.phone .object-caption small,.phone .portal-intro p,.phone .shared-welcome p,
+.phone .shared-start p,.phone .scene-hint,.phone .shared-person small,
+.phone .growth-story p,.phone .connection-name p,.phone .connection-profile .field>label,
+.phone .page>.content>.small-note,.phone .page>.content>.blank-state>p,
+.phone .page>.content>.body-copy,.phone .page .section-label{color:var(--klin-muted)}
+.phone .page-top{gap:11px}
+.phone .page-top h2{font-size:22px;line-height:1.3;letter-spacing:-.5px}
+.phone .page-top .meta{margin-top:4px;font-size:11px}
+.phone .page .field,.phone .page .field>label,.phone .page .field-label,
+.phone .page .request-summary strong,.phone .page .detail-line dd,
+.phone .page .intro-quote,.phone .page .check{color:var(--klin-ink)}
+.phone .page .field-note,.phone .sheet-inner .small-note,
+.phone .sheet-inner p,.phone .sheet-private-label{color:var(--klin-muted)}
+
+/* This frosted layer belongs to the phone page only. It never covers the site. */
+.phone #app>.page:is([data-screen="profile"],[data-screen="public-card"],
+  [data-screen="demand"],[data-screen="preview"],[data-screen="candidate"],
+  [data-screen="invite"],[data-screen="setup-basics"],[data-screen="setup-birth"],
+  [data-screen="memory"]){
+  background:rgba(242,247,253,.66);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+}
+.phone #app>.page:is([data-screen="profile"],[data-screen="public-card"]){background:rgba(241,247,254,.48)}
+.phone dialog::backdrop{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.phone>.phone-scrim{background:#d6e2f15c;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.phone dialog{background:#fcfdff;border-color:#e2e8f1;box-shadow:0 -14px 60px #253e6520;color:var(--klin-ink)}
+.phone .sheet-inner{color:var(--klin-ink)}
+.phone .sheet-title h3{color:var(--klin-ink)}
+.phone .sheet-handle{background:#cdd6e2}
+
+/* One ink tone, one quiet secondary tone, and familiar hand-drawn controls. */
+.phone .page .btn:not(.white,.secondary,.ghost,.danger),
+.phone .sheet-inner .btn:not(.white,.secondary,.ghost,.danger){background:#263247;border-color:#263247;color:#fff}
+.phone .page .btn:not(.white,.secondary,.ghost,.danger):hover,
+.phone .sheet-inner .btn:not(.white,.secondary,.ghost,.danger):hover{background:#3a4a63;border-color:#3a4a63;color:#fff}
+.phone .page .btn:is(.white,.secondary),.phone .sheet-inner .btn:is(.white,.secondary){background:#fff;border-color:#dce4ee;color:var(--klin-ink)}
+.phone .page .btn.ghost,.phone .sheet-inner .btn.ghost{color:#54647b;background:transparent}
+.phone .page .btn:is(.white,.secondary,.ghost):hover:not(:disabled),
+.phone .sheet-inner .btn:is(.white,.secondary,.ghost):hover:not(:disabled){background:#edf4fc;border-color:#d7e2f0;color:var(--klin-ink)}
+.phone .page :is(.icon-button,.tiny-btn,.scene-icon,.friends-button,.text-button):hover:not(:disabled),
+.phone .page-top .icon-button:has(.back-chevron):hover:not(:disabled),
+.phone .page-top .header-home:hover:not(:disabled){background:#edf4fc;border-color:#d8e3ef;color:var(--klin-ink)}
+.phone .room-tools .scene-icon{color:#293344;background:#ffffffed;border-color:#fff;box-shadow:0 3px 15px #54739e0a}
+.phone .page-top .icon-button,.phone .friends-button,.phone .portal-resume{background:#ffffffed;color:var(--klin-ink);border-color:#fff}
+.phone :is(.tag,.tag.quiet,.tag.green){background:#edf4fc;color:#485e7c;border-color:#dbe6f3}
+.phone :is(.chip,.tiny-btn,.visit-topic){color:var(--klin-ink);background:#fff;border-color:#dce5ef}
+.phone .chip[aria-pressed="true"],.phone .chip.selected,
+.phone .visit-topic[aria-pressed="true"],.phone .personality-tag-suggestions .tiny-btn[aria-pressed="true"]{background:#2e3c51;color:#fff;border-color:#2e3c51}
+.phone :is(.input,select,textarea):focus{border-color:#9cafc8;box-shadow:0 0 0 3px #93afcf1b}
+.phone :is(.input,select,textarea)::placeholder{color:#8b96a5}
+.phone button:focus-visible,.phone a:focus-visible{outline-color:#596c88}
+.phone .personality-tag-suggestions .tiny-btn{background:#f2f6fc;border-color:#e0e8f3;color:#4e617e}
+.phone .avatar-editor-preview,.phone .avatar-upload-button{background:#eef5fd;border-color:#dce6f2;color:#4e617e}
+.phone .send-button:hover:not(:disabled),.phone .send-button:focus:not(:disabled){color:#263247;background:#ecf3fb;border-color:#d3dfec}
+.phone .composer-row:focus-within{border-color:#aebed3;box-shadow:0 0 0 3px #afc5e020}
+.phone .page .composer-row textarea,.phone .page .composer-row textarea:focus,
+.phone .page .composer-row textarea:focus-visible{background:transparent;border:0;outline:none;box-shadow:none}
+
+/* Home: the light and Klin do most of the talking. */
+.phone .room-dialogue{top:24%;left:9%;right:15%;transition:transform .35s ease,opacity .22s ease}
+.phone .companion-signature{font-size:19px;margin:0 0 8px 4px;line-height:1.2}
+.phone .room-speech{padding:14px 17px;font-size:13px;line-height:1.7;background:#ffffffd9;color:#303b4e;border-color:#fff;box-shadow:0 8px 30px #4b6d9b08}
+.phone .dialogue-dot{background:#bedbf4;box-shadow:0 0 0 7px #d8eaff30}
+.phone .home-chat-actions>.visit-entry{background:#fff;color:#273247;border-color:#fff;box-shadow:0 5px 24px #4d6f9a12}
+.phone .home-chat-actions>.visit-entry:hover{background:#eff6ff;color:#273247}
+.phone .home-composer .composer-row{box-shadow:0 5px 24px #4d6f9a12}
+.phone .home-chat-bottom>.scene-hint{font-size:10px;color:#61728a;margin-bottom:11px}
+.phone .last-whisper{background:#ffffffc9;color:#4d5d74}
+.phone .demand-nudge{background:#f9fcff;color:#344a67;border-color:#d6e2f1}
+.phone .conversation-log,.phone .conversation-close{display:none}
+.phone[data-conversation="true"] .room-dialogue{display:none}
+.phone[data-conversation="true"] .home-chat-bottom>.scene-hint,
+.phone[data-conversation="true"] .home-chat-bottom>.last-whisper{display:none}
+.phone[data-conversation="true"] .home-chat-bottom{bottom:4.5%}
+.phone[data-conversation="true"] .home-companion{left:37%;bottom:63%;width:26%;height:13%}
+.phone[data-conversation="true"] .conversation-close{display:flex;align-items:center;gap:5px;position:absolute;right:7%;top:20%;z-index:4;padding:7px 11px;border:1px solid #ffffffb5;border-radius:20px;background:#ffffffb5;color:#53647c;font-size:11px;line-height:18px}
+.phone .conversation-close svg,.phone .conversation-close .back-chevron{display:block;flex:none;width:16px;height:16px;margin:0}
+.phone[data-conversation="true"] .conversation-close:hover{background:#fff;color:#2b3a50}
+.phone[data-conversation="true"] .conversation-log{position:absolute;top:40%;bottom:17%;left:7%;right:7%;z-index:3;display:flex;flex-direction:column;gap:10px;overflow:auto;overscroll-behavior:contain;scrollbar-width:none;padding:9px 0 12px;mask-image:linear-gradient(transparent,#000 9px,#000 calc(100% - 8px),transparent);-webkit-mask-image:linear-gradient(transparent,#000 9px,#000 calc(100% - 8px),transparent)}
+.phone[data-conversation="true"] .room-chat-page:has(.demand-nudge) .conversation-log{bottom:25%}
+.phone .conversation-message{align-self:flex-start;max-width:88%;padding:12px 15px;border-radius:20px 20px 20px 6px;background:#fffffff0;color:#2c384b;border:1px solid #ffffffb5;font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.phone .conversation-message.own{align-self:flex-end;background:#dceafd;color:#304460;border-color:#cddff5;border-radius:20px 20px 6px 20px}
+.phone .conversation-message .message-label,.phone .conversation-message .conversation-speaker{display:block;margin:0 0 4px;color:#62758e;font-size:10px;font-weight:600}
+.phone .conversation-message p{margin:0}
+.phone .conversation-message .typing i{background:#6d88ab}
+
+/* The first greeting is one compact thought, with a touch beside the spirit. */
+.phone .landing-page:not(.onboard-page) .landing-intro{top:19%;left:8%;right:8%}
+.phone .landing-intro h2{font-size:26px;line-height:1.3;letter-spacing:-.5px}
+.phone .landing-intro p{max-width:265px;margin:8px auto 0;font-size:12px;line-height:1.6}
+.phone .landing-intro .eyebrow{font-size:9px;letter-spacing:.12em;margin-bottom:7px;color:#647183}
+.phone .landing-invitation{top:57%;left:12%;right:12%}
+.phone .landing-invitation .landing-greeting-prompt{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:9px 17px;background:#ffffffc4;border:1px solid #fff;border-radius:24px;box-shadow:0 6px 22px #6b8db60a;color:#3b526f;font-size:12px;line-height:20px;pointer-events:auto}
+.phone .landing-invitation .landing-greeting-prompt:hover{background:#fff;color:#283f5d}
+.phone .landing-invitation p{color:var(--klin-ink)}
+.phone .landing-invitation>span:last-child{color:var(--klin-muted)}
+.phone .landing-invitation .touch-ring{background:#ffffffc9;border-color:#fff;color:#59789b}
+.phone .landing-progress i{background:#cfddeb}
+.phone .landing-progress i.done{background:#607e9f}
+.phone .landing-setup .setup-companion strong{color:#2b3b51}
+.phone .landing-setup .setup-companion p,.phone .landing-setup .small-note{color:#64748a}
+.phone .landing-setup .landing-form-card{background:#ffffffed;border-color:#fff;box-shadow:0 10px 32px #4e6d980a}
+.phone .object-caption strong{font-size:17px;line-height:1.4}
+.phone .object-caption small{color:#63758d;font-size:10px;line-height:1.5}
+.phone .other-voice{background:#ffffffd9;color:#405572;border-color:#d9e4f1}
+.phone .other-voice:hover:not(:disabled){background:#eaf3ff;color:#2d4564;border-color:#cedef1}
+.phone .klin-reading{background:#fffffff0;border-color:#fff;color:#2d3c52;box-shadow:0 8px 24px #6b85ad08}
+.phone .klin-reading p,.phone .klin-reading h3{color:#2d3c52}
+.phone .growth-story-heading{top:20%}
+.phone .growth-story h2{margin:8px 0;font-size:24px}
+.phone .growth-kicker{color:#5d7899}
+.phone .growth-progress{background:#cdddee}
+.phone .growth-progress i{background:#719ac3;box-shadow:0 0 10px #d4ebff}
+.phone .growth-story-footer button{background:#ffffffb8;border-color:#fff;color:#4b6584}
+
+/* A doorway made of light: the button is a legible invitation at its edge. */
+.phone .portal-intro{top:20%;left:7%;right:7%}
+.phone .portal-intro h3{font-size:24px;line-height:1.3;margin-bottom:7px}
+.phone .portal-intro p{font-size:12px;line-height:1.6;color:#647183}
+.phone .portal-label{background:#fffffff0;border-color:#fff;color:#354c6c;box-shadow:0 5px 25px #7a9fce15;font-size:12px;font-weight:600;padding:10px 16px}
+.phone .portal-hit:hover .portal-label{background:#f3f8ff;color:#233e61;box-shadow:0 5px 28px #9ebee833}
+.phone .portal-fallback{border:1px solid #fff;border-radius:3px;background:linear-gradient(125deg,#fff,#eef7ff 65%,#fff3f1);box-shadow:0 0 18px #fff,0 0 48px #d5ebff,0 0 85px #e4d9f580}
+.phone .visit-progress i{background:#c7d9ed}
+.phone .visit-progress i.active{background:#6a8db8}
+.phone .portal-resume,.phone .friends-button{color:#435a78}
+
+/* Keep planning short. Optional settings open inside a single quiet form. */
+.phone .request-page .page-top{padding-right:0}
+.phone .request-page .request-content{top:21%;bottom:15%;padding-bottom:8px;overflow-y:auto;touch-action:pan-y}
+.phone .request-panel{margin:0;padding:19px;border:1px solid #ffffffed;border-radius:24px;background:#fffffff0;box-shadow:0 8px 28px #5c7da508;color:var(--klin-ink)}
+.phone .request-essentials{display:flex;flex-direction:column;gap:14px}
+.phone .request-panel .field{margin:0;gap:7px}
+.phone .request-panel .field>label,.phone .request-panel .field-label{font-size:12px;font-weight:600;line-height:1.4;margin:0;color:#35455c}
+.phone .request-panel :is(.input,textarea,.klin-select-trigger){min-height:44px;font-size:13px;line-height:21px;padding:11px 13px;border-radius:14px;background:#f8fafd;border-color:#e1e8f2}
+.phone .request-panel textarea{min-height:78px;max-height:105px;resize:none;line-height:1.7}
+.phone .request-panel .request-topics{gap:6px;margin:-5px 0 0}
+.phone .request-panel .request-topics .chip{padding:7px 11px;min-height:31px;font-size:11px;line-height:17px;background:#eef4fc;border-color:transparent;color:#50698b}
+.phone .request-panel .request-mode{display:flex;flex-wrap:wrap;gap:7px}
+.phone .request-panel .request-mode .chip{min-height:36px;padding:8px 13px;font-size:12px;line-height:18px}
+.phone .request-options{margin-top:17px;border-top:1px solid #e5ebf4}
+.phone .request-options>summary{position:relative;display:flex;flex-direction:column;gap:4px;padding:14px 24px 1px 0;list-style:none;cursor:pointer;font-size:12px;font-weight:600;color:#475b77}
+.phone .request-options>summary::-webkit-details-marker{display:none}
+.phone .request-options>summary::after{content:"";position:absolute;right:4px;top:18px;width:6px;height:6px;border-right:1.5px solid #667c99;border-bottom:1.5px solid #667c99;transform:rotate(45deg);transition:transform .18s}
+.phone .request-options[open]>summary::after{transform:rotate(225deg);top:21px}
+.phone .request-options>summary small{color:#647183;font-size:10px;font-weight:400;line-height:1.5}
+.phone .request-options-body{display:flex;flex-direction:column;gap:14px;padding:16px 0 0}
+.phone .request-options-body .field-note{font-size:10px;line-height:1.5;color:#647183;margin:0}
+.phone .request-privacy{font-size:10px;line-height:1.6;color:#657891;margin:11px 5px 0;text-align:center}
+.phone .request-page .fixed-footer{bottom:4.5%;left:6%;right:6%;background:transparent}
+.phone .request-page .fixed-footer .btn{min-height:47px;padding:12px 10px;font-size:13px}
+.phone .request-preview-page .request-panel+.request-panel{margin-top:12px}
+.phone .request-review{margin-bottom:0}
+.phone .request-review h3,.phone .request-intro h3{font-size:13px;line-height:1.4;margin:0 0 10px;color:#384b66}
+.phone .request-review .section-label{margin:0 0 6px;color:#4e6481;font-size:12px}
+.phone .request-review .detail-list{margin:0}
+.phone .request-review .detail-line{padding:5px 0;gap:10px;font-size:12px;line-height:1.65}
+.phone .request-review .detail-line dt{color:#647183;min-width:48px}
+.phone .request-review .detail-line dd{color:#35465f}
+.phone .request-intro .list-row{padding:0 0 9px;gap:9px;border:0}
+.phone .request-intro .list-row small{color:#72829a!important}
+.phone .request-intro textarea{height:89px;min-height:89px}
+.phone .request-preview-page .request-panel{padding:16px 18px}
+
+/* A sent invitation reads as one note, not scattered blocks over scenery. */
+.phone .connection-profile{gap:15px}
+.phone .connection-name .large-avatar{background:#e5effc;color:#50698e}
+.phone .connection-name h3{font-size:21px;line-height:1.3}
+.phone .connection-name p{font-size:12px;line-height:1.6;color:#647183}
+.phone .connection-reasons{background:#ffffffda;color:#4f6481}
+.phone .connection-profile .field>label{color:#4c5f79}
+.phone .invitation-page .page-top{padding-right:0}
+.phone .invitation-profile{top:24%;bottom:20%;gap:0}
+.phone .invitation-panel{padding:22px 20px 19px;border:1px solid #ffffffed;border-radius:26px;background:#fffffff0;box-shadow:0 10px 34px #557aa50b}
+.phone .invitation-panel .connection-name{gap:12px}
+.phone .invitation-panel .large-avatar{width:49px;height:49px;border-radius:17px;font-size:23px}
+.phone .invitation-panel .connection-name h3{font-size:20px;margin-bottom:4px}
+.phone .invitation-panel .connection-name p{font-size:11px}
+.phone .invitation-note{background:#eff5fc;border:1px solid #e5edf7;border-radius:18px;padding:16px;margin-top:18px}
+.phone .invitation-note>span{color:#647183;font-size:10px}
+.phone .invitation-note p{margin:7px 0 0;color:#344964;font-size:13px;line-height:1.8}
+.phone .invitation-panel>.scene-hint{font-size:10px;line-height:1.6;margin:14px 0 0;color:#647183;text-align:left}
+
+/* The real card stays compact and sharp against a more distant light field. */
+.phone .profile-card-tools .text-button{color:#4a6080;font-weight:500}
+.phone .profile-card-tools .text-button:hover{background:#ffffffa8;color:#294363;border-color:transparent}
+.phone .profile-footer>.scene-hint{color:#657891}
+.phone .profile-stage .share-card{box-shadow:0 18px 48px #476b9d16}
+.phone .share-card .share-card-avatar{background:linear-gradient(140deg,#e1edff,#f7e9f5);color:#536b8f;box-shadow:0 0 0 1px #e1e9f6}
+.phone .share-card .personality-sticker-box{background:#f7faff}
+.phone .share-card .personality-empty{color:#647183}
+.phone .share-card .sticker-orbit-mark,.phone .share-card .share-card-footer-mark{color:#85a7d5}
+.phone .share-card .share-card-footer{border-color:#e7edf5}
+.phone .share-card .personality-sticker{color:#34405a}
+
+/* The shared room follows the same two-tone text and calm message surfaces. */
+.phone .shared-person strong,.phone .shared-first-hello{color:#3a4d68}
+.phone .shared-person small,.phone .shared-messages .message-label{color:#647183}
+.phone .user-scene-avatar .avatar{background:#e1edff;color:#4d6991;border-color:#fff}
+.phone .person-1 .user-scene-avatar .avatar{background:#f4e6f1;color:#8e657f}
+.phone .shared-messages .bubble,.phone .bubble{background:#fffffff0;color:#2f4058;border-color:#fff}
+.phone .shared-messages .message.own .bubble,.phone .message.own .bubble{background:#dfeefd;color:#304764;border-color:#d4e4f7}
+.phone .shared-composer .private-entry,.phone .shared-composer .private-entry:hover{color:#647183}
+.phone .success-badge{background:#eaf2ff;border-color:#d7e5f7;color:#56759d}
+.phone .glass-card,.phone .subtle-card{color:#354a68}
+.phone .subtle-card{background:#f0f6fd;border-color:#dce7f5}
+.phone .sheet-inner .section-label,.phone .glass-card .section-label{color:#647183}
+
+@media(max-width:650px) and (max-height:740px){
+  .phone .page-top h2{font-size:21px}
+  .phone .landing-page:not(.onboard-page) .landing-intro{top:19%}
+  .phone .landing-intro h2{font-size:24px}
+  .phone .landing-intro p{font-size:12px;line-height:1.55}
+  .phone .landing-invitation{top:57%}
+  .phone .room-dialogue{top:23%;right:12%}
+  .phone .room-speech{font-size:12px;line-height:1.7;padding:12px 15px}
+  .phone .companion-signature{font-size:18px}
+  .phone .request-page .request-content{top:20%;bottom:15%}
+  .phone .request-panel{padding:16px 17px;border-radius:22px}
+  .phone .request-essentials{gap:12px}
+  .phone .request-panel :is(.input,.klin-select-trigger){min-height:41px;padding-top:9px;padding-bottom:9px}
+  .phone .request-panel textarea{min-height:68px;max-height:90px}
+  .phone .request-options{margin-top:13px}
+  .phone .request-options>summary{padding-top:12px}
+  .phone .request-options>summary::after{top:16px}
+  .phone .request-review .detail-line{padding:4px 0;font-size:11px}
+  .phone .request-preview-page .request-panel{padding:14px 17px}
+  .phone .request-intro textarea{height:78px;min-height:78px}
+  .phone .invitation-profile{top:23%}
+  .phone .invitation-panel{padding:19px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .phone .room-dialogue,.phone .request-options>summary::after{transition:none}
+}

@@ -1,0 +1,696 @@
+{
+  "format": "knokknok-static-demo-v1",
+  "createdAt": "2026-10-16T09:46:32.942Z",
+  "entry": "index.html",
+  "variant": "klin",
+  "payloadBytes": 57410522,
+  "files": [
+    {
+      "source": "generated deployment marker",
+      "path": ".nojekyll",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "app.mjs",
+      "path": "app.mjs",
+      "bytes": 96959,
+      "sha256": "18010ba80482b5b0e71116533dbdba8bfce26318aff9847ebf61259835436caf"
+    },
+    {
+      "source": "assets/brand-20261016/knoknok-logo-latest.png",
+      "path": "assets/brand-20261016/knoknok-logo-latest.png",
+      "bytes": 357401,
+      "sha256": "88a84ed9da304e381399a4b0c6f25ae302baa5a5ac54e42f2026a3a4d4c5b652"
+    },
+    {
+      "source": "assets/figma-20261009/bubble.svg",
+      "path": "assets/figma-20261009/bubble.svg",
+      "bytes": 2430,
+      "sha256": "512a68c29eb3bd10d6a7ad8a115cebc32c07028e56e610663584d38a74ca0065"
+    },
+    {
+      "source": "assets/figma-20261009/status.svg",
+      "path": "assets/figma-20261009/status.svg",
+      "bytes": 5833,
+      "sha256": "7e6c0d2fb037eed2f1b702f85eab2482cb5ffaa1b03461996ef1ea2d6784f8ad"
+    },
+    {
+      "source": "assets/figma-nav-20261009/back.svg",
+      "path": "assets/figma-nav-20261009/back.svg",
+      "bytes": 421,
+      "sha256": "e71a47a595df9e84199423f9a8883ed1965d2b51792dc4754235c3ceb9a4dee1"
+    },
+    {
+      "source": "assets/figma-nav-20261009/nav-chat.svg",
+      "path": "assets/figma-nav-20261009/nav-chat.svg",
+      "bytes": 3731,
+      "sha256": "a75580bbbc8c275384f442846bccb1c019384072458fde6637307591c688719e"
+    },
+    {
+      "source": "assets/figma-nav-20261009/nav-memory.svg",
+      "path": "assets/figma-nav-20261009/nav-memory.svg",
+      "bytes": 7907,
+      "sha256": "ba1f4e792409bd4dd42f9e2e312932c2b9ead1dcc6221fb3ac30b71c0e23ad49"
+    },
+    {
+      "source": "assets/figma-nav-20261009/nav-profile.svg",
+      "path": "assets/figma-nav-20261009/nav-profile.svg",
+      "bytes": 6948,
+      "sha256": "dd64b1e58f421c5caed30ce20b9e12e94f555d7bb8efc940da68215afd15eb83"
+    },
+    {
+      "source": "assets/figma-nav-20261009/nav-visit.svg",
+      "path": "assets/figma-nav-20261009/nav-visit.svg",
+      "bytes": 4293,
+      "sha256": "5639102e706c66e12726a165f277292cc1395e99e9d5faeb152a10164e695932"
+    },
+    {
+      "source": "assets/klin-native-20261016-0907/adult-hair.bin",
+      "path": "assets/klin-native-20261016-0907/adult-hair.bin",
+      "bytes": 16125696,
+      "sha256": "d8b15d12359ea25c4509d1778b1cf6de5c59fd2988f05233d80ee222cc7b9d64"
+    },
+    {
+      "source": "assets/klin-native-20261016-0907/adult.glb",
+      "path": "assets/klin-native-20261016-0907/adult.glb",
+      "bytes": 7454728,
+      "sha256": "c9d1f582a440fc0b801f70eb5ed907fe934a630ae3d7ab2b7e9d503f19a0f18b"
+    },
+    {
+      "source": "assets/klin-native-20261016-0907/adult.png",
+      "path": "assets/klin-native-20261016-0907/adult.png",
+      "bytes": 694510,
+      "sha256": "155b583e0e94b980face44edcb1deb3adc36071729a7b28df73d13b95d0c954f"
+    },
+    {
+      "source": "assets/klin-native-20261016-0907/juvenile-hair.bin",
+      "path": "assets/klin-native-20261016-0907/juvenile-hair.bin",
+      "bytes": 16923168,
+      "sha256": "f69dc490d93119d0bd392361e1878ab6cbc43f2d3c706edbad6149f69465f3f5"
+    },
+    {
+      "source": "assets/klin-native-20261016-0907/juvenile.glb",
+      "path": "assets/klin-native-20261016-0907/juvenile.glb",
+      "bytes": 11085716,
+      "sha256": "a6658dfcc34c0501b04dbbc62affc3d8d3e5fb297accf06677b6a94722bf6c52"
+    },
+    {
+      "source": "assets/klin-native-20261016-0907/juvenile.png",
+      "path": "assets/klin-native-20261016-0907/juvenile.png",
+      "bytes": 726682,
+      "sha256": "b12a39c1a56d29da799e523a5bc84528ed17cdccce326e4e415074806d75ebd2"
+    },
+    {
+      "source": "assets/klin-native-20261016-0907/native-model-manifest.json",
+      "path": "assets/klin-native-20261016-0907/native-model-manifest.json",
+      "bytes": 9797,
+      "sha256": "98a71caac2461f1c20a099257756930db28010726901c89b1cf54558be80a8bf"
+    },
+    {
+      "source": "assets/visit-20261010/door-soft.png",
+      "path": "assets/visit-20261010/door-soft.png",
+      "bytes": 1345227,
+      "sha256": "7488b6c1ea210268e2c8f5e175ac6b10d1c8342030a0a9abf20566c9e7e21015"
+    },
+    {
+      "source": "avatar-upload.mjs",
+      "path": "avatar-upload.mjs",
+      "bytes": 1225,
+      "sha256": "371b715498ad195270f9589255aa3925a86ab861c921f563d9d02395022bb63d"
+    },
+    {
+      "source": "card-handoff.css",
+      "path": "card-handoff.css",
+      "bytes": 561,
+      "sha256": "0f38e72a523aa4a600d8161de496c93344b753716c562242dfc6cf46d02528bf"
+    },
+    {
+      "source": "card-handoff.mjs",
+      "path": "card-handoff.mjs",
+      "bytes": 2764,
+      "sha256": "e2f3d63a6544513bca7ea492058f6b36adeb58d0db68b0df84af2f36a69630f7"
+    },
+    {
+      "source": "card-labels.mjs",
+      "path": "card-labels.mjs",
+      "bytes": 3315,
+      "sha256": "2f3f0c59bf647e30888f3b7a878e0822f7bd63b12a2f98cbd59d4d349fed7ab3"
+    },
+    {
+      "source": "card-personality.css",
+      "path": "card-personality.css",
+      "bytes": 6287,
+      "sha256": "68f41bf7a6f6ad38652286ab27feda2d3b07d2fd528c8828d3f81915f71dd1e1"
+    },
+    {
+      "source": "companion-animation.mjs",
+      "path": "companion-animation.mjs",
+      "bytes": 1988,
+      "sha256": "7522944652f4809db5bd7517dd48566e2799b8731d1cbcacade58f19e9714eec"
+    },
+    {
+      "source": "date-picker.css",
+      "path": "date-picker.css",
+      "bytes": 4954,
+      "sha256": "c36a24f66c907857331052bccd1b7842e69fed40202ce5c8d391c2b442096758"
+    },
+    {
+      "source": "date-picker.mjs",
+      "path": "date-picker.mjs",
+      "bytes": 10906,
+      "sha256": "f7e10821e21b959e6a76c5ba3c505bab4859b9ee0121546d28c1ef2f375e2e5c"
+    },
+    {
+      "source": "demo.css",
+      "path": "demo.css",
+      "bytes": 823,
+      "sha256": "dc31cb60dd51eaebd53a81df837c8b2f1deee1c4f8146ba69331a4137b1d345e"
+    },
+    {
+      "source": "energy-experience.css",
+      "path": "energy-experience.css",
+      "bytes": 19691,
+      "sha256": "572c1c4581b9211ea2b5560b2abc8342baae4d1fdda5f64a399b61e66899e715"
+    },
+    {
+      "source": "figma-ui.css",
+      "path": "figma-ui.css",
+      "bytes": 10466,
+      "sha256": "9b8ad3cf80eca8aba652e0c31c5f13912eebb07fee20eaefa525a5dc7272549f"
+    },
+    {
+      "source": "form-controls.css",
+      "path": "form-controls.css",
+      "bytes": 7264,
+      "sha256": "bcda068301ea27f75afc2891bf7a953b546f7c07aeee0469ab04e2f597cbb84b"
+    },
+    {
+      "source": "form-controls.mjs",
+      "path": "form-controls.mjs",
+      "bytes": 17292,
+      "sha256": "3b72c14fa86f84e85e3696cf9a3f7c43cb0b0ab491209d28bc2b8987f962fb12"
+    },
+    {
+      "source": "home-greeting.mjs",
+      "path": "home-greeting.mjs",
+      "bytes": 3446,
+      "sha256": "e25c35a47800bdbe0099a8ec86916b94cddf43dcfe154bfc52fb9276509c87ac"
+    },
+    {
+      "source": "home-scenes.css",
+      "path": "home-scenes.css",
+      "bytes": 4999,
+      "sha256": "d0557abde98ce15af762efec77fc90ad3695f642595628eddf97857977928e0f"
+    },
+    {
+      "source": "demo.html",
+      "path": "index.html",
+      "bytes": 4781,
+      "sha256": "d7b1fb8fb2f673e203bdfa6403de81381d6c69d8ff877e0e10f59bfa229e4639"
+    },
+    {
+      "source": "journey-experience.css",
+      "path": "journey-experience.css",
+      "bytes": 19607,
+      "sha256": "372e3a73f33195927ade8beb27e79fbde6fa984025522acbf886ce958ae53bfc"
+    },
+    {
+      "source": "klin-companion.css",
+      "path": "klin-companion.css",
+      "bytes": 4750,
+      "sha256": "caa308a239040f08fb5fb307351138f1a19560a37b0f4bd109376ef3c728833f"
+    },
+    {
+      "source": "klin-companion.mjs",
+      "path": "klin-companion.mjs",
+      "bytes": 1691,
+      "sha256": "35590bc60dbd3c4dc4b722fc04d4924a9007a8fcc39a84adb666313ab0583bff"
+    },
+    {
+      "source": "klin-experience.css",
+      "path": "klin-experience.css",
+      "bytes": 16576,
+      "sha256": "750acc1149baca8f56fd6c5d605b4c46199778c4d77888c0217d195e335fb6a7"
+    },
+    {
+      "source": "klin-native-model.mjs",
+      "path": "klin-native-model.mjs",
+      "bytes": 10559,
+      "sha256": "da8b093228db47ef241ddf05ab31ff71fb68755fe8a1cde5440724c771835eb3"
+    },
+    {
+      "source": "klin-world.mjs",
+      "path": "klin-world.mjs",
+      "bytes": 68727,
+      "sha256": "aba6fb87d078a93446954dbf001a0b6c51e798da7a52b175e26cbd3eae8fd56e"
+    },
+    {
+      "source": "landing.mjs",
+      "path": "landing.mjs",
+      "bytes": 1929,
+      "sha256": "071a4ced2f6f1fe75f9e305c1ebfdeaf76c8beaa72efc04bee4be83bc9565c26"
+    },
+    {
+      "source": "logo-brand.css",
+      "path": "logo-brand.css",
+      "bytes": 1105,
+      "sha256": "ea01e20d6fafdda28a1bfc39897e9b113d321315b3f6357d316afef42aef1843"
+    },
+    {
+      "source": "model.mjs",
+      "path": "model.mjs",
+      "bytes": 33641,
+      "sha256": "89332299c41cd0f53f794771eaff03bd53148f0a0ac4c423295c3d35e0d2478b"
+    },
+    {
+      "source": "motion.css",
+      "path": "motion.css",
+      "bytes": 302,
+      "sha256": "d38e3da13351049d5a38e9b790b205ad68078bc489df0a83e9f340d703586c09"
+    },
+    {
+      "source": "motion.mjs",
+      "path": "motion.mjs",
+      "bytes": 4336,
+      "sha256": "337b9b2e9d802c706050219ba50e678e3b529d330ae7ca837be2c3a89f9b424f"
+    },
+    {
+      "source": "pixel-room.mjs",
+      "path": "pixel-room.mjs",
+      "bytes": 1156,
+      "sha256": "bf9a620a2d4fa156b27a3ceab568f700a17866e1555554689e7ed3e8d7c8dd85"
+    },
+    {
+      "source": "public-card.mjs",
+      "path": "public-card.mjs",
+      "bytes": 15867,
+      "sha256": "a7c20ed064ae6550361739c617cb8f5662c71a7421903402a86eb2c2037bddb0"
+    },
+    {
+      "source": "refinement-v8.css",
+      "path": "refinement-v8.css",
+      "bytes": 8722,
+      "sha256": "022a926695cd450076f661e7f8e5a7a161ce08f43e4803d4301de0d86118d0ae"
+    },
+    {
+      "source": "scene-experience.css",
+      "path": "scene-experience.css",
+      "bytes": 18784,
+      "sha256": "a99a232753c9840b0a30054b8c8b6aba25ff2d6c7b9dfbee5ca63967dba7fea4"
+    },
+    {
+      "source": "scene-sound.mjs",
+      "path": "scene-sound.mjs",
+      "bytes": 1172,
+      "sha256": "50b53ee7eaa185b0cfadaad8acb6a3191aa62be9a8db94314ad1e874badc6de2"
+    },
+    {
+      "source": "soft-companion.css",
+      "path": "soft-companion.css",
+      "bytes": 1628,
+      "sha256": "5da8fd867964b0e2907733d99920ab47ddfe2a99e0263d3ca0bb7b8bcef813a8"
+    },
+    {
+      "source": "styles.css",
+      "path": "styles.css",
+      "bytes": 28407,
+      "sha256": "b932a55a68ef1398efb1e4a978605751bc10b69acad788879c646f0abe6215b2"
+    },
+    {
+      "source": "theme-black.css",
+      "path": "theme-black.css",
+      "bytes": 3645,
+      "sha256": "1967d1dd0b625bd5da91c13a5caf513aee1f575277d079a639acb724bfb64d32"
+    },
+    {
+      "source": "typography.css",
+      "path": "typography.css",
+      "bytes": 1440,
+      "sha256": "597b31c7f3a5ffdb12dde4841bff7e8eb8b4ebe87c6e5fc476b3f23cb40612b7"
+    },
+    {
+      "source": "typography.mjs",
+      "path": "typography.mjs",
+      "bytes": 1447,
+      "sha256": "d5decad9c2b358f30d6fae2b2bfbfd0b5ce188e611e74af07e5d7f99fb1627df"
+    },
+    {
+      "source": "ui-icons.mjs",
+      "path": "ui-icons.mjs",
+      "bytes": 10352,
+      "sha256": "4b268c0702836fbc369d25562752a6cca1b9ad1926b3d2bd6ce11851afc7eed9"
+    },
+    {
+      "source": "universe-experience.css",
+      "path": "universe-experience.css",
+      "bytes": 9970,
+      "sha256": "9561702d5d600b903cfa8cc7dfe12fa137304af122d65a79e7eb656a987385a5"
+    },
+    {
+      "source": "variant-pixel.css",
+      "path": "variant-pixel.css",
+      "bytes": 2514,
+      "sha256": "16fbda482ab4b2602f6e5fc3b29d9a4224d84616a8ace50cea9798eb0d368880"
+    },
+    {
+      "source": "vendor/three/LICENSE",
+      "path": "vendor/three/LICENSE",
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    },
+    {
+      "source": "vendor/three/addons/loaders/GLTFLoader.js",
+      "path": "vendor/three/addons/loaders/GLTFLoader.js",
+      "bytes": 114899,
+      "sha256": "32a39527316c10b05c71421ee9e374ac020a1e94bab99cc8b63d918b9d6eb274"
+    },
+    {
+      "source": "vendor/three/addons/utils/BufferGeometryUtils.js",
+      "path": "vendor/three/addons/utils/BufferGeometryUtils.js",
+      "bytes": 35555,
+      "sha256": "748066188940e858e5d48985866e84a6e6691fc31776ea59d9d89c1a7f6fe6cd"
+    },
+    {
+      "source": "vendor/three/three.core.js",
+      "path": "vendor/three/three.core.js",
+      "bytes": 1405971,
+      "sha256": "03fb6e9fa08628385a9096948593251ae473239c7039496d7c280cba73d84631"
+    },
+    {
+      "source": "vendor/three/three.module.js",
+      "path": "vendor/three/three.module.js",
+      "bytes": 626071,
+      "sha256": "1bb0b770bac5da2b59b21aa5fff4c547eeb864d4e408e4c36fbc6ced1dce0e9e"
+    },
+    {
+      "source": "visit-scene.css",
+      "path": "visit-scene.css",
+      "bytes": 5045,
+      "sha256": "002d5a9b52d2950b88d7c1eaba79b136ccdc61143990242e4b2688b0d74fad2d"
+    },
+    {
+      "source": "visit-scene.mjs",
+      "path": "visit-scene.mjs",
+      "bytes": 1364,
+      "sha256": "df490e714bdbdd9d49f8144652286011fed7f2a49350e7fdf7feacf779016481"
+    }
+  ],
+  "runtimeDependencies": [
+    {
+      "from": "demo.html",
+      "to": "styles.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "motion.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "theme-black.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "variant-pixel.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "logo-brand.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "figma-ui.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "home-scenes.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "soft-companion.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "visit-scene.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "klin-companion.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "klin-experience.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "journey-experience.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "demo.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "app.mjs",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "typography.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "form-controls.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "scene-experience.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "universe-experience.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "card-personality.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "energy-experience.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "card-handoff.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "date-picker.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "refinement-v8.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "avatar-upload.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "form-controls.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "date-picker.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "typography.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "scene-sound.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "landing.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "ui-icons.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "public-card.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "klin-world.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "klin-companion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "visit-scene.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "pixel-room.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "home-greeting.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "companion-animation.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "model.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "public-card.mjs",
+      "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "public-card.mjs",
+      "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-world.mjs",
+      "to": "vendor/three/three.module.js",
+      "kind": "module"
+    },
+    {
+      "from": "klin-world.mjs",
+      "to": "klin-native-model.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "motion.mjs",
+      "to": "card-handoff.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "model.mjs",
+      "to": "landing.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "model.mjs",
+      "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "vendor/three/three.module.js",
+      "to": "vendor/three/three.core.js",
+      "kind": "module"
+    },
+    {
+      "from": "vendor/three/three.module.js",
+      "to": "vendor/three/three.core.js",
+      "kind": "module"
+    },
+    {
+      "from": "klin-native-model.mjs",
+      "to": "vendor/three/three.module.js",
+      "kind": "module"
+    },
+    {
+      "from": "klin-native-model.mjs",
+      "to": "vendor/three/addons/loaders/GLTFLoader.js",
+      "kind": "module"
+    },
+    {
+      "from": "vendor/three/addons/loaders/GLTFLoader.js",
+      "to": "vendor/three/three.module.js",
+      "kind": "module"
+    },
+    {
+      "from": "vendor/three/addons/loaders/GLTFLoader.js",
+      "to": "vendor/three/addons/utils/BufferGeometryUtils.js",
+      "kind": "module"
+    },
+    {
+      "from": "vendor/three/addons/utils/BufferGeometryUtils.js",
+      "to": "vendor/three/three.module.js",
+      "kind": "module"
+    }
+  ],
+  "thirdPartyNotices": [
+    "vendor/three/LICENSE"
+  ],
+  "dynamicAssets": {
+    "assets/figma-nav-20261009/nav-": [
+      "assets/figma-nav-20261009/nav-visit.svg",
+      "assets/figma-nav-20261009/nav-memory.svg",
+      "assets/figma-nav-20261009/nav-profile.svg"
+    ],
+    "assets/visit-20261010/door-": [
+      "assets/visit-20261010/door-soft.png"
+    ]
+  },
+  "omittedPixelAssets": [
+    "assets/pixel-animation/04-xin-openness.gif",
+    "assets/pixel-animation/04-xin-openness.png",
+    "assets/pixel-room.png",
+    "assets/pixel-scene-20261010/room-original.png",
+    "assets/pixel-scene-20261010/knokknok-wordmark-chunky-pixel-white.png",
+    "assets/visit-20261010/door-pixel.png"
+  ],
+  "exclusionReason": "Historical pixel resources are unreachable with pixelVariant fixed to false. No tests, verification, source boards, provenance, galleries or prior character art are included.",
+  "deployment": {
+    "target": "GitHub Pages",
+    "projectBasePath": "/knoknok-demo/",
+    "entry": "index.html",
+    "noJekyll": true,
+    "pngTextMetadataRemoved": true,
+    "pixelsAndAlphaUnchanged": true
+  }
+}

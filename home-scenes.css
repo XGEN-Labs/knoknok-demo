@@ -1,0 +1,48 @@
+/* The same room sits below every destination. Focus changes never move the scene. */
+.phone>#app{z-index:1}
+#app>.page.room-page,#app.scene-transitioning>.page.room-page,
+[data-character="pixel"] #app>.page.room-page,
+[data-character="pixel"] #app.scene-transitioning>.page.room-page{background:transparent}
+.phone>.home-scene{opacity:0;transition:opacity .42s cubic-bezier(.22,.76,.18,1)}
+.phone[data-room-scene="home"]>.home-scene,
+.phone[data-room-scene="blurred"]>.home-scene{opacity:1}
+.home-scene-focus{position:absolute;inset:0;z-index:2;backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);transition:backdrop-filter .42s cubic-bezier(.22,.76,.18,1),-webkit-backdrop-filter .42s cubic-bezier(.22,.76,.18,1)}
+.home-scene-focus::after{content:"";position:absolute;inset:0;opacity:0;background:linear-gradient(180deg,rgba(27,34,64,.34) 0%,rgba(27,34,64,.28) 13%,rgba(244,246,255,.5) 25%,rgba(244,246,255,.62) 78%,rgba(244,246,255,.4) 100%);transition:opacity .42s cubic-bezier(.22,.76,.18,1)}
+.phone[data-room-scene="blurred"] .home-scene-focus{backdrop-filter:blur(36px);-webkit-backdrop-filter:blur(36px)}
+.phone[data-room-scene="blurred"] .home-scene-focus::after{opacity:1}
+.companion-ground-wrap{position:absolute;inset:0;opacity:0;transition:opacity .42s ease}
+.phone[data-room-scene="home"] .companion-ground-wrap{opacity:1}
+.phone[data-room-scene="blurred"] .room-glow,.phone[data-room-scene="blurred"] .room-dust{animation-play-state:paused}
+.home-page{isolation:isolate}
+.home-scene{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.home-scene-room{display:block;width:100%;height:100%;object-fit:cover;object-position:center;user-select:none}
+.home-scene::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(28,41,101,.15),transparent 26%,transparent 83%,rgba(250,246,239,.8));pointer-events:none}
+.home-page .home-top,.home-page .greeting,.home-page .home-companion{z-index:2}
+.home-page .brand-logo{image-rendering:auto}
+.room-page .nav-pill{background:rgba(246,248,255,.88);box-shadow:inset 0 0 0 1px rgba(255,255,255,.94),0 5px 18px rgba(37,44,69,.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.room-page .nav-chat,.room-page .nav-chat.active{background:rgba(246,248,255,.8);box-shadow:inset 0 0 0 1px rgba(255,255,255,.94),0 5px 18px rgba(37,44,69,.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.room-page .nav-chat:hover:not(:disabled){background:rgba(246,248,255,.9);opacity:1}
+.companion-ground{position:absolute;left:35%;top:62.5%;width:30%;height:2.5%;border-radius:50%;background:rgba(81,57,44,.19);filter:blur(5px);transform:scaleX(.94);transition:opacity .4s ease}
+[data-character="pixel"] .home-scene-room{image-rendering:pixelated}
+[data-character="pixel"] .brand-logo{image-rendering:pixelated}
+.pixel-room-raster{position:absolute;inset:0;display:none}
+.is-pixel-ready .pixel-room-raster{display:block}
+.is-pixel-ready .pixel-room-source{visibility:hidden}
+[data-character="pixel"] .home-scene::after{background:linear-gradient(180deg,rgba(28,41,101,.08) 0 20%,transparent 20% 88%,rgba(250,246,239,.12) 88% 100%)}
+[data-character="pixel"] .room-glow{display:none}
+[data-character="pixel"] .companion-ground{left:36%;top:65%;width:28%;height:1.4%;border-radius:0;filter:none;background:rgba(62,49,83,.19);box-shadow:5px -3px rgba(62,49,83,.09),-5px 3px rgba(62,49,83,.09)}
+.room-glow{position:absolute;right:-9%;top:41%;width:49%;height:38%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,206,139,.19),transparent 69%);opacity:.5;mix-blend-mode:screen;animation:room-breathe 7s ease-in-out infinite;transition:opacity .5s ease}
+.room-dust{position:absolute;left:77%;top:32%;width:3px;height:3px;border-radius:50%;background:#fff4d0;opacity:0;box-shadow:-33px 74px #fff4d0,15px 107px #fff4d0,-88px 168px #fff4d0;animation:room-dust 9s ease-in-out infinite}
+[data-character="pixel"] .room-glow{right:-7%;top:38%;width:42%;height:35%;animation-timing-function:steps(6,end)}
+[data-character="pixel"] .room-dust{border-radius:0;animation-timing-function:steps(8,end)}
+.home-scene.scene-welcoming .room-glow{opacity:1;animation:none}
+.home-scene.scene-welcoming .companion-ground{opacity:.55}
+@keyframes room-breathe{0%,100%{opacity:.4}50%{opacity:.8}}
+@keyframes room-dust{0%,100%{opacity:0;transform:translateY(5px)}35%,65%{opacity:.45}80%{opacity:0;transform:translateY(-6px)}}
+.reduced-motion .room-glow,.reduced-motion .room-dust{animation:none;transition:none}
+.reduced-motion .room-dust{opacity:.18}
+@media(prefers-reduced-motion:reduce){.room-glow,.room-dust{animation:none;transition:none}.room-dust{opacity:.18}}
+
+/* Speech appears for a short exchange; its fixed slot never moves surrounding UI. */
+.home-page .greeting{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .4s ease,visibility 0s linear .4s}
+.home-page .greeting.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .4s ease,visibility 0s}

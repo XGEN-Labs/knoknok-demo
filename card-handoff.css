@@ -1,0 +1,10 @@
+/* A child can stay visible while the scene's remaining controls are hidden.
+   Retain the card's original parent and selectors to preserve every pixel. */
+.phone[data-scene-travel] #app>.page .share-card.card-in-handoff{
+  visibility:visible!important;pointer-events:none!important;z-index:4;
+  transition:none!important;animation:none!important;backface-visibility:hidden;
+}
+.phone[data-scene-travel] #app>.page.card-handoff-page{
+  background:transparent!important;backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;overflow:visible;
+}

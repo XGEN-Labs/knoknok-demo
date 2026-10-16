@@ -1,0 +1,125 @@
+/* One neutral action palette; the blue scene and message colours stay intact. */
+:root{--action-bg:#000;--action-fg:#fff;--action-hover:#202020;--action-muted:#d2d2d2}
+
+.btn,
+.btn.dark,
+.btn.white,
+.btn.secondary,
+.btn.danger,
+.chip,
+.chip.selected,
+.icon-button,
+.tiny-btn,
+.tiny-btn.danger,
+.send-button,
+.private-entry,
+.suggestions button,
+.review-btn,
+.review-btn.primary,
+.review-btn.active,
+.header-actions button,
+.header-actions button[aria-pressed=true],
+.mobile-controls,
+.row-button{
+  background:var(--action-bg);
+  color:var(--action-fg);
+  border-color:var(--action-bg);
+}
+
+.btn:not(.ghost):hover:not(:disabled),
+.chip:hover:not(:disabled),
+.icon-button:hover:not(:disabled),
+.tiny-btn:hover:not(:disabled),
+.send-button:hover:not(:disabled),
+.private-entry:hover:not(:disabled),
+.suggestions button:hover:not(:disabled),
+.review-btn:hover:not(:disabled),
+.header-actions button:hover:not(:disabled),
+.mobile-controls:hover:not(:disabled),
+.row-button:hover:not(:disabled){
+  background:var(--action-hover);
+  border-color:var(--action-hover);
+  filter:none;
+}
+
+/* A white inset ring distinguishes choices without introducing another colour. */
+.chip.selected,
+.chip[aria-pressed=true],
+.review-btn.active,
+.header-actions button[aria-pressed=true],
+.review-btn[aria-pressed=true]{
+  box-shadow:inset 0 0 0 2px #fff;
+}
+
+.btn.ghost,
+.text-button,
+.password-eye{
+  background:transparent;
+  color:#111;
+  border-color:transparent;
+}
+.btn.ghost:hover:not(:disabled),
+.text-button:hover:not(:disabled),
+.password-eye:hover:not(:disabled){
+  background:#0000000a;
+  filter:none;
+}
+.header-actions a{color:#111}
+.message-status .text-button{padding:3px 6px;font-size:11px;line-height:1.5;text-decoration:underline;text-underline-offset:3px}
+
+/* List entries are actions too; preserve their title/detail hierarchy. */
+.row-button{border-radius:14px;padding:12px}
+.row-button+.row-button{margin-top:8px;border-top-color:transparent}
+.row-button .row-main,
+.row-button strong{color:#fff}
+.row-button small,
+.row-button .chevron{color:var(--action-muted)}
+.row-button .avatar{background:#313131;color:#fff}
+
+.nav-pill{
+  background:#000;
+  border-color:#000;
+  box-shadow:0 7px 20px #00000012;
+}
+.nav-button,
+.nav-button.active,
+.nav-chat,
+.nav-chat.active{
+  background:#000;
+  color:#fff;
+  border-color:#000;
+}
+.nav-button.active,
+.nav-chat.active{box-shadow:inset 0 0 0 1.5px #fff;font-weight:600}
+.nav-button:hover:not(:disabled),
+.nav-chat:hover:not(:disabled){background:#202020;filter:none}
+
+/* The workbench journey remains a quiet text navigation rather than black bars. */
+.journey-step,
+.journey-step.current{background:transparent;color:#151515}
+.journey-step .step-num,
+.journey-step.current .step-num,
+.journey-step.done .step-num{background:#000;color:#fff;border-color:#000;box-shadow:none}
+.journey-step.current .step-num{box-shadow:inset 0 0 0 2px #fff}
+.journey-step:hover:not(:disabled){filter:none;color:#000}
+.journey-step:disabled{opacity:.4}
+
+button:disabled{opacity:.42;box-shadow:none}
+button:focus-visible,
+.header-actions a:focus-visible{
+  outline:2px solid #000;
+  outline-offset:4px;
+  box-shadow:0 0 0 2px #fff;
+}
+.nav-button:focus-visible,
+.nav-chat:focus-visible{outline-color:#fff;outline-offset:-4px;box-shadow:0 0 0 2px #000}
+.check input{accent-color:#000}
+
+/* These controls are the illustration itself, so they never receive a button fill. */
+.home-companion,
+.home-companion:hover:not(:disabled),
+.home-companion:active:not(:disabled),
+.greeting,
+.greeting:hover:not(:disabled),
+.greeting:active:not(:disabled){background:transparent;border-color:transparent;filter:none}
+.greeting{color:#0a0201}

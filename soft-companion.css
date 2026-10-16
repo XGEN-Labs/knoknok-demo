@@ -1,0 +1,37 @@
+/* Animate the original artwork inside its fixed hit target, keeping UI still. */
+[data-character="soft"] .home-companion>.companion-art{
+  transform-origin:50% 75%;
+  animation:soft-companion-hover 5.2s ease-in-out infinite;
+  will-change:transform;
+}
+[data-character="soft"] .home-companion .figma-companion-image,
+[data-character="soft"] .onboard-portrait .figma-companion-image{
+  transform-origin:50% 78%;
+  animation:soft-companion-breathe 3.6s ease-in-out infinite;
+}
+[data-character="soft"] .home-scene .companion-ground{
+  animation:soft-companion-shadow 5.2s ease-in-out infinite;
+}
+@keyframes soft-companion-hover{
+  0%,100%{transform:translate3d(-2px,1px,0) rotate(-1.5deg)}
+  25%{transform:translate3d(2px,-5px,0) rotate(.8deg)}
+  50%{transform:translate3d(3px,-9px,0) rotate(1.8deg)}
+  75%{transform:translate3d(-1px,-4px,0) rotate(-.7deg)}
+}
+@keyframes soft-companion-breathe{
+  0%,100%{transform:scale(1.015,.985)}
+  50%{transform:scale(.985,1.025)}
+}
+@keyframes soft-companion-shadow{
+  0%,100%{transform:scaleX(.98);opacity:.95}
+  50%{transform:scaleX(.78);opacity:.5}
+}
+/* The existing boop remains on the outer button so idle motion resumes naturally. */
+[data-character="soft"] .reduced-motion .home-companion>.companion-art,
+[data-character="soft"] .reduced-motion .figma-companion-image,
+[data-character="soft"] .reduced-motion .companion-ground{animation:none;will-change:auto}
+@media(prefers-reduced-motion:reduce){
+  [data-character="soft"] .home-companion>.companion-art,
+  [data-character="soft"] .figma-companion-image,
+  [data-character="soft"] .companion-ground{animation:none;will-change:auto}
+}

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-Hant" class="share-demo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbfaf7">
+  <meta name="description" content="認識你的伙伴 Klin，從第一次見面，到一起認識新朋友。可互動 Demo。">
+  <title>Knoknok · 和 Klin 一起開始</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%2343a4ff'/%3E%3Ctext x='9' y='29' font-family='Arial' font-weight='bold' font-size='28'%3Ek%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css?v=20261010-room-focus-3">
+  <link rel="stylesheet" href="motion.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="theme-black.css?v=20261010-room-focus-3">
+  <link rel="stylesheet" href="variant-pixel.css?v=20261010-room-focus-3">
+  <link rel="stylesheet" href="logo-brand.css?v=20261010-room-focus-3">
+  <link rel="stylesheet" href="figma-ui.css?v=20261010-profile-cleanup-2">
+  <link rel="stylesheet" href="home-scenes.css?v=20261010-pixel-scene-1">
+  <link rel="stylesheet" href="soft-companion.css?v=20261010-room-focus-3">
+  <link rel="stylesheet" href="visit-scene.css?v=20261010-visit-1">
+  <link rel="stylesheet" href="klin-companion.css?v=20261016-team-9">
+  <link rel="stylesheet" href="klin-experience.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="journey-experience.css?v=20261016-refinement-8">
+  <link rel="preload" as="image" href="assets/klin-native-20261016-0907/juvenile.png">
+  <link rel="preload" as="image" href="assets/klin-native-20261016-0907/adult.png">
+  <link rel="stylesheet" href="demo.css?v=20261016-refinement-8">
+  <script type="module" src="app.mjs?v=20261016-team-9"></script>
+  <link rel="stylesheet" href="typography.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="form-controls.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="scene-experience.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="universe-experience.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="card-personality.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="energy-experience.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="card-handoff.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="date-picker.css?v=20261016-refinement-8">
+  <link rel="stylesheet" href="refinement-v8.css?v=20261016-refinement-8">
+</head>
+<body>
+  <header class="workbench-header">
+    <a class="wordmark" href="./"><img class="brand-logo" src="assets/brand-20261016/knoknok-logo-latest.png" alt="Knoknok" width="2172" height="724"><span>Klin · 互動 Demo</span></a>
+    <div class="header-actions"><button type="button" id="motion-toggle" aria-pressed="false">減少動態</button><button type="button" id="reset-button">重新體驗</button></div>
+  </header>
+  <main class="workbench">
+    <aside class="journey-panel"><div class="eyebrow">THE FIRST CONNECTION</div><h1>從登入，<br>到認識新朋友。</h1><p class="panel-intro">從你的伙伴開始，<br>按自己的步調，敲開一段關係。</p><nav id="journey" aria-label="體驗流程"></nav><div class="design-note">依照你的 Figma 視覺延伸<br><span>Klin 的小世界 · 一起走過每一頁</span></div></aside>
+    <section class="device-stage" aria-label="手機互動原型">
+      <div class="device-caption"><span id="screen-label">01 / 歡迎來到 Knoknok</span><span class="live-label">可操作</span></div>
+      <div class="device-viewport"><div class="phone" id="phone">
+        <div class="status-bar" aria-hidden="true"><span>9:41</span><span class="island"></span><img id="status-icons" src="assets/figma-20261009/status.svg" alt="" width="86" height="13"></div>
+        <div id="app"></div><div class="home-indicator" aria-hidden="true"></div><div id="toast" role="status" aria-live="polite"></div>
+        <dialog id="sheet"><div id="sheet-content"></div></dialog>
+      </div></div>
+      <p class="prototype-note">互動 Demo · 登入、匹配與對話均為模擬</p>
+    </section>
+    <aside class="review-panel"><div class="review-heading"><span class="eyebrow">正在體驗</span><span id="stage-count">01 / 07</span></div><h2 id="guide-title"></h2><p id="guide-copy"></p><div id="guide-actions"></div><div class="review-divider"></div><div class="eyebrow">演示控制</div><div id="scenario-controls"></div><p class="review-footnote">所有資料保存在此瀏覽器。<br>私人建議不會自動傳給對方。</p></aside>
+  </main>
+  <button id="mobile-controls" class="mobile-controls" type="button">演示控制</button>
+</body>
+</html>

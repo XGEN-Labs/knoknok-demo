@@ -1,0 +1,108 @@
+/* Source: Figma page 72:1038, refreshed 2026-10-09.
+   Reference canvas 402 × 874. Shared UI is identical across character variants. */
+:root{--sky:#4368ff;--blue:#4368ff;--ink:#24283b;--muted:#626a8d;--action-bg:#000;--action-fg:#fff;font-family:'PingFang SC',-apple-system,BlinkMacSystemFont,'PingFang TC',sans-serif}
+.phone,[data-character="pixel"] .phone{background:linear-gradient(180deg,#4368ff,#fff)}
+.page,#app.scene-transitioning>.page,[data-character="pixel"] #app.scene-transitioning>.page{background:linear-gradient(180deg,#4368ff,#fff);background-size:100% calc(100% + 5px);background-position:0 -3px}
+.page.home-page,#app.scene-transitioning>.home-page,[data-character="pixel"] #app.scene-transitioning>.home-page{background-image:linear-gradient(180deg,#4368ff,#eef1ff)}
+.status-bar{height:62px;padding:2.333px 9px 0;display:grid;grid-template-columns:1fr 125px 1fr;gap:0;justify-content:normal;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-weight:590;line-height:22px;color:#fff}
+.status-bar>span:first-child{width:auto;padding-right:6px}
+.status-bar .island{width:125px;height:37px}
+.status-bar img{width:85.329px;height:13px;justify-self:center;margin:0 1px 0 0}
+.home-indicator{display:none}
+.page .btn{font-size:14px;font-weight:600;line-height:20px;min-height:56px;padding:17px 18px;border-radius:16px}
+.page .btn:disabled{opacity:1;color:rgba(255,255,255,.5)}
+.page .btn.white,.page .btn.figma-secondary{background:#fff;color:#000;border:1px solid rgba(0,0,0,.1)}
+.page .btn.white:disabled,.page .btn.figma-secondary:disabled{color:rgba(0,0,0,.5);opacity:1}
+.page .btn.white:hover:not(:disabled),.page .btn.figma-secondary:hover:not(:disabled){background:#fafafa;border-color:rgba(0,0,0,.1)}
+.page .btn.figma-primary{background:#000;color:#fff;border:0}
+.page .btn.figma-primary:disabled{color:rgba(255,255,255,.5)}
+.page .btn.figma-primary:hover:not(:disabled){background:#1e1e1e}
+.welcome .btn.figma-primary{background:#1e1e1e}
+.page .brand{left:47px;top:93.6667px;width:308px;height:102.6667px;line-height:0;margin:0}
+.page .brand>.brand-logo{position:static;display:block;width:100%;height:100%;max-width:none;transform:none;object-fit:cover}
+.welcome-art{left:-55px;top:71px;width:513px;height:641px;object-fit:cover;animation:none}
+.welcome-actions{left:23px;right:24px;top:673px;bottom:auto;gap:20px}
+.welcome-actions .btn{height:56px}
+.auth-page .brand{left:91px;top:74.3333px;width:220px;height:73.3333px}
+.auth-art,.auth-art-overlay{position:absolute;left:-55px;top:71px;width:513px;height:641px;filter:blur(40px);opacity:.4;pointer-events:none}
+.auth-art>img,.auth-art-overlay>img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.auth-page .auth-back{position:absolute;left:15px;top:91px;width:44px;height:44px;display:grid;place-items:center;padding:0;background:transparent;border:0;border-radius:50%;z-index:3;line-height:0}
+.auth-page .auth-back:hover:not(:disabled){background:transparent;opacity:.86}
+.auth-page .auth-back .back-chevron{display:block;width:36px;height:36px}
+.auth-page .auth-form{position:absolute;left:23px;right:24px;top:325px;margin:0}
+.auth-field{display:grid;gap:8px}
+.auth-page .auth-form .auth-field>label{height:22px;padding-left:10px;color:#fff;font-size:16px;font-weight:500;line-height:22px}
+.auth-field>.input{height:56px;min-height:56px;border-radius:16px;padding:15px 16px;background:rgba(255,255,255,.5);border:1px solid rgba(76,146,211,.3);color:#24283b;caret-color:#24283b;font-size:16px;line-height:24px}
+.auth-field>.input:focus{outline:2px solid #ffffffa0;outline-offset:2px;border-color:rgba(76,146,211,.3)}
+.auth-meta{position:absolute;left:33px;top:419px;padding:0;margin:0;font-size:12px;line-height:17px;color:#fff;font-weight:500}
+.auth-error{position:absolute;left:23px;right:24px;top:448px}
+.auth-page .auth-submit{left:23px;right:24px;top:673px;bottom:auto}
+.auth-resend{position:absolute;left:23px;right:24px;top:749px}
+.auth-submit>.btn,.auth-resend>.btn{height:56px}
+.home-top,[data-character="pixel"] .home-top{left:24px;top:86px;right:auto;display:block}
+.home-top .mini-wordmark,[data-character="pixel"] .home-top .mini-wordmark{width:146px;height:49px;margin:0;line-height:0}
+.home-top .mini-wordmark>.brand-logo{position:static;display:block;width:100%;height:100%;transform:none;object-fit:cover}
+.greeting{left:35px;top:289px;width:236px;height:94.5px;aspect-ratio:236/94.5;border:0}
+.greeting>img{width:100%;height:100%;max-width:none;object-fit:fill}
+.greeting-copy,[data-character="pixel"] .greeting-copy{left:46px;right:12px;top:17px;display:grid;gap:4px;font-size:16px;line-height:22px;font-weight:500;color:#626a8d;white-space:nowrap}
+.greeting-copy>span{display:block;overflow:hidden;text-overflow:ellipsis}
+.home-companion,[data-character="pixel"] .home-companion{left:107px;top:385px;width:188px;height:188px;aspect-ratio:1;animation:none}
+.home-companion.booped{animation:boop .7s var(--ease)}
+.companion-art>.figma-companion-image{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.bottom-nav{bottom:21px;left:21px;right:21px;gap:8px;height:62px}
+.nav-pill{height:62px;flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,68px);column-gap:23px;justify-content:center;align-items:start;padding:6px 0;background:rgba(255,255,255,.2);border:0;border-radius:36px;box-shadow:none;backdrop-filter:none}
+.nav-button,.nav-button.active{position:relative;isolation:isolate;width:68px;height:48px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:0;padding:0;background:transparent;color:#252c45;border:0;border-radius:28.69px;box-shadow:none;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:10px;line-height:12px;letter-spacing:-.1px;font-weight:590;transition:opacity .18s ease}
+.nav-button::before{content:"";position:absolute;z-index:-1;left:-15px;right:-15px;top:-1px;height:52px;border-radius:28.69px;background:#fff;opacity:0;transition:opacity .18s ease}
+.nav-button.active::before{opacity:1}
+.nav-icon{display:block;flex:none;object-fit:cover;width:36px;height:36px;pointer-events:none}
+.nav-button>.nav-icon{margin-bottom:0}
+.nav-chat,.nav-chat.active{width:62px;height:62px;display:grid;place-items:center;padding:0;background:transparent;color:#252c45;border:0;border-radius:50%;box-shadow:none;transition:opacity .18s ease}
+.nav-chat .nav-icon{width:62px;height:62px}
+.nav-button:hover:not(:disabled),.nav-chat:hover:not(:disabled){background:transparent;filter:none}
+.nav-chat:hover:not(:disabled){opacity:.86}
+.nav-button:focus-visible,.nav-chat:focus-visible{outline-color:#252c45;outline-offset:2px;box-shadow:none}
+.bottom-nav button:active:not(:disabled),.auth-back:active:not(:disabled),.page-top .icon-button:has(.back-chevron):active:not(:disabled),.page-top .header-home:active:not(:disabled){transform:none}
+.page-top h2,.page-top .meta,[data-character="pixel"] .page-top .meta{color:#fff}
+.page-top .icon-button{background:transparent;border:0;color:#fff;padding:0}
+.page-top .back-chevron,.page-top .home-icon{display:block;width:36px;height:36px}
+.page-top .icon-button:hover:not(:disabled){background:#ffffff1a;border:0}
+.page-top .icon-button:has(.back-chevron),.page-top .header-home{width:44px;height:44px;flex:none;background:transparent;line-height:0;transition:opacity .18s ease}
+.page-top .icon-button:has(.back-chevron):hover:not(:disabled),.page-top .header-home:hover:not(:disabled){background:transparent;opacity:.86}
+.page-top .text-button{color:#fff}
+.field,.field-label,.body-copy,.small-note,.check,.section-label,.request-summary,.request-summary strong,.detail-line dd,.reason,.intro-quote,.visibility,.field-note,.memory-card p,.memory-source,.message-label,.message-status,.chat-system,.chat-identity p,.chat-participants,.onboard-copy p,[data-character="pixel"] .onboard-copy p,.initializing-content p{color:#626a8d}
+.message .bubble{color:#626a8d}
+.message.own .bubble{background:#4368ff;border-color:#4368ff;color:#fff}
+.input,textarea,select{border-radius:16px}
+.page .glass-card{box-shadow:none;background:rgba(255,255,255,.8);border-color:#ffffffb0}
+.page .chip,.page .tiny-btn,.page .suggestions button{border-radius:16px}
+@keyframes page-in{from{opacity:0}to{opacity:1}}
+@media(max-width:650px){
+  body,[data-character="pixel"] body{background:#4368ff}
+  .status-bar{height:62px;padding:2.333px 9px 0}
+  .status-bar .island{width:125px;height:37px}
+  .status-bar img{margin:0 1px 0 0}
+  .page .brand{left:11.69154%;top:10.71701%;width:76.61692%;height:auto;aspect-ratio:3}
+  .welcome-art{left:-13.68159%;top:8.12357%;width:127.61194%;height:73.34096%;object-fit:cover}
+  .welcome-actions{left:5.72139%;right:5.97015%;top:77.00229%;bottom:auto;gap:20px}
+  .auth-page .brand{left:22.63682%;top:8.50495%;width:54.72637%;height:auto;aspect-ratio:3}
+  .auth-art,.auth-art-overlay{left:-13.68159%;top:8.12357%;width:127.61194%;height:73.34096%}
+  .auth-page .auth-back{left:calc(9.20398% - 22px);top:calc(12.92906% - 22px)}
+  .auth-page .auth-form{left:5.72139%;right:5.97015%;top:37.18535%}
+  .auth-meta{left:8.20896%;top:47.9405%}
+  .auth-error{left:5.72139%;right:5.97015%;top:51.25858%}
+  .auth-page .auth-submit{left:5.72139%;right:5.97015%;top:77.00229%;bottom:auto}
+  .auth-resend{left:5.72139%;right:5.97015%;top:85.69794%}
+  .home-top,[data-character="pixel"] .home-top{left:5.97015%;top:9.83982%;right:auto}
+  .home-top .mini-wordmark,[data-character="pixel"] .home-top .mini-wordmark{width:146px;height:49px}
+  .greeting{left:8.70647%;top:33.06636%;width:58.70647%;height:auto;aspect-ratio:236/94.5}
+  .greeting-copy,[data-character="pixel"] .greeting-copy{left:19.49153%;top:17.98942%;right:4%;font-size:clamp(14px,3.9801vw,16px);line-height:1.375}
+  .home-companion,[data-character="pixel"] .home-companion{left:26.61692%;top:44.05034%;width:46.76617%;height:auto;aspect-ratio:1}
+  .bottom-nav{left:5.22388%;right:5.22388%;bottom:2.40275%;height:62px}
+  .nav-pill{grid-template-columns:repeat(3,minmax(0,68px));column-gap:clamp(8px,5.72vw,23px);padding-left:12px;padding-right:12px}
+  .nav-button{width:100%}
+  .pixel-welcome{left:26.61692%;top:44.05034%;width:46.76617%;height:auto;aspect-ratio:1}
+}
+
+/* A single account action should not inherit the full information-card padding. */
+.page .glass-card.profile-logout{padding:0;border-radius:16px}
+.page .profile-logout>.btn{min-height:50px;padding:15px 18px;border-radius:inherit}

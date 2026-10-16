@@ -1,0 +1,32 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="236" height="94.4997" viewBox="0 0 236 94.4997" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Union" filter="url(#filter0_iii_0_26)">
+<path d="M193.5 0C216.972 2.44819e-06 236 19.0279 236 42.5C236 63.0943 221.352 80.2668 201.906 84.1681C198.743 84.8027 195.836 86.5434 194.224 89.3372L193.986 89.7495C190.329 96.0829 181.188 96.0831 177.531 89.7498C175.834 86.8106 172.698 85 169.304 85H42.5C19.0279 85 0 65.9721 0 42.5C0 19.0279 19.0279 5.47621e-07 42.5 0H193.5Z" fill="white" fill-opacity="0.8"/>
+</g>
+<defs>
+<filter id="filter0_iii_0_26" x="0" y="0" width="236" height="94.4997" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="40" operator="dilate" in="SourceAlpha" result="effect1_innerShadow_0_26"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="15"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+<feBlend mode="plus-darker" in2="shape" result="effect1_innerShadow_0_26"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="40" operator="dilate" in="SourceAlpha" result="effect2_innerShadow_0_26"/>
+<feOffset dy="-2"/>
+<feGaussianBlur stdDeviation="5"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.1 0"/>
+<feBlend mode="plus-lighter" in2="effect1_innerShadow_0_26" result="effect2_innerShadow_0_26"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feMorphology radius="40" operator="dilate" in="SourceAlpha" result="effect3_innerShadow_0_26"/>
+<feOffset dy="2"/>
+<feGaussianBlur stdDeviation="5"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.03 0"/>
+<feBlend mode="plus-lighter" in2="effect2_innerShadow_0_26" result="effect3_innerShadow_0_26"/>
+</filter>
+</defs>
+</svg>

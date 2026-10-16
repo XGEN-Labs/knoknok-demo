@@ -1,0 +1,20 @@
+/* User-supplied transparent PNG: preserve its original artwork and bytes. */
+.brand-logo{display:block;object-fit:contain;flex-shrink:0}
+.workbench-header .wordmark>.brand-logo,
+.compare-header .wordmark>.brand-logo{width:144px;height:48px;filter:brightness(0)}
+.compare-header .wordmark{display:flex;align-items:center}
+
+/* Keep the original 52px title slot; center the PNG's transparent canvas in it. */
+.page .brand{width:min(280px,70%);height:52px;line-height:0}
+.page .brand>.brand-logo{position:absolute;left:0;top:50%;width:100%;height:auto;max-width:none;transform:translateY(-50%)}
+.home-top{flex-direction:column;align-items:flex-start;gap:8px}
+.home-top .mini-wordmark{position:relative;width:min(276px,100%);height:64px;line-height:0;margin:0}
+.home-top .mini-wordmark>.brand-logo{position:absolute;left:0;top:50%;width:100%;height:auto;max-width:none;transform:translateY(-50%)}
+.home-top .home-day{margin:0}
+
+@media(max-width:650px){
+  .home-top .mini-wordmark{width:min(276px,76vw);height:64px}
+}
+@media(max-width:380px){
+  .compare-header .wordmark>.brand-logo{width:126px;height:42px}
+}

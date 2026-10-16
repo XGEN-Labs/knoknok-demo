@@ -1,0 +1,214 @@
+/* First hello, personal cards and visiting share the same clean Klin world. */
+
+/* The character occupies the middle of this page; copy stays above and below. */
+.phone .landing-page{overflow:hidden}
+.phone .landing-brand{position:absolute;top:10.7%;left:8%;width:118px;height:40px;line-height:0}
+.phone .landing-brand .brand-logo{position:static;display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0)}
+.phone .landing-progress{display:flex;gap:5px;align-items:center}
+.phone .landing-page>.landing-progress{position:absolute;top:12.9%;right:8%}
+.phone .landing-progress i{display:block;width:13px;height:3px;border-radius:4px;background:#dde5f1}
+.phone .landing-progress i.done{background:var(--klin-blue)}
+.phone .landing-intro{position:absolute;top:18%;left:7%;right:7%;text-align:center}
+.phone .landing-intro .eyebrow{display:block;margin:0 0 8px;color:var(--klin-muted);font-size:9px;line-height:12px;letter-spacing:.15em}
+.phone .landing-intro h2{margin:0;color:var(--klin-ink);font-size:25px;line-height:1.3;font-weight:600;letter-spacing:-.65px}
+.phone .landing-intro p{margin:9px 0 0;color:var(--klin-muted);font-size:12px;line-height:1.65}
+.phone .landing-touch{position:absolute;top:29%;left:17%;width:66%;height:26%;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none;z-index:2;-webkit-tap-highlight-color:transparent}
+.phone .landing-touch:hover:not(:disabled),.phone .landing-touch:active:not(:disabled){background:transparent;border-color:transparent;box-shadow:none;filter:none;transform:none}
+.phone .landing-touch>.klin-art{width:100%;height:100%}
+.phone.klin-world-ready .landing-touch>.klin-art{visibility:hidden;animation:none}
+.phone .landing-touch.reading-portrait{pointer-events:none}
+.phone .landing-invitation{position:absolute;top:60%;left:8%;right:8%;text-align:center;pointer-events:none}
+.phone .landing-invitation .touch-ring{display:grid;place-items:center;width:38px;height:38px;margin:0 auto 13px;border:1px solid #dbe7f9;border-radius:50%;background:var(--klin-blue-soft);color:var(--klin-blue-ink);font-size:24px;line-height:1}
+.phone .landing-invitation p{margin:0 0 8px;color:var(--klin-ink);font-size:15px;line-height:1.5}
+.phone .landing-invitation>span:last-child{color:var(--klin-muted);font-size:11px;line-height:1.7}
+.phone .landing-conversation{position:absolute;top:56%;left:7%;right:7%;bottom:8%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#cddcf2 transparent;padding:0 2px 8px}
+.phone .landing-question{margin:0 0 14px;color:var(--klin-muted);font-size:12px;line-height:1.7;text-align:center}
+.phone .metal-choices{display:grid;gap:10px}
+.phone .metal-choice{display:grid;grid-template-columns:36px minmax(0,1fr) 18px;align-items:center;gap:12px;width:100%;min-height:76px;padding:14px 15px;border:1px solid var(--klin-line);border-radius:20px;background:#fff;color:var(--klin-ink);text-align:left;box-shadow:0 3px 14px #17283f03}
+.phone .metal-choice:hover:not(:disabled){background:#f8fbff;border-color:#cbdbf3;color:var(--klin-ink);filter:none}
+.phone .metal-choice strong{display:block;font-size:14px;line-height:1.5;font-weight:600}
+.phone .metal-choice small{display:block;margin-top:4px;font-size:11px;line-height:1.5;color:var(--klin-muted)}
+.phone .metal-choice>span:last-child{font-size:18px;color:var(--klin-blue-ink)}
+.phone .metal-mark{position:relative;width:36px;height:36px;border-radius:12px;background:var(--klin-blue-soft)}
+.phone .metal-mark::before{content:"";position:absolute;inset:11px;border:1.5px solid var(--klin-blue-ink);border-radius:2px;transform:rotate(45deg)}
+.phone .metal-mark.xin::before{inset:10px;border-radius:50% 50% 14% 50%;border-color:#83a6df;background:#d9e7ff}
+.phone .klin-reading{margin:0 0 16px;padding:19px 20px;border:1px solid var(--klin-line);border-radius:22px;background:#fff;color:var(--klin-ink);font-size:13px;line-height:1.9}
+.phone .klin-reading p{margin:0;color:var(--klin-ink);font-size:13px;line-height:1.9}
+.phone .klin-reading p+p{margin-top:12px}
+.phone .landing-conversation .split-buttons{gap:8px}
+.phone .landing-conversation .split-buttons>.btn{min-width:0;padding:12px 9px;font-size:11px;line-height:18px}
+.phone .landing-conversation>.btn{gap:9px}
+.phone .other-voice{display:block;margin:9px auto 0;padding:8px 12px;font-size:11px;color:var(--klin-muted)}
+
+/* Forms can scroll independently while the next action stays within reach. */
+.phone .landing-setup .content{top:22%;bottom:116px;padding-bottom:24px}
+.phone .landing-setup .content>.landing-progress{position:static;margin:0 0 20px}
+.phone .landing-setup .setup-companion{min-height:42px;margin:0 0 18px}
+.phone .landing-setup .setup-companion strong{font-size:14px}
+.phone .landing-setup .setup-companion p{margin:6px 0 0;font-size:12px}
+.phone .landing-form-card{padding:20px;border:1px solid var(--klin-line);border-radius:22px;background:#fff}
+.phone .landing-form-card .field{gap:8px;margin-bottom:18px}
+.phone .landing-form-card .field:last-child{margin-bottom:0}
+.phone .landing-form-card .field label{padding-left:0;font-size:12px;line-height:1.55;font-weight:500}
+.phone .landing-form-card :is(input,select){min-height:50px;padding:13px 14px;font-size:15px;line-height:22px}
+.phone .landing-form-card .birth-time-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:12px}
+.phone .landing-form-card .birth-time-row .check{margin:0;white-space:nowrap;font-size:11px}
+.phone .landing-form-card .check input{width:16px;height:16px;min-height:16px;padding:0;margin:0 1px 0 0}
+.phone .landing-setup .fixed-footer{left:6%;right:6%;bottom:4.5%}
+.phone .landing-setup .small-note{margin:14px 3px 0;font-size:11px;line-height:1.7}
+.phone .landing-setup .fixed-footer .action-arrow{width:18px;height:18px;flex:none}
+
+/* A public card carries only the details that its owner chose to share. */
+.phone .profile-card-page .content{top:21%;padding-bottom:26px}
+.phone .public-card-content{position:absolute;top:21%;left:0;right:0;bottom:5%;padding:0 6% 24px;overflow-y:auto;overscroll-behavior:contain}
+.phone .share-card{position:relative;isolation:isolate;display:flex;flex-direction:column;width:100%;min-width:0;min-height:394px;padding:25px 24px 20px;overflow:hidden;border:1px solid #e0e7f0;border-radius:24px;background:linear-gradient(150deg,#fff 0%,#fff 68%,#f0f6ff 100%);color:var(--klin-ink);box-shadow:0 8px 28px #182a4307}
+.phone .share-card-corner{position:absolute;z-index:-1;display:block;pointer-events:none}
+.phone .share-card-corner-top{top:-45px;right:-46px;width:136px;height:136px;border-radius:50%;background:#edf4ffb3}
+.phone .share-card-corner-bottom{left:-28px;bottom:60px;width:65px;height:65px;border:1px solid #e2ecfa;border-radius:50%}
+.phone .share-card-brand{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.phone .share-card-brand-mark{color:var(--klin-ink);font-size:14px;line-height:20px;font-weight:700;letter-spacing:-.65px}
+.phone .share-card-brand-label{color:var(--klin-muted);font-size:9px;line-height:16px;letter-spacing:.06em}
+.phone .share-card-identity{margin-top:37px}
+.phone .share-card-hello{margin:0 0 9px;color:var(--klin-muted);font-size:11px;line-height:1.5}
+.phone .share-card-name{margin:0;color:var(--klin-ink);font-size:40px;font-weight:600;line-height:1.16;letter-spacing:-1.2px;overflow-wrap:anywhere}
+.phone .share-card-bio{margin:19px 0 0;color:#505a68;font-size:13px;line-height:1.85;white-space:pre-wrap;overflow-wrap:anywhere}
+.phone .share-card-tags{display:flex;flex-wrap:wrap;gap:7px;margin:20px 0 0}
+.phone .share-card-tag{display:inline-flex;align-items:center;max-width:100%;padding:6px 10px;border:1px solid #dce8f9;border-radius:999px;background:var(--klin-blue-soft);color:var(--klin-blue-ink);font-size:10px;line-height:16px;overflow-wrap:anywhere}
+.phone .share-card-meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin:20px 0 0;color:var(--klin-muted);font-size:10px;line-height:1.7;overflow-wrap:anywhere}
+.phone .share-card-meta>span+span::before{content:"·";margin-right:12px;color:#9ba6b7}
+.phone .share-card-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:18px;border-top:1px solid #e8edf5}
+.phone .share-card-meta+.share-card-footer,.phone .share-card-tags+.share-card-footer,.phone .share-card-bio+.share-card-footer{margin-top:26px}
+.phone .share-card-companion{display:inline-flex;align-items:center;gap:9px;color:var(--klin-muted);font-size:10px;line-height:1.5}
+.phone .share-card-companion img{display:block;width:43px;height:43px;object-fit:contain;border-radius:15px;background:#f3f7fd}
+.phone .share-card-footer-mark{font-size:22px;line-height:1;color:#8daee1}
+.phone .share-card.is-compact{min-height:330px;padding:21px 20px 18px}
+.phone .share-card.is-compact .share-card-identity{margin-top:25px}
+.phone .share-card.is-compact .share-card-name{font-size:34px}
+.phone .profile-card-tools{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 0;padding:0;border:0;background:transparent}
+.phone .profile-card-tools .text-button{min-height:32px;padding:6px 4px;font-size:11px;line-height:20px}
+.phone .profile-card-tools .field:last-child{margin-bottom:0}
+.phone .profile-card-note{margin:14px 3px 0;color:var(--klin-muted);font-size:11px;line-height:1.75}
+.phone .profile-card-note p{margin:0}
+.phone .profile-card-content>.profile-card-note:first-child{margin:0 3px 16px;font-size:12px}
+.phone .profile-card-privacy{margin:13px 3px 0;font-size:10px;line-height:1.7}
+.phone .profile-management{margin:21px 0 0}
+.phone .profile-management .row-button{display:flex;align-items:center;justify-content:space-between;gap:15px;min-height:47px;padding:12px 14px;border-radius:16px;font-size:12px;line-height:20px}
+.phone .card-actions{display:flex;gap:10px;margin:18px 0 0}
+.phone .card-actions>.btn{flex:1;min-width:0;min-height:48px;padding:12px 10px;font-size:12px;line-height:20px}
+.phone .card-view-tabs,.phone .preview-switch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;min-height:44px;margin:0 0 17px;padding:4px;border:1px solid var(--klin-line);border-radius:999px;background:#eef2f8}
+.phone .card-view-tabs button,.phone .preview-switch button{min-width:0;min-height:34px;padding:7px 10px;border:0;border-radius:999px;background:transparent;color:var(--klin-muted);font-size:12px;line-height:18px;box-shadow:none}
+.phone .card-view-tabs button:is(.active,[aria-pressed="true"],[aria-selected="true"]),.phone .preview-switch button:is(.active,[aria-pressed="true"],[aria-selected="true"]){background:#fff;color:var(--klin-ink);box-shadow:0 1px 3px #1a263809;font-weight:600}
+.phone .public-card-content>.btn{margin-top:20px}
+.phone .public-card-content>.small-note{text-align:center;margin:16px 0 0}
+
+/* The visiting door is an app-native shape, with no room illustration behind it. */
+.phone .visit-content{padding-top:4px}
+.phone .visit-tabs{margin-bottom:18px}
+.phone .visit-heading{margin-bottom:13px}
+.phone .visit-heading h3{margin:0 0 7px;font-size:20px;line-height:1.35}
+.phone .visit-heading p{margin:0;font-size:12px;line-height:1.6}
+.phone .visit-topics{gap:6px}
+.phone .visit-topic{min-height:34px;padding:7px 12px;font-size:12px;line-height:18px}
+.phone .visit-topic.custom{background:transparent;color:var(--klin-muted);border-color:#d4deed}
+.phone .visit-stage,.phone .visit-search .visit-stage{position:relative;width:100%;height:210px;margin:14px auto 0;isolation:isolate;background:transparent}
+.phone .visit-stage::before{content:"";position:absolute;left:calc(50% - 69px);bottom:-3px;width:154px;height:14px;border-radius:50%;background:#536e9920;filter:blur(7px);z-index:-1;pointer-events:none}
+.phone .visit-stage .visit-door{position:absolute;left:calc(50% - 44px);bottom:0;top:auto;width:142px;height:196px;padding:0;border:0;border-radius:73px 73px 12px 12px;background:transparent;box-shadow:none;transform-origin:center bottom;cursor:pointer;perspective:550px}
+.phone .visit-stage .visit-door:hover:not(:disabled),.phone .visit-stage .visit-door:active:not(:disabled){background:transparent;filter:none}
+.phone .visit-door-frame{position:absolute;inset:0;display:block;padding:8px;border:1px solid #e0e7f0;border-radius:73px 73px 12px 12px;background:#fdfefe;box-shadow:inset 0 0 0 3px #fff,0 5px 15px #24416c07}
+.phone .visit-door-leaf{position:absolute;inset:8px;display:block;border:1px solid #bcd0ed;border-radius:65px 65px 7px 7px;background:#deebff;transform-origin:left center;transition:transform .28s ease,border-color .28s ease;backface-visibility:hidden}
+.phone .visit-door:hover .visit-door-leaf{transform:rotateY(-6deg);border-color:#a7c2e9}
+.phone .visit-door:active .visit-door-leaf{transform:rotateY(-10deg)}
+.phone .visit-door-window{position:absolute;top:34px;left:calc(50% - 25px);display:block;width:50px;height:47px;border:1px solid #c9dcf6;border-radius:25px 25px 5px 5px;background:#f8fbff;overflow:hidden}
+.phone .visit-door-window::before{content:"";position:absolute;top:0;bottom:0;left:calc(50% - .5px);width:1px;background:#d5e3f6}
+.phone .visit-door-window::after{content:"";position:absolute;top:25px;left:0;right:0;height:1px;background:#d5e3f6}
+.phone .visit-door-knob{position:absolute;top:104px;right:13px;display:block;width:9px;height:9px;border:1px solid #b1bfd1;border-radius:50%;background:#fff;box-shadow:0 1px 3px #526c9226}
+.phone .visit-stage .visit-door-sign{top:auto;bottom:24px;left:16px;right:16px;min-height:20px;padding:0;border:0;border-radius:0;background:transparent;color:var(--klin-blue-ink);box-shadow:none;font-size:10px;line-height:16px}
+.phone .visit-stage .visit-companion{left:calc(50% - 124px);bottom:0;width:104px;height:108px}
+.phone .visit-stage .visit-companion .companion-art{filter:none}
+.phone .visit-stage .visit-knock{top:75px;left:calc(50% - 25px);color:var(--klin-blue-ink);font-size:12px}
+.phone .visit-stage.is-knocking .visit-door{animation:none}
+.phone .visit-stage.is-knocking .visit-door-leaf{animation:klin-door-greeting .65s ease-out}
+.phone .visit-stage.is-seeking .visit-door-sign{animation:none}
+.phone .visit-stage.is-found .visit-door-leaf{background:#e4efff}
+.phone .visit-stage.is-found .visit-door-window{background:#fff}
+.phone .visit-reply{min-height:34px;margin:8px 0 10px;color:var(--klin-muted);font-size:12px;line-height:1.7}
+.phone .visit-content>.btn,.phone #visit-panel>.btn{height:48px;min-height:48px;font-size:14px;border-radius:17px}
+.phone .visit-resume{padding:11px 13px;font-size:12px}
+.phone .visit-conditions{margin:11px 0;font-size:11px}
+.phone .visit-search-topic{font-size:12px}
+@keyframes klin-door-greeting{0%,100%{transform:rotateY(0)}25%,65%{transform:rotateY(-9deg)}45%,80%{transform:rotateY(-2deg)}}
+
+@media(max-width:650px){
+  .phone .landing-brand{width:112px;height:38px}
+  .phone .share-card-name{font-size:clamp(30px,10vw,40px)}
+  .phone .public-card-content{bottom:5%}
+}
+@media(max-height:740px) and (max-width:650px){
+  .phone .landing-brand{top:10%;width:104px;height:35px}
+  .phone .landing-page>.landing-progress{top:12.6%}
+  .phone .landing-intro{top:17%}
+  .phone .landing-intro .eyebrow{font-size:9px;line-height:11px;margin-bottom:5px}
+  .phone .landing-intro h2{font-size:22px;line-height:1.25}
+  .phone .landing-intro p{font-size:11px;line-height:1.5;margin-top:6px}
+  .phone .landing-invitation .touch-ring{width:32px;height:32px;margin-bottom:10px;font-size:21px}
+  .phone .landing-invitation p{font-size:14px}
+  .phone .landing-conversation{top:55.5%;bottom:6.5%;left:6%;right:6%}
+  .phone .landing-question{font-size:11px;margin-bottom:10px}
+  .phone .metal-choice{min-height:67px;padding:11px 13px;border-radius:18px}
+  .phone .metal-choice strong{font-size:13px}
+  .phone .metal-choice small{font-size:10px;margin-top:3px}
+  .phone .klin-reading,.phone .klin-reading p{font-size:12px;line-height:1.8}
+  .phone .klin-reading{padding:16px 17px}
+  .phone .landing-setup .content{top:22%;bottom:105px}
+  .phone .landing-setup .content>.landing-progress{margin-bottom:14px}
+  .phone .landing-setup .setup-companion{margin-bottom:14px}
+  .phone .landing-form-card{padding:17px}
+  .phone .landing-form-card .field{margin-bottom:15px}
+  .phone .landing-form-card :is(input,select){min-height:46px;padding:11px 12px}
+  .phone .landing-form-card .check input{min-height:16px;height:16px;padding:0}
+  .phone .profile-card-page .content{top:19%}
+  .phone .public-card-content{top:22%}
+  .phone .share-card{min-height:365px;padding:21px 20px 18px}
+  .phone .share-card-identity{margin-top:26px}
+  .phone .share-card-name{font-size:34px}
+  .phone .share-card-bio{font-size:12px;line-height:1.8;margin-top:16px}
+  .phone .share-card-tags{margin-top:16px}
+  .phone .share-card-footer{padding-top:15px}
+  .phone .share-card-meta+.share-card-footer,.phone .share-card-tags+.share-card-footer,.phone .share-card-bio+.share-card-footer{margin-top:21px}
+  .phone .card-actions{gap:8px;margin-top:14px}
+  .phone .card-actions>.btn{font-size:11px;padding:11px 8px;min-height:46px}
+  /* Keep the owner's quick actions above navigation on a 375 x 667 screen. */
+  .phone .profile-card-content>.profile-card-note:first-child{margin-bottom:12px;font-size:11px;line-height:18px}
+  .phone .profile-card-content .share-card{min-height:280px;padding:14px 18px;border-radius:24px}
+  .phone .profile-card-content .share-card-brand-mark{font-size:12px;line-height:16px}
+  .phone .profile-card-content .share-card-brand-label{font-size:8px;line-height:14px}
+  .phone .profile-card-content .share-card-identity{display:flex;align-items:baseline;gap:8px;margin-top:12px}
+  .phone .profile-card-content .share-card-hello{flex:none;margin:0;font-size:9px;line-height:14px}
+  .phone .profile-card-content .share-card-name{min-width:0;font-size:30px;line-height:1.14;letter-spacing:-.8px}
+  .phone .profile-card-content .share-card-bio{margin-top:8px;font-size:11px;line-height:19px}
+  .phone .profile-card-content .share-card-tags{gap:5px;margin-top:10px}
+  .phone .profile-card-content .share-card-tag{padding:4px 8px;font-size:9px;line-height:15px}
+  .phone .profile-card-content .share-card-meta{margin-top:8px;font-size:9px;line-height:14px}
+  .phone .profile-card-content .share-card-footer{margin-top:10px;padding-top:8px}
+  .phone .profile-card-content .share-card-companion{gap:7px;font-size:9px}
+  .phone .profile-card-content .share-card-companion img{width:28px;height:28px;border-radius:10px}
+  .phone .profile-card-content .share-card-footer-mark{font-size:18px}
+  .phone .profile-card-content .profile-card-tools{margin-top:8px}
+  .phone .profile-card-content .profile-card-tools .text-button{min-height:30px;padding-top:5px;padding-bottom:5px}
+  .phone .profile-card-content .card-actions{margin-top:12px}
+  .phone .visit-tabs{margin-bottom:14px}
+  .phone .visit-heading h3{font-size:18px}
+  .phone .visit-heading p{font-size:11px}
+  .phone .visit-stage,.phone .visit-search .visit-stage{height:182px;margin-top:10px}
+  .phone .visit-stage .visit-door{width:127px;height:174px}
+  .phone .visit-door-frame{border-radius:66px 66px 11px 11px}
+  .phone .visit-door-leaf{border-radius:59px 59px 6px 6px}
+  .phone .visit-door-window{top:29px;width:44px;height:42px;left:calc(50% - 22px)}
+  .phone .visit-door-knob{top:92px;right:11px;width:8px;height:8px}
+  .phone .visit-stage .visit-door-sign{bottom:20px}
+  .phone .visit-stage .visit-companion{left:calc(50% - 115px);width:95px;height:98px}
+}
+@media(prefers-reduced-motion:reduce){
+  .phone .visit-door-leaf{transition:none}
+  .phone .visit-stage.is-knocking .visit-door-leaf{animation:none}
+}

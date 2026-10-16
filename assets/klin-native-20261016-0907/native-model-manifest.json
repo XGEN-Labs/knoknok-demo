@@ -1,0 +1,344 @@
+{
+  "version": "09-07",
+  "source": "user-supplied klin-09-07-blender.zip",
+  "sourceZipSha256": "fd71a1b1525448477483ab4cbd61b2b14c6f612be08fe8b68220b0181f8ab3c3",
+  "sourceBlendSha256": "0b7982122901a94d3e6e9a769bc470c50c386f2751b33c4131009f520d604d6c",
+  "meshPolicy": "Native topology and vertex coordinates preserved; no decimation or procedural replacement.",
+  "hairPolicy": "Native Hair Curves paths grouped to source mesh; deterministic web LOD retains all main/flyaway strands and every fourth undercoat strand. Source-surface normals allow scene lighting to affect hair.",
+  "stages": {
+    "juvenile": {
+      "meshFile": "juvenile.glb",
+      "hairFile": "juvenile-hair.bin",
+      "hairStride": 6,
+      "meshes": [
+        {
+          "name": "BabyFit_Body_Continuous",
+          "vertices": 212294,
+          "polygons": 212292,
+          "boundsMin": [
+            -1.0272504091262817,
+            -0.6568828225135803,
+            0.0
+          ],
+          "boundsMax": [
+            1.0417799949645996,
+            0.7251462936401367,
+            1.9600000381469727
+          ]
+        },
+        {
+          "name": "BabyFit_Eye_L",
+          "vertices": 2498,
+          "polygons": 2560,
+          "boundsMin": [
+            -0.24299997091293335,
+            -0.7285740971565247,
+            0.6890000104904175
+          ],
+          "boundsMax": [
+            -0.0950000062584877,
+            -0.6285741329193115,
+            0.9909999370574951
+          ]
+        },
+        {
+          "name": "BabyFit_Eye_R",
+          "vertices": 2498,
+          "polygons": 2560,
+          "boundsMin": [
+            0.09800001978874207,
+            -0.7294625639915466,
+            0.687999963760376
+          ],
+          "boundsMax": [
+            0.23999999463558197,
+            -0.6314626336097717,
+            0.9819999933242798
+          ]
+        },
+        {
+          "name": "BabyFit_Tail",
+          "vertices": 19778,
+          "polygons": 19776,
+          "boundsMin": [
+            -0.25159215927124023,
+            0.5354958772659302,
+            0.22432127594947815
+          ],
+          "boundsMax": [
+            0.251592218875885,
+            1.266631841659546,
+            0.7556787133216858
+          ]
+        }
+      ],
+      "meshSha256": "a6658dfcc34c0501b04dbbc62affc3d8d3e5fb297accf06677b6a94722bf6c52",
+      "hairSha256": "f69dc490d93119d0bd392361e1878ab6cbc43f2d3c706edbad6149f69465f3f5",
+      "grooms": [
+        {
+          "name": "BabyFit_Body_Continuous_Groom_flyaway",
+          "mesh": "BabyFit_Body_Continuous",
+          "offset": 0,
+          "count": 938,
+          "sourceStrands": 67,
+          "retainedStrands": 67,
+          "undercoat": false
+        },
+        {
+          "name": "BabyFit_Body_Continuous_Groom_main",
+          "mesh": "BabyFit_Body_Continuous",
+          "offset": 938,
+          "count": 266672,
+          "sourceStrands": 19048,
+          "retainedStrands": 19048,
+          "undercoat": false
+        },
+        {
+          "name": "BabyFit_Body_Continuous_Groom_undercoat",
+          "mesh": "BabyFit_Body_Continuous",
+          "offset": 267610,
+          "count": 381008,
+          "sourceStrands": 190504,
+          "retainedStrands": 47626,
+          "undercoat": true
+        },
+        {
+          "name": "BabyFit_Tail_Groom_flyaway",
+          "mesh": "BabyFit_Tail",
+          "offset": 648618,
+          "count": 84,
+          "sourceStrands": 6,
+          "retainedStrands": 6,
+          "undercoat": false
+        },
+        {
+          "name": "BabyFit_Tail_Groom_main",
+          "mesh": "BabyFit_Tail",
+          "offset": 648702,
+          "count": 18662,
+          "sourceStrands": 1333,
+          "retainedStrands": 1333,
+          "undercoat": false
+        },
+        {
+          "name": "BabyFit_Tail_Groom_undercoat",
+          "mesh": "BabyFit_Tail",
+          "offset": 667364,
+          "count": 37768,
+          "sourceStrands": 18884,
+          "retainedStrands": 4721,
+          "undercoat": true
+        }
+      ]
+    },
+    "adult": {
+      "meshFile": "adult.glb",
+      "hairFile": "adult-hair.bin",
+      "hairStride": 6,
+      "meshes": [
+        {
+          "name": "Adult_Arm_Lowered_Fit",
+          "vertices": 3010,
+          "polygons": 3072,
+          "boundsMin": [
+            -1.3447877168655396,
+            -0.17010557651519775,
+            0.5768756866455078
+          ],
+          "boundsMax": [
+            -0.9584875106811523,
+            0.28010550141334534,
+            1.192986249923706
+          ]
+        },
+        {
+          "name": "Adult_Arm_Raised_Fit",
+          "vertices": 4096,
+          "polygons": 4034,
+          "boundsMin": [
+            0.9150000214576721,
+            -0.19499383866786957,
+            1.1449999809265137
+          ],
+          "boundsMax": [
+            1.6376765966415405,
+            0.24499383568763733,
+            2.0199999809265137
+          ]
+        },
+        {
+          "name": "Adult_Body_Fit",
+          "vertices": 143856,
+          "polygons": 143582,
+          "boundsMin": [
+            -1.5822019577026367,
+            -0.9550666809082031,
+            0.012000000104308128
+          ],
+          "boundsMax": [
+            1.3294641971588135,
+            1.0495768785476685,
+            2.9724340438842773
+          ]
+        },
+        {
+          "name": "Adult_Eye_0",
+          "vertices": 3010,
+          "polygons": 3072,
+          "boundsMin": [
+            -0.30299997329711914,
+            -1.0149999856948853,
+            1.3009999990463257
+          ],
+          "boundsMax": [
+            -0.11300002038478851,
+            -0.8550000190734863,
+            1.715000033378601
+          ]
+        },
+        {
+          "name": "Adult_Eye_1",
+          "vertices": 3010,
+          "polygons": 3072,
+          "boundsMin": [
+            0.12100003659725189,
+            -1.0149999856948853,
+            1.3009999990463257
+          ],
+          "boundsMax": [
+            0.3109999895095825,
+            -0.8550000190734863,
+            1.715000033378601
+          ]
+        },
+        {
+          "name": "Adult_Tail_Fit",
+          "vertices": 3010,
+          "polygons": 3072,
+          "boundsMin": [
+            -0.30999988317489624,
+            0.8109999895095825,
+            0.35999998450279236
+          ],
+          "boundsMax": [
+            0.2799999713897705,
+            1.4799997806549072,
+            0.9499999284744263
+          ]
+        }
+      ],
+      "meshSha256": "c9d1f582a440fc0b801f70eb5ed907fe934a630ae3d7ab2b7e9d503f19a0f18b",
+      "hairSha256": "d8b15d12359ea25c4509d1778b1cf6de5c59fd2988f05233d80ee222cc7b9d64",
+      "grooms": [
+        {
+          "name": "Adult_Arm_Lowered_Fit_Groom_flyaway",
+          "mesh": "Adult_Arm_Lowered_Fit",
+          "offset": 0,
+          "count": 28,
+          "sourceStrands": 2,
+          "retainedStrands": 2,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Arm_Lowered_Fit_Groom_main",
+          "mesh": "Adult_Arm_Lowered_Fit",
+          "offset": 28,
+          "count": 6090,
+          "sourceStrands": 435,
+          "retainedStrands": 435,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Arm_Lowered_Fit_Groom_undercoat",
+          "mesh": "Adult_Arm_Lowered_Fit",
+          "offset": 6118,
+          "count": 12336,
+          "sourceStrands": 6166,
+          "retainedStrands": 1542,
+          "undercoat": true
+        },
+        {
+          "name": "Adult_Arm_Raised_Fit_Groom_flyaway",
+          "mesh": "Adult_Arm_Raised_Fit",
+          "offset": 18454,
+          "count": 42,
+          "sourceStrands": 3,
+          "retainedStrands": 3,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Arm_Raised_Fit_Groom_main",
+          "mesh": "Adult_Arm_Raised_Fit",
+          "offset": 18496,
+          "count": 10640,
+          "sourceStrands": 760,
+          "retainedStrands": 760,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Arm_Raised_Fit_Groom_undercoat",
+          "mesh": "Adult_Arm_Raised_Fit",
+          "offset": 29136,
+          "count": 21552,
+          "sourceStrands": 10774,
+          "retainedStrands": 2694,
+          "undercoat": true
+        },
+        {
+          "name": "Adult_Body_Fit_Groom_flyaway",
+          "mesh": "Adult_Body_Fit",
+          "offset": 50688,
+          "count": 854,
+          "sourceStrands": 61,
+          "retainedStrands": 61,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Body_Fit_Groom_main",
+          "mesh": "Adult_Body_Fit",
+          "offset": 51542,
+          "count": 242956,
+          "sourceStrands": 17354,
+          "retainedStrands": 17354,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Body_Fit_Groom_undercoat",
+          "mesh": "Adult_Body_Fit",
+          "offset": 294498,
+          "count": 347112,
+          "sourceStrands": 173555,
+          "retainedStrands": 43389,
+          "undercoat": true
+        },
+        {
+          "name": "Adult_Tail_Fit_Groom_flyaway",
+          "mesh": "Adult_Tail_Fit",
+          "offset": 641610,
+          "count": 42,
+          "sourceStrands": 3,
+          "retainedStrands": 3,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Tail_Fit_Groom_main",
+          "mesh": "Adult_Tail_Fit",
+          "offset": 641652,
+          "count": 9996,
+          "sourceStrands": 714,
+          "retainedStrands": 714,
+          "undercoat": false
+        },
+        {
+          "name": "Adult_Tail_Fit_Groom_undercoat",
+          "mesh": "Adult_Tail_Fit",
+          "offset": 651648,
+          "count": 20256,
+          "sourceStrands": 10128,
+          "retainedStrands": 2532,
+          "undercoat": true
+        }
+      ]
+    }
+  }
+}

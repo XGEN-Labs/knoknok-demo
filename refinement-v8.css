@@ -1,0 +1,72 @@
+/* v8: fewer anchors, clearer actions. Scene light is authored in klin-world.mjs. */
+.phone .auth-page .auth-header{position:absolute;top:12%;left:7%;right:7%;height:40px;display:flex;align-items:center;gap:16px;z-index:3}
+.phone .auth-page .auth-header .auth-back{position:static;display:grid;place-items:center;flex:none;width:39px;height:39px;margin:0;padding:0;background:#ffffffdf;border:1px solid #fff;border-radius:50%}
+.phone .auth-page .auth-header .auth-back .back-chevron{width:24px;height:24px}
+.phone .auth-page .auth-header .brand{position:static;display:block;width:124px;height:42px;margin:0;aspect-ratio:auto}
+.phone .auth-page .auth-header .brand .brand-logo{position:static;display:block;width:100%;height:100%;object-fit:contain}
+.phone .auth-panel{position:absolute;top:29%;left:7%;right:7%;padding:23px 21px 20px;background:#ffffffed;border:1px solid #fff;border-radius:27px;box-shadow:0 12px 40px #385b7b0c;backdrop-filter:blur(18px)}
+.phone .auth-heading{margin-bottom:23px}
+.phone .auth-heading h1{margin:0;font-family:var(--system-type,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif);font-size:24px;font-weight:700;line-height:1.4;letter-spacing:-.5px;color:#273247}
+.phone .auth-heading p{margin:7px 0 0;font-size:12px;line-height:1.6;color:#687a91}
+.phone .auth-page .auth-form{position:static;margin:0;display:block}
+.phone .auth-page .auth-form .auth-field{display:flex;flex-direction:column;gap:8px;margin:0}
+.phone .auth-page .auth-form .auth-field>label{position:static;height:auto;margin:0;padding:0;font-size:12px;font-weight:600;line-height:1.5;color:#41516a}
+.phone .auth-page .auth-field>.input{height:48px;min-height:48px;padding:12px 14px;background:#f5f8fc;border:1px solid #dde7f2;color:#263247;border-radius:15px;font-size:15px}
+.phone .auth-page .auth-field>.input:focus{outline:0;border-color:#9ab6d6;box-shadow:0 0 0 3px #9ab6d61a}
+.phone .auth-page .auth-error{position:static;min-height:12px;margin:5px 0 9px;font-size:12px;line-height:1.5}
+.phone .auth-page .auth-submit{position:static;margin:0}
+.phone .auth-page .auth-submit>.btn{width:100%;min-height:47px;height:47px;border-radius:16px;font-size:14px}
+.phone .auth-page .auth-submit>.btn:disabled{background:#dce4ed;border-color:#dce4ed;color:#7e8da1;opacity:1}
+.phone .auth-page .auth-resend{position:static;margin:15px 0 0;text-align:center}
+.phone .auth-page .auth-resend .text-button{font-size:12px;padding:7px 12px;color:#607895;background:transparent}
+.phone .birth-page .setup-content{top:22%;bottom:14%;padding-top:0}
+.phone .birth-page .setup-content>.landing-progress{margin:0 4px 14px}
+.phone .birth-page .landing-form-card{padding:19px;border-radius:24px}
+.phone .birth-intro{font-size:12px;line-height:1.5;color:#65768e;margin:0 0 18px}
+.phone .birth-page .landing-form-card .field{margin-bottom:15px;gap:7px}
+.phone .birth-page .landing-form-card .field:last-child{margin-bottom:0}
+.phone .birth-page .landing-form-card .field>label{font-size:12px;font-weight:600;line-height:1.5;margin:0;color:#394c66}
+.phone .birth-page .landing-form-card :is(.input,.klin-select-trigger){min-height:44px;border-radius:15px;font-size:13px;background:#f8fafc;padding:11px 13px}
+.phone .birth-page .birth-time-row{gap:10px;grid-template-columns:minmax(0,1fr) auto}
+.phone .birth-page .small-note{margin:12px 4px 0;font-size:10px;line-height:1.6;text-align:center}
+.phone .birth-page .fixed-footer{left:7%;right:7%;bottom:4%}.phone .birth-page .fixed-footer .btn{min-height:46px;font-size:14px}
+/* Each light has a tactile card, an unmistakable mark, and an arrow. */
+.phone .onboard-page .landing-intro{top:21%;left:7%;right:7%}
+.phone .onboard-page .landing-intro h2{font-size:25px;line-height:1.35}
+.phone .onboard-page .light-objects{position:absolute;left:7%;right:7%;top:66%;display:grid;grid-template-columns:1fr 1fr;gap:11px;z-index:4}
+.phone .onboard-page .light-object{position:relative;left:auto;right:auto;top:auto;width:100%;height:auto;min-height:101px;display:grid;grid-template-columns:35px minmax(0,1fr);align-items:center;gap:9px;padding:16px 11px 16px 13px;background:#ffffffeb;border:1px solid #fff;border-radius:22px;box-shadow:0 8px 28px #48617b12;text-align:left;color:#28364b;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.phone .onboard-page .light-object:hover:not(:disabled){background:#fff;transform:translateY(-3px);box-shadow:0 13px 30px #48617b20;filter:none}
+.phone .onboard-page .light-object:active:not(:disabled){transform:scale(.98)}
+.phone .onboard-page .light-object .object-fallback{display:none}
+.phone .onboard-page .choice-glyph{display:grid;place-items:center;width:35px;height:45px;font-size:33px;font-weight:400;color:#6489bd;text-shadow:0 0 18px #b4d8ff}
+.phone .onboard-page .choice-glyph.xin{color:#a19acb;font-size:42px;text-shadow:0 0 18px #e3dbff}
+.phone .onboard-page .light-object .object-caption{position:static;left:auto;right:auto;top:auto;text-align:left}
+.phone .onboard-page .object-caption strong{font-size:13px;line-height:1.5;white-space:nowrap}
+.phone .onboard-page .object-caption small{font-size:10px;line-height:1.4;margin-top:5px;color:#687a91;white-space:normal}
+.phone .onboard-page .choice-arrow{position:absolute;right:11px;top:9px;font-size:12px;color:#7188a5}
+.phone .onboard-page .landing-conversation:empty{display:none}
+/* A single reading order: title and topic, light scene, then the primary action. */
+.phone .portal-order-v8 .portal-intro{top:21%;left:7%;right:7%;pointer-events:auto}
+.phone .portal-order-v8 .portal-intro h3{margin:0 0 13px;font-size:22px;line-height:1.4}
+.phone .portal-order-v8 .visit-topics{display:flex;flex-wrap:nowrap;align-items:center;gap:7px;margin:0}
+.phone .portal-order-v8 .visit-topic{min-height:33px;padding:7px 13px;border-radius:18px;font-size:12px;line-height:17px}
+.phone .portal-order-v8 .visit-topic.custom{width:33px;padding:5px;line-height:22px;font-size:20px}
+.phone .portal-order-v8 .portal-door-hit{left:55%;top:34%;width:28%;height:34%;border-radius:2px;padding:0;box-shadow:none;background:transparent;z-index:2}
+.phone .portal-order-v8 .portal-door-hit:focus-visible{outline:2px solid #6a89ad;outline-offset:7px}
+.phone .portal-order-v8 .portal-bottom{top:auto;left:17%;right:17%;bottom:9%;text-align:center;display:flex;flex-direction:column;align-items:stretch;gap:9px}
+.phone .portal-order-v8 .portal-bottom>.btn{min-height:45px;border-radius:23px;font-size:13px;padding:12px 16px;box-shadow:0 7px 22px #284e7314}
+.phone .portal-order-v8 .portal-resume{margin:0;padding:7px 8px;min-height:30px;background:transparent;border:0;box-shadow:none;font-size:11px;line-height:16px}
+/* The shareable introduction is the focus; detailed conditions stay available. */
+.phone .visit-review-v8 .field{display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+.phone .visit-review-v8 .field>label{font-size:11px;color:#64768e;font-weight:500}
+.phone .visit-review-v8 .visit-review-intro{height:100px;min-height:100px!important;padding:15px;border:1px solid #e0e8f2;border-radius:18px;background:#f8fbff;color:#2c3d54;font-size:15px;line-height:1.65;resize:none}
+.phone .visit-review-conditions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;padding:0 3px;color:#586d88;font-size:12px;line-height:1.5}
+.phone .visit-review-conditions>span:nth-child(2){grid-column:1;grid-row:2;font-size:11px}
+.phone .visit-review-conditions .text-button{grid-column:2;grid-row:1/3;align-self:center;background:#edf4fc;padding:7px 12px;border-radius:16px;font-size:11px;color:#506c8d}
+.phone .visit-review-more{margin:14px 2px 0;border-top:1px solid #e6edf5;padding-top:11px;color:#718198;font-size:11px;line-height:1.6}
+.phone .visit-review-more summary{cursor:pointer;color:#647891;font-size:11px;line-height:1.6}
+.phone .visit-review-more p{margin:6px 0 0;font-size:11px;line-height:1.5;color:#718198}
+.phone .visit-review-v8 .visit-review-note{margin:16px 3px 13px;font-size:10px;line-height:1.6;color:#6c7f96}
+.phone .visit-review-v8>.btn{min-height:45px;border-radius:17px;font-size:14px;margin-bottom:4px}
+@media(max-height:650px){.phone .auth-panel{top:27%;padding:20px}.phone .auth-heading{margin-bottom:19px}.phone .birth-page .setup-content{top:24%;bottom:14%}.phone .birth-page .landing-form-card{padding:15px}.phone .birth-page .landing-form-card .field{margin-bottom:11px}.phone .birth-page .birth-intro{margin-bottom:12px}.phone .portal-order-v8 .portal-intro h3{font-size:20px;margin-bottom:9px}.phone .portal-order-v8 .portal-bottom{bottom:6%}.phone .onboard-page .light-object{min-height:90px;padding:13px 9px}.phone .onboard-page .object-caption strong{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.phone .onboard-page .light-object{transition:none}}

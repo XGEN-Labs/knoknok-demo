@@ -1,0 +1,4 @@
+#app.scene-transitioning>.page{animation:none;will-change:transform;pointer-events:none;background:linear-gradient(180deg,#43a4ff,#fff)}
+#app.scene-transitioning>.scene-leaving{z-index:1}
+#app.scene-transitioning>.scene-arriving{z-index:2;pointer-events:auto}
+.page .scene-static-entry{animation:none}

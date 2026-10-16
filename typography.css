@@ -1,0 +1,11 @@
+/* System typography keeps Chinese titles, names and controls in the same family.
+   The supplied brand artwork and hand-drawn icons remain images / vectors. */
+:root{--klin-hand:"PingFang TC","PingFang SC",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;--klin-display:var(--klin-hand)}
+.phone :is(.page-top h2,.landing-intro h2,.onboard-copy h3,.initializing-content h3,.visit-heading h3,.portal-intro h3,.growth-story h2,.sheet-title h3,.share-card-name,.shared-welcome h3,.companion-signature,.object-caption strong,.user-scene-avatar .avatar,.shared-person strong,.shared-messages .message-label,.connection-name .large-avatar,.connection-name h3,.klin-name),[data-klin-hand]{font-family:var(--klin-display)!important;font-weight:700!important;font-synthesis:none;letter-spacing:0}
+.phone .page-top h2{font-size:23px;line-height:1.35}
+.phone .landing-intro h2{font-size:28px;line-height:1.28}
+.phone .visit-heading h3{font-size:24px;line-height:1.3}
+.phone .sheet-title h3{font-size:23px}
+.phone .share-card-name{font-size:44px;line-height:1.14}
+.klin-name{font-family:var(--klin-display)!important;font-weight:700!important;font-size:1em;line-height:inherit;letter-spacing:0;font-synthesis:none}
+@media(max-height:740px) and (max-width:650px){.phone .page-top h2{font-size:21px}.phone .landing-intro h2{font-size:25px}.phone .visit-heading h3{font-size:22px}.phone .profile-card-content .share-card-name{font-size:36px}}

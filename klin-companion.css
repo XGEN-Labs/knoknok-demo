@@ -1,0 +1,51 @@
+/* Latest selected Klin artwork; the established interface remains unchanged. */
+.klin-art{position:relative;display:block;width:100%;height:100%;background:none}
+.klin-art::before,.klin-art::after{display:none}
+.klin-loading-light{display:none}
+.klin-loading-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.phone.klin-world-loading .klin-art>.figma-companion-image{visibility:hidden}
+.phone.klin-world-loading .klin-art{animation:none!important}
+.phone.klin-world-loading .klin-loading-light{display:block;position:absolute;left:50%;top:46%;width:52px;height:52px;transform:translate(-50%,-50%);border:1px solid #8daecb40;border-radius:50%;background:radial-gradient(circle,#fff 0 15%,#f4fcffbf 28%,#d6ebff4d 55%,transparent 73%);box-shadow:0 0 25px 12px #c9e5ff30;animation:klin-loading-breathe 2.8s ease-in-out infinite;pointer-events:none}
+.phone.klin-world-loading :is(.klin-welcome,.landing-touch,.home-companion,.onboard-portrait,.initializing-content) .klin-loading-light{width:76px;height:76px}
+.klin-loading-label{display:none}
+.phone.klin-world-loading :is(.klin-welcome,.landing-touch,.home-companion,.onboard-portrait,.initializing-content) .klin-loading-label{display:block;position:absolute;top:calc(100% + 17px);left:50%;transform:translateX(-50%);color:#52677d;font-size:13px;font-weight:500;line-height:1.5;letter-spacing:.1px;white-space:nowrap}
+.phone.klin-world-loading .avatar .klin-loading-light{width:20px;height:20px}
+@keyframes klin-loading-breathe{0%,100%{border-color:#8daecb30;box-shadow:0 0 20px 7px #c9e5ff30}50%{border-color:#8daecb65;box-shadow:0 0 32px 13px #c9e5ff40}}
+.reduced-motion .phone.klin-world-loading .klin-loading-light{animation:none}
+@media(prefers-reduced-motion:reduce){.phone.klin-world-loading .klin-loading-light{animation:none}}
+.klin-welcome{position:absolute;left:7.5%;top:28%;width:85%;height:40%;pointer-events:none}
+.klin-welcome>.klin-art{animation:klin-breathe 4.5s ease-in-out infinite;transform-origin:50% 88%}
+.setup-companion{display:flex;align-items:center;gap:16px;min-height:100px;margin:-12px 0 18px;padding:0 10px;color:#fff}
+.setup-companion>.klin-art{width:104px;height:104px;flex:none}
+.setup-companion strong{font-size:17px;font-weight:600}
+.setup-companion p{margin:7px 0 0;font-size:13px;line-height:1.6;color:#fff}
+.setup-page:has(#setup-birth-form) .setup-companion{min-height:76px;margin-bottom:12px}
+.setup-page:has(#setup-birth-form) .setup-companion>.klin-art{width:76px;height:76px}
+[data-character="soft"] .home-companion{width:252px;height:252px;left:calc(50% - 126px);top:36%}
+[data-character="soft"] .home-page .greeting{top:26%}
+[data-character="soft"] .home-companion>.klin-art{animation:klin-breathe 4.5s ease-in-out infinite;transform-origin:50% 88%}
+[data-character="soft"] .home-companion .figma-companion-image,[data-character="soft"] .onboard-portrait .figma-companion-image{animation:none}
+[data-character="soft"] .home-scene .companion-ground{top:61%;animation:none;opacity:.55}
+.home-companion.is-growing>.klin-art{animation:klin-arrive 2.2s cubic-bezier(.2,.75,.25,1) both;transform-origin:50% 88%}
+.growth-origin{position:absolute;inset:0;pointer-events:none;transform-origin:50% 88%;animation:klin-grow-out 2.2s ease-in-out both}
+.growth-origin>.klin-art{width:100%;height:100%}
+.avatar .klin-art{width:100%;height:100%}
+.initializing-content>.klin-art{width:180px;height:180px}
+.auth-page .auth-art,.auth-page .auth-art-overlay{object-fit:contain}
+.auth-art>img,.auth-art-overlay>img{object-fit:contain}
+@keyframes klin-breathe{0%,100%{transform:scale(1,.99) rotate(-.5deg)}50%{transform:scale(1.01,1.015) rotate(.5deg)}}
+@keyframes klin-arrive{0%,24%{opacity:0;transform:scale(.72)}66%{opacity:1;transform:scale(1.035)}100%{opacity:1;transform:scale(1)}}
+@keyframes klin-grow-out{0%,24%{opacity:1;transform:scale(.72)}62%,100%{opacity:0;transform:scale(.96)}}
+.reduced-motion .klin-welcome>.klin-art,.reduced-motion .home-companion>.klin-art{animation:none}
+.reduced-motion .growth-origin{display:none}
+@media(max-width:650px){
+  [data-character="soft"] .home-companion{width:min(252px,28.83svh);height:min(252px,28.83svh);left:calc(50% - min(126px,14.415svh))}
+}
+@media(max-width:650px) and (max-height:740px){
+  [data-character="soft"] .home-companion{top:41%}
+  [data-character="soft"] .home-scene .companion-ground{top:65%}
+  [data-character="soft"] .home-page .greeting{top:24%}
+  .setup-companion{min-height:76px;gap:12px;margin-bottom:12px}
+  .setup-companion>.klin-art{width:76px;height:76px}
+}
+@media(prefers-reduced-motion:reduce){.klin-welcome>.klin-art,[data-character="soft"] .home-companion>.klin-art{animation:none}.growth-origin{display:none}}
