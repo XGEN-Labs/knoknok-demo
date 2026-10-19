@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-19T09:42:38.752Z",
+  "createdAt": "2026-10-19T09:45:12.624Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 63480081,
+  "payloadBytes": 63480340,
   "files": [
     {
       "source": "app.mjs",
@@ -212,8 +212,8 @@
     {
       "source": "contract-paper-readability.css",
       "path": "contract-paper-readability.css",
-      "bytes": 9489,
-      "sha256": "bd457f6a9f1e0a84b9b26927d9ca95d43f9c8f766d41940452f1fabd8cbcecaf"
+      "bytes": 9748,
+      "sha256": "4f31f20133e92ffc79e36844c8499f4621fb03fefbb2972f2f85c95db4df4a6f"
     },
     {
       "source": "contract-story.mjs",

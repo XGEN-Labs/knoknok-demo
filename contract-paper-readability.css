@@ -52,6 +52,7 @@
 .phone .growth-story-heading h2,.phone .growth-story-heading p{color:#29262f!important;text-shadow:none}
 .phone .growth-story-footer button{background:#ffffffe6;color:#39343f;border-color:#fffffff2;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .phone #app :is(.companion-signature,.conversation-speaker,.shared-person strong,.message-label){display:table;width:max-content;max-width:100%;padding:3px 10px;border:1px solid #ffffffdd;border-radius:12px;background:#ffffffe0;color:#37323e!important;text-shadow:none;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.phone #app .profile-footer>.btn,.phone #app .profile-footer>.btn:hover:not(:disabled){background:#ffffffe0!important;border:1px solid #fffffff0!important;color:#302b36!important;text-shadow:none;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}
 
 @container (max-height:740px){
   .phone .contract-story .contract-heading{top:12%;padding:10px 11px 11px;border-radius:19px}
