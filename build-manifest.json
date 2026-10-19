@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-19T12:56:31.201Z",
+  "createdAt": "2026-10-19T12:59:20.853Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 63501060,
+  "payloadBytes": 63501078,
   "files": [
     {
       "source": "app.mjs",
@@ -303,7 +303,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 5671,
-      "sha256": "c591d2feeeaf8e7e4638e627c0710d97de83d64157913c699eeb8745200fe0e6"
+      "sha256": "d650c4969c1cbdec94a63e9adb87e86a319ad09a9d0a356c6ce0fffefa3b76bb"
     },
     {
       "source": "journey-experience.css",
@@ -386,8 +386,8 @@
     {
       "source": "mobile-app-polish.css",
       "path": "mobile-app-polish.css",
-      "bytes": 8184,
-      "sha256": "7bc77af1eee63f3159abe14b5f74af0029180f9599830a0c3cfdcb5824c27f00"
+      "bytes": 8202,
+      "sha256": "f0ff5e93600668b51bd8fa1c54c9eca99d5eb337b6a9a4b7dd681ef896388c7a"
     },
     {
       "source": "mobile-login-scene.css",

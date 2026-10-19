@@ -24,7 +24,7 @@
 .phone #app .home-chat-bottom{left:6%;right:6%;bottom:var(--app-safe-bottom)}
 .phone #app .home-chat-actions{display:flex;align-items:stretch;gap:10px;width:100%}
 .phone #app .home-composer{position:static;min-width:0;flex:1;width:auto;margin:0}
-.phone #app .home-chat-actions>.visit-entry{position:static;flex:0 0 76px;min-width:76px;min-height:60px;padding:10px 12px;border-radius:30px;display:flex;align-items:center;justify-content:center;gap:6px;background:#ffffffe3;color:#272730;border:1px solid #fffffff2;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);font-size:14px;line-height:20px}
+.phone #app .home-chat-actions>.visit-entry{position:static;flex:0 0 76px;min-width:76px;min-height:60px;padding:10px 8px;border-radius:30px;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;background:#ffffffe3;color:#272730;border:1px solid #fffffff2;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);font-size:14px;line-height:20px}
 .phone #app .visit-entry svg{width:21px;height:21px;flex:none}
 .phone #app .home-composer .composer-row{width:100%;min-height:60px;box-sizing:border-box;border-radius:30px;transition:min-height .2s}
 .phone[data-conversation="true"] #app .home-chat-actions>.visit-entry{display:none}
