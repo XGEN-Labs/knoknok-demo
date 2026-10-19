@@ -1,6 +1,6 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-19T09:45:12.624Z",
+  "createdAt": "2026-10-19T09:48:51.755Z",
   "entry": "index.html",
   "variant": "klin",
   "payloadBytes": 63480340,
@@ -213,7 +213,7 @@
       "source": "contract-paper-readability.css",
       "path": "contract-paper-readability.css",
       "bytes": 9748,
-      "sha256": "4f31f20133e92ffc79e36844c8499f4621fb03fefbb2972f2f85c95db4df4a6f"
+      "sha256": "f99f0fb62383861ce92a0f7921185e020f5e0f857c631182df96886a708b7e00"
     },
     {
       "source": "contract-story.mjs",
