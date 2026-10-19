@@ -1,0 +1,75 @@
+/* Mobile app geometry uses the visible viewport, including Safari's keyboard. */
+.phone{--app-safe-top:76px;--app-safe-bottom:24px;container-type:size}
+.phone #app .page{animation:none}
+.phone :is(button,a,input,textarea,select,[tabindex]):focus,
+.phone :is(button,a,input,textarea,select,[tabindex]):focus-visible{outline:0!important;outline-offset:0!important}
+.phone :is(input,textarea,select,.klin-select-trigger):focus,
+.phone .klin-select.is-open .klin-select-trigger{box-shadow:none!important;border-color:#dcdde2!important}
+.phone :is(.composer-row,.onboarding-input-row):focus-within{box-shadow:none!important;border-color:#e1e1e6!important}
+.phone button{-webkit-tap-highlight-color:transparent}
+.phone #app :is(.icon-button,.scene-icon,.onboarding-back,.auth-back,.scene-sound,.scene-more),
+.phone #app .page-top .header-home{
+  display:grid;place-items:center;flex:0 0 44px;width:44px;min-width:44px;max-width:44px;
+  height:44px;min-height:44px;max-height:44px;aspect-ratio:1/1;padding:0;border-radius:50%;
+  background:#ffffffd9!important;color:#25252c!important;border:1px solid #fffffff2!important;
+  backdrop-filter:blur(32px) saturate(90%);-webkit-backdrop-filter:blur(32px) saturate(90%);
+}
+.phone #app :is(.icon-button,.scene-icon,.onboarding-back,.auth-back) :is(svg,.back-chevron){display:block;width:22px;height:22px;flex:none;color:inherit}
+.phone #app :is(.page-top,.auth-header,.onboarding-header){top:var(--app-safe-top);min-height:44px;height:44px;align-items:center}
+.phone #app .onboarding-header{left:7%;right:7%;display:flex;justify-content:space-between;gap:12px;z-index:6}
+.phone #app .onboarding-header .onboarding-back{position:static}
+.phone #app .onboarding-header .onboarding-history{position:static;display:block;flex:none;margin:0;min-height:44px;padding:11px 14px;border-radius:24px;background:#ffffffe0;color:#303039;border:1px solid #fffffff2;font-size:12px;line-height:20px;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)}
+.phone #app .home-top{top:var(--app-safe-top);left:7%;right:7%;display:flex;justify-content:flex-end;align-items:center;min-height:44px}
+.phone #app .room-tools{display:flex;position:static;gap:9px}
+.phone #app .home-chat-bottom{left:6%;right:6%;bottom:var(--app-safe-bottom)}
+.phone #app .home-chat-actions{display:flex;align-items:stretch;gap:10px;width:100%}
+.phone #app .home-composer{position:static;min-width:0;flex:1;width:auto;margin:0}
+.phone #app .home-chat-actions>.visit-entry{position:static;flex:0 0 76px;min-width:76px;min-height:60px;padding:10px 12px;border-radius:30px;display:flex;align-items:center;justify-content:center;gap:6px;background:#ffffffe3;color:#272730;border:1px solid #fffffff2;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);font-size:14px;line-height:20px}
+.phone #app .visit-entry svg{width:21px;height:21px;flex:none}
+.phone #app .home-composer .composer-row{width:100%;min-height:60px;box-sizing:border-box;border-radius:30px;transition:min-height .2s}
+.phone[data-conversation="true"] #app .home-chat-actions>.visit-entry{display:none}
+.phone[data-conversation="true"] #app .home-composer .composer-row{min-height:72px}
+.phone[data-conversation="true"] #app .home-composer textarea{height:52px;min-height:52px;max-height:100px}
+.phone #app .conversation-log{top:39%;bottom:calc(var(--app-safe-bottom) + 130px)}
+.phone #app .onboarding-composer{bottom:var(--app-safe-bottom)}
+.phone #app .onboarding-composer>.btn,
+.phone #app .fixed-footer>.btn,
+.phone #app .page .btn:not(.dark),
+.phone #sheet .btn:not(.danger){background:#ffffffe8!important;color:#26262e!important;border-color:#fffffff5!important;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);text-shadow:none}
+.phone #sheet form>.btn[type="submit"],.phone #sheet .btn.dark{background:#202020!important;color:#fff!important;border-color:#202020!important}
+.phone #app .page.welcome .welcome-actions>.btn,.phone #app .page.welcome .welcome-actions>.btn:hover:not(:disabled){background:#202020!important;border-color:#202020!important;color:#fff!important;backdrop-filter:none;-webkit-backdrop-filter:none}
+.phone #sheet .sheet-title{justify-content:flex-start}
+.phone :is(.sheet-handle,.sheet-title,.kn-date-handle,.kn-date-picker header){touch-action:none}
+.phone #sheet .sheet-inner{padding-bottom:max(22px,var(--app-safe-bottom),env(safe-area-inset-bottom,0px))}
+.phone #sheet.card-editor-sheet .sheet-inner{padding-bottom:max(18px,var(--app-safe-bottom),env(safe-area-inset-bottom,0px))!important}
+.phone .all-card-tags{display:flex;flex-wrap:wrap;gap:10px;padding:8px 0 14px}
+.phone .all-card-tags>span{padding:9px 14px;border-radius:15px;background:#f1eff9;color:#343039;font-size:15px;line-height:22px}
+.phone #app .fixed-footer{bottom:var(--app-safe-bottom)}
+.phone .kn-date-picker{padding-bottom:max(20px,var(--app-safe-bottom),env(safe-area-inset-bottom,0px))}
+.phone .kn-date-picker header h2{margin-right:0}
+.phone[data-keyboard-open="true"] #app .conversation-log{top:22%;bottom:calc(var(--app-safe-bottom) + 108px)}
+.phone[data-keyboard-open="true"] #app .room-tools{visibility:hidden}
+.phone[data-keyboard-open="true"] #app .auth-header{visibility:hidden}
+.phone[data-keyboard-open="true"] #sheet .sheet-inner{overflow-y:auto!important;max-height:var(--sheet-height)!important;overscroll-behavior:contain}
+@media(max-width:650px){
+  html,body,.share-demo body{width:100%;height:100%;margin:0;padding:0;overflow:hidden;overscroll-behavior:none;background:#7699ee}
+  .workbench,.share-demo .workbench{position:fixed;left:0;right:0;top:var(--app-offset-top,0px);height:var(--app-height,100dvh);width:100%;margin:0;padding:0;overflow:hidden}
+  .device-stage,.device-viewport{width:100%;height:100%;min-height:0;margin:0;padding:0}
+  .phone,.share-demo .phone,[data-character="soft"] .phone{width:100%;height:100%;min-height:0!important;max-height:none;border:0!important;border-radius:0!important;outline:0!important;box-shadow:none!important;transform:none!important}
+  .device-viewport:has(.auth-register),.phone:has(.auth-register){min-height:0}
+  .phone #sheet.card-editor-sheet{max-height:var(--sheet-height)}
+}
+@media(max-width:650px) and (hover:none) and (pointer:coarse){
+  .phone{--app-safe-top:max(16px,calc(env(safe-area-inset-top,0px) + 12px));--app-safe-bottom:max(18px,calc(env(safe-area-inset-bottom,0px) + 12px))}
+  .phone>.status-bar,.phone>.home-indicator{display:none}
+  .phone :is(input,textarea,select){font-size:16px!important}
+}
+@container (max-height:620px){
+  .phone #app .onboarding-thread{top:35%;bottom:26%;gap:7px}
+  .phone #app .onboarding-message{padding:10px 13px;font-size:14px;line-height:1.5}
+  .phone #app .is-birth-time .onboarding-thread{top:28%;bottom:16%}
+  .phone #app .birth-hour-grid{gap:5px}
+  .phone #app .birth-hour-grid button{min-height:39px;border-radius:13px}
+  .phone #app .onboarding-reading{padding:12px}
+}
+@media(prefers-reduced-motion:reduce){.phone #app .home-composer .composer-row{transition:none}}

@@ -233,6 +233,11 @@ export function createAwakeningField() {
     recognition = 1, conversation = false, thinking = false, pulse = 0, reduced = false, pixelRatio = 1 } = {}) {
     const envelope = awakeningEnvelope(progress, reduced), growing = progress != null;
     group.visible = (growing || conversation) && patched.size > 0;
+    // Surface-sampled grains darken the resting white fleece and read as spots.
+    // Keep these particles for the brief growth effect; native pose, breath and
+    // eye motion carry the conversation without a layer of colored speckles.
+    points.visible = growing && !reduced;
+    lenses.visible = growing && !reduced;
     if (position) group.position.copy(position);
     group.scale.setScalar(scale); group.rotation.y = yaw;
     uniforms.time.value = reduced ? 0 : time;

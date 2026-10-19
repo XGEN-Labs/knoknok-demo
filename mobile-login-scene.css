@@ -1,0 +1,41 @@
+/* Keep the separated welcome scene full bleed at every mobile viewport size. */
+.phone > .klin-login-scene-host {
+  inset: 0;
+  border: 0;
+  border-radius: inherit;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* A retained opacity keyframe makes the page its own backdrop root. Removing
+   that fade lets the white form sample the actual, sibling WebGL scene. */
+.phone #app > .page.auth-login {
+  animation: none !important;
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Safari can isolate live WebGL into another compositing layer. Blur the real
+   scene pixels as well while the account panel is open, rather than relying
+   on a white alpha fill. A matching scene underlay prevents pale blur edges. */
+.phone.klin-login-auth-active {
+  background: #93a9ef url('assets/login-world-20261019/source/clean-background.png') center / cover no-repeat;
+}
+.phone.klin-login-auth-active > .klin-login-scene-host {
+  filter: blur(18px);
+  transition: none;
+}
+.phone .page.auth-login .auth-panel {
+  background: rgba(255, 255, 255, .87) !important;
+  backdrop-filter: blur(40px) saturate(.8);
+  -webkit-backdrop-filter: blur(40px) saturate(.8);
+}
+
+@media (max-width: 650px) {
+  .phone.klin-login-scene-active {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}

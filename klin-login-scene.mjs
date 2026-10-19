@@ -1,4 +1,4 @@
-import { createKlinLoginScene } from './assets/login-world-20261019/klin-login-scene.mjs?v=20261019-separated-4';
+import { createKlinLoginScene } from './assets/login-world-20261019/klin-login-scene.mjs?v=20261019-mobile-polish-23';
 
 // The login artwork owns its character. Other routes retain the native world.
 export function createLoginSceneBridge({phone}={}) {
@@ -13,6 +13,7 @@ export function createLoginSceneBridge({phone}={}) {
     if(disposed)return;
     host.hidden=!active;
     phone.classList.toggle('klin-login-scene-active',active);
+    phone.classList.toggle('klin-login-auth-active',active&&Boolean(phone.querySelector('#app .auth-login')));
     phone.dataset.loginScene=active?mode:'inactive';
     if(!scene)return;
     if(!active||suspended||document.hidden||reducedMotion){
@@ -24,7 +25,7 @@ export function createLoginSceneBridge({phone}={}) {
     if(scene||disposed)return;
     try{
       // Motion is controlled by this bridge, including live preference changes.
-      scene=createKlinLoginScene({host,reducedMotion:false});
+      scene=createKlinLoginScene({host,characterScale:.76,reducedMotion:false});
       scene.pause();
       Promise.resolve(scene.ready).then(result=>{
         if(disposed)return;
@@ -54,6 +55,7 @@ export function createLoginSceneBridge({phone}={}) {
     window.removeEventListener('pageshow',onPageShow);
     window.removeEventListener('pagehide',onPageHide);
     phone.classList.remove('klin-login-scene-active');
+    phone.classList.remove('klin-login-auth-active');
     delete phone.dataset.loginScene;
     host.remove();
   }

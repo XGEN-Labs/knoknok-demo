@@ -80,14 +80,19 @@ function companionPath(value) {
   return typeof value === 'string' && /^(?:\.\/)?assets\/[A-Za-z0-9_./-]+\.(?:png|webp|jpe?g)$/i.test(value) && !value.split('/').includes('..') ? value : DEFAULT_COMPANION;
 }
 
-export function cardMarkup(value, { companionSrc = DEFAULT_COMPANION, compact = false } = {}) {
+export function cardMarkup(value, { companionSrc = DEFAULT_COMPANION, compact = false, showAllTags = false } = {}) {
   const data = validatedData(value);
   if (!data) return '';
   const image = escape(companionPath(companionSrc));
   const meta = [data.language ? `<span class="share-card-language">${escape(data.language)}</span>` : '', data.region ? `<span class="share-card-region">${escape(data.region)}</span>` : ''].filter(Boolean).join('');
   const avatar = `<img src="${escape(data.avatar || DEFAULT_CARD_AVATAR)}" alt="${escape(data.name)}的${data.avatar ? '' : '預設'}頭像" width="72" height="72">`;
-  const stickers = data.tags.map((tag, index) => `<span class="personality-sticker sticker-${index + 1}" title="${escape(tag)}" style="--sticker-color:${STICKER_COLORS[index]};--sticker-angle:${STICKER_ANGLES[index]}deg">${escape(tag)}</span>`).join('');
-  return `<article class="share-card${compact ? ' is-compact' : ''}" aria-label="${escape(data.name)}的分享名片"><div class="paper-card-postage" aria-hidden="true"><div class="paper-card-stamp"><img class="paper-card-landscape" src="assets/cloud-realm-20261019/arrival.webp" alt=""><img class="paper-card-spirit" src="${image}" alt="" draggable="false"></div><span class="paper-card-postage-label">彼之境 · 來客</span></div><header class="share-card-brand"><span class="share-card-brand-mark"><img class="share-card-brand-logo" src="${BRAND_LOGO}" width="2172" height="724" alt="Knoknok"></span><span class="share-card-brand-label">一張名片，一次相遇。</span></header><div class="share-card-identity"><div class="share-card-avatar">${avatar}</div><div class="share-card-name-block"><h2 class="share-card-name" title="${escape(data.name)}">${escape(data.name)}</h2><span class="share-card-hello">很高興，與你相遇。</span></div></div><div class="share-card-about">${data.bio ? `<p class="share-card-bio" title="${escape(data.bio)}">${escape(data.bio)}</p>` : ''}${meta ? `<div class="share-card-meta">${meta}</div>` : ''}</div><section class="personality-stickers${data.tags.length ? '' : ' is-empty'}" aria-label="我的標籤${data.tags.length ? ` · ${data.tags.length}` : ''}"><div class="personality-sticker-box${data.tags.length ? '' : ' is-empty'}">${stickers}</div></section><footer class="share-card-footer"><span class="share-card-companion"><img src="${image}" width="62" height="62" alt="Klin" draggable="false"><span>Klin 與我</span></span><span class="echo-pass-invite">留給下一次相遇</span></footer></article>`;
+  // Only the interactive full card truncates its preview. Compact cards and
+  // standalone shared snapshots remain complete without an unhandled control.
+  const interactiveTags = showAllTags === true && !compact && data.tags.length > 0;
+  const previewTags = interactiveTags ? data.tags.slice(0, 3) : data.tags;
+  const stickers = previewTags.map((tag, index) => `<span class="personality-sticker sticker-${index + 1}" title="${escape(tag)}" style="--sticker-color:${STICKER_COLORS[index]};--sticker-angle:${STICKER_ANGLES[index]}deg">${escape(tag)}</span>`).join('');
+  const tagsLink = interactiveTags ? `<button class="share-card-tags-link" type="button" data-action="view-card-tags" aria-label="查看所有 ${data.tags.length} 個標籤">所有標籤<span aria-hidden="true"> · ${data.tags.length} ↗</span></button>` : '';
+  return `<article class="share-card${compact ? ' is-compact' : ''}" aria-label="${escape(data.name)}的分享名片"><div class="paper-card-postage" aria-hidden="true"><div class="paper-card-stamp"><img class="paper-card-landscape" src="assets/cloud-realm-20261019/arrival.webp" alt=""><img class="paper-card-spirit" src="${image}" alt="" draggable="false"></div><span class="paper-card-postage-label">彼之境 · 來客</span></div><header class="share-card-brand"><span class="share-card-brand-mark"><img class="share-card-brand-logo" src="${BRAND_LOGO}" width="2172" height="724" alt="Knoknok"></span><span class="share-card-brand-label">一張名片，一次相遇。</span></header><div class="share-card-identity"><div class="share-card-avatar">${avatar}</div><div class="share-card-name-block"><h2 class="share-card-name" title="${escape(data.name)}">${escape(data.name)}</h2></div></div><div class="share-card-about">${data.bio ? `<p class="share-card-bio" title="${escape(data.bio)}">${escape(data.bio)}</p>` : ''}${meta ? `<div class="share-card-meta">${meta}</div>` : ''}</div><section class="personality-stickers${data.tags.length ? '' : ' is-empty'}" aria-label="我的標籤${data.tags.length ? ` · ${data.tags.length}` : ''}"><div class="personality-sticker-box${data.tags.length ? '' : ' is-empty'}">${stickers}</div>${tagsLink}</section></article>`;
 }
 
 export function cardShareURL(value, baseURL) {
@@ -149,7 +154,7 @@ export async function downloadCard(value) {
   ctx.font = '600 77px ' + family;
   let nameSize = 77, nameLines = wrapLines(ctx, data.name, 510);
   while (nameLines.length > 2 && nameSize > 29) { nameSize -= 4; ctx.font = '600 ' + nameSize + 'px ' + family; nameLines = wrapLines(ctx, data.name, 510); }
-  const identityY = 246, identityHeight = Math.max(132, nameLines.length * (nameSize + 8) + 68);
+  const identityY = 246, identityHeight = Math.max(132, nameLines.length * (nameSize + 8) + 18);
   let flowY = identityY + identityHeight + 50;
   ctx.font = '34px ' + family;
   const bioLines = data.bio ? wrapLines(ctx, data.bio, right - left).slice(0, 2) : [];
@@ -168,8 +173,7 @@ export async function downloadCard(value) {
     if (display !== text) display = Array.from(display).slice(0, -1).join('') + '…';
     tags.push({ index, display, x, y: flowY + row * 78, width }); x += width + 22;
   }
-  const footerY = Math.max(708, flowY + (tags.length ? (row + 1) * 78 : 0) + 46);
-  const height = footerY + 128;
+  const height = Math.max(680, flowY + (tags.length ? row * 78 + 61 : 0) + 70);
   // The same warm cotton stock and quiet fibres used by the DOM card.
   ctx.fillStyle = '#fffdf8'; ctx.fillRect(0, 0, 1080, height);
   const paper = ctx.createLinearGradient(0, 0, 1080, height);
@@ -203,7 +207,6 @@ export async function downloadCard(value) {
   const nameplateWidth = Math.min(550, Math.max(...nameLines.map(line => ctx.measureText(line).width)) + 40);
   ctx.fillStyle = '#3d4350'; rounded(ctx, 236, identityY - 4, nameplateWidth, nameLines.length * (nameSize + 8) + 18, 6); ctx.fill();
   ctx.fillStyle = '#fff'; nameLines.forEach((line, i) => ctx.fillText(line, 256, identityY + 8 + i * (nameSize + 8)));
-  ctx.fillStyle = '#a4998b'; ctx.font = '24px ' + family; ctx.fillText('很高興，與你相遇。', 236, identityY + nameLines.length * (nameSize + 8) + 34);
   ctx.fillStyle = '#655d54'; ctx.font = '34px ' + family;
   bioLines.forEach((line, i) => {
     let display = line;
@@ -219,10 +222,6 @@ export async function downloadCard(value) {
     ctx.fillStyle = STICKER_COLORS[index]; rounded(ctx, -width / 2, -30, width, 61, 12); ctx.fill();
     ctx.strokeStyle = '#ffffff66'; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#493c43'; ctx.font = '500 31px ' + family; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(display, 0, 2); ctx.restore();
   }
-  ctx.strokeStyle = '#ddd3c780'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(left, footerY); ctx.lineTo(right, footerY); ctx.stroke();
-  if (companion) { ctx.globalAlpha = .7; ctx.drawImage(companion, left, footerY + 28, 65, 65); ctx.globalAlpha = 1; }
-  ctx.fillStyle = '#8c7e71'; ctx.font = '28px ' + family; ctx.fillText('Klin 與我', left + 80, footerY + 46);
-  ctx.fillStyle = '#a69888'; ctx.font = '24px ' + family; ctx.textAlign = 'right'; ctx.fillText('留給下一次相遇', right, footerY + 48);
   const portrait = document.createElement('canvas'); portrait.width = 1080; portrait.height = height;
   const portraitContext = portrait.getContext('2d');
   if (!portraitContext) throw new Error('瀏覽器暫時無法繪製名片。');

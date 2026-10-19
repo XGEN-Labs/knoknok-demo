@@ -1,8 +1,8 @@
 import * as THREE from './vendor/three/three.module.js';
 import { loadNativeKlinStage } from './klin-native-model.mjs';
 import { createContractLight } from './klin-contract-light.mjs';
-import { createAwakeningField } from './klin-awakening-field.mjs?v=20261019-contract-22';
-import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261019-contract-22';
+import { createAwakeningField } from './klin-awakening-field.mjs?v=20261019-mobile-23';
+import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261019-mobile-23';
 
 // Persistent world; supplied Blender juvenile/adult meshes and native hair curves
 // are loaded once, then carried through all scenes by the same locomotion rig.

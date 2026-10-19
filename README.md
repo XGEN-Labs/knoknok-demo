@@ -15,7 +15,7 @@ These are demonstration credentials. Login, character replies, visits and messag
 
 ## Try the experience
 
-Complete the first conversation, choose a birthday and optional birth period, sign the encounter contract, and watch Klin grow. At home, chat with Klin, visit the relationship network, and edit or share your paper card.
+Complete the first conversation, choose a birthday and optional birth period, sign the encounter contract, and watch Klin grow. At home, tap the message field to chat with Klin. Tap the scene to return to the room; the visit entrance appears beside the message field. Search the relationship network, view all card tags, and edit or share your paper card. Swipe down or tap outside a bottom panel to close it.
 
 ## Local preview
 
@@ -23,4 +23,4 @@ Run `python3 -m http.server 8769 --bind 127.0.0.1` in this repository and open [
 
 ## Version
 
-`20261019-contract-22`. GitHub Pages publishes the `main` branch from the repository root.
+`20261019-mobile-23`. GitHub Pages publishes the `main` branch from the repository root.

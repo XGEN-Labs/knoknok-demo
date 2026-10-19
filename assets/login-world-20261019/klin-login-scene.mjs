@@ -11,6 +11,7 @@ uniform sampler2D uCharacter;
 uniform vec2 uResolution;
 uniform float uTime;
 uniform float uMotion;
+uniform float uCharacterScale;
 varying vec2 vUv;
 const float TAU=6.28318530718;
 float blink(float t,float center){float d=abs(t-center);return 1.-smoothstep(.035,.125,d);}
@@ -38,6 +39,8 @@ void main(){
  float c=cos(tilt),s=sin(tilt);
  p=mat2(c,-s,s,c)*p;
  p/=vec2(1.+breath*.012+lean*.025,1.+breath*.018+lean*.032);
+ // Scale the independent sprite around its grounded feet, never the scene.
+ p/=uCharacterScale;
  p+=pivot;
  vec2 q=(p-vec2(58.7,653.1))/.535;
  float close=max(blink(uTime,4.6),blink(uTime,9.8))*uMotion;
@@ -48,11 +51,12 @@ void main(){
  gl_FragColor=texture2D(uCharacter,uv);
 }`;
 const loopTime=t=>((Number(t)||0)%12+12)%12;
-export function createKlinLoginScene({host,imageUrl,characterUrl,reducedMotion,onReady}={}){
+export function createKlinLoginScene({host,imageUrl,characterUrl,characterScale=1,reducedMotion,onReady}={}){
  if(!host)throw new TypeError('Klin login scene requires a host.');
  let disposed=false,loaded=false,requested=true,raf=0,previousStamp=0,lastDraw=0,currentTime=0,mode='loading';
  const media=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):null;
  let reduced=typeof reducedMotion==='boolean'?reducedMotion:Boolean(media?.matches);
+ const spriteScale=Math.max(.5,Math.min(1.15,Number(characterScale)||1));
  const oldPosition=host.style.position,changedPosition=getComputedStyle(host).position==='static';
  if(changedPosition)host.style.position='relative';
  const backdrop=document.createElement('img');
@@ -77,7 +81,7 @@ export function createKlinLoginScene({host,imageUrl,characterUrl,reducedMotion,o
   const width=Math.max(1,Math.round(w*ratio)),height=Math.max(1,Math.round(h*ratio));
   for(const layer of [canvas,ambient,shadow])if(layer.width!==width||layer.height!==height){layer.width=width;layer.height=height;}
   const cover=Math.max(w/854,h/1842),offsetX=(w-854*cover)/2,offsetY=(h-1842*cover)/2;
-  Object.assign(staticCharacter.style,{left:`${offsetX+58.7*cover}px`,top:`${offsetY+653.1*cover}px`,width:`${1359*.535*cover}px`,height:`${1157*.535*cover}px`});
+  Object.assign(staticCharacter.style,{left:`${offsetX+(418+(58.7-418)*spriteScale)*cover}px`,top:`${offsetY+(1266+(653.1-1266)*spriteScale)*cover}px`,width:`${1359*.535*spriteScale*cover}px`,height:`${1157*.535*spriteScale*cover}px`});
   return [width,height];
  }
  function glow(ctx,x,y,rx,ry,color,alpha){
@@ -95,7 +99,7 @@ export function createKlinLoginScene({host,imageUrl,characterUrl,reducedMotion,o
   for(let i=0;i<3;i++)glow(ctx,130+i*300+Math.sin(phase+i)*34*motion,635+i*100,190,55,'rgba(235,238,255,1)',.07+.035*Math.sin(phase+i)*motion);
 
  }
- function draw(){if(disposed||!loaded)return;const size=dimensions();drawAtmosphere(size);if(shadowContext){const [w,h]=size,cover=Math.max(w/854,h/1842);shadowContext.setTransform(1,0,0,1,0,0);shadowContext.clearRect(0,0,w,h);shadowContext.setTransform(cover,0,0,cover,(w-854*cover)/2,(h-1842*cover)/2);glow(shadowContext,418,1268,205,26,'rgba(90,78,113,1)',.14);}drawSprite?.(size);}
+ function draw(){if(disposed||!loaded)return;const size=dimensions();drawAtmosphere(size);if(shadowContext){const [w,h]=size,cover=Math.max(w/854,h/1842);shadowContext.setTransform(1,0,0,1,0,0);shadowContext.clearRect(0,0,w,h);shadowContext.setTransform(cover,0,0,cover,(w-854*cover)/2,(h-1842*cover)/2);glow(shadowContext,418,1268,205*spriteScale,26,'rgba(90,78,113,1)',.14);}drawSprite?.(size);}
  function stopFrame(){if(raf)cancelAnimationFrame(raf);raf=0;previousStamp=0;}
  function schedule(){if(!disposed&&loaded&&requested&&!reduced&&!document.hidden&&drawSprite&&!raf)raf=requestAnimationFrame(frame);}
  function frame(stamp){raf=0;if(disposed||!requested||reduced||document.hidden)return;if(!previousStamp)previousStamp=stamp;currentTime=loopTime(currentTime+Math.min((stamp-previousStamp)/1000,.1));previousStamp=stamp;if(stamp-lastDraw>=1000/30-.6){draw();lastDraw=stamp;}schedule();}
@@ -110,7 +114,7 @@ export function createKlinLoginScene({host,imageUrl,characterUrl,reducedMotion,o
    const buffer=resources.buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
    const position=gl.getAttribLocation(program,'aPosition');gl.enableVertexAttribArray(position);gl.vertexAttribPointer(position,2,gl.FLOAT,false,0,0);
    const texture=resources.texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,sprite);
-   const uniforms=Object.fromEntries(['uCharacter','uResolution','uTime','uMotion'].map(k=>[k,gl.getUniformLocation(program,k)]));gl.uniform1i(uniforms.uCharacter,0);
+   const uniforms=Object.fromEntries(['uCharacter','uResolution','uTime','uMotion','uCharacterScale'].map(k=>[k,gl.getUniformLocation(program,k)]));gl.uniform1i(uniforms.uCharacter,0);gl.uniform1f(uniforms.uCharacterScale,spriteScale);
    drawSprite=size=>{gl.viewport(0,0,...size);gl.useProgram(program);gl.uniform2f(uniforms.uResolution,...size);gl.uniform1f(uniforms.uTime,currentTime);gl.uniform1f(uniforms.uMotion,reduced?0:1);gl.drawArrays(gl.TRIANGLES,0,6);};
    loaded=true;draw();setReady('webgl');schedule();
   }catch(error){fallback(error);}

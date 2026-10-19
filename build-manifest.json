@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-19T09:48:51.755Z",
+  "createdAt": "2026-10-19T12:51:11.082Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 63480340,
+  "payloadBytes": 63499851,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 93937,
-      "sha256": "7a6d139a43f22efa460b195451268127d5fd9b05b4f1d69a0cc43f15da91fd93"
+      "bytes": 94117,
+      "sha256": "31eac56f0045c2e2b14d049680346f58102c062c1b0629a32f9734df8d31706d"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -134,8 +134,8 @@
     {
       "source": "assets/login-world-20261019/klin-login-scene.mjs",
       "path": "assets/login-world-20261019/klin-login-scene.mjs",
-      "bytes": 11673,
-      "sha256": "c8971660e260c824d4b9fbf15bca7f153dd2f5bc3bdc3ccdf907758898220701"
+      "bytes": 12047,
+      "sha256": "a3b70cfa031c50453398f6d24216da82df6627d61327cdbbf51975de910eaa98"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -210,6 +210,12 @@
       "sha256": "7522944652f4809db5bd7517dd48566e2799b8731d1cbcacade58f19e9714eec"
     },
     {
+      "source": "contract-centered-paper.css",
+      "path": "contract-centered-paper.css",
+      "bytes": 7728,
+      "sha256": "4345370a7edcdf6a303ae46dd850e119232bfc2c5ddf2dfff3dd8b5de70a68bc"
+    },
+    {
       "source": "contract-paper-readability.css",
       "path": "contract-paper-readability.css",
       "bytes": 9748,
@@ -218,8 +224,8 @@
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 3634,
-      "sha256": "14c508d0fcf3f672e2de41adeeb733dc500185226d19a39d002f127c9760e753"
+      "bytes": 4344,
+      "sha256": "b28930cb9ecb29a92cd34812346d535d81515cb508b987377fac4f2846ce1855"
     },
     {
       "source": "conversation-experience.css",
@@ -242,8 +248,8 @@
     {
       "source": "date-picker.mjs",
       "path": "date-picker.mjs",
-      "bytes": 15834,
-      "sha256": "16a81f8c09d1fc80cd22fa4ba4510a5f095be9d6fa31ce75896c4cd884763677"
+      "bytes": 16063,
+      "sha256": "59f467d32aa9579372a450b88bc4d2100113dbef5b5894a75263487616658c6b"
     },
     {
       "source": "demo.css",
@@ -296,8 +302,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 5455,
-      "sha256": "c1c2d94741a293b4112512ae3ccb13f3d7a4e80549214485868c181723f3632c"
+      "bytes": 5672,
+      "sha256": "6d049038fe82e1b8dde3e8924740835c8d404d6b09279ae40d23d708399e6114"
     },
     {
       "source": "journey-experience.css",
@@ -308,8 +314,8 @@
     {
       "source": "klin-awakening-field.mjs",
       "path": "klin-awakening-field.mjs",
-      "bytes": 15862,
-      "sha256": "2f29e53d9f7596f4b817adcd02527db19a309dea46066e911d2809728ec8f5a6"
+      "bytes": 16186,
+      "sha256": "ebcc7e8f3a72b281618dc03950bc60f4495d965bde417028790960070ba286a3"
     },
     {
       "source": "klin-companion.css",
@@ -338,8 +344,8 @@
     {
       "source": "klin-login-scene.mjs",
       "path": "klin-login-scene.mjs",
-      "bytes": 2485,
-      "sha256": "bc94b2c28249e172027797de5520abfb445865406c9b73347261c119cf524b8c"
+      "bytes": 2674,
+      "sha256": "185634b1b840a93379887885ca1f378cfb03768cde0f539ffe90d15cd33b7265"
     },
     {
       "source": "klin-native-model.mjs",
@@ -356,8 +362,8 @@
     {
       "source": "klin-world.mjs",
       "path": "klin-world.mjs",
-      "bytes": 66326,
-      "sha256": "190500b6f1ee619d6f40144ccdab1fbfdc4ef9de8ea02c12197f3fbc3edda434"
+      "bytes": 66322,
+      "sha256": "c6aacaef85f8f334f41898fea53db0b3d798704af607d92e1c52662abe02b2b3"
     },
     {
       "source": "landing.mjs",
@@ -376,6 +382,24 @@
       "path": "logo-brand.css",
       "bytes": 1105,
       "sha256": "ea01e20d6fafdda28a1bfc39897e9b113d321315b3f6357d316afef42aef1843"
+    },
+    {
+      "source": "mobile-app-polish.css",
+      "path": "mobile-app-polish.css",
+      "bytes": 6974,
+      "sha256": "e05fd2c4da444caa3851bbde4b7eedc67095a017e85d66825884121ddbd85908"
+    },
+    {
+      "source": "mobile-login-scene.css",
+      "path": "mobile-login-scene.css",
+      "bytes": 1275,
+      "sha256": "a90c5fc312b3f82d1f0c4e51a521006bc060c1c161a0790e103d5afe5a5f3498"
+    },
+    {
+      "source": "mobile-viewport.mjs",
+      "path": "mobile-viewport.mjs",
+      "bytes": 898,
+      "sha256": "fff3f958472f9f35fe53fcac50962870361ef728345aecbad7b2009272b2052d"
     },
     {
       "source": "model.mjs",
@@ -404,14 +428,14 @@
     {
       "source": "public-card.css",
       "path": "public-card.css",
-      "bytes": 7158,
-      "sha256": "627396f191c37b32d8dc1afea83107e5c41734e8361b7c29209d0f29550c0b28"
+      "bytes": 6748,
+      "sha256": "92b6c2045f577a622a8fb45d996cb3db2fc70c6c0fdfe571c22ee1c2d33629ff"
     },
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 17429,
-      "sha256": "365c8401bf5c7b3fec32562d340a063125f52ea6b72daede6fb704dfa262a75d"
+      "bytes": 17030,
+      "sha256": "1d9ffbf141f4159f0d68c2e382556fe1a7afb5a71d387e4cfc178306f10a455c"
     },
     {
       "source": "realm-scene.css",
@@ -436,6 +460,12 @@
       "path": "scene-sound.mjs",
       "bytes": 1172,
       "sha256": "50b53ee7eaa185b0cfadaad8acb6a3191aa62be9a8db94314ad1e874badc6de2"
+    },
+    {
+      "source": "sheet-dismiss.mjs",
+      "path": "sheet-dismiss.mjs",
+      "bytes": 1226,
+      "sha256": "def4f874ed4f2274e84844050a77fb01fcdcdd0cba230e0c3fe6cb90f69b3a53"
     },
     {
       "source": "social-refinement.css",
@@ -690,6 +720,31 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "mobile-login-scene.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "mobile-app-polish.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "contract-centered-paper.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "mobile-viewport.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "sheet-dismiss.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "contract-story.mjs",
       "kind": "module"
@@ -783,6 +838,11 @@
       "from": "conversation-experience.css",
       "to": "public-card.css",
       "kind": "resource"
+    },
+    {
+      "from": "date-picker.mjs",
+      "to": "sheet-dismiss.mjs",
+      "kind": "module"
     },
     {
       "from": "public-card.mjs",
