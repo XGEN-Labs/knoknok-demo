@@ -1,0 +1,31 @@
+/* Compact complete editor; the sheet itself never needs to scroll. */
+.phone[data-card-handoff]>.klin-world-host{filter:none!important;transition:none!important}
+.phone #sheet.card-editor-sheet{height:auto;max-height:var(--sheet-height);overflow:hidden;background:#fff}
+.phone #sheet.card-editor-sheet #sheet-content{max-height:none;overflow:hidden}
+.phone #sheet.card-editor-sheet .sheet-inner{padding:11px 22px 18px!important;max-height:none!important;overflow:hidden;box-sizing:border-box}
+.phone #sheet.card-editor-sheet .sheet-handle{width:28px;height:3px;margin:0 auto 13px}
+.phone #sheet.card-editor-sheet .sheet-title{margin:0 0 14px;min-height:32px}
+.phone #sheet.card-editor-sheet .sheet-title h3{font-size:21px;line-height:30px;color:#252525;margin:0}
+.phone #sheet.card-editor-sheet .sheet-title .icon-button{width:32px;height:32px;min-height:32px;font-size:23px;background:#f7f7f8;color:#333;border:0;padding:0}
+.phone #sheet.card-editor-sheet form[data-form="profile"]{display:flex;flex-direction:column;gap:11px;margin:0}
+.phone #sheet.card-editor-sheet .avatar-editor{display:grid;grid-template-columns:50px 1fr;gap:12px;align-items:center;margin:0 0 2px}
+.phone #sheet.card-editor-sheet .avatar-editor-preview{width:50px;height:50px;min-width:50px;min-height:50px;border-radius:50%;overflow:hidden;display:block}
+.phone #sheet.card-editor-sheet .avatar-editor-preview img{display:block;width:100%;height:100%;object-fit:cover}
+.phone #sheet.card-editor-sheet .avatar-upload-button{min-height:28px;padding:5px 12px;border-radius:15px;font-size:12px;line-height:17px;background:#f5f5f7;border:1px solid #e6e6e9;color:#303038}
+.phone #sheet.card-editor-sheet .avatar-editor p{font-size:10px;line-height:15px;margin:5px 0 0;color:#86868b}
+.phone #sheet.card-editor-sheet .field{display:flex;flex-direction:column;gap:5px;margin:0}
+.phone #sheet.card-editor-sheet .field>label{font-size:12px;line-height:17px;color:#444;margin:0}
+.phone #sheet.card-editor-sheet :is(input.input,textarea){font-size:14px;line-height:20px;padding:9px 12px;border-radius:13px;border:1px solid #e6e6e9;background:#fff;color:#2e2e33;min-height:39px;margin:0;box-sizing:border-box}
+.phone #sheet.card-editor-sheet textarea#bio{height:58px!important;min-height:58px!important;max-height:58px!important;resize:none;overflow-y:auto;scrollbar-width:none}
+.phone #sheet.card-editor-sheet .personality-tag-suggestions{display:flex;flex-wrap:wrap;gap:6px;margin:3px 0 0}
+.phone #sheet.card-editor-sheet .personality-tag-suggestions .tiny-btn{min-height:27px;height:27px;padding:4px 10px;border-radius:15px;font-size:11px;line-height:17px;margin:0;border:1px solid #e1e3e9;background:#f5f6f9;color:#424650;white-space:nowrap}
+.phone #sheet.card-editor-sheet .personality-tag-suggestions .tiny-btn[aria-pressed="true"]{background:#303b50!important;border-color:#303b50!important;color:#fff!important}
+.phone #sheet.card-editor-sheet .check{display:flex;align-items:center;gap:8px;min-height:24px;font-size:12px;line-height:18px;margin:0;color:#555}
+.phone #sheet.card-editor-sheet .check input{width:16px;height:16px;min-height:16px;margin:0;accent-color:#303b50}
+.phone #sheet.card-editor-sheet form>.btn[type="submit"]{margin:0!important;min-height:42px;height:42px;flex:none;border-radius:22px;font-size:14px;padding:9px 15px;background:#222!important;color:#fff!important;border:0}
+/* White type stays readable against the luminous scene. */
+.phone #app .network-avatar{background:rgba(54,66,108,.58);border-color:#ffffffa8;box-shadow:inset 0 1px 0 #ffffff29,0 3px 13px #24335721;color:#fff;backdrop-filter:blur(16px) saturate(120%)}
+.phone #app .network-friend strong{padding:4px 10px;border:1px solid #ffffff45;border-radius:13px;background:#263652a6;color:#fff!important;font-size:14px;line-height:19px;text-shadow:0 1px 2px #17264366;box-shadow:0 2px 10px #2737530d}
+.phone #app .network-friend small{background:#26365294;color:#fff;border:1px solid #ffffff4d;font-size:11px;font-weight:500;text-shadow:0 1px 2px #14254055}
+.phone #app .network-self{background:#26365299;color:#fff;border:1px solid #ffffff65;padding:8px 12px;text-shadow:0 1px 3px #13243d66}.phone #app .network-self small{color:#fffffff2}
+@media(max-height:740px){.phone #sheet.card-editor-sheet .sheet-inner{padding:9px 20px 14px!important}.phone #sheet.card-editor-sheet .sheet-handle{margin-bottom:10px}.phone #sheet.card-editor-sheet .sheet-title{margin-bottom:10px}.phone #sheet.card-editor-sheet form[data-form="profile"]{gap:9px}.phone #sheet.card-editor-sheet .avatar-editor{grid-template-columns:44px 1fr;gap:11px;margin-bottom:0}.phone #sheet.card-editor-sheet .avatar-editor-preview{width:44px;height:44px;min-width:44px;min-height:44px}.phone #sheet.card-editor-sheet :is(input.input,textarea){min-height:36px;padding:7px 11px}.phone #sheet.card-editor-sheet textarea#bio{height:50px!important;min-height:50px!important;max-height:50px!important}.phone #sheet.card-editor-sheet .personality-tag-suggestions .tiny-btn{padding-left:9px;padding-right:9px}.phone #sheet.card-editor-sheet .avatar-editor p{font-size:10px}}

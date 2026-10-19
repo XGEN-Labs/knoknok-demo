@@ -1,31 +1,32 @@
-/* A compact, keyboard accessible date sheet within the phone viewport. */
+/* Native-feeling touch wheels: no list boxes, filled selection state or scrollbar. */
 .phone .kn-date-source{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;opacity:0!important;pointer-events:none;clip-path:inset(50%)}
-.phone .kn-date-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;margin:0;padding:11px 13px;border:1px solid #dfe6ef;border-radius:15px;background:#f8fafc;color:#273247;text-align:left;font:500 13px/21px var(--system-type,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif);cursor:pointer}
-.phone .kn-date-trigger svg{width:18px;height:18px;flex:none;color:#67788e}
-.phone .kn-date-trigger.is-empty{color:#778597}.phone .kn-date-trigger:disabled{opacity:.48;cursor:default}
-.phone .kn-date-trigger:hover:not(:disabled){border-color:#a8bdd7;background:#fff;transform:none}
-.phone .kn-date-trigger:focus-visible{outline:2px solid #6e8fb4;outline-offset:3px}
-.kn-date-scrim{position:absolute;inset:0;width:100%;height:100%;background:#344d6b23;backdrop-filter:blur(9px);border-radius:30px;z-index:60;pointer-events:none}
-.phone dialog.kn-date-picker{position:fixed;top:auto;right:auto;margin:0;padding:13px 18px 18px;box-sizing:border-box;border:1px solid #fff;border-radius:25px;background:#fbfdff;color:#263247;box-shadow:0 16px 60px #284a7330;overflow-y:auto;overscroll-behavior:contain;font-family:var(--system-type,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif)}
+.phone .kn-date-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;min-height:44px;margin:0;padding:11px 13px;border:1px solid #dedede;border-radius:15px;background:#fff;color:#262626;text-align:left;font:500 13px/21px var(--system-type,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif);cursor:pointer}
+.phone .kn-date-trigger svg{width:18px;height:18px;flex:none;color:#777}
+.phone .kn-date-trigger.is-empty{color:#888}.phone .kn-date-trigger:disabled{opacity:.48;cursor:default}
+.phone .kn-date-trigger:hover:not(:disabled){border-color:#aaa;background:#fff;transform:none}
+.phone .kn-date-trigger:focus-visible{outline:1px solid #666;outline-offset:3px}
+.kn-date-scrim{position:absolute;inset:0;width:100%;height:100%;background:transparent;backdrop-filter:blur(9px);border-radius:30px;z-index:60;pointer-events:none}
+.phone dialog.kn-date-picker{--kn-wheel-row:44px;position:fixed;top:auto;right:auto;margin:0;padding:10px 24px 22px;box-sizing:border-box;border:0;border-radius:28px;background:#fff;color:#242424;box-shadow:0 8px 40px #00000014;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;font-family:var(--system-type,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif)}
+.phone dialog.kn-date-picker::-webkit-scrollbar,.phone .kn-date-wheel::-webkit-scrollbar{display:none;width:0;height:0}
 .phone dialog.kn-date-picker::backdrop{background:transparent;backdrop-filter:none}
-.kn-date-handle{width:30px;height:3px;margin:0 auto 15px;border-radius:4px;background:#cad6e5}
-.kn-date-picker header{display:flex;align-items:center;justify-content:space-between;margin:0 0 16px}
-.kn-date-picker header h2{font-size:18px;line-height:1.4;font-weight:700;letter-spacing:0;margin:0;color:#263247}
-.kn-date-picker .kn-date-cancel{display:grid;place-items:center;width:31px;height:31px;border:0;border-radius:50%;background:#edf3fa;color:#566982;font-size:24px;line-height:1;padding:0}
-.kn-date-columns{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:8px}
-.kn-date-column{display:flex;flex-direction:column;gap:7px;min-width:0;color:#69788b;font-size:11px;text-align:center;font-weight:600}
-.phone .kn-date-picker .kn-date-column select{appearance:none;background:#f0f5fb!important;background-image:none!important;border:1px solid #e1eaf4!important;border-radius:14px!important;box-shadow:none!important;padding:4px!important;width:100%;height:154px!important;min-height:154px!important;font:500 15px/1.7 var(--system-type,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif);text-align:center;overflow-y:auto;color:#33455d;scrollbar-width:thin;scrollbar-color:#cad8e9 transparent}
-.phone .kn-date-picker .kn-date-column select option{padding:6px 0;border-radius:9px;min-height:29px;text-align:center;color:#33455d}
-.phone .kn-date-picker .kn-date-column select option:checked{background:#d5e5f7 linear-gradient(#d5e5f7,#d5e5f7);color:#22374f;font-weight:700}
-.phone .kn-date-picker .kn-date-column select:focus{outline:2px solid #9bb9d9;outline-offset:2px}
-.kn-time-columns{display:grid;grid-template-columns:1fr 12px 1fr;gap:8px;margin:13px auto 0;max-width:220px}.kn-time-colon{align-self:center;text-align:center;color:#7d8ca1}
-.phone .kn-date-picker .kn-time-columns select{height:104px!important;min-height:104px!important}
-.kn-date-shortcuts{display:flex;gap:7px;margin:-2px 0 14px}
-.kn-date-picker .kn-date-shortcuts button{flex:1;background:#edf4fc;color:#48617f;border:1px solid #dce8f5;border-radius:13px;padding:8px 7px;min-height:35px;font-size:12px}
-.kn-date-selection{color:#536c88;font-size:12px;text-align:center;margin:15px 0 12px;line-height:1.5}
-.kn-date-error{color:#a75050!important;font-size:12px!important;line-height:1.5;margin:8px 0!important}
-.kn-date-picker .kn-date-confirm{width:100%;min-height:43px;background:#27354a;color:#fff;border:1px solid #27354a;border-radius:15px;font-size:14px;font-weight:700}
-.kn-date-picker button:hover:not(:disabled){filter:brightness(.98);transform:none}
-@media(max-height:650px){.phone dialog.kn-date-picker{padding:11px 16px 14px}.kn-date-handle{margin-bottom:10px}.kn-date-picker header{margin-bottom:10px}.phone .kn-date-picker .kn-date-column select{height:128px!important;min-height:128px!important}.phone .kn-date-picker .kn-time-columns select{height:80px!important;min-height:80px!important}.kn-date-selection{margin:10px 0}}
-
-.kn-date-year-entry{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 13px;color:#687b93;font-size:11px}.phone .kn-date-picker .kn-date-year-entry input{width:94px;min-height:34px;height:34px;padding:5px 10px;border:1px solid #dce7f3;border-radius:11px;background:#f0f5fb;color:#2c425f;text-align:center;font:600 15px var(--system-type,-apple-system,sans-serif)}
+.phone .kn-date-picker .kn-date-handle{width:28px;height:3px;margin:0 auto 19px;border-radius:4px;background:#d6d6d6}
+.phone .kn-date-picker header{display:flex;align-items:center;justify-content:space-between;margin:0 0 14px}
+.phone .kn-date-picker header h2{font-size:17px;line-height:1.5;font-weight:600;letter-spacing:.02em;margin:0;color:#242424}
+.phone dialog.kn-date-picker .kn-date-cancel{display:grid;place-items:center;width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:#777;font-size:23px;line-height:1;padding:0}
+.kn-date-columns{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:4px}
+.phone .kn-date-picker .kn-date-column{display:flex;flex-direction:column;gap:2px;min-width:0;color:#999;font-size:11px;text-align:center;font-weight:400;letter-spacing:.05em}
+.phone .kn-date-picker .kn-date-wheel{box-sizing:border-box;min-width:0;height:calc(var(--kn-wheel-row)*5);padding:calc(var(--kn-wheel-row)*2) 0;margin:0;overflow-y:auto;overscroll-behavior-y:contain;scroll-snap-type:y mandatory;scrollbar-width:none;-ms-overflow-style:none;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(transparent,#000 29%,#000 71%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 29%,#000 71%,transparent);background:transparent;border:0;border-radius:0;outline:none;cursor:grab;letter-spacing:0;contain:layout style}
+.phone .kn-date-picker .kn-date-wheel:active{cursor:grabbing}
+.phone .kn-date-picker .kn-date-wheel:focus-visible{outline:1px dashed #aaa;outline-offset:2px;border-radius:6px}
+.phone .kn-date-picker .kn-date-wheel-row{display:flex;align-items:center;justify-content:center;box-sizing:border-box;height:var(--kn-wheel-row);min-height:var(--kn-wheel-row);padding:0;margin:0;border:0;background:transparent;color:#aaa;font:400 19px/1 var(--system-type,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif);font-variant-numeric:tabular-nums;scroll-snap-align:center;scroll-snap-stop:normal;transition:color .14s ease;pointer-events:none}
+.phone .kn-date-picker .kn-date-wheel-row.is-current{color:#222;font-weight:500}
+.kn-time-columns{display:grid;grid-template-columns:1fr 12px 1fr;gap:4px;margin:4px auto 0;max-width:230px}.kn-time-colon{align-self:center;text-align:center;color:#777;padding-top:17px}
+.phone .kn-date-picker .kn-date-shortcuts{display:flex;justify-content:center;gap:22px;margin:0 0 9px}
+.phone dialog.kn-date-picker .kn-date-shortcuts button{flex:0 1 auto;background:transparent;color:#777;border:0;border-radius:0;padding:5px 2px;min-height:32px;font-size:12px;font-weight:400}
+.phone dialog.kn-date-picker div.kn-date-selection{background:transparent;border:0;color:#999;font-size:11px;letter-spacing:.08em;text-align:center;margin:12px 0 18px;line-height:1.5;min-height:17px}
+.phone .kn-date-picker .kn-date-error{color:#666!important;font-size:12px!important;line-height:1.5;margin:8px 0!important}
+.phone .kn-date-picker .kn-date-confirm{width:100%;min-height:48px;background:#222;color:#fff;border:0;border-radius:24px;font-size:14px;font-weight:600;letter-spacing:.05em}
+.phone .kn-date-picker button:hover:not(:disabled){filter:brightness(.98);transform:none}
+.phone .kn-date-picker[data-picker-type="datetime-local"]{--kn-wheel-row:31px}
+@media(max-height:650px){.phone dialog.kn-date-picker{--kn-wheel-row:38px;padding:9px 22px 18px}.phone .kn-date-picker .kn-date-handle{margin-bottom:13px}.phone .kn-date-picker header{margin-bottom:10px}.phone .kn-date-picker .kn-date-selection{margin:8px 0 14px}.phone .kn-date-picker[data-picker-type="datetime-local"]{--kn-wheel-row:26px}.phone .kn-date-picker[data-picker-type="datetime-local"] .kn-date-wheel-row{font-size:16px}}
+@media(prefers-reduced-motion:reduce){.phone .kn-date-picker .kn-date-wheel-row{transition:none}}

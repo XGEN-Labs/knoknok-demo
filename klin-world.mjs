@@ -1,5 +1,8 @@
 import * as THREE from './vendor/three/three.module.js';
 import { loadNativeKlinStage } from './klin-native-model.mjs';
+import { createContractLight } from './klin-contract-light.mjs';
+import { createAwakeningField } from './klin-awakening-field.mjs?v=20261019-contract-22';
+import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261019-contract-22';
 
 // Persistent world; supplied Blender juvenile/adult meshes and native hair curves
 // are loaded once, then carried through all scenes by the same locomotion rig.
@@ -15,7 +18,7 @@ const SETUP_PAGES = new Set(['basics', 'birth', 'setup', 'setup-basics', 'setup-
 const SCENE_SPACING = 5.2;
 const SCENE_X = Object.freeze({ welcome: -SCENE_SPACING, home: 0, porch: SCENE_SPACING, memory: SCENE_SPACING * 2, profile: SCENE_SPACING * 3, companion: SCENE_SPACING * 4, shared: SCENE_SPACING * 5 });
 const SCENE_ORDER = Object.keys(SCENE_X);
-const palette = Object.freeze({ background: 0xe8f4ff, cream: 0xfff8fa, blue: 0xc6e4ff, accent: 0xb8cdff, pearl: 0xffffff, floor: 0xe9f4ff, ink: 0x24334b });
+const palette = Object.freeze({ background: 0xe4dfeb, cream: 0xf4e9df, blue: 0xb9c5df, accent: 0xe3c4bf, pearl: 0xfffbf3, floor: 0xeee3d7, ink: 0x393649 });
 
 function random(seed = 1827) {
   let x = seed >>> 0;
@@ -127,148 +130,39 @@ function createLightChoice(kind) {
   return { group, core, aura, echo, floor, particles, kind };
 }
 
-function createEvolutionLight() {
-  const group = new THREE.Group(); group.name = 'klin-evolution-light'; group.visible = false;
-  const cocoon = lightPlane(4.8, 5.5, 0xf1e8ff); cocoon.position.y = 1.25; group.add(cocoon);
-  const heart = lightPlane(2.5, 4.1, 0xfff5de, 'beam'); heart.position.set(0, 1.25, .06); group.add(heart);
-  const rings = [0, 1, 2].map((_, i) => {
-    const ring = lightPlane(4.5, 4.5, i === 1 ? 0xffead1 : 0xe6d6ff, 'ring');
-    ring.rotation.x = -Math.PI / 2 + .10 * i; ring.position.y = .14 + i * .52; group.add(ring); return ring;
-  });
-  const floor = lightPlane(5.3, 5.3, 0xf2e5ff); floor.rotation.x = -Math.PI / 2; floor.position.y = .06; group.add(floor);
-  const seeds = [], positions = new Float32Array(144 * 3), rng = random(55213);
-  for (let i = 0; i < 144; i++) seeds.push({ angle: rng() * TAU, radius: 1.1 + rng() * 1.7, y: rng(), speed: .65 + rng() * 1.0 });
-  const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0xfff3e2, size: .029, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false }));
-  particles.renderOrder = 4; group.add(particles);
-  const spill = new THREE.PointLight(0xe7d1ff, 0, 7, 1.3); spill.position.set(0, 1.5, 1.4); group.add(spill);
-  return { group, cocoon, heart, rings, floor, particles, seeds, spill };
-}
-
-function updateEvolutionLight(light, progress, time, position, scale, camera) {
-  const active = progress != null;
-  light.group.visible = active;
-  if (!active) { light.spill.intensity = 0; return; }
-  const t = clamp(progress);
-  const gather = smooth(t / .24) * (1 - smooth((t - .50) / .20));
-  const flash = Math.exp(-Math.pow((t - .45) / .065, 2));
-  const release = smooth((t - .43) / .29);
-  const fade = 1 - smooth((t - .62) / .22);
-  light.group.position.copy(position); light.group.scale.setScalar(scale);
-  light.cocoon.quaternion.copy(camera.quaternion); light.heart.quaternion.copy(camera.quaternion);
-  light.cocoon.material.uniforms.strength.value = gather * .78 + flash * 1.7;
-  light.cocoon.scale.setScalar(.72 + gather * .35 + release * .48);
-  light.heart.material.uniforms.strength.value = gather * .85 + flash * 2.6;
-  light.heart.scale.set(1 + release * .50, .75 + gather * .4, 1);
-  light.floor.material.uniforms.strength.value = (gather * .65 + flash * .85) * fade;
-  light.rings.forEach((ring, i) => {
-    const spread = smooth((t - .32 - i * .035) / .37);
-    ring.scale.setScalar(.38 + spread * (1.25 + i * .12));
-    ring.position.y = .12 + i * .47 + gather * .20;
-    ring.material.uniforms.strength.value = Math.sin(spread * Math.PI) * .95 * fade;
-  });
-  const vertices = light.particles.geometry.attributes.position;
-  light.seeds.forEach((seed, i) => {
-    const angle = seed.angle + time * .42 * seed.speed;
-    const r = lerp(seed.radius, .22, gather) + release * seed.radius * 1.3;
-    const y = .15 + seed.y * 2.4 + gather * .35 + release * (.8 + seed.y);
-    vertices.setXYZ(i, Math.cos(angle) * r, y, Math.sin(angle) * r * .63);
-  });
-  vertices.needsUpdate = true;
-  light.particles.material.opacity = (gather * .85 + flash * .15) * fade;
-  light.spill.intensity = gather * .75 + flash * 2.0;
-}
-
 function shadowTexture() {
   const canvas = document.createElement('canvas'); canvas.width = canvas.height = 128;
   const ctx = canvas.getContext('2d');
   const gradient = ctx.createRadialGradient(64, 64, 3, 64, 64, 63);
-  gradient.addColorStop(0, 'rgba(49,85,117,.42)'); gradient.addColorStop(.3, 'rgba(49,85,117,.24)'); gradient.addColorStop(1, 'rgba(49,85,117,0)');
+  gradient.addColorStop(0, 'rgba(112,81,57,.40)'); gradient.addColorStop(.3, 'rgba(112,81,57,.22)'); gradient.addColorStop(1, 'rgba(112,81,57,0)');
   ctx.fillStyle = gradient; ctx.fillRect(0, 0, 128, 128);
   return new THREE.CanvasTexture(canvas);
-}
-
-// The field is centered on the relationship, not on a distant landscape. A
-// screen-sized analytical shader keeps broad clean light continuous on every
-// route; there are no stars, noise clouds, planets or horizon geometry.
-function createEnergyField() {
-  const group = new THREE.Group(); group.name = 'klin-intimate-energy-field';
-  const material = new THREE.ShaderMaterial({uniforms:{time:{value:0},aspect:{value:.46},conversation:{value:0}},depthWrite:false,depthTest:false,fog:false,toneMapped:false,
-    vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,.9999,1.0);}',
-    fragmentShader:`varying vec2 vUv;uniform float time;uniform float aspect;uniform float conversation;
-      void main(){vec2 p=vec2((vUv.x-.5)*aspect,vUv.y-.43);float t=time*.22;
-        float r=length(p*vec2(1.24,.82));float angle=atan(p.y,p.x);
-        vec3 pearl=vec3(.67,.84,.99);vec3 sky=vec3(.095,.39,.90);vec3 blush=vec3(1.,.63,.77);
-        float surround=smoothstep(.10,.68,r);vec3 color=mix(pearl,sky,surround*.72);
-        float breath=sin(t)*.026;float shell=.20+breath*.65+.020*sin(angle*2.-t*.55);
-        float ribbon=exp(-pow((r-shell)/.054,2.));
-        float inner=exp(-pow((r-(.135+breath*.5))/.025,2.));
-        float drift=sin(p.y*3.5+t*.42)*.075;
-        float stream=exp(-pow((p.x+.12+drift-p.y*.17)/.065,2.));
-        float second=exp(-pow((p.x-.17-drift+p.y*.21)/.048,2.));
-        float silk=exp(-pow((p.x+.04+sin(p.y*5.8+t*.35)*.055-p.y*.19)/.018,2.));
-        float warmth=exp(-dot(p-vec2(-.15+sin(t*.6)*.035,.05),p-vec2(-.15+sin(t*.6)*.035,.05))*19.);
-        color=mix(color,blush,warmth*.25);
-        color+=vec3(.12,.14,.16)*ribbon*.65+vec3(.07,.09,.13)*inner*.35;
-        color+=vec3(.13,.15,.16)*stream+vec3(.09,.11,.14)*second;
-        color=mix(color,vec3(.96,.99,1.),silk*.55);
-        float heart=exp(-dot(p,p)*14.);color=mix(color,vec3(.94,.97,1.),heart*(.35+conversation*.10));
-        float fringe=exp(-pow((r-shell-.034)/.018,2.));color+=vec3(.045,.012,.035)*fringe;
-        gl_FragColor=vec4(color,1.);
-        #include <tonemapping_fragment>
-        #include <colorspace_fragment>
-      }`});
-  const plane=new THREE.Mesh(new THREE.PlaneGeometry(2,2),material);plane.frustumCulled=false;plane.renderOrder=-100;group.add(plane);
-  return {group,material};
-}
-
-// A translucent near veil, a curved far veil and a low light basin establish
-// depth around the spirit without introducing a planet, stage or real room.
-function createEnergyDepth() {
-  const group=new THREE.Group();group.name='klin-energy-depth';
-  const vertex='varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}';
-  const basinMaterial=new THREE.ShaderMaterial({uniforms:{time:{value:0}},vertexShader:vertex,transparent:true,depthWrite:false,side:THREE.DoubleSide,
-    fragmentShader:`varying vec2 vUv;uniform float time;void main(){vec2 q=(vUv-.5)*2.;float r=length(q*vec2(.74,1.));float edge=1.-smoothstep(.30,1.,r);float ripple=exp(-pow((r-.34-sin(time*.42)*.012)/.10,2.));vec3 color=mix(vec3(.55,.72,.91),vec3(.92,.97,1.),exp(-r*r*12.));color+=ripple*.08;gl_FragColor=vec4(color,edge*.78);}`});
-  const basin=new THREE.Mesh(new THREE.PlaneGeometry(10,11),basinMaterial);basin.rotation.x=-Math.PI/2;basin.position.set(0,-.08,1.1);group.add(basin);
-  const veils=[];
-  for(const [i,side]of [-1,1].entries()){
-    const geometry=new THREE.PlaneGeometry(6.2,8.5,36,30),positions=geometry.attributes.position;
-    for(let n=0;n<positions.count;n++){const x=positions.getX(n),y=positions.getY(n);positions.setXYZ(n,x+Math.sin(y*.53+side)*.36,y,Math.cos(x*.54+y*.23)*.65);}geometry.computeVertexNormals();
-    const material=new THREE.ShaderMaterial({uniforms:{time:{value:0},phase:{value:i*2.2},near:{value:i}},vertexShader:vertex,transparent:true,depthWrite:false,side:THREE.DoubleSide,
-      fragmentShader:`varying vec2 vUv;uniform float time;uniform float phase;uniform float near;void main(){float t=time*.13+phase;float path=.45+sin(vUv.y*3.7+t)*.11;float d=(vUv.x-path);float band=exp(-pow(d/.11,2.));float rim=exp(-pow((d-.13)/.023,2.));float fade=sin(vUv.y*3.14159);fade*=1.-smoothstep(.30,.50,abs(vUv.x-.5));vec3 color=mix(vec3(.38,.65,.91),vec3(.88,.96,1.),band);color=mix(color,vec3(.99,.86,.90),rim*.32);gl_FragColor=vec4(color,(band*.24+rim*.23)*fade*(.75+near*.18));}`});
-    const veil=new THREE.Mesh(geometry,material);veil.position.set(side*2.05,3.1,i?1.25:-3.2);veil.rotation.y=side*.45;veil.rotation.z=side*-.18;group.add(veil);veils.push(veil);
-  }
-  const floor=new THREE.Mesh(new THREE.PlaneGeometry(11,11),new THREE.ShadowMaterial({color:0x5478a4,opacity:.14,depthWrite:false}));floor.rotation.x=-Math.PI/2;floor.position.y=-.06;floor.receiveShadow=true;group.add(floor);
-  return {group,basin,veils,floor};
 }
 
 function createRoom() {
   const environment=new THREE.Group(),worlds=new THREE.Group();environment.add(worlds);
   const groups=Object.fromEntries(Object.keys(SCENE_X).map(name=>{const group=new THREE.Group();group.name=`klin-${name}`;group.position.x=SCENE_X[name];worlds.add(group);return[name,group];}));
-  const field=createEnergyField();worlds.add(field.group);
+  const field=createWarmField();worlds.add(field.group);
   const inert=()=>new THREE.Group();
-  const floor=inert(),rug=inert(),podium=inert(),miniGround=inert(),sharedTable=inert();
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(12,12),new THREE.ShadowMaterial({opacity:.15,depthWrite:false}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;
+  const rug=inert(),podium=inert(),miniGround=inert(),sharedTable=inert();
   environment.add(floor,miniGround);groups.home.add(rug);groups.welcome.add(podium);groups.shared.add(sharedTable);
   const lampShade={material:{emissiveIntensity:.13}};
-  const portal=createLightPortal();groups.porch.add(portal.group);
+  const portal=createLightPortal();portal.group.visible=false;groups.porch.add(portal.group);
+  const lounge=createFriendLounge(makeRoundedBox,shadowTexture());groups.porch.add(lounge.group);
   const metalChoices=new THREE.Group();groups.welcome.add(metalChoices);
   const lightChoices={geng:createLightChoice('geng'),xin:createLightChoice('xin')};
   const geng=lightChoices.geng.group,xin=lightChoices.xin.group;metalChoices.add(geng,xin);
-  const sceneDepth=Object.fromEntries(Object.entries(groups).map(([name,group])=>{const depth=createEnergyDepth();group.add(depth.group);return[name,depth];}));
+  const sceneDepth=Object.fromEntries(Object.entries(groups).map(([name,group])=>{const depth=createWarmDepth(name);group.add(depth.group);return[name,depth];}));
   const sceneLights=Object.fromEntries(Object.entries(groups).map(([name,group])=>{
-    const glow=lightPlane(name==='shared'?7:5.3,name==='shared'?7:5.3,0xe3f1ff);glow.rotation.x=-Math.PI/2;glow.position.set(0,.025,.25);group.add(glow);
+    const glow=lightPlane(name==='shared'?7:5.3,name==='shared'?7:5.3,0xffe8c5);glow.rotation.x=-Math.PI/2;glow.position.set(0,.025,.25);group.add(glow);
     const veil=lightPlane(5.4,6.0,name==='porch'?0xffecde:0xcde6ff,'ring');veil.position.set(name==='porch'?.9:-1.05,2.0,-3.0);veil.rotation.z=name==='porch'?-.27:.35;group.add(veil);
     return[name,{glow,veil}];
   }));
-  const participantSeats=[-1,1].map(side=>{
-    const seat=inert(),badge=inert(),stem=inert();groups.shared.add(seat,badge,stem);
-    const disk=new THREE.Mesh(new THREE.CircleGeometry(.35,48),new THREE.MeshBasicMaterial({color:side<0?0xd9eaff:0xf1dfe9}));badge.add(disk);
-    const head=new THREE.Mesh(new THREE.CircleGeometry(.10,24),new THREE.MeshBasicMaterial({color:0xffffff}));head.position.set(0,.07,.01);badge.add(head);
-    const shoulders=new THREE.Mesh(new THREE.CircleGeometry(.18,24),new THREE.MeshBasicMaterial({color:0xffffff}));shoulders.position.set(0,-.14,.01);shoulders.scale.y=.6;badge.add(shoulders);
-    return{side,seat,badge,stem};
-  });
+  // Participant identity is shown by the HTML names above the two native
+  // companions. Do not duplicate it with synthetic avatar disks in the scene.
   const contact=new THREE.Mesh(new THREE.PlaneGeometry(2.65,2.2),new THREE.MeshBasicMaterial({map:shadowTexture(),transparent:true,depthWrite:false,opacity:.12}));contact.rotation.x=-Math.PI/2;environment.add(contact);
-  return{environment,worlds,groups,room:groups.home,welcome:groups.welcome,floor,rug,podium,miniGround,contact,lampShade,portal,metalChoices,choiceProps:{geng,xin},lightChoices,sceneLights,sceneDepth,participantSeats,sharedTable,field};
+  return{environment,worlds,groups,room:groups.home,welcome:groups.welcome,floor,rug,podium,miniGround,contact,lampShade,portal,metalChoices,choiceProps:{geng,xin},lightChoices,sceneLights,sceneDepth,sharedTable,field,lounge};
 }
 
 export function sceneForKlinPage(page) {
@@ -282,14 +176,14 @@ export function sceneForKlinPage(page) {
 }
 
 export function getKlinPageLayout(page) {
-  if (HOME_PAGES.has(page)) return { x: .5, footY: .67, height: .22, world: 'home', blur: false, mini: false };
+  if (HOME_PAGES.has(page)) return { x: .5, footY: .68, height: .235, world: 'home', blur: false, mini: false };
   if(page==='profile'||page==='public-card')return {x:.5,footY:.67,height:.22,world:'profile',blur:true,mini:false,character:false};
   if(page==='chat'||page==='connected')return {x:.30,footY:.55,height:.125,world:'shared',blur:false,mini:false,shared:true};
   if (page === 'landing' || page === 'onboard') return { x: .5, footY: .54, height: .245, world: 'welcome', blur: false, mini: false };
   if (page === 'initializing') return { x: .5, footY: .54, height: .235, world: 'welcome', blur: false, mini: false };
   if (page === 'welcome') return { x: .5, footY: .66, height: .30, world: 'welcome', blur: false, mini: false };
   if (AUTH_PAGES.has(page)) return { x: .85, footY: .20, height: .10, world: 'welcome', blur: true, mini: true };
-  if (VISIT_PAGES.has(page)) return { x: .25, footY: .68, height: .18, world: 'porch', blur: false, mini: false,portal:true };
+  if (VISIT_PAGES.has(page)) return { x: .50, footY: .62, height: .18, world: 'porch', blur: false, mini: false, portal: false, lounge: true };
   if (SETUP_PAGES.has(page)) return { x: .85, footY: .185, height: .095, world: 'welcome', blur: true, mini: true };
   return { x: .85, footY: .18, height: .09, world: sceneForKlinPage(page), blur: true, mini: true };
 }
@@ -301,7 +195,7 @@ function createFallback(host, reason) {
   host.dataset.worldError = String(reason?.message || reason || 'WebGL unavailable').slice(0, 180);
   // The integrator keeps its existing accessible artwork when WebGL is absent.
   const complete = options => { queueMicrotask(() => options?.onComplete?.()); return () => {}; };
-  return { supported: false, ready: Promise.resolve(false), setPage() {}, setStage() {}, setLayout() {}, setConversationMode() {}, setCardPreview() {}, setParticipants() {}, setPortalState() {}, transition(_from, _to, options) { return complete(options); }, grow(options) { return complete(options); }, interact() {}, setReducedMotion() {}, resize() {}, dispose() { host.replaceChildren(); } };
+  return { supported: false, ready: Promise.resolve(false), setPage() {}, setStage() {}, setLayout() {}, setConversationMode() {}, setCardPreview() {}, setParticipants() {}, setPortalState() {}, setLoungeState() {}, setActive() {}, transition(_from, _to, options) { return complete(options); }, grow(options) { return complete(options); }, signContract(options={}) { let cancelled=false;queueMicrotask(()=>{if(!cancelled){options.onSigned?.();options.onComplete?.();}});return()=>{cancelled=true;}; }, interact() {}, setReducedMotion() {}, resize() {}, dispose() { host.replaceChildren(); } };
 }
 
 /**
@@ -322,21 +216,22 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   host.append(canvas);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+  renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.06;
   renderer.setClearColor(palette.background, 1);
-  const scene = new THREE.Scene(); scene.background = new THREE.Color(palette.background); scene.fog = new THREE.Fog(palette.background, 38, 90);
+  const scene = new THREE.Scene(); scene.background = new THREE.Color(palette.background); scene.fog = new THREE.Fog(palette.background, 15, 38);
   const camera = new THREE.OrthographicCamera(-2.2, 2.2, 4.8, -4.8, .1, 80);
   camera.position.set(0, 5.1, 13); camera.lookAt(0, 1.8, 0); camera.updateMatrixWorld();
-  const hemisphere=new THREE.HemisphereLight(0xeef7ff,0xadc9e6,1.22);scene.add(hemisphere);
+  const hemisphere=new THREE.HemisphereLight(0xdce6ff,0xbab8d4,1.13);scene.add(hemisphere);
   // The analytical contact field avoids a hard spiky silhouette in the haze.
-  const key = new THREE.DirectionalLight(0xfffaf4, 2.65); key.position.set(-3.8, 7.4, 5.7); key.castShadow = false;
+  const key = new THREE.DirectionalLight(0xffe8d8, 2.30); key.position.set(3.8, 7.4, 5.7); key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024); key.shadow.camera.left = key.shadow.camera.bottom = -5; key.shadow.camera.right = key.shadow.camera.top = 5;
-  key.shadow.camera.near = .2; key.shadow.camera.far = 28; key.shadow.bias = -.0004; key.shadow.normalBias = .027; key.shadow.radius = 4;
+  key.shadow.camera.near = .2; key.shadow.camera.far = 28; key.shadow.bias = -.0004; key.shadow.normalBias = .015; key.shadow.radius = 7;
   key.target.position.set(0, 1, 0); scene.add(key, key.target);
-  const fill = new THREE.DirectionalLight(0xc9e4ff, .92); fill.position.set(4, 3, 3); scene.add(fill);
-  const rim = new THREE.DirectionalLight(0xe2f0ff, 1.05); rim.position.set(1, 5, -4); scene.add(rim);
+  const fill = new THREE.DirectionalLight(0xb9caff, .62); fill.position.set(-4, 3, 3); scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xe0d8ff, .78); rim.position.set(1, 5, -4); scene.add(rim);
   const room = createRoom(); scene.add(room.environment);
-  const evolutionLight = createEvolutionLight(); scene.add(evolutionLight.group);
+  const awakeningField = createAwakeningField(); scene.add(awakeningField.group);
+  const contractLight=createContractLight();scene.add(contractLight.group);
   const rig = createKlinRig(); scene.add(rig.root);
   const otherRig=cloneKlinRig(rig);otherRig.root.visible=false;scene.add(otherRig.root);
   // Keep the old structural rig only for motion anchors. Never show the rejected
@@ -348,10 +243,10 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   const pointer = { x: 0, y: 0 };
   const state = {
     page: 'welcome', stage: 'juvenile', growth: 0, scale: 1, yaw: 0, look: 0,
-    reduced: !!reducedMotion, disposed: false, time: 0, blink: 1,
+    reduced: !!reducedMotion, active: true, disposed: false, time: 0, blink: 1, eyeOpenness: 1,
     layout: pageLayout('welcome'), position: new THREE.Vector3(), action: null,
     width: 402, height: 874, last: performance.now(), frame: 0, mode: 'welcome', blur: 0, sceneX: SCENE_X.welcome, awaitingGrowth: false,
-    conversation:false, transitionPhase:'idle', participants:[{id:'you'},{id:'friend'}],activeId:'you',portalState:'idle',selectedMetal:null,
+    conversation:false, transitionPhase:'idle', participants:[{id:'you'},{id:'friend'}],activeId:'you',portalState:'idle',selectedMetal:null,lounge:{count:3,activeId:null,phase:'idle'},realm:{recognition:1,resting:false,keepsake:false,conversationPhase:null,thinking:false},echoPulseStarted:-10,contractPhase:'idle',
   };
   let resolveReady;
   const ready = new Promise(resolve => { resolveReady = resolve; });
@@ -360,6 +255,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   const setCameraX = x => {
     if (Math.abs(camera.position.x - x) > .00001) backgroundDirty = true;
     state.sceneX = x; camera.position.x = x; camera.lookAt(x, 1.8, 0); camera.updateMatrixWorld();
+    key.position.x=x+3.8;key.target.position.x=x;key.target.updateMatrixWorld();
   };
   const layoutToWorld = (layout, sceneX = room.groups[layout.world]?.position.x ?? state.sceneX) => {
     const point = new THREE.Vector3(0, 0, 0).project(camera);
@@ -422,9 +318,9 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`,
-    // The field is authored in display light. Preserve its clear blue/white
-    // balance through blur; an extra ACES pass would turn it gray.
-    toneMapped: false, depthTest: false, depthWrite: false,
+    // The physical warm surfaces are linear in the HDR targets; apply the
+    // same ACES display transform as the unblurred room exactly once.
+    toneMapped: true, depthTest: false, depthWrite: false,
   });
   const postQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), blurMaterial); postQuad.frustumCulled = false; postScene.add(postQuad);
   const updateWorldMode = layoutOrMode => {
@@ -441,8 +337,8 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     else if(state.page==='welcome'||state.page==='landing')room.metalChoices.visible=false;
     // Background changes are a camera/stage response; Klin remains the same rig.
     scene.background.setHex(palette.background);scene.fog.color.setHex(palette.background);
-    hemisphere.groundColor.setHex(0xadc9e6);
-    fill.color.setHex(0xc9e4ff);
+    hemisphere.groundColor.setHex(0xc2bfd8);
+    fill.color.setHex(0xd8e0ff);
   };
   const applyLayout = layout => {
     const placement = layoutToWorld(layout);
@@ -453,6 +349,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   };
   function stopAction() {
     if (!state.action) return;
+    if(state.action.kind==='contract')state.contractPhase='idle';
     state.action.cancelled = true; state.action = null;
   }
   function beginAction(action) {
@@ -505,12 +402,14 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     if(state.page!=='home'||state.action?.kind==='transition'||state.action?.kind==='grow')return;
     setLayout(enabled?{...pageLayout('home'),footY:.37,height:.13}:pageLayout('home'),{immediate:state.reduced});
   }
-  function transition(from, to, { direction = 'forward', onComplete, onCardFrame, stage = state.stage, layout: override } = {}) {
+  function transition(from, to, { direction = 'forward', onComplete, onCardFrame, stage = state.stage, layout: override, preserveScene = false } = {}) {
     const nextPage = String(to || 'home');
     state.conversation=false;host.dataset.conversationMode='idle';
     const presentingCard=from==='home'&&(nextPage==='profile'||nextPage==='public-card');
     const growthEntrance = nextPage === 'home' && stage === 'juvenile' && (state.mode === 'welcome' || ['landing','onboard','initializing'].includes(from));
-    const layout = growthEntrance ? {...pageLayout('onboard'),footY:.62,height:.245} : {...pageLayout(nextPage),...(override||{})};
+    // A card belongs to the current room. Keep its camera, character placement
+    // and background through the entire offer, including the final frame.
+    const layout = presentingCard && preserveScene ? {...state.layout,blur:true} : growthEntrance ? {...pageLayout('onboard'),footY:.62,height:.245} : {...pageLayout(nextPage),...(override||{})};
     const fromWorld=sceneForKlinPage(from),toWorld=layout.world;
     const sceneDirection=Math.sign(SCENE_ORDER.indexOf(toWorld)-SCENE_ORDER.indexOf(fromWorld))||(direction==='back'||direction==='backward'?-1:1);
     // A card is offered from Klin's present location, without traveling to an
@@ -524,16 +423,22 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     if(nextPage==='onboard')room.metalChoices.visible=true;
     const targetGrowth = state.stage === 'adult' ? 1 : 0;
     const driftDirection = Math.sign(placement.sceneX - current.sceneX) || (direction === 'back' || direction === 'backward' ? -1 : 1);
-    return beginAction({ kind: 'transition', duration: state.reduced ? 1 : presentingCard?1850:1150, from: current, to: placement, layout, sceneMoves, direction: driftDirection, targetGrowth, presentingCard, onComplete, onCardFrame });
+    return beginAction({ kind: 'transition', duration: state.reduced ? 1 : presentingCard?1850:1150, from: current, to: placement, layout, sceneMoves, fromWorld:state.mode, direction: driftDirection, targetGrowth, presentingCard, onComplete, onCardFrame });
+  }
+  function signContract({onComplete,onSigned}={}){
+    if(state.action?.kind==='contract')return ()=>{};
+    state.contractPhase='touch';state.echoPulseStarted=state.time;
+    return beginAction({kind:'contract',duration:state.reduced?650:2550,onComplete,onSigned,signed:false,fromYaw:state.yaw});
   }
   function grow({ onComplete, replay = false } = {}) {
+    if(state.action?.kind==='contract')return ()=>{};
     if (replay || state.growth > .01) { state.growth = 0; state.stage = 'juvenile'; }
     const layout = { ...pageLayout('home'), x: .5 };
     const sceneMoves=prepareSceneRoute(layout,1);
     const from = { position: rig.root.position.clone(), scale: rig.root.scale.x, sceneX: camera.position.x, yaw: rig.root.rotation.y, growth: state.growth };
     const homePlacement = layoutToWorld(layout);
-    // Transformation remains in the first field, then a levitating light arc
-    // carries the grown spirit into the home relationship field.
+    // Moving iridescent light wraps the preserved native form before a gentle
+    // drift carries the adult companion toward its home.
     state.awaitingGrowth = false; state.page = 'home';
     state.position.copy(from.position); state.scale = from.scale;
     state.layout = { ...state.layout, mini: false, blur: false }; updateWorldMode(state.layout);
@@ -545,9 +450,23 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     if(activeId!=null)state.activeId=String(activeId);
     backgroundDirty=true;requestFrame();
   }
+  function setLoungeState({count=state.lounge.count,activeId=state.lounge.activeId,phase='idle'}={}){
+    state.lounge={count:clamp(Number.isFinite(count)?Math.round(count):3,0,3),activeId:activeId==null?null:String(activeId),phase};backgroundDirty=true;requestFrame();
+  }
+  function setRealmState(value={}){
+    const oldPhase=state.realm.conversationPhase,wasThinking=state.realm.thinking;
+    Object.assign(state.realm,value);state.realm.recognition=clamp(Number(state.realm.recognition)||0);
+    state.realm.conversationPhase=state.realm.conversationPhase==null?null:String(state.realm.conversationPhase).slice(0,48);
+    state.realm.thinking=!!state.realm.thinking;
+    if((oldPhase!==state.realm.conversationPhase&&state.realm.conversationPhase)||(wasThinking&&!state.realm.thinking))state.echoPulseStarted=state.time;
+    // Recognition changes the living light, never the clarity of the scene.
+    host.style.setProperty('--realm-focus-blur','0px');
+    host.dataset.environment='reference-scene';backgroundDirty=true;requestFrame();
+  }
   function setPortalState(value='idle'){state.portalState=['idle','seeking','found','open'].includes(value)?value:'idle';requestFrame();}
   function interact(kind = 'wave') {
-    if(state.action?.kind==='grow')return ()=>{};
+    if(state.action?.kind==='grow'||state.action?.kind==='contract')return ()=>{};
+    state.echoPulseStarted=state.time;
     if(state.action?.kind==='transition'){
       const routeAction=state.action;
       if(['geng','xin','portal','knock'].includes(kind)){routeAction.queuedInteraction=kind;if(kind==='geng'||kind==='xin')state.selectedMetal=kind;}
@@ -567,7 +486,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     const activity = state.action;
     const elapsed = activity ? clamp((performance.now() - activity.started) / activity.duration) : 0;
     let walk = 0, wave = 0, waveLeft = 0, squat = 0, stretch = 0, lean = 0, turn = state.yaw+(state.layout.shared ? .72 : 0), step = 0,portalPulse=0;
-    let scale = state.scale, evolutionProgress = null;
+    let scale = state.scale, evolutionProgress = null,contractProgress=null;
     let position = state.position.clone();
     if (activity) {
       if (activity.kind === 'transition' || activity.kind === 'layout') {
@@ -598,19 +517,19 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
       } else if (activity.kind === 'grow') {
         const t = elapsed;
         evolutionProgress = t;
-        // Readable phases: light gathers, Klin rises into a bright silhouette,
-        // the adult is revealed, then the pair travels into the home scene.
-        const gather = smooth(t / .23) * (1 - smooth((t - .47) / .18));
-        const lift = smooth((t - .14) / .20) * (1 - smooth((t - .59) / .15));
+        // Colored living light and soft bokeh follow native surfaces. There is
+        // no white cocoon, clipping plane or hard ring through the model.
+        const gather = smooth(t / .25) * (1 - smooth((t - .50) / .22));
+        const lift = smooth((t - .13) / .24) * (1 - smooth((t - .61) / .18));
         const driftingHome = smooth((t - .74) / .26);
         moveScenes(activity.sceneMoves,driftingHome);
         const crossingRooms = Math.abs(activity.to.sceneX - activity.from.sceneX) > .01;
         setCameraX(lerp(activity.from.sceneX, activity.to.sceneX, driftingHome));
         position.lerpVectors(activity.from.position, activity.to.position, driftingHome);
         scale = lerp(activity.from.scale, activity.to.scale, driftingHome);
-        state.growth = smooth((t - .40) / .13);
-        squat = gather * .12; stretch = Math.sin(clamp((t - .35) / .28) * Math.PI) * .10;
-        position.y += lift * .38 * scale;
+        state.growth = smooth((t - .35) / .24);
+        squat = gather * .028; stretch = Math.sin(clamp((t - .35) / .28) * Math.PI) * .018;
+        position.y += lift * .17 * scale;
         const faceAlongRoute = smooth((t - .74) / .08) * (1 - smooth((t - .91) / .09));
         turn = Math.sin(t * TAU) * gather * .15 + faceAlongRoute * (crossingRooms ? .22 : .12);
         lean = Math.sin(t * Math.PI * 4) * gather * .025;
@@ -620,6 +539,14 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
         if (t > .84 && state.mode !== activity.layout.world) updateWorldMode(activity.layout);
         state.blur = 0;
         room.lampShade.material.emissiveIntensity = .13 + gather * .28;
+      } else if(activity.kind==='contract'){
+        contractProgress=elapsed;
+        state.contractPhase=elapsed<.24?'touch':elapsed<.52?'weave':elapsed<.80?'sign':elapsed<1?'acknowledge':'sealed';
+        const consent=smooth(elapsed/.30)*(1-smooth((elapsed-.82)/.18));
+        wave=consent*.30;waveLeft=consent*.25;turn=Math.sin(elapsed*Math.PI)*-.07;
+        if(!state.reduced)position.y+=Math.sin(elapsed*Math.PI)*scale*.045;
+        state.blur=0;
+        if(elapsed>=.80&&!activity.signed){activity.signed=true;queueMicrotask(()=>{if(!activity.cancelled&&!state.disposed)activity.onSigned?.();});}
       } else if (activity.kind === 'turn') {
         // Stop briefly on the right and back views before returning to the user.
         const stops = [[0, 0], [.22, Math.PI / 2], [.40, Math.PI / 2], [.57, Math.PI], [.72, Math.PI], [1, TAU]];
@@ -644,8 +571,9 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
         squat = Math.sin(elapsed * TAU) * .024;
       }
       if (elapsed >= 1) {
-        if (activity.kind === 'transition' || activity.kind === 'layout') { state.position.copy(activity.to.position); state.scale = activity.to.scale; state.layout = activity.layout; setCameraX(activity.to.sceneX); updateWorldMode(activity.layout); if(activity.kind==='transition')settleCorner(activity.layout,position);state.yaw = 0;turn=activity.layout.shared ? .72 : 0; if (activity.targetGrowth != null) state.growth = activity.targetGrowth; }
+        if (activity.kind === 'transition' || activity.kind === 'layout') { state.position.copy(activity.to.position); state.scale = activity.to.scale; state.layout = activity.layout; setCameraX(activity.to.sceneX); updateWorldMode(activity.layout); if(activity.kind==='transition'&&!activity.presentingCard)settleCorner(activity.layout,position);state.yaw = 0;turn=activity.layout.shared ? .72 : 0; if (activity.targetGrowth != null) state.growth = activity.targetGrowth; }
         if (activity.kind === 'grow') { state.growth = 1; state.stage = 'adult'; state.position.copy(activity.to.position); state.scale = activity.to.scale; state.layout = activity.layout; state.awaitingGrowth = false; setCameraX(activity.to.sceneX); updateWorldMode(activity.layout);settleCorner(activity.layout,position); room.lampShade.material.emissiveIntensity = .13; }
+        if(activity.kind==='contract')state.contractPhase='sealed';
         if (activity.kind === 'turn') state.yaw = 0;
         state.action = null;
         queueMicrotask(() => { if (!activity.cancelled && !state.disposed) {activity.onComplete?.();if(activity.queuedInteraction&&!state.action)interact(activity.queuedInteraction);} });
@@ -653,7 +581,15 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     }
     if(!state.action)state.transitionPhase='idle';
     host.dataset.transitionPhase=state.transitionPhase;
-    updateEvolutionLight(evolutionLight, evolutionProgress, time, position, scale, camera);
+    host.dataset.contractPhase=state.contractPhase;
+    const userOrigin=layoutToWorld({x:.50,footY:.86,height:.10,world:state.mode}).position.sub(position).divideScalar(Math.max(.001,scale));userOrigin.z=1.0;
+    contractLight.update({progress:contractProgress,time,position,scale,origin:userOrigin,reduced:state.reduced,pixelRatio:renderer.getPixelRatio()});
+    const echoPulse=state.reduced?0:1-smooth((state.time-state.echoPulseStarted)/1.45);
+    const isFirstConversation=state.page==='landing'||state.page==='onboard'||state.page==='initializing';
+    awakeningField.update({time,position,scale,yaw:turn,growth:state.growth,progress:evolutionProgress,
+      recognition:state.realm.recognition,conversation:isFirstConversation,thinking:state.realm.thinking,
+      pulse:echoPulse,reduced:state.reduced,pixelRatio:renderer.getPixelRatio()});
+    host.dataset.lightCurrent=evolutionProgress!=null?'coalescing':isFirstConversation?(state.reduced?'still':state.realm.thinking?'listening':'responsive'):'rest';
     host.dataset.evolutionPhase = evolutionProgress == null ? 'idle' : evolutionProgress < .25 ? 'gather' : evolutionProgress < .48 ? 'transform' : evolutionProgress < .74 ? 'reveal' : 'arrive';
     const g = state.growth;
     const breathing = state.reduced ? 0 : (Math.sin(time * 1.32)+Math.sin(time*.71+.8)*.18) * .009;
@@ -681,7 +617,10 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     rig.body.scale.set(lerp(.89, 1.06, g) * (1 + squat * .26 - stretch * .20 - breathing * .4), lerp(.85, 1.04, g) * (1 - squat * .45 + stretch + breathing), lerp(.85, 1.0, g));
     rig.body.rotation.x = pointer.y * -.018;
     const blinkPhase = time % 5.1;
-    const blink = state.reduced ? 1 : blinkPhase > 4.78 && blinkPhase < 4.96 ? .14 + Math.abs((blinkPhase - 4.87) / .09) * .86 : 1;
+    const naturalBlink = blinkPhase > 4.78 && blinkPhase < 4.96 ? .14 + Math.abs((blinkPhase - 4.87) / .09) * .86 : 1;
+    const waking = state.page==='landing' ? .62+state.realm.recognition*.38 : 1;
+    state.eyeOpenness=state.reduced?1:lerp(state.eyeOpenness,activity?.kind==='wave'?1:waking,.08);
+    const blink = state.reduced ? 1 : naturalBlink*state.eyeOpenness;
     rig.eyes.forEach(eye => { eye.scale.y = .168 * blink; });
     if(nativeModels.primary)for(const model of Object.values(nativeModels.primary))model.setBlink?.(blink);
     for (const limb of rig.limbs) {
@@ -705,13 +644,21 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     rig.tail.position.set(0, lerp(.40, .59, g), -lerp(.69, .83, g)); rig.tail.scale.setScalar(lerp(.17, .25, g));
     room.contact.position.set(position.x, state.position.y + .018 * scale, position.z + .06 * scale);
     room.contact.scale.set(scale * lerp(.69, .94, g), scale * lerp(.62, .87, g), 1);
-    room.contact.material.opacity = (state.layout.mini ? .10 : .23)/(1+Math.max(0,position.y-state.position.y)*1.6);
+    // First contact floats above the cloud path. A floor contact shadow would
+    // hang in the open sky at this higher dialogue placement.
+    const floatsInWelcome=state.page==='landing'||state.page==='onboard'||state.page==='initializing';
+    room.contact.material.opacity = floatsInWelcome?0:(state.layout.mini ? .10 : .23)/(1+Math.max(0,position.y-state.position.y)*1.6);
+    room.floor.visible=!floatsInWelcome&&activity?.kind!=='grow';
     room.miniGround.position.set(position.x, position.y - .075 * scale, position.z + .05 * scale); room.miniGround.scale.set(scale * 1.17, scale, scale * .83);
     const homeBase = layoutToWorld(pageLayout('home'),room.groups.home.position.x);
     const porchBase = layoutToWorld(pageLayout('relations'),room.groups.porch.position.x);
-    // Light anchors share the scene rail; no physical platforms are rendered.
-    for (const[name,group]of Object.entries(room.groups))group.position.y=name==='porch'?porchBase.position.y:homeBase.position.y;
-    room.floor.position.y = Math.min(homeBase.position.y,porchBase.position.y)-.30;
+    // The curved floor, soft seats and Klin share a physical contact plane.
+    const floorY=name=>name==='porch'?porchBase.position.y:name==='shared'?layoutToWorld(pageLayout('chat'),room.groups.shared.position.x).position.y:name==='welcome'?layoutToWorld(pageLayout('landing'),room.groups.welcome.position.x).position.y:homeBase.position.y;
+    // While neighboring coves share the viewport, keep their physical floors
+    // coplanar. A raised lounge floor must never clip the traveling companion.
+    const travelFloor=activity?.kind==='transition'&&!activity.presentingCard?lerp(floorY(activity.fromWorld),floorY(activity.layout.world),ease(elapsed)):null;
+    for (const[name,group]of Object.entries(room.groups))group.position.y=travelFloor??floorY(name);
+    room.floor.position.set(position.x,state.position.y-.015,position.z);
     room.rug.position.set(0, -.41, .30);
     room.field.material.uniforms.time.value=state.reduced?0:time;room.field.material.uniforms.conversation.value=state.conversation?1:0;
     if(!state.reduced)backgroundDirty=true;
@@ -721,16 +668,18 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
       room.podium.position.set(position.x-room.groups.welcome.position.x,position.y-homeBase.position.y-podiumHeight/2,position.z+.05*scale);
       room.podium.scale.set(scale,podiumHeight,scale*.75);
     }
-    key.position.x = state.sceneX - 3.8; fill.position.x = state.sceneX + 4; rim.position.x = state.sceneX + 1;
+    key.position.x = state.sceneX + 3.8; fill.position.x = state.sceneX - 4; rim.position.x = state.sceneX + 1;
     key.target.position.set(state.sceneX, homeBase.position.y + 1, homeBase.position.z);
     const portalPlace=layoutToWorld({x:.69,footY:.67,height:.33,world:'porch'});
     room.portal.group.position.set(portalPlace.position.x-room.groups.porch.position.x,portalPlace.position.y-room.groups.porch.position.y,portalPlace.position.z-.05);
     const portalScale=(camera.top-camera.bottom)*.33/3.49;
     room.portal.group.scale.set(portalScale*.82,portalScale,portalScale);room.portal.group.rotation.y=-.10;
-    room.portal.group.visible=!(state.mode==='porch'&&state.layout.portal===false&&!state.action);
+    room.portal.group.visible=false; // Legacy API remains; friends now gather in a lounge.
+    room.lounge.group.visible=state.layout.lounge!==false;
+    updateFriendLounge(room.lounge,state.lounge,state.reduced?0:time);
     room.portal.glow.uniforms.time.value=state.time;
     room.portal.glow.uniforms.strength.value=({idle:1,seeking:1.25,found:1.6,open:2}[state.portalState]||1)+portalPulse*.65;
-    room.portal.spill.intensity=.65+portalPulse*.4+(state.portalState==='found'||state.portalState==='open'?.45:0);
+    room.portal.spill.intensity=0;
     room.portal.haloMaterial.uniforms.strength.value=1+portalPulse*.20;
     room.portal.warmEdge.material.uniforms.strength.value=.30+(state.reduced?0:(Math.sin(time*.8)+1)*.05)+portalPulse*.18;
     room.portal.leafPivot.rotation.y=1.08+(state.reduced?0:Math.sin(time*.34)*.018)+portalPulse*.10;
@@ -752,14 +701,12 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
       light.core.position.y=.41+(state.reduced?0:Math.sin(time*.8)*.025);
     }
     for(const[name,light]of Object.entries(room.sceneLights)){
-      light.glow.material.uniforms.strength.value=name==='welcome'?.32:.22;
+      light.glow.material.uniforms.strength.value=0;
       light.veil.material.uniforms.strength.value=0;
       if(name==='welcome')light.glow.position.set(room.podium.position.x,room.podium.position.y+.26*scale,room.podium.position.z);
     }
-    for(const depth of Object.values(room.sceneDepth)){
-      depth.basin.material.uniforms.time.value=state.reduced?0:time;
-      depth.veils.forEach((veil,i)=>{veil.material.uniforms.time.value=state.reduced?0:time;veil.position.x=(i?1:-1)*2.05+(state.reduced?0:Math.sin(time*.17+i)*.11)+pointer.x*(i?.06:.025);});
-    }
+    for(const depth of Object.values(room.sceneDepth))updateWarmDepth(depth,state.reduced?0:time,pointer.x,state.realm);
+    updateReferenceField(room.field,{page:state.page,from:activity?.kind==='transition'?activity.fromWorld:state.mode,to:activity?.kind==='transition'?activity.layout.world:state.mode,mix:activity?.kind==='transition'?ease(elapsed):0,visit:state.lounge,keepsake:state.realm.keepsake});
     if(activity?.presentingCard&&activity.onCardFrame){
       rig.root.updateMatrixWorld(true);
       const model=nativeModels.primary?.[g<.5?'juvenile':'adult'];
@@ -769,17 +716,11 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     const sharedAt=layoutToWorld({x:.5,footY:.55,height:.125,world:'shared'});
     const tableHeight=.42;
     room.sharedTable.position.set(0,sharedAt.position.y-homeBase.position.y-tableHeight/2,sharedAt.position.z+.12);room.sharedTable.scale.set(1,tableHeight,.63);
-    for(const person of room.participantSeats){
-      const at=layoutToWorld({x:person.side<0 ? .23 : .77,footY:.36,height:.1,world:'shared'});
-      person.badge.position.set(at.position.x-room.groups.shared.position.x,at.position.y-homeBase.position.y-.254,at.position.z-1.0);
-      person.seat.position.x=person.badge.position.x;
-      const poleHeight=Math.max(.1,person.badge.position.y-1.18);person.stem.position.set(person.badge.position.x,1.0+poleHeight/2,person.badge.position.z-.05);person.stem.scale.y=poleHeight;
-    }
     otherRig.root.visible=nativeReady&&room.groups.shared.visible&&state.participants.length>1;
     otherContact.visible=otherRig.root.visible;
     if(otherRig.root.visible){
       for(const[original,copy]of otherRig.copies)if(original!==rig.root){copy.position.copy(original.position);copy.rotation.copy(original.rotation);copy.scale.copy(original.scale);}
-      const at=layoutToWorld({x:.70,footY:.55,height:.125,world:'shared'});
+      const at=layoutToWorld({...pageLayout('chat'),x:.72});
       otherRig.root.position.copy(at.position);otherRig.root.scale.setScalar(at.scale);otherRig.root.rotation.set(0,-.72,0);
       if(nativeModels.secondary)for(const[stage,model]of Object.entries(nativeModels.secondary)){
         model.root.visible=stage==='adult';const normalized=2.72/(model.height||2.72);
@@ -798,7 +739,8 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     }
   }
   function render() {
-    if (state.disposed || document.hidden) return;
+    if (state.disposed || !state.active || document.hidden) return;
+    if(!nativeReady){renderer.clear();return;}
     try {
       if (state.blur > .005) {
         const primaryVisible=rig.root.visible,miniVisible = room.miniGround.visible, contactVisible = room.contact.visible;
@@ -843,14 +785,14 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   }
   function tick(now) {
     state.frame = 0;
-    if (state.disposed || document.hidden) return;
+    if (state.disposed || !state.active || document.hidden) return;
     if((now-state.last)/1000<(state.action?1/60:1/30)*.92){requestFrame();return;}
     const delta = Math.min((now - state.last) / 1000, .05); state.last = now; state.time += delta;
     updatePose(state.time); render();
     if (!state.reduced || state.action) requestFrame();
   }
   function requestFrame() {
-    if (!state.frame && !state.disposed && !document.hidden) state.frame = requestAnimationFrame(tick);
+    if (!state.frame && !state.disposed && state.active && !document.hidden) state.frame = requestAnimationFrame(tick);
   }
   function resize() {
     if (state.disposed) return;
@@ -872,6 +814,13 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     state.reduced = !!value;
     if (state.reduced && state.action) state.action.started = performance.now() - state.action.duration;
     requestFrame();
+  }
+  function setActive(value) {
+    const next=!!value;
+    if(state.disposed||state.active===next)return;
+    state.active=next;host.dataset.active=String(next);
+    if(!next){if(state.frame)cancelAnimationFrame(state.frame);state.frame=0;return;}
+    state.last=performance.now();resize();requestFrame();
   }
   const onVisibility = () => {
     if (document.hidden) { if (state.frame) cancelAnimationFrame(state.frame); state.frame = 0; }
@@ -895,11 +844,12 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   canvas.addEventListener('webglcontextlost', onContextLost, false); canvas.addEventListener('webglcontextrestored', onContextRestored, false);
   applyLayout(state.layout); resize(); requestFrame();
   host.dataset.model = 'loading-native';
-  Promise.all([loadNativeKlinStage('juvenile'),loadNativeKlinStage('adult'),loadNativeKlinStage('juvenile'),loadNativeKlinStage('adult')]).then(([juvenile,adult,secondJuvenile,secondAdult])=>{
+  Promise.all([loadNativeKlinStage('juvenile'),loadNativeKlinStage('adult'),loadNativeKlinStage('juvenile'),loadNativeKlinStage('adult'),room.field.ready]).then(([juvenile,adult,secondJuvenile,secondAdult])=>{
     if(state.disposed)return;
     nativeModels.primary={juvenile,adult};nativeModels.secondary={juvenile:secondJuvenile,adult:secondAdult};
     for(const model of Object.values(nativeModels.primary))rig.root.add(model.root);
     for(const model of Object.values(nativeModels.secondary))otherRig.root.add(model.root);
+    awakeningField.setModels(nativeModels.primary);
     nativeReady=true;host.dataset.model='blender-09-07';backgroundDirty=true;updatePose(state.time);render();requestFrame();
   }).catch(error=>{
     if(state.disposed)return;
@@ -919,8 +869,8 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     postQuad.geometry.dispose(); blurMaterial.dispose(); backgroundTarget.dispose(); horizontalTarget.dispose(); renderer.dispose(); canvas.remove();
     if (!readyResolved) { readyResolved = true; resolveReady(false); }
   }
-  return { supported: true, ready, canvas, setPage, setStage, setLayout, setConversationMode, setCardPreview, setParticipants, setPortalState, transition, grow, interact, setReducedMotion, resize, dispose,
+  return { supported: true, ready, canvas, setPage, setStage, setLayout, setConversationMode, setCardPreview, setParticipants, setPortalState, setLoungeState, setRealmState, transition, grow, signContract, interact, setReducedMotion, setActive, resize, dispose,
     // Read-only diagnostics help the host report actual rendering and growth.
-    get status() { return { page: state.page, stage: state.stage, growth: state.growth, action: state.action?.kind || 'idle', rendering: host.dataset.world, world: state.mode, cameraX: state.sceneX,participants:state.participants.map(x=>x.id),portal:state.portalState,selectedMetal:state.selectedMetal,evolutionPhase:host.dataset.evolutionPhase,model:host.dataset.model,nativeReady,conversation:state.conversation,transitionPhase:state.transitionPhase }; },
+    get status() { return { page: state.page, stage: state.stage, growth: state.growth, action: state.action?.kind || 'idle', rendering: host.dataset.world, world: state.mode, cameraX: state.sceneX,participants:state.participants.map(x=>x.id),portal:state.portalState,lounge:{...state.lounge,visible:state.mode==='porch'&&state.layout.lounge!==false},environment:'reference-scene',realm:{...state.realm},selectedMetal:state.selectedMetal,evolutionPhase:host.dataset.evolutionPhase,contractPhase:state.contractPhase,lightCurrent:host.dataset.lightCurrent,particleSamples:awakeningField.sampleCount,model:host.dataset.model,nativeReady,conversation:state.conversation,transitionPhase:state.transitionPhase }; },
   };
 }

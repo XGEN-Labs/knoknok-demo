@@ -1,0 +1,5 @@
+/* Environment focus only. Requested control and social UI refinements live in social-refinement.css. */
+.phone .klin-world-canvas{transition:filter .7s ease}
+.phone[data-world-page="landing"] .klin-world-canvas{filter:none}
+@media(prefers-reduced-motion:reduce){.phone .klin-world-canvas{transition:none}}
+body.reduced-motion .phone .klin-world-canvas{transition:none}

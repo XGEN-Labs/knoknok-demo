@@ -22,17 +22,11 @@ export const validMetalVoice = tone => typeof tone === 'string' && Object.hasOwn
 export function landingComplete(state) {
   if (state.session.activeUserId !== 'a') return true;
   const o = state.onboarding;
-  return o?.status === 'ready' && o.basicsComplete === true && o.birthComplete === true && o.interaction?.greeted === true &&
-    validMetalVoice(o.interaction?.tone) &&
-    ['resonates', 'different'].includes(o.interaction?.response);
+  return o?.status === 'ready' && o.basicsComplete === true && o.birthComplete === true &&
+    o.conversation?.complete === true;
 }
 
 export function onboardingDestination(state) {
   if (state.session.activeUserId !== 'a') return 'relations';
-  const o = state.onboarding;
-  if (o?.interaction?.greeted !== true) return 'landing';
-  if (o.basicsComplete !== true) return 'setup-basics';
-  if (o.birthComplete !== true) return 'setup-birth';
-  if (o.status !== 'ready') return 'initializing';
-  return landingComplete(state) ? 'home' : 'onboard';
+  return landingComplete(state) ? 'home' : 'landing';
 }

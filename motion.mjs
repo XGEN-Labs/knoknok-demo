@@ -43,6 +43,7 @@ export function transitionScene({ host, app, previous, current, source, world, s
   host.dataset.travelFrom = from;
   host.dataset.travelTo = to;
   if (world) host.dataset.sceneTravel = 'true';
+  if (cardHandoff) host.dataset.cardHandoff = 'presenting';
   app.append(previous);
   for (const { node, top, left } of scrollPositions) { node.scrollTop = top; node.scrollLeft = left; }
 
@@ -63,7 +64,11 @@ export function transitionScene({ host, app, previous, current, source, world, s
   const panelsDone = Promise.allSettled(animations.map(a => a.finished));
   watchdog = setTimeout(complete, cardHandoff ? 3000 : 2300);
   if (world) {
-    try { cancelWorld = world.transition(from, to, { direction, stage, layout, onCardFrame: frame => cardHandoff?.frame(frame), onComplete: complete }); }
+    try { cancelWorld = world.transition(from, to, { direction, stage, layout, preserveScene: !!cardHandoff, onCardFrame: frame => {
+      if (!cardHandoff || finished) return;
+      host.dataset.cardHandoff = frame.progress < .4 ? 'presenting' : 'expanding';
+      cardHandoff.frame(frame);
+    }, onComplete: complete }); }
     catch { panelsDone.then(complete); }
   } else panelsDone.then(complete);
   function finish(focus) {
@@ -77,6 +82,12 @@ export function transitionScene({ host, app, previous, current, source, world, s
     current.classList.remove('scene-arriving');
     app.classList.remove('scene-transitioning');
     delete host.dataset.sceneTravel;
+    delete host.dataset.cardHandoff;
+    // The paper has already arrived. Reveal only its surrounding controls;
+    // moving the whole page here would visibly move the just-settled card.
+    if (focus && cardHandoff) for (const node of current.querySelectorAll('.page-top,.profile-card-tools,.profile-footer')) {
+      node.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: ease });
+    }
     if (focus && world && !cardHandoff) current.classList.add('scene-ui-arrived');
     delete host.dataset.travelFrom; delete host.dataset.travelTo;
     if (focus && current.isConnected) current.querySelector('h2')?.focus({ preventScroll: true });

@@ -1,0 +1,142 @@
+/* User-requested controls: neutral UI, coloured personal tags, persistent scene. */
+:root{--talk-ink:#252525;--talk-muted:#737373;--talk-paper:#fff;--talk-surface:#fff;--talk-line:#e4e4e4;--talk-sage:#222;--talk-sage-soft:#eee;--talk-peach:#fff;--talk-focus:#777;--klin-blue-ink:#333;--klin-blue-soft:#eee}
+.phone .page .btn:not(.white,.secondary,.ghost,.danger):hover:not(:disabled),.phone .sheet-inner .btn:not(.white,.secondary,.ghost,.danger):hover:not(:disabled){background:#3a3a3a;border-color:#3a3a3a;color:#fff}
+.phone .page .btn:is(.white,.secondary,.ghost):hover:not(:disabled),.phone .sheet-inner .btn:is(.white,.secondary,.ghost):hover:not(:disabled),.phone .page :is(.icon-button,.tiny-btn,.scene-icon,.text-button):hover:not(:disabled){background:#f1f1f1;border-color:#ddd;color:#252525}
+.phone :is(.btn.ghost,.text-button,.profile-card-tools button,.onboarding-history,.conversation-speaker,.message-label,.companion-signature,.shared-person strong,.detail-line dt){color:#686868}
+.phone .page :is(.input,select,textarea)::placeholder{color:#8b8b8b}
+.phone .page :is(.input,select,textarea):focus{border-color:#aaa;box-shadow:none}
+.phone :is(.onboarding-send,.send-button){background:#222;color:#fff}
+.phone :is(.onboarding-send,.send-button):hover:not(:disabled){background:#444;color:#fff}
+.phone :is(.quick-replies,.conversation-replies) button{background:#fff;color:#333;border-color:#ddd}
+.phone :is(.quick-replies,.conversation-replies) button:hover:not(:disabled){background:#eee;color:#222;border-color:#ccc}
+.phone .onboarding-send:disabled{background:#ccc;color:#fff}
+.phone .sheet-handle{background:#d0d0d0}
+.phone :is(.bubble,.message.own .bubble,.conversation-message,.conversation-message.own,.onboarding-message,.onboarding-message.is-user,.room-speech){background:#fff;border-color:#fff;color:#292929}
+.phone .welcome .welcome-actions{bottom:4.8%;gap:12px;left:12%;right:12%}
+.phone .welcome .welcome-actions>.btn{min-height:49px;padding:12px 16px;border-radius:25px;box-shadow:none}
+.phone .welcome-login-note{text-align:center;font-size:12px;margin:1px 0 0;color:#555}
+/* No substitute panel artwork or tinted scrim; blur the actual live layers. */
+.phone[data-scene-overlay="true"]>.klin-world-host,.phone.sheet-open>.klin-world-host,.phone:has(.kn-date-picker[open])>.klin-world-host{filter:blur(14px);transition:filter .22s ease}
+.phone.sheet-open>#app,.phone:has(.kn-date-picker[open])>#app{filter:blur(9px);transition:filter .18s ease;pointer-events:none}
+.phone #app>.page:is([data-screen="profile"],[data-screen="public-card"]){background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.phone>.phone-scrim,.phone .kn-date-scrim{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+.phone.klin-world-ready>.home-scene{display:none}
+.phone dialog{background:#fff;color:#252525;border-color:#e5e5e5;box-shadow:0 -10px 60px #00000015}
+.phone .kn-date-confirm{background:#222;color:#fff}
+.phone .kn-date-picker :is(select,input){color:#252525;accent-color:#222}
+.phone .onboarding-input-row .kn-date-trigger{flex:1;border:0;box-shadow:none;border-radius:24px;background:transparent;min-height:44px;color:#333;padding:9px 5px}
+.phone .onboarding-input-row .kn-date-trigger.is-empty{color:#777}
+.phone .onboarding-input-row .field{flex:1;margin:0;min-width:0}
+.phone .onboarding-input-row .field>label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.phone .onboarding-klin{top:16%;height:23%;left:28%;width:44%;z-index:3}
+.phone .onboarding-thread{top:40%;bottom:24%}
+.phone .onboarding-message.is-new{animation:reply-arrive .36s ease both}
+.phone .onboarding-presence{position:absolute;top:37%;left:15%;right:15%;text-align:center;color:#555;font-size:12px;pointer-events:none}
+@keyframes reply-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* A data relationship graph: all nodes remain genuine keyboard-accessible controls. */
+.phone .friends-lounge .lounge-heading{top:18%;left:5%;right:5%}
+.phone .lounge-heading h1{font-size:24px}
+.phone .lounge-heading p{color:#666;font-size:13px}
+.phone .relationship-network{position:absolute;inset:25% 4% 16%;z-index:2}
+.phone .network-connections{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.phone .network-connections path{fill:none;stroke:#ffffffd9;stroke-width:.55;stroke-linecap:round;stroke-dasharray:1.2 1.6;vector-effect:non-scaling-stroke;filter:drop-shadow(0 1px 2px #58535b50)}
+.phone .network-connections path.is-connected{stroke-width:1.4;stroke-dasharray:none}
+.phone .network-friend{position:absolute;left:var(--node-x);top:var(--node-y);transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:6px;width:100px;padding:8px 0;background:transparent;border:0;cursor:pointer;color:#292929}
+.phone .network-avatar{display:grid;place-items:center;width:66px;height:66px;border:3px solid #ffffffd9;background:#ffffffed;box-shadow:0 6px 25px #4a3e5320;border-radius:50%;font-size:25px;font-weight:600}
+.phone .network-friend:hover .network-avatar{box-shadow:0 0 0 6px #ffffff40,0 8px 24px #0002}
+.phone .network-friend strong{font-size:16px;line-height:1.2}
+.phone .network-friend small{font-size:11px;color:#666;background:#ffffffce;border-radius:10px;padding:3px 8px}
+.phone .network-self{position:absolute;top:53%;left:50%;transform:translate(-50%,0);text-align:center;white-space:nowrap;padding:8px 12px;border-radius:16px;background:#ffffffd9;color:#333;font-size:12px}
+.phone .network-self small{display:block;font-size:10px;color:#777;margin-top:4px}
+.phone .friends-lounge .lounge-companion{top:36%;left:33%;width:34%;height:17%;z-index:3}
+/* Collectible Echo Pass: an environment window, identity, vivid chosen tags. */
+.phone .profile-stage{top:20%;bottom:17%;left:6%;right:6%;gap:12px;justify-content:flex-start;overflow:visible}
+.phone .profile-stage>.share-card{--card-ink:#252525;--card-muted:#747474;position:relative;display:flex;flex-direction:column;flex:0 1 auto;width:100%;max-height:calc(100% - 42px);padding:12px;border:1px solid #ffffffed;border-radius:24px;background:#fff;box-shadow:0 16px 45px #3e324528;overflow:hidden;gap:0}
+.phone .share-card .echo-pass-window{position:relative;flex:none;height:160px;border-radius:15px;overflow:hidden;margin:0 0 14px;background:#eee}
+.phone .echo-pass-landscape{display:block;width:100%;height:100%;object-fit:cover;object-position:center 42%}
+.phone .echo-pass-creature{position:absolute;width:110px;height:110px;object-fit:contain;bottom:1px;right:14px;filter:drop-shadow(0 7px 4px #2a203b25)}
+.phone .echo-pass-title{position:absolute;top:17px;left:16px;display:flex;flex-direction:column;gap:6px;color:#3b3538}
+.phone .echo-pass-title small{font-size:9px;letter-spacing:2px;font-weight:600}
+.phone .echo-pass-title strong{font-size:24px;letter-spacing:2px;font-weight:500;line-height:1.3}
+.phone .share-card .share-card-brand{position:absolute;top:121px;left:28px;margin:0;padding:0;height:27px;z-index:1}
+.phone .share-card .share-card-brand-mark{height:27px;width:82px}
+.phone .share-card .share-card-brand-logo{width:82px;height:27px;filter:brightness(0)}
+.phone .share-card .share-card-identity{gap:12px;padding:0 8px;margin:0 0 10px;align-items:center}
+.phone .share-card .share-card-avatar{flex:0 0 46px;width:46px;height:46px;padding:0;border:0;background:#f0f0f0;color:#333;box-shadow:none;font-size:22px}
+.phone .share-card .share-card-avatar :is(img,span){width:100%;height:100%;object-fit:cover}
+.phone .share-card .share-card-name{font-size:27px;line-height:1.2;color:#222;font-weight:650;letter-spacing:-.6px;-webkit-line-clamp:2}
+.phone .share-card .share-card-about{padding:0 8px;margin:0 0 12px;flex:none;min-height:0}
+.phone .share-card .share-card-bio{font-size:13px;line-height:1.6;color:#555;-webkit-line-clamp:2;margin:0 0 6px}
+.phone .share-card .share-card-meta{font-size:11px;color:#777;gap:10px;margin:0}
+.phone .share-card .personality-stickers{margin:0;padding:0 8px 13px;flex:none;min-height:0;max-height:none;overflow:visible}
+.phone .share-card .personality-sticker-box{display:flex;justify-content:flex-start;align-content:flex-start;gap:8px;min-height:0;max-height:none;padding:2px 0;background:transparent;border:0;border-radius:0}
+.phone .share-card .personality-sticker{font-size:12px;padding:7px 10px;border-radius:9px;line-height:1.1;color:#2e2635;background:var(--sticker-color);border:0;box-shadow:none;max-width:130px}
+.phone .share-card .share-card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed #d6d6d6;margin:0 8px;padding:10px 0 1px;min-height:0;flex:none}
+.phone .share-card .share-card-companion{gap:7px;font-size:10px;color:#777}
+.phone .share-card .share-card-companion img{display:none}
+.phone .share-card .echo-pass-invite{font-size:10px;color:#555}
+.phone .profile-card-tools{display:flex;justify-content:space-between;gap:10px;padding:0 5px;margin:0;flex:none}
+.phone .profile-card-tools button{font-size:12px;color:#444}
+.phone .sheet-inner .share-card{background:#fff;border-radius:18px;padding:12px;gap:0}
+.phone .sheet-inner .share-card .echo-pass-window{height:110px;margin-bottom:12px}
+.phone .sheet-inner .share-card .share-card-brand{position:absolute;top:81px;left:25px}
+.phone .sheet-inner .share-card .echo-pass-creature{width:85px;height:85px}
+.phone .sheet-inner .share-card .echo-pass-title strong{font-size:20px}
+.phone .sheet-inner .share-card .share-card-identity{gap:10px;margin-bottom:8px;padding:0 5px}
+.phone .sheet-inner .share-card .share-card-name{font-size:24px;color:#222}
+.phone .sheet-inner .share-card .share-card-avatar{width:42px;height:42px;flex-basis:42px;background:#eee;color:#333;border:0;box-shadow:none}
+.phone .sheet-inner .share-card .share-card-about{margin:0;padding:0 5px}
+.phone .sheet-inner .share-card .share-card-bio{font-size:12px;color:#555}
+.phone .sheet-inner .share-card .personality-stickers{padding:8px 5px}
+.phone .sheet-inner .share-card .personality-sticker-box{min-height:0;padding:0;justify-content:flex-start;gap:6px;background:none;border:0}
+.phone .sheet-inner .share-card .personality-sticker{font-size:11px;background:var(--sticker-color);color:#222;padding:6px 9px;border-radius:8px}
+.phone .sheet-inner .share-card .share-card-footer{margin:0 5px;padding:9px 0 0;border-top:1px dashed #ddd;min-height:0}
+.phone .sheet-inner .share-card .share-card-companion{font-size:10px;color:#777}
+.phone .sheet-inner .share-card .share-card-companion img{display:none}
+@media(max-height:740px){.phone .profile-stage{top:19%;bottom:18%}.phone .profile-stage>.share-card .echo-pass-window{height:118px}.phone .profile-stage>.share-card .share-card-brand{top:80px}.phone .profile-stage>.share-card .echo-pass-title strong{font-size:21px}.phone .profile-stage>.share-card .echo-pass-creature{width:90px;height:90px}.phone .share-card .share-card-about{margin-bottom:8px}.phone .share-card .share-card-avatar{width:38px;height:38px;flex-basis:38px}.phone .share-card .share-card-name{font-size:24px}.phone .share-card .personality-stickers{padding-bottom:9px}.phone .network-avatar{width:58px;height:58px}}
+@media(prefers-reduced-motion:reduce){.phone .onboarding-message.is-new{animation:none}.phone>.klin-world-host,.phone>#app{transition:none!important}}
+body.reduced-motion .phone .onboarding-message.is-new{animation:none}
+.phone .onboarding-reading{background:#fff;border-radius:20px;padding:20px;color:#333;flex:none}
+.phone .onboarding-reading small{font-size:10px;color:#888;letter-spacing:1px}
+.phone .onboarding-reading h3{font-size:19px;line-height:1.5;margin:11px 0 12px}
+.phone .onboarding-reading p{font-size:14px;line-height:1.8;color:#666;margin:0}
+/* Override older fixed sage values as well as tokens, without recolouring art. */
+.phone #app :is(button,input,textarea,select),.phone #sheet :is(button,input,textarea,select){color:#292929;border-color:#dedede}
+.phone #app :is(.btn:not(.white,.secondary,.ghost,.danger),.send-button,.onboarding-send),.phone #sheet .btn:not(.white,.secondary,.ghost,.danger){background:#222;border-color:#222;color:#fff}
+.phone #app :is(.btn:not(.white,.secondary,.ghost,.danger),.send-button,.onboarding-send):hover:not(:disabled),.phone #sheet .btn:not(.white,.secondary,.ghost,.danger):hover:not(:disabled){background:#444;border-color:#444;color:#fff}
+.phone #app :is(.btn.white,.btn.secondary,.scene-icon,.icon-button,.tiny-btn,.visit-entry,.quick-replies button,.conversation-replies button),.phone #sheet :is(.btn.white,.btn.secondary,.icon-button){background:#fff;color:#292929;border-color:#e5e5e5}
+.phone #app :is(.avatar,.lounge-avatar),.phone #sheet .avatar{background:#eee;color:#555}
+.phone #app :is(.message-label,.conversation-speaker,.shared-person strong,.onboarding-history,.profile-card-tools button,.private-entry,.companion-signature),.phone #sheet :is(.text-button,.detail-line dt){color:#686868}
+.phone #app :is(.bubble,.message.own .bubble,.onboarding-message,.onboarding-message.is-user,.room-speech,.conversation-message,.conversation-message.own){background:#fff;border-color:#fff;color:#292929}
+.phone #app .network-friend{background:transparent;border:0}
+.phone .kn-date-picker :is(.kn-date-year-entry,.kn-date-selection,.kn-date-column select){background:#f5f5f5;color:#333;border-color:#ddd}
+.phone .kn-date-picker select option:checked{background:#e6e6e6;color:#222}
+.phone .profile-stage{overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding-bottom:8px}
+.phone .profile-stage>.share-card{flex:0 0 auto;max-height:none}
+.phone .sheet-inner .share-card{position:relative}
+.phone .sheet-inner .share-card .share-card-brand{top:102px;height:17px}
+.phone .sheet-inner .share-card .share-card-brand-mark,.phone .sheet-inner .share-card .share-card-brand-logo{width:57px;height:19px}
+.phone .sheet-inner .echo-pass-title{top:12px;left:13px;gap:4px}
+.phone .sheet-inner .echo-pass-title strong{line-height:1.2}
+@media(max-height:740px){.phone .profile-stage>.share-card .share-card-brand{top:108px;height:18px}.phone .profile-stage>.share-card .share-card-brand-mark,.phone .profile-stage>.share-card .share-card-brand-logo{width:60px;height:20px}}
+/* Keep the same environment visible while the live character first loads. */
+.phone:not(.klin-world-ready)>.home-scene{display:block;opacity:1;position:absolute;inset:0;background:url('assets/cloud-realm-20261019/home.webp') center/cover no-repeat;pointer-events:none}
+.phone:not(.klin-world-ready)[data-world-page="relations"]>.home-scene{background-image:url('assets/cloud-realm-20261019/porch.webp')}
+.phone:not(.klin-world-ready):is([data-world-page="chat"],[data-world-page="connected"])>.home-scene{background-image:url('assets/cloud-realm-20261019/shared.webp')}
+.phone:not(.klin-world-ready):is([data-scene-overlay="true"],.sheet-open)>.home-scene{filter:blur(14px)}
+.phone dialog.kn-date-picker{background:#fff;color:#292929;box-shadow:0 16px 60px #0002}
+.phone .kn-date-picker header h2,.phone .kn-date-picker .kn-date-column,.phone .kn-date-picker .kn-date-selection{color:#555}
+.phone .kn-date-picker .kn-date-cancel,.phone .kn-date-picker .kn-date-shortcuts button{background:#eee;color:#555;border-color:#ddd}
+.phone .kn-date-picker .kn-date-handle{background:#ccc}
+.phone dialog.kn-date-picker .kn-date-column select{background:#f4f4f4!important;border-color:#ddd!important;color:#333;scrollbar-color:#bbb transparent}
+.phone dialog.kn-date-picker .kn-date-column select option{color:#333}
+.phone dialog.kn-date-picker .kn-date-column select option:checked{background:#dedede!important;background-image:none!important;color:#222}
+.phone dialog.kn-date-picker .kn-date-column select:focus{outline:2px solid #999;outline-offset:2px}
+.phone .kn-date-trigger svg{color:#777}
+.phone .kn-date-trigger:focus-visible{outline-color:#888}
+.phone dialog.kn-date-picker .kn-date-column select option:checked{background:#dedede linear-gradient(#dedede,#dedede)!important;color:#222!important;-webkit-text-fill-color:#222}
+.phone .network-connections path{stroke-width:1.25}
+.phone .network-connections path.is-connected{stroke-width:2.1}
+
+/* Arrival remains sharp; only active modal layers blur the current scene. */
+.phone:not(.klin-world-ready)[data-world-page="landing"]>.home-scene{background-image:url('assets/cloud-realm-20261019/arrival.webp')}

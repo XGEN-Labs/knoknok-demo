@@ -1,5 +1,7 @@
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, validMetalVoice } from './landing.mjs';
+import { interestTags, suggestedCardTags, NEUTRAL_CARD_TAGS, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs';
+export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs';
 export const STORAGE_KEY = 'knokknok-prototype-v1';
 const DAY = 24 * 60 * 60 * 1000;
 const copy = value => JSON.parse(JSON.stringify(value));
@@ -9,18 +11,99 @@ const nextId = (state, prefix) => `${prefix}-${state.nextId++}`;
 const pairKey = (a, b) => [a, b].sort().join(':');
 const pairBlocked = (state, a, b) => state.blockedPairs.includes(pairKey(a, b));
 const fail = (state, message) => { state.error = message; return state; };
-const newOnboarding = () => ({ basicsComplete: false, birthComplete: false, status: 'new', initializedAt: null, error: null, interaction: { version: 1, greeted: false, tone: null, response: null } });
+const newOnboarding = (now = Date.now()) => ({ basicsComplete: false, birthComplete: false, status: 'new', initializedAt: null, error: null, contractRequired: true, contract: null, interaction: { version: 1, greeted: false, tone: null, response: null }, conversation: createOnboardingConversation(now) });
 const defaultBirth = ownerId => ({ date: ownerId === 'a' ? '1998-06-18' : '', time: '', unknownTime: true, place: '', timezone: '' });
-const newCompanion = (stage = 'juvenile', grownAt = null) => ({ id: 'klin', name: 'Klin', element: 'metal', stage, grownAt: stage === 'adult' ? grownAt : null });
+const newCompanion = (stage = 'juvenile', grownAt = null, name = 'Klin') => ({ id: 'klin', name, element: 'metal', stage, grownAt: stage === 'adult' ? grownAt : null });
+const newSocialIntent = () => ({ step: 'idle', topic: '', pace: '', status: 'idle', friendIds: [], selectedRelationshipId: null });
+
+function normalizedContract(value, now) {
+  if (!value || value.version !== 1 || !Number.isFinite(value.signedAt) || value.signedAt < 0 || value.signedAt > now) return null;
+  const userName = clean(value.userName), companionName = clean(value.companionName);
+  if (!userName || !companionName || Array.from(userName).length > 18 || Array.from(companionName).length > 18) return null;
+  return { version: 1, signedAt: value.signedAt, userName, companionName };
+}
+
+/** Older completed saves remain usable without fabricating a signed contract. */
+export function hasSignedCompanionContract(state) {
+  const onboarding = state.onboarding, conversation = onboarding?.conversation;
+  if (onboarding?.contractRequired === false && onboarding.status === 'ready' && conversation?.complete === true) return true;
+  const contract = normalizedContract(onboarding?.contract, state.now);
+  if (!contract) return false;
+  if (conversation?.complete === true) return true;
+  return conversation?.step === 'complete' && contract.userName === conversation.answers?.name && contract.companionName === conversation.answers?.companionName;
+}
+
+export const DEMO_FRIENDS = Object.freeze([
+  Object.freeze({ id: 'b', name: '阿朗', initial: '朗', interests: Object.freeze(['攝影', '看展']), recent: '剛看完一個攝影展，想交換幾張喜歡的照片。', greeting: '你好，我是阿朗。最近有看到讓你想停下來的畫面嗎？' }),
+  Object.freeze({ id: 'c', name: '小雨', initial: '雨', interests: Object.freeze(['閱讀', '咖啡']), recent: '找到一家安靜的小書店，正在讀一本散文。', greeting: '嗨，我是小雨。今天有什麼小事讓你心情好一點嗎？' }),
+  Object.freeze({ id: 'd', name: '阿哲', initial: '哲', interests: Object.freeze(['散步', '音樂']), recent: '最近喜歡傍晚散步，順便收集新的歌單。', greeting: '你好，我是阿哲。你散步時會聽音樂，還是聽城市的聲音？' }),
+]);
+
+export function getDemoFriends(state, userId = active(state)) {
+  return DEMO_FRIENDS.filter(friend => friend.id !== userId && !pairBlocked(state, userId, friend.id) &&
+    !state.relationships.some(item => item.id === `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}` && item.status !== 'active')).map(friend => {
+    const relationship = state.relationships.find(item => item.members.includes(userId) && item.members.includes(friend.id) && item.status === 'active');
+    return { ...friend, interests: [...friend.interests], isSimulated: true, relationshipId: relationship?.id || `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}`, connected: Boolean(relationship) };
+  });
+}
+
+export const SHARED_MOMENT_OPTIONS = Object.freeze([
+  Object.freeze({ id: 'walk', label: '一起走走', detail: '留一点时间，去看看路上的风景。' }),
+  Object.freeze({ id: 'stay', label: '安静坐坐', detail: '不急着出发，先在这里待一会儿。' }),
+]);
+
+export function getCompanionTurn(state, userId = active(state)) {
+  const intent = state.private[userId]?.socialIntent || newSocialIntent();
+  const replies = intent.step === 'topic' ? ['一起看展', '散步聊聊天', '分享最近的日常']
+    : intent.step === 'pace' ? ['先輕鬆聊聊', '慢慢熟悉', '找時間一起出門']
+    : intent.step === 'confirm' ? ['好，幫我找找', '再想一下'] : [];
+  const friends = intent.status === 'matched' ? getDemoFriends(state, userId).filter(friend => intent.friendIds.includes(friend.id)) : [];
+  return { key: intent.step, replies: replies.map(text => ({ label: text, text })), friends, topic: intent.topic, pace: intent.pace, status: intent.status, relationshipId: intent.selectedRelationshipId };
+}
+
+function socialReply(state, space, text) {
+  const intent = space.socialIntent ||= newSocialIntent();
+  const cancelled = /先不要|暫時不要|暂时不要|再想|不找了|取消|先不找|算了/.test(text);
+  const wantsSocial = /(?:想|希望|幫我|帮我|可以|能不能).{0,18}(?:認識|认识|朋友|交友|找人|找個人|找个人)|(?:交|找)(?:個|个|些)?(?:新)?朋友/.test(text) && !/不想|不希望|不要/.test(text);
+  const topic = interestTags(text).join('、');
+  if (intent.step !== 'idle' && cancelled) {
+    space.socialIntent = newSocialIntent();
+    return '好，不急著找。我留在這裡，先陪你聊聊。';
+  }
+  if (intent.step === 'confirm') {
+    if (/^(?:好[的呀啊吧]?|可以|確認|确认|幫我找找|帮我找找|去找吧|拜託你了|拜托你了|嗯)[，,。！!\s]*(?:幫我|帮我|請|请)?(?:找找|找朋友|去找|開始|开始)?[吧呀啊。！!\s]*$/.test(text)) {
+      intent.step = 'complete'; intent.status = 'matched';
+      intent.friendIds = getDemoFriends(state).map(friend => friend.id);
+      return '好，幾位可以聊聊的朋友，已經在串門裡了。去打個招呼吧。';
+    }
+    if (topic) { intent.topic = topic; return `那就從${topic}開始，照「${intent.pace}」的步調。要我幫你找找嗎？`; }
+    return '不用急，想好了再說「好，幫我找找」，我才會開始。也可以說「再想一下」。';
+  }
+  if (intent.step === 'topic') {
+    if (text.length > 120) return '先用一句話告訴我，想和新朋友一起做什麼就好。';
+    intent.topic = topic || text; intent.step = 'pace';
+    return `好，一起${intent.topic.replace(/^一起/, '')}。你想先輕鬆聊聊，還是慢慢熟悉再約出門？`;
+  }
+  if (intent.step === 'pace') {
+    if (text.length > 120) return '你希望用什麼步調認識彼此？像「先輕鬆聊聊」就可以。';
+    intent.pace = text; intent.step = 'confirm';
+    return `我懂了，想一起${intent.topic.replace(/^一起/, '')}，照「${intent.pace}」的步調。要我幫你找找嗎？`;
+  }
+  if (wantsSocial) {
+    space.socialIntent = { ...newSocialIntent(), step: topic ? 'pace' : 'topic', topic, status: 'draft' };
+    return topic ? `一起${topic}，聽起來不錯。你想先輕鬆聊聊，還是慢慢熟悉再約出門？` : '好呀。你想和新朋友一起做點什麼？';
+  }
+  return null;
+}
 
 /** The default companion keeps its identity throughout onboarding and later visits. */
 export function companionProfile(state, userId = active(state)) {
   const saved = state.private?.[userId]?.companion;
-  const legacyAdult = userId === 'b' || (userId === 'a' && state.onboarding?.status === 'ready');
+  const legacyAdult = userId !== 'a' || state.onboarding?.status === 'ready';
   const stage = ['juvenile', 'adult'].includes(saved?.stage) ? saved.stage : legacyAdult ? 'adult' : 'juvenile';
   const grownAt = Number.isFinite(saved?.grownAt) ? saved.grownAt
     : userId === 'a' && Number.isFinite(state.onboarding?.initializedAt) ? state.onboarding.initializedAt : state.now;
-  return newCompanion(stage, grownAt);
+  return newCompanion(stage, grownAt, clean(state.users?.[userId]?.companionName) || 'Klin');
 }
 
 function futureTime(now) {
@@ -33,13 +116,13 @@ function futureTime(now) {
 function privateSpace(ownerId, now) {
   return {
     birth: defaultBirth(ownerId),
-    companion: newCompanion(ownerId === 'b' ? 'adult' : 'juvenile', now),
+    companion: newCompanion(ownerId === 'a' ? 'juvenile' : 'adult', now),
     memory: ownerId === 'a' ? [
       { id: 'memory-initial-1', text: '最近工作有點累', source: '示範私人對話', status: 'confirmed', updatedAt: now },
       { id: 'memory-initial-2', text: '認識新朋友時，想先從文字聊天開始', source: '伙伴的待確認理解', status: 'pending', updatedAt: now },
     ] : [],
     companionMessages: [{ id: `welcome-${ownerId}`, role: 'assistant', text: '今天想聊什麼？', createdAt: now }],
-    aiDraft: '', aiAdvice: '', aiError: null, publicDraft: '', pendingDemandSuggestion: false,
+    aiDraft: '', aiAdvice: '', aiError: null, publicDraft: '', pendingDemandSuggestion: false, socialIntent: newSocialIntent(),
   };
 }
 
@@ -47,12 +130,14 @@ export function initialState(now = Date.now()) {
   return {
     schemaVersion: 1, now, nextId: 1, error: null,
     session: { authenticated: false, activeUserId: 'a', provider: null },
-    onboarding: newOnboarding(),
+    onboarding: newOnboarding(now),
     users: {
-      a: { id: 'a', name: 'Frank', language: '粵語', region: '香港', bio: '喜歡發掘城市裡的小展覽。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardAvatar: '', shareRegion: false },
-      b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardAvatar: '', shareRegion: false },
+      a: { id: 'a', name: 'Frank', language: '粵語', region: '香港', bio: '喜歡發掘城市裡的小展覽。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: false, cardAvatar: '', shareRegion: false },
+      b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
+      c: { id: 'c', name: '小雨', language: '粵語', region: '香港', bio: '喜歡閱讀、咖啡和安靜的小書店。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['閱讀', '咖啡'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
+      d: { id: 'd', name: '阿哲', language: '粵語', region: '香港', bio: '喜歡散步、音樂和城市裡的小發現。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['散步', '音樂'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
     },
-    private: { a: privateSpace('a', now), b: privateSpace('b', now) },
+    private: { a: privateSpace('a', now), b: privateSpace('b', now), c: privateSpace('c', now), d: privateSpace('d', now) },
     draft: {
       topic: '一起看展，聊聊最近喜歡的作品', language: '粵語', time: futureTime(now), mode: 'online', area: '九龍',
       expiresAt: now + 7 * DAY, intro: '想認識喜歡看展的朋友，可以先在線上聊聊。', hard: ['language', 'mode'],
@@ -176,6 +261,57 @@ export function reduce(previous, action = {}) {
   if (!state.session.authenticated) return fail(state, '請先進入示範帳號。');
 
   switch (action.type) {
+    case 'SIGN_COMPANION_CONTRACT': {
+      if (actorId !== 'a') return fail(state, '這位伙伴已經有自己的約定。');
+      if (hasSignedCompanionContract(state)) return state;
+      const savedConversation = state.onboarding.conversation;
+      const initializedLegacyFlow = savedConversation?.migrated === true && savedConversation.complete === true && state.onboarding.status === 'ready' && state.onboarding.basicsComplete && state.onboarding.birthComplete;
+      const conversation = normalizeOnboardingConversation(savedConversation, state.now, { legacyReady: initializedLegacyFlow });
+      const answers = conversation.answers;
+      const naturalReady = conversation.step === 'complete' && clean(answers.name) && clean(answers.companionName);
+      if (!naturalReady && !initializedLegacyFlow) return fail(state, '先讓我知道怎麼稱呼你，再一起許下約定。');
+      state.onboarding.contract = { version: 1, signedAt: state.now,
+        userName: naturalReady ? answers.name : state.users.a.name,
+        companionName: naturalReady ? answers.companionName : state.users.a.companionName };
+      return state;
+    }
+    case 'ONBOARDING_REPLY':
+    case 'ONBOARDING_BACK':
+    case 'ONBOARDING_SKIP':
+    case 'FINISH_CONVERSATION': {
+      if (actorId !== 'a') return fail(state, '這位伙伴已經認識你了。');
+      if (state.onboarding.conversation?.complete === true) return action.type === 'FINISH_CONVERSATION' ? state : fail(state, '已經準備好了，我們一起回家吧。');
+      if (action.type === 'FINISH_CONVERSATION' && !hasSignedCompanionContract(state)) return fail(state, '先和我許下陪伴的約定，再一起回家吧。');
+      const result = advanceOnboardingConversation(state.onboarding.conversation, action, state.now);
+      if (result.error) return fail(state, result.error);
+      state.onboarding.conversation = result.conversation;
+      if (action.type === 'ONBOARDING_BACK') state.onboarding.contract = null;
+      state.onboarding.interaction.greeted = true;
+      const answers = result.conversation.answers;
+      space.birth = {
+        date: answers.birthDate || '', time: answers.birthTime || '', unknownTime: !answers.birthTime,
+        place: answers.birthPlace || '', timezone: space.birth.timezone || '',
+      };
+      space.about = { ...(space.about || {}), gender: answers.gender || '' };
+      if (answers.name) state.users.a.name = answers.name;
+      if (answers.companionName) {
+        state.users.a.companionName = answers.companionName;
+        space.companion.name = answers.companionName;
+      }
+      state.onboarding.error = null;
+      if (action.type === 'FINISH_CONVERSATION') {
+        state.onboarding.status = 'ready'; state.onboarding.basicsComplete = true; state.onboarding.birthComplete = true;
+        state.onboarding.initializedAt ||= state.now;
+        if (!state.users.a.cardTagsEdited) state.users.a.cardTags = suggestedCardTags(answers);
+        if (state.users.a.bio === '喜歡發掘城市裡的小展覽。') {
+          const tags = interestTags(/喜歡|喜欢|愛好|爱好/.test(answers.response || '') ? answers.response : '');
+          state.users.a.bio = tags.length ? `喜歡${tags.join('、')}，想和新朋友慢慢聊聊。` : '想和新朋友，慢慢聊些喜歡的事。';
+        }
+        const welcome = space.companionMessages.find(message => message.id === 'welcome-a');
+        if (welcome?.text === '今天想聊什麼？') welcome.text = `${answers.name}，我是${answers.companionName}。今天想先和我聊些什麼？`;
+      }
+      return state;
+    }
     case 'GREET_COMPANION':
       if (actorId !== 'a') return fail(state, '這位伙伴已經認識你了。');
       state.onboarding.interaction.greeted = true;
@@ -234,12 +370,14 @@ export function reduce(previous, action = {}) {
       state.onboarding.status = 'ready';
       state.onboarding.initializedAt = state.now;
       state.onboarding.error = null;
+      state.onboarding.conversation = createOnboardingConversation(state.now, { legacyReady: true });
       return state;
     case 'ENTER_COMPANION_HOME':
       if (actorId === 'a' && state.onboarding.status !== 'ready') return fail(state, '請先完成資料確認，讓 Klin 準備好陪伴你。');
-      if (!landingComplete(state)) return fail(state, '先和 Klin 打個招呼，告訴我你的感覺，再一起回家。');
+      if (actorId === 'a' && !hasSignedCompanionContract(state)) return fail(state, '先和我許下陪伴的約定，再一起回家吧。');
+      if (!landingComplete(state)) return fail(state, '先和 Klin 慢慢認識，再一起回家。');
       space.companion = companionProfile(state, actorId);
-      if (space.companion.stage === 'juvenile') space.companion = newCompanion('adult', state.now);
+      if (space.companion.stage === 'juvenile') space.companion = newCompanion('adult', state.now, state.users[actorId].companionName);
       return state;
     case 'SWITCH_USER':
       if (typeof action.userId !== 'string' || !Object.hasOwn(state.users, action.userId) || !Object.hasOwn(state.private, action.userId)) return fail(state, '找不到這個示範身份。');
@@ -252,6 +390,7 @@ export function reduce(previous, action = {}) {
       if (patch.cardTags !== undefined || patch.cardLabels !== undefined) {
         state.users[actorId].cardTags = migrateCardTags(patch.cardTags ?? state.users[actorId].cardTags, patch.cardLabels);
         state.users[actorId].cardLabels = {};
+        state.users[actorId].cardTagsEdited = true;
       }
       if (patch.cardAvatar !== undefined) state.users[actorId].cardAvatar = normalizeCardAvatar(patch.cardAvatar);
       if (patch.shareRegion !== undefined) state.users[actorId].shareRegion = patch.shareRegion === true;
@@ -381,15 +520,54 @@ export function reduce(previous, action = {}) {
       const id = nextId(state, 'private-message');
       space.companionMessages.push({ id, role: 'user', text, createdAt: state.now });
       if (action.fail) { space.companionMessages.at(-1).status = 'failed'; return fail(state, '伙伴暫時沒有收到，內容已保留。'); }
-      const wantsSocial = /朋友|認識|认识|看展|社交|拍照/.test(text);
-      space.pendingDemandSuggestion = wantsSocial;
-      space.companionMessages.push({ id: nextId(state, 'private-message'), role: 'assistant', text: wantsSocial ? '想找個朋友一起去嗎？我可以幫你整理需求。' : memoryReply(space), createdAt: state.now });
+      const reply = socialReply(state, space, text);
+      space.pendingDemandSuggestion = false;
+      space.companionMessages.push({ id: nextId(state, 'private-message'), role: 'assistant', text: reply || memoryReply(space), createdAt: state.now });
       if (/喜歡|喜欢|想先|希望/.test(text)) space.memory.push({ id: nextId(state, 'memory'), text, source: '這次私人對話', status: 'pending', updatedAt: state.now });
+      return state;
+    }
+    case 'OPEN_DEMO_FRIEND': {
+      const friend = DEMO_FRIENDS.find(item => item.id === action.friendId);
+      if (!friend || friend.id === actorId || pairBlocked(state, actorId, friend.id)) return fail(state, '這位朋友暫時無法開始對話。');
+      let relationship = state.relationships.find(item => item.members.includes(actorId) && item.members.includes(friend.id) && item.status === 'active');
+      if (!relationship) {
+        const id = `demo-friend-${pairKey(actorId, friend.id).replace(':', '-')}`;
+        if (state.relationships.some(item => item.id === id)) return fail(state, '這段示範聯繫已結束。');
+        relationship = { id, invitationId: null, members: [actorId, friend.id], status: 'active', createdAt: state.now, endedAt: null, isSimulated: true };
+        state.relationships.push(relationship);
+        state.messages.push({ id: nextId(state, 'message'), relationshipId: id, senderId: friend.id, text: friend.greeting, status: 'sent', createdAt: state.now, isAI: false, isSimulated: true });
+      }
+      space.socialIntent ||= newSocialIntent(); space.socialIntent.selectedRelationshipId = relationship.id;
+      return state;
+    }
+    case 'CHOOSE_SHARED_MOMENT': {
+      const relationship = relationshipForAction(state, action);
+      if (!relationship || relationship.status !== 'active' || pairBlocked(state, ...relationship.members)) return fail(state, '这间共同小屋暂时无法参与。');
+      if (!SHARED_MOMENT_OPTIONS.some(option => option.id === action.choice)) return fail(state, '先选一张你喜欢的回响。');
+      if (relationship.sharedMoment?.completedAt) return state;
+      const moment = relationship.sharedMoment ||= { choices: {}, confirmed: {}, completedAt: null };
+      moment.choices[actorId] = action.choice; moment.confirmed[actorId] = false;
+      // Only the explicitly simulated prototype neighbour may respond locally.
+      if (action.simulatePartner === true && relationship.isSimulated === true) {
+        const partner = relationship.members.find(id => id !== actorId);
+        moment.choices[partner] = partner === 'c' ? 'stay' : 'walk'; moment.confirmed[partner] = true;
+      }
+      return state;
+    }
+    case 'KEEP_SHARED_MOMENT': {
+      const relationship = relationshipForAction(state, action);
+      if (!relationship || relationship.status !== 'active' || pairBlocked(state, ...relationship.members)) return fail(state, '这间共同小屋暂时无法参与。');
+      const moment = relationship.sharedMoment;
+      if (!moment || !relationship.members.every(id => SHARED_MOMENT_OPTIONS.some(option => option.id === moment.choices[id]))) return fail(state, '等两个人都选好，再一起留下来。');
+      if (moment.completedAt) return state;
+      moment.confirmed[actorId] = true;
+      if (relationship.members.every(id => moment.confirmed[id] === true)) moment.completedAt = state.now;
       return state;
     }
     case 'DISMISS_DEMAND_SUGGESTION':
     case 'CREATE_DEMAND_DRAFT':
       space.pendingDemandSuggestion = false;
+      space.socialIntent = newSocialIntent();
       return state;
     case 'MEMORY_CONFIRM':
     case 'MEMORY_EDIT':
@@ -487,30 +665,65 @@ export function hydrateState(serialized, now = Date.now()) {
     if (state?.schemaVersion !== 1 || !state.users?.a || !state.users?.b || !state.private?.a || !state.private?.b || !state.session || !state.draft || !Number.isFinite(state.nextId) || !Number.isFinite(state.now)) return initialState(now);
     for (const field of ['candidates', 'invitations', 'relationships', 'messages', 'reports', 'blockedPairs']) if (!Array.isArray(state[field])) return initialState(now);
     for (const id of ['a', 'b']) if (!Array.isArray(state.private[id].memory) || !Array.isArray(state.private[id].companionMessages)) return initialState(now);
-    for (const id of ['a', 'b']) {
+    const defaults = initialState(now);
+    const savedOnboarding = state.onboarding && typeof state.onboarding === 'object' && !Array.isArray(state.onboarding) ? state.onboarding : {};
+    const ready = savedOnboarding.status === 'ready' && savedOnboarding.basicsComplete === true && savedOnboarding.birthComplete === true;
+    for (const id of ['c', 'd']) {
+      state.users[id] ||= defaults.users[id];
+      state.private[id] ||= defaults.private[id];
+      if (!Array.isArray(state.private[id].memory) || !Array.isArray(state.private[id].companionMessages)) state.private[id] = defaults.private[id];
+    }
+    for (const id of ['a', 'b', 'c', 'd']) {
       state.users[id].language ||= '粵語';
       state.users[id].region ||= '香港';
-      state.users[id].companionName = 'Klin';
-      state.users[id].cardTags = migrateCardTags(state.users[id].cardTags, state.users[id].cardLabels);
+      const companionName = clean(state.users[id].companionName);
+      const legacyKnok = companionName === 'Knok' && (savedOnboarding.conversation?.version !== 2 || savedOnboarding.conversation?.migrated === true);
+      state.users[id].companionName = companionName && Array.from(companionName).length <= 18 && !legacyKnok ? companionName : 'Klin';
+      const savedTagsEdited = state.users[id].cardTagsEdited;
+      const savedTags = migrateCardTags(state.users[id].cardTags, state.users[id].cardLabels);
+      // Old empty cards gain neutral defaults. An explicit edit, including [], stays authoritative.
+      state.users[id].cardTagsEdited = savedTagsEdited === true || savedTagsEdited === undefined && savedTags.length > 0;
+      state.users[id].cardTags = savedTagsEdited === undefined && savedTags.length === 0 ? [...NEUTRAL_CARD_TAGS] : savedTags;
       state.users[id].cardLabels = {};
       state.users[id].cardAvatar = normalizeCardAvatar(state.users[id].cardAvatar);
       state.users[id].shareRegion = state.users[id].shareRegion === true;
       state.private[id].birth = { ...defaultBirth(id), ...(state.private[id].birth || {}) };
       state.private[id].companion = companionProfile(state, id);
+      state.private[id].pendingDemandSuggestion = false;
+      const savedIntent = state.private[id].socialIntent;
+      const intent = newSocialIntent();
+      if (savedIntent && typeof savedIntent === 'object' && !Array.isArray(savedIntent)) {
+        intent.topic = clean(savedIntent.topic).slice(0, 120);
+        intent.pace = clean(savedIntent.pace).slice(0, 120);
+        if (['topic', 'pace', 'confirm', 'complete'].includes(savedIntent.step)) intent.step = savedIntent.step;
+        if (['pace', 'confirm', 'complete'].includes(intent.step) && !intent.topic) intent.step = 'topic';
+        if (['confirm', 'complete'].includes(intent.step) && !intent.pace) intent.step = 'pace';
+        intent.status = intent.step === 'idle' ? 'idle' : intent.step === 'complete' && savedIntent.status === 'matched' ? 'matched' : 'draft';
+        if (intent.step === 'complete' && intent.status !== 'matched') intent.step = 'confirm';
+        const available = getDemoFriends(state, id).map(friend => friend.id);
+        intent.friendIds = intent.status === 'matched' && Array.isArray(savedIntent.friendIds) ? [...new Set(savedIntent.friendIds.filter(friendId => available.includes(friendId)))] : [];
+        const selected = state.relationships.find(item => item.id === savedIntent.selectedRelationshipId && item.members.includes(id));
+        intent.selectedRelationshipId = selected?.id || null;
+      }
+      state.private[id].socialIntent = intent;
       const welcome = state.private[id].companionMessages.find(message => message.id === `welcome-${id}`);
       if (welcome?.text === '嗨，我在這裡。我們可以慢慢認識，也可以一起找到聊得來的新朋友。') welcome.text = '今天想聊什麼？';
     }
-    const savedOnboarding = state.onboarding && typeof state.onboarding === 'object' && !Array.isArray(state.onboarding) ? state.onboarding : {};
     const legacy = savedOnboarding.interaction === undefined && savedOnboarding.status === 'ready';
     const savedInteraction = savedOnboarding.interaction && typeof savedOnboarding.interaction === 'object' && !Array.isArray(savedOnboarding.interaction) ? savedOnboarding.interaction : {};
     const tone = legacy ? 'xin' : validMetalVoice(savedInteraction.tone) ? savedInteraction.tone : null;
     const interaction = { version: 1, greeted: legacy || savedInteraction.greeted === true, tone, response: legacy ? 'different' : tone && ['resonates', 'different'].includes(savedInteraction.response) ? savedInteraction.response : null };
     if (legacy || savedInteraction.migrated === true) interaction.migrated = true;
-    state.onboarding = { ...newOnboarding(), ...savedOnboarding,
+    state.onboarding = { ...newOnboarding(now), ...savedOnboarding,
       basicsComplete: savedOnboarding.basicsComplete === true,
       birthComplete: savedOnboarding.birthComplete === true,
       status: ['new', 'preparing', 'failed', 'ready'].includes(savedOnboarding.status) ? savedOnboarding.status : 'new',
+      // Only a pre-contract completed save is exempt. In-progress saves and
+      // current saves retain the explicit signing gate after a refresh.
+      contractRequired: ready && !Object.hasOwn(savedOnboarding, 'contractRequired') ? false : savedOnboarding.contractRequired === false && ready ? false : true,
+      contract: normalizedContract(savedOnboarding.contract, Math.max(state.now, now)),
       interaction,
+      conversation: normalizeOnboardingConversation(savedOnboarding.conversation, now, { legacyReady: ready }),
     };
     if (typeof state.session.activeUserId !== 'string' || !Object.hasOwn(state.users, state.session.activeUserId) || !Object.hasOwn(state.private, state.session.activeUserId)) state.session.activeUserId = 'a';
     state.now = Math.max(state.now, now);

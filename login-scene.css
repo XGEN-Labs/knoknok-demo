@@ -1,0 +1,7 @@
+/* Full artwork stays behind the existing welcome logo and login controls. */
+.phone>.klin-login-scene-host{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:#93a9ef url('assets/login-world-20261019/source/clean-background.png') center/cover no-repeat}
+.phone>.klin-login-scene-host[hidden]{display:none}
+.klin-login-scene-host canvas{display:block;width:100%;height:100%;pointer-events:none}
+.phone.klin-login-scene-active>.klin-world-host,.phone.klin-login-scene-active>.home-scene,.phone.klin-login-scene-active .klin-welcome{visibility:hidden!important;animation:none!important}
+.phone.klin-login-scene-active.sheet-open>.klin-login-scene-host,.phone.klin-login-scene-active[data-scene-overlay="true"]>.klin-login-scene-host{filter:blur(14px)}
+@media(prefers-reduced-motion:reduce){.phone>.klin-login-scene-host{transition:none}}

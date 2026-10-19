@@ -1,0 +1,197 @@
+/* Requested exceptions to scene glass: a white frosted login form and legible hour choices. */
+.phone .page.welcome .brand {
+  left: 7%;
+  width: 86%;
+  max-width: none;
+  height: auto;
+  aspect-ratio: 3 / 1;
+}
+
+.phone .page.welcome .welcome-actions > .btn,
+.phone .page.welcome .welcome-actions > .btn:hover:not(:disabled) {
+  background: #202020 !important;
+  color: #fff !important;
+  border-color: #202020 !important;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.phone .page.welcome .welcome-actions > .btn > span {
+  color: #fff !important;
+}
+
+.phone .page.auth-login .auth-panel {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  width: 86%;
+  max-width: 358px;
+  height: auto;
+  box-sizing: border-box;
+  padding: 28px 25px;
+  transform: translate(-50%, -50%);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, .87) !important;
+  border: 1px solid rgba(255, 255, 255, .96) !important;
+  box-shadow: inset 0 1px 0 #fff, 0 14px 48px rgba(33, 38, 58, .12);
+  backdrop-filter: blur(40px) saturate(80%);
+  -webkit-backdrop-filter: blur(40px) saturate(80%);
+}
+
+.phone .page.auth-login .auth-panel :is(h1, label, .auth-heading p) {
+  color: #202020 !important;
+  text-shadow: none !important;
+}
+
+.phone .page.auth-login .auth-heading {
+  margin: 0 0 24px;
+}
+
+.phone .page.auth-login .auth-heading h1 {
+  font-size: 24px;
+  line-height: 1.4;
+  font-weight: 650;
+  letter-spacing: -.4px;
+}
+
+.phone .page.auth-login .auth-heading p {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.phone .page.auth-login .auth-form {
+  position: static;
+  display: grid;
+  gap: 14px;
+  margin: 0;
+}
+
+.phone .page.auth-login .auth-form .auth-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  margin: 0;
+}
+
+.phone .page.auth-login .auth-form .auth-field > label {
+  height: auto;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.phone .page.auth-login .auth-form .auth-field > .input {
+  min-height: 48px;
+  height: 48px;
+  padding: 11px 14px;
+  border: 1px solid #dedede;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, .92);
+  color: #202020;
+  font-size: 16px;
+  line-height: 24px;
+  caret-color: #202020;
+}
+
+.phone .page.auth-login .auth-form .auth-field > .input:focus {
+  border-color: #777;
+  outline: 2px solid rgba(32, 32, 32, .16);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.phone .page.auth-login .auth-error {
+  position: static;
+  min-height: 0;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.phone .page.auth-login .auth-error:empty {
+  display: none;
+}
+
+.phone .page.auth-login .auth-submit {
+  position: static;
+  margin: 4px 0 0;
+}
+
+.phone .page.auth-login .auth-submit .btn,
+.phone .page.auth-login .auth-submit .btn:hover:not(:disabled) {
+  min-height: 48px;
+  height: 48px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: #202020 !important;
+  border: 1px solid #202020 !important;
+  color: #fff !important;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.phone .page.auth-login .auth-submit .btn span {
+  color: #fff !important;
+}
+
+.phone #app .page.is-birth-time .birth-hour-grid button {
+  background: rgba(255, 255, 255, .85) !important;
+  border-color: rgba(255, 255, 255, .94) !important;
+  color: #202020 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .85);
+  backdrop-filter: blur(18px) saturate(85%);
+  -webkit-backdrop-filter: blur(18px) saturate(85%);
+}
+
+.phone #app .page.is-birth-time .birth-hour-grid button:hover {
+  background: rgba(255, 255, 255, .97) !important;
+}
+
+.phone #app .page.is-birth-time .birth-hour-grid button strong,
+.phone #app .page.is-birth-time .birth-hour-grid button small {
+  color: #202020 !important;
+  text-shadow: none;
+}
+
+.phone #app .page.is-birth-time .birth-hour-grid button small {
+  color: #505050 !important;
+}
+
+.phone #app .page.is-birth-time .onboarding-message p {
+  color: #202020 !important;
+  text-shadow: none;
+}
+
+.phone #app .page.is-birth-time .quick-replies button,
+.phone #app .page.is-birth-time .quick-replies button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, .85) !important;
+  border-color: rgba(255, 255, 255, .94) !important;
+  color: #202020 !important;
+  text-shadow: none;
+}
+
+@media (max-height: 740px) {
+  .phone .page.auth-login .auth-panel {
+    top: 50%;
+    padding: 23px 23px;
+  }
+
+  .phone .page.auth-login .auth-heading {
+    margin-bottom: 19px;
+  }
+
+  .phone .page.auth-login .auth-heading h1 {
+    font-size: 23px;
+  }
+
+  .phone .page.auth-login .auth-form {
+    gap: 12px;
+  }
+}
