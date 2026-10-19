@@ -50,6 +50,15 @@
 .phone[data-keyboard-open="true"] #app .conversation-log{top:22%;bottom:calc(var(--app-safe-bottom) + 108px)}
 .phone[data-keyboard-open="true"] #app .room-tools{visibility:hidden}
 .phone[data-keyboard-open="true"] #app .auth-header{visibility:hidden}
+.phone[data-keyboard-open="true"] #app .friends-lounge .lounge-heading{display:none}
+.phone[data-keyboard-open="true"] #app .friends-lounge .network-search{top:calc(var(--app-safe-top) + 56px)}
+.phone[data-keyboard-open="true"] #app .friends-lounge .network-search-status{top:calc(var(--app-safe-top) + 108px)}
+.phone[data-keyboard-open="true"] #app .friends-lounge .relationship-network{inset:calc(var(--app-safe-top) + 138px) 7% var(--app-safe-bottom);display:flex;flex-direction:column;gap:8px;overflow-y:auto;overscroll-behavior:contain}
+.phone[data-keyboard-open="true"] #app .friends-lounge :is(.network-connections,.network-self,.lounge-companion){display:none}
+.phone[data-keyboard-open="true"] #app .friends-lounge .network-friend{position:relative;left:auto;top:auto;transform:none;flex:none;flex-direction:row;justify-content:flex-start;width:100%;min-height:54px;padding:5px 0;gap:8px}
+.phone[data-keyboard-open="true"] #app .friends-lounge .network-friend[hidden]{display:none}
+.phone[data-keyboard-open="true"] #app .friends-lounge .network-avatar{width:42px;height:42px;flex:0 0 42px;font-size:20px}
+.phone[data-keyboard-open="true"] #app .friends-lounge .network-friend small{margin-left:auto}
 .phone[data-keyboard-open="true"] #sheet .sheet-inner{overflow-y:auto!important;max-height:var(--sheet-height)!important;overscroll-behavior:contain}
 @media(max-width:650px){
   html,body,.share-demo body{width:100%;height:100%;margin:0;padding:0;overflow:hidden;overscroll-behavior:none;background:#7699ee}
