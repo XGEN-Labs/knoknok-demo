@@ -1,8 +1,8 @@
 import * as THREE from './vendor/three/three.module.js';
 import { loadNativeKlinStage } from './klin-native-model.mjs';
 import { createContractLight } from './klin-contract-light.mjs';
-import { createAwakeningField } from './klin-awakening-field.mjs?v=20261019-mobile-23';
-import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261019-mobile-23';
+import { createAwakeningField } from './klin-awakening-field.mjs?v=20261020-portal-24d';
+import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261020-portal-24d';
 
 // Persistent world; supplied Blender juvenile/adult meshes and native hair curves
 // are loaded once, then carried through all scenes by the same locomotion rig.
@@ -252,6 +252,8 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   const ready = new Promise(resolve => { resolveReady = resolve; });
   let readyResolved = false;
   const unprojected = new THREE.Vector3();
+  const labelAnchor = new THREE.Vector3();
+  let lastLabelAnchor = '';
   const setCameraX = x => {
     if (Math.abs(camera.position.x - x) > .00001) backgroundDirty = true;
     state.sceneX = x; camera.position.x = x; camera.lookAt(x, 1.8, 0); camera.updateMatrixWorld();
@@ -409,7 +411,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     const growthEntrance = nextPage === 'home' && stage === 'juvenile' && (state.mode === 'welcome' || ['landing','onboard','initializing'].includes(from));
     // A card belongs to the current room. Keep its camera, character placement
     // and background through the entire offer, including the final frame.
-    const layout = presentingCard && preserveScene ? {...state.layout,blur:true} : growthEntrance ? {...pageLayout('onboard'),footY:.62,height:.245} : {...pageLayout(nextPage),...(override||{})};
+    const layout = presentingCard && preserveScene ? {...state.layout,blur:false} : growthEntrance ? {...pageLayout('onboard'),footY:.62,height:.245} : {...pageLayout(nextPage),...(override||{})};
     const fromWorld=sceneForKlinPage(from),toWorld=layout.world;
     const sceneDirection=Math.sign(SCENE_ORDER.indexOf(toWorld)-SCENE_ORDER.indexOf(fromWorld))||(direction==='back'||direction==='backward'?-1:1);
     // A card is offered from Klin's present location, without traveling to an
@@ -507,7 +509,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
             turn=-Math.sin(Math.PI*elapsed)*.07;wave=smooth(elapsed/.27)*(1-smooth((elapsed-.76)/.24));waveLeft=wave*.75;
             position.z-=smooth((elapsed-.76)/.24)*scale*.18;scale*=1-smooth((elapsed-.76)/.24)*.07;
             state.transitionPhase=elapsed<.25?'present-card':elapsed<.76?'offer-card':'handoff';
-            state.blur=lerp(activity.from.blur||0,1,smooth((elapsed-.31)/.64));
+            state.blur=0;
           }else{
             state.transitionPhase=elapsed<.24?'rise':elapsed<.78?'glide':'settle';
             if(elapsed>.44&&state.mode!==activity.layout.world)updateWorldMode(activity.layout);
@@ -596,6 +598,9 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     const settle = state.reduced ? 0 : Math.sin(time * .64+.9) * .012;
     if(!state.reduced&&!state.action){position.y+=(Math.sin(time*.94)*.025+Math.sin(time*1.81+.5)*.006)*scale;position.x+=Math.sin(time*.47)*.009*scale;turn+=Math.sin(time*.39+.6)*.035;}
     rig.root.position.copy(position); rig.root.scale.setScalar(scale); rig.root.rotation.set(0, turn + pointer.x * .045, lean);
+    labelAnchor.copy(rig.root.position).project(camera);
+    const anchorX=((labelAnchor.x+1)*50).toFixed(3)+'%',anchorY=((1-labelAnchor.y)*50).toFixed(3)+'%';
+    if(lastLabelAnchor!==anchorX+anchorY){host.parentElement?.style.setProperty('--klin-foot-x',anchorX);host.parentElement?.style.setProperty('--klin-foot-y',anchorY);lastLabelAnchor=anchorX+anchorY;}
     rig.root.visible=nativeReady&&(!!state.action||state.layout.character!==false);
     room.contact.visible=rig.root.visible;
     room.miniGround.visible=rig.root.visible&&!!state.layout.mini;

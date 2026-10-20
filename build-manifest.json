@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-19T12:59:20.853Z",
+  "createdAt": "2026-10-20T08:22:49.937Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 63501078,
+  "payloadBytes": 70743465,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 94117,
-      "sha256": "31eac56f0045c2e2b14d049680346f58102c062c1b0629a32f9734df8d31706d"
+      "bytes": 94416,
+      "sha256": "422478fdbe948034a2eac866480472bcb7ddd3afaa8b011bcc8f303f3d36a947"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -132,12 +132,6 @@
       "sha256": "98a71caac2461f1c20a099257756930db28010726901c89b1cf54558be80a8bf"
     },
     {
-      "source": "assets/login-world-20261019/klin-login-scene.mjs",
-      "path": "assets/login-world-20261019/klin-login-scene.mjs",
-      "bytes": 12047,
-      "sha256": "a3b70cfa031c50453398f6d24216da82df6627d61327cdbbf51975de910eaa98"
-    },
-    {
       "source": "assets/login-world-20261019/source/character-transparent.png",
       "path": "assets/login-world-20261019/source/character-transparent.png",
       "bytes": 1932038,
@@ -154,6 +148,90 @@
       "path": "assets/login-world-20261019/source/original-login-world.png",
       "bytes": 1902641,
       "sha256": "77633e4702a6b254d29406bed33f837d9b492e0821b941486970e859a35724d1"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/champagne-metal-room.png",
+      "path": "assets/portal-scenes-20261020/champagne-metal-room.png",
+      "bytes": 2064831,
+      "sha256": "c816565289e9696ac02e0e5790409c954ad405a3fca25104ec09ac9feb7f9c8f"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/onboarding-doorlight.png",
+      "path": "assets/portal-scenes-20261020/onboarding-doorlight.png",
+      "bytes": 1557686,
+      "sha256": "ff7e397e6e528d9f88a6fba1b595d297e0025d2a4202bd667869755ed7c11d9a"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/three-avatar-porches.png",
+      "path": "assets/portal-scenes-20261020/three-avatar-porches.png",
+      "bytes": 1803465,
+      "sha256": "44de83e5bb354c86af9676da197f1901317573904444a7657c3860ae77516303"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/welcome-user.png",
+      "path": "assets/portal-scenes-20261020/welcome-user.png",
+      "bytes": 1781686,
+      "sha256": "35dd3ca5eba5b342082bfd7e4ba766f4a409b9122040884a4a3226719c80ed52"
+    },
+    {
+      "source": "assets/ui/arrow-up.svg",
+      "path": "assets/ui/arrow-up.svg",
+      "bytes": 253,
+      "sha256": "96d0150f6ca19bf60e55389884b69356718bb81f4bace10f2124853610941e46"
+    },
+    {
+      "source": "assets/ui/audio-lines.svg",
+      "path": "assets/ui/audio-lines.svg",
+      "bytes": 349,
+      "sha256": "3942b8a5d6bccc927a55f857f0d44b90e2663470cd2d569000c9b60c37578dfa"
+    },
+    {
+      "source": "assets/ui/ellipsis-horizontal.svg",
+      "path": "assets/ui/ellipsis-horizontal.svg",
+      "bytes": 362,
+      "sha256": "dd9980eb9dab3e27e0c8507182fea76f156e35a6221c55713454054de550de6c"
+    },
+    {
+      "source": "assets/ui/heroicons-LICENSE",
+      "path": "assets/ui/heroicons-LICENSE",
+      "bytes": 1071,
+      "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985"
+    },
+    {
+      "source": "assets/ui/lucide-LICENSE",
+      "path": "assets/ui/lucide-LICENSE",
+      "bytes": 3208,
+      "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+    },
+    {
+      "source": "assets/ui/microphone.svg",
+      "path": "assets/ui/microphone.svg",
+      "bytes": 357,
+      "sha256": "8d01f205baa837943ecd8e36baa521894b4398d19e75348edaa719746b6c7763"
+    },
+    {
+      "source": "assets/ui/speaker-wave.svg",
+      "path": "assets/ui/speaker-wave.svg",
+      "bytes": 492,
+      "sha256": "ac7afd8bf01135feb569004d6010289075deaad5cac9fff4243087dd701759d6"
+    },
+    {
+      "source": "assets/ui/speaker-x-mark.svg",
+      "path": "assets/ui/speaker-x-mark.svg",
+      "bytes": 491,
+      "sha256": "2b492521abd78c47eca84d3339be2c68c69a6c590e267070455c6d2394520336"
+    },
+    {
+      "source": "assets/ui/stop.svg",
+      "path": "assets/ui/stop.svg",
+      "bytes": 254,
+      "sha256": "123e8f6f00c326a8fdda42bb326ae504284d0e8c7da834cdb779f1300c11e0c2"
+    },
+    {
+      "source": "assets/ui/x-mark.svg",
+      "path": "assets/ui/x-mark.svg",
+      "bytes": 239,
+      "sha256": "f44f8d4070a779c324f07a199122b4cc8686b5a8d9705727dc38d0cfd3bb27ec"
     },
     {
       "source": "assets/visit-20261010/door-soft.png",
@@ -204,6 +282,12 @@
       "sha256": "68f41bf7a6f6ad38652286ab27feda2d3b07d2fd528c8828d3f81915f71dd1e1"
     },
     {
+      "source": "communication-mode.mjs",
+      "path": "communication-mode.mjs",
+      "bytes": 13193,
+      "sha256": "c1900c8ca8994cafc8857cad5b5ba6d69a4c0e92221c8624b7c781ab3675e507"
+    },
+    {
       "source": "companion-animation.mjs",
       "path": "companion-animation.mjs",
       "bytes": 1988,
@@ -212,8 +296,8 @@
     {
       "source": "contract-centered-paper.css",
       "path": "contract-centered-paper.css",
-      "bytes": 7728,
-      "sha256": "4345370a7edcdf6a303ae46dd850e119232bfc2c5ddf2dfff3dd8b5de70a68bc"
+      "bytes": 9950,
+      "sha256": "99aed30e925b9a0b00cf75056e8900541fa2bc6d7cd15d96e659670105ff86c9"
     },
     {
       "source": "contract-paper-readability.css",
@@ -224,8 +308,8 @@
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 4344,
-      "sha256": "b28930cb9ecb29a92cd34812346d535d81515cb508b987377fac4f2846ce1855"
+      "bytes": 5916,
+      "sha256": "1f7005715539852e883875dd71e6e2613b31ee6569ef895655dfbc10f6b8ce31"
     },
     {
       "source": "conversation-experience.css",
@@ -288,6 +372,18 @@
       "sha256": "738039935915d5cd816f0318e13c482ac7f85213bd3eac530adc0492344acf27"
     },
     {
+      "source": "glass-material.css",
+      "path": "glass-material.css",
+      "bytes": 1591,
+      "sha256": "871401682151e5b2fb1c9c788dc5c867cddebc574345007ba4c18145a491c41e"
+    },
+    {
+      "source": "home-controls-v24.css",
+      "path": "home-controls-v24.css",
+      "bytes": 7396,
+      "sha256": "518db376e3b15b2c938826303f668222295f6cd80887227c2c5b22f669624ec4"
+    },
+    {
       "source": "home-greeting.mjs",
       "path": "home-greeting.mjs",
       "bytes": 3446,
@@ -302,8 +398,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 5671,
-      "sha256": "d650c4969c1cbdec94a63e9adb87e86a319ad09a9d0a356c6ce0fffefa3b76bb"
+      "bytes": 6046,
+      "sha256": "9dcc7ae3f4048dee47b181b1d42f3689bf7874b76330d298eecc169dc9ce8019"
     },
     {
       "source": "journey-experience.css",
@@ -342,12 +438,6 @@
       "sha256": "750acc1149baca8f56fd6c5d605b4c46199778c4d77888c0217d195e335fb6a7"
     },
     {
-      "source": "klin-login-scene.mjs",
-      "path": "klin-login-scene.mjs",
-      "bytes": 2674,
-      "sha256": "185634b1b840a93379887885ca1f378cfb03768cde0f539ffe90d15cd33b7265"
-    },
-    {
       "source": "klin-native-model.mjs",
       "path": "klin-native-model.mjs",
       "bytes": 10559,
@@ -356,14 +446,14 @@
     {
       "source": "klin-reference-scene.mjs",
       "path": "klin-reference-scene.mjs",
-      "bytes": 3766,
-      "sha256": "4dcd0ef003939e73415a9cf6f421c3cfab6f38ae729537a15710b78558dc662b"
+      "bytes": 3799,
+      "sha256": "3396decfa9cf89ab2907cc25216ac9da122d31c720f00dbb2d13a7acc138c8d8"
     },
     {
       "source": "klin-world.mjs",
       "path": "klin-world.mjs",
-      "bytes": 66322,
-      "sha256": "c6aacaef85f8f334f41898fea53db0b3d798704af607d92e1c52662abe02b2b3"
+      "bytes": 66704,
+      "sha256": "bb3681532eea2cfe8637162f1b9dae4d86783d64b3c2c0110045fe78ccfc0a20"
     },
     {
       "source": "landing.mjs",
@@ -426,22 +516,46 @@
       "sha256": "bf9a620a2d4fa156b27a3ceab568f700a17866e1555554689e7ed3e8d7c8dd85"
     },
     {
+      "source": "portal-arrival.mjs",
+      "path": "portal-arrival.mjs",
+      "bytes": 2486,
+      "sha256": "5db514e8fdc190175d04940070b9009c6dff9b3b290c44b14cdff25f3645a43c"
+    },
+    {
+      "source": "portal-glass.css",
+      "path": "portal-glass.css",
+      "bytes": 6843,
+      "sha256": "ce85d28cf9d9a88e5c6b8242d8c8aa6eb75c19e965435da88630aac0df9e7e9b"
+    },
+    {
+      "source": "portal-social-v24.css",
+      "path": "portal-social-v24.css",
+      "bytes": 2984,
+      "sha256": "44857c3d021a23942f2d1e6b722c66f942b55ba5a26425658ae152846bd8e27d"
+    },
+    {
       "source": "public-card.css",
       "path": "public-card.css",
-      "bytes": 6748,
-      "sha256": "92b6c2045f577a622a8fb45d996cb3db2fc70c6c0fdfe571c22ee1c2d33629ff"
+      "bytes": 7113,
+      "sha256": "03b47b5214d280ec4066d31833be434ea99b73a802e9a681c25b6b904aa08ce8"
     },
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 17030,
-      "sha256": "1d9ffbf141f4159f0d68c2e382556fe1a7afb5a71d387e4cfc178306f10a455c"
+      "bytes": 16857,
+      "sha256": "5c80c5dc8434e5e5b08e6f96e6528c4b11cec4bf1312ecd393d362d27b3b1f0c"
     },
     {
       "source": "realm-scene.css",
       "path": "realm-scene.css",
       "bytes": 370,
       "sha256": "7c3938422488d29ad029de3af3216d626a3d813c7c3b516835acee7a521a50df"
+    },
+    {
+      "source": "refinement-v25.css",
+      "path": "refinement-v25.css",
+      "bytes": 2796,
+      "sha256": "e0080cab4e317c32e309c1ee965db1729cad8ee82c82f3a73683b7fda2afb643"
     },
     {
       "source": "refinement-v8.css",
@@ -735,6 +849,36 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "glass-material.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "portal-glass.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "home-controls-v24.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "portal-social-v24.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "refinement-v25.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "communication-mode.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "mobile-viewport.mjs",
       "kind": "module"
@@ -796,7 +940,7 @@
     },
     {
       "from": "app.mjs",
-      "to": "klin-login-scene.mjs",
+      "to": "portal-arrival.mjs",
       "kind": "module"
     },
     {
@@ -877,11 +1021,6 @@
     {
       "from": "klin-world.mjs",
       "to": "klin-reference-scene.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "klin-login-scene.mjs",
-      "to": "assets/login-world-20261019/klin-login-scene.mjs",
       "kind": "module"
     },
     {

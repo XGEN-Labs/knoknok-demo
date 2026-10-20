@@ -139,7 +139,7 @@ export async function downloadCard(value) {
   const canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 2200;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('瀏覽器暫時無法繪製名片。');
-  const family = '-apple-system,BlinkMacSystemFont,"PingFang TC","PingFang SC",system-ui,sans-serif';
+  const family = '"Songti TC","Songti SC","Noto Serif CJK TC","Noto Serif CJK SC","PMingLiU",serif';
   const [logo, companion, avatar, landscape] = await Promise.all([
     cardImage(BRAND_LOGO), cardImage(DEFAULT_COMPANION), cardImage(data.avatar || DEFAULT_CARD_AVATAR),
     cardImage('assets/cloud-realm-20261019/arrival.webp'),
@@ -156,24 +156,24 @@ export async function downloadCard(value) {
   while (nameLines.length > 2 && nameSize > 29) { nameSize -= 4; ctx.font = '600 ' + nameSize + 'px ' + family; nameLines = wrapLines(ctx, data.name, 510); }
   const identityY = 246, identityHeight = Math.max(132, nameLines.length * (nameSize + 8) + 18);
   let flowY = identityY + identityHeight + 50;
-  ctx.font = '34px ' + family;
+  ctx.font = '50px ' + family;
   const bioLines = data.bio ? wrapLines(ctx, data.bio, right - left).slice(0, 2) : [];
   const allBioLines = data.bio ? wrapLines(ctx, data.bio, right - left) : [];
-  const bioY = flowY; flowY += bioLines.length * 59;
+  const bioY = flowY; flowY += bioLines.length * 77;
   const meta = [data.language, data.region].filter(Boolean).join(' · ');
   const metaY = flowY + (bioLines.length ? 16 : 0);
-  if (meta) flowY = metaY + 40;
+  if (meta) flowY = metaY + 56;
   flowY += 38;
-  const tags = []; let x = left, row = 0; ctx.font = '500 31px ' + family;
+  const tags = []; let x = left, row = 0; ctx.font = '600 43px ' + family;
   for (const [index, text] of data.tags.entries()) {
     const width = Math.min(450, ctx.measureText(text).width + 54);
     if (x + width > right && x > left) { row++; x = left; }
     let display = text;
     while (ctx.measureText(display).width > width - 54) display = Array.from(display).slice(0, -1).join('');
     if (display !== text) display = Array.from(display).slice(0, -1).join('') + '…';
-    tags.push({ index, display, x, y: flowY + row * 78, width }); x += width + 22;
+    tags.push({ index, display, x, y: flowY + row * 94, width }); x += width + 22;
   }
-  const height = Math.max(680, flowY + (tags.length ? row * 78 + 61 : 0) + 70);
+  const height = Math.max(680, flowY + (tags.length ? row * 94 + 77 : 0) + 70);
   // The same warm cotton stock and quiet fibres used by the DOM card.
   ctx.fillStyle = '#fffdf8'; ctx.fillRect(0, 0, 1080, height);
   const paper = ctx.createLinearGradient(0, 0, 1080, height);
@@ -188,7 +188,7 @@ export async function downloadCard(value) {
     const print = tint.getContext('2d'); print.drawImage(logo, 0, 0, 260, 87); print.globalCompositeOperation = 'source-in'; print.fillStyle = ink; print.fillRect(0, 0, 260, 87);
     ctx.globalAlpha = .84; ctx.drawImage(tint, left, 62, 260, 87); ctx.globalAlpha = 1;
   }
-  ctx.fillStyle = '#9a8f83'; ctx.font = '24px ' + family; ctx.fillText('一張名片，一次相遇。', left, 163);
+  ctx.fillStyle = '#7a6e62'; ctx.font = '36px ' + family; ctx.fillText('一張名片，一次相遇。', left, 163);
   // A small printed souvenir stamp replaces the previous full-width image box.
   ctx.save(); ctx.translate(910, 182); ctx.rotate(6 * Math.PI / 180);
   ctx.fillStyle = '#fffefb'; ctx.fillRect(-100, -115, 200, 230);
@@ -196,7 +196,7 @@ export async function downloadCard(value) {
   ctx.save(); ctx.beginPath(); ctx.rect(-88, -103, 176, 206); ctx.clip();
   if (landscape) { ctx.globalAlpha = .90; cover(landscape, -88, -103, 176, 206, .35); ctx.globalAlpha = 1; }
   if (companion) { ctx.globalAlpha = .92; ctx.drawImage(companion, -59, -6, 118, 118); ctx.globalAlpha = 1; }
-  ctx.restore(); ctx.fillStyle = '#9c8b7c'; ctx.font = '19px ' + family; ctx.textAlign = 'center'; ctx.fillText('彼之境 · 來客', 0, 133); ctx.restore(); ctx.textAlign = 'left';
+  ctx.restore(); ctx.fillStyle = '#7b6a59'; ctx.font = '36px ' + family; ctx.textAlign = 'center'; ctx.fillText('彼之境 · 來客', 0, 133); ctx.restore(); ctx.textAlign = 'left';
   ctx.save(); ctx.beginPath(); ctx.arc(left + 66, identityY + 66, 66, 0, Math.PI * 2); ctx.clip();
   if (avatar) cover(avatar, left, identityY, 132, 132);
   else {
@@ -204,23 +204,22 @@ export async function downloadCard(value) {
     ctx.fillStyle = sky; ctx.fillRect(left, identityY, 132, 132); ctx.fillStyle = '#fffaf3'; ctx.beginPath(); ctx.arc(left + 66, identityY + 50, 20, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(left + 66, identityY + 127, 38, 44, 0, 0, Math.PI * 2); ctx.fill();
   }
   ctx.restore(); ctx.font = '600 ' + nameSize + 'px ' + family;
-  const nameplateWidth = Math.min(550, Math.max(...nameLines.map(line => ctx.measureText(line).width)) + 40);
-  ctx.fillStyle = '#3d4350'; rounded(ctx, 236, identityY - 4, nameplateWidth, nameLines.length * (nameSize + 8) + 18, 6); ctx.fill();
-  ctx.fillStyle = '#fff'; nameLines.forEach((line, i) => ctx.fillText(line, 256, identityY + 8 + i * (nameSize + 8)));
-  ctx.fillStyle = '#655d54'; ctx.font = '34px ' + family;
+  // Names are printed directly on the same stock as the rest of the card.
+  ctx.fillStyle = ink; nameLines.forEach((line, i) => ctx.fillText(line, 236, identityY + 8 + i * (nameSize + 8)));
+  ctx.fillStyle = '#655d54'; ctx.font = '50px ' + family;
   bioLines.forEach((line, i) => {
     let display = line;
     if (i === 1 && allBioLines.length > 2) {
       while (display && ctx.measureText(display + '…').width > right - left) display = Array.from(display).slice(0, -1).join('');
       display += '…';
     }
-    ctx.fillText(display, left, bioY + i * 59);
+    ctx.fillText(display, left, bioY + i * 77);
   });
-  if (meta) { ctx.fillStyle = '#9b8f82'; ctx.font = '28px ' + family; ctx.fillText(meta, left, metaY); }
+  if (meta) { ctx.fillStyle = '#776b5f'; ctx.font = '42px ' + family; ctx.fillText(meta, left, metaY); }
   for (const { index, display, x, y, width } of tags) {
-    ctx.save(); ctx.translate(x + width / 2, y + 30); ctx.rotate(STICKER_ANGLES[index] * Math.PI / 180);
-    ctx.fillStyle = STICKER_COLORS[index]; rounded(ctx, -width / 2, -30, width, 61, 12); ctx.fill();
-    ctx.strokeStyle = '#ffffff66'; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#493c43'; ctx.font = '500 31px ' + family; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(display, 0, 2); ctx.restore();
+    ctx.save(); ctx.translate(x + width / 2, y + 38); ctx.rotate(STICKER_ANGLES[index] * Math.PI / 180);
+    ctx.fillStyle = STICKER_COLORS[index]; rounded(ctx, -width / 2, -38, width, 77, 12); ctx.fill();
+    ctx.strokeStyle = '#ffffff66'; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#493c43'; ctx.font = '600 43px ' + family; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(display, 0, 2); ctx.restore();
   }
   const portrait = document.createElement('canvas'); portrait.width = 1080; portrait.height = height;
   const portraitContext = portrait.getContext('2d');

@@ -3,8 +3,8 @@ import * as THREE from './vendor/three/three.module.js';
 // Authored environment plates, with live native Klin rendered in front. UI is
 // entirely HTML and uses the pre-scene-redesign components and styles.
 const assets={
- home:'./assets/cloud-realm-20261019/home.webp',
- porch:'./assets/cloud-realm-20261019/porch.webp',
+ home:'./assets/portal-scenes-20261020/champagne-metal-room.png',
+ porch:'./assets/portal-scenes-20261020/three-avatar-porches.png',
  shared:'./assets/cloud-realm-20261019/shared.webp',
  arrival:'./assets/cloud-realm-20261019/arrival.webp',
 };

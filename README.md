@@ -1,26 +1,15 @@
-# Knoknok · Klin Demo
+# Knoknok interactive demo
 
-Meet Klin, explore the cloud realm, and try the interactive frontend prototype.
+Current release: `20261020-refine-25d` (2026-10-20).
 
-[Open the Demo](https://xgen-labs.github.io/knoknok-demo/)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261020-refine-25d)
 
-## Sign in
+This release refines login alignment and full-screen light transitions, 50% white glass controls, consistent onboarding bubbles, paper-scroll signing and card typography, room-preserving profile editing, and one voice-input action with animated composer expansion. The volume glyph is 22px inside a 44px touch target.
 
-The account and password are already filled in:
+Browser speech recognition is user-initiated and returns text to a draft. Account, AI, neighbours and messages remain local demo behaviour. No realtime AI voice service is connected.
 
-- Account: `knoknok.demo`
-- Password: `Knoknok2026`
+Validation: 171 automated tests passed; 112 build files, 38 runtime assets, no missing assets. Responsive browser checks cover 440px and 375px widths and a reduced keyboard viewport; these are not physical-device or microphone certification.
 
-These are demonstration credentials. Login, character replies, visits and messages are local simulations; real authentication, AI and SMS services are not connected. Each browser keeps its own Demo progress.
+This public repository contains only the deployable web build. Development history, original design references, source model packages and private handoff documents remain in the private development repository.
 
-## Try the experience
-
-Complete the first conversation, choose a birthday and optional birth period, sign the encounter contract, and watch Klin grow. At home, tap the message field to chat with Klin. Tap the scene to return to the room; the visit entrance appears beside the message field. Search the relationship network, view all card tags, and edit or share your paper card. Swipe down or tap outside a bottom panel to close it.
-
-## Local preview
-
-Run `python3 -m http.server 8769 --bind 127.0.0.1` in this repository and open [the local Demo](http://127.0.0.1:8769/).
-
-## Version
-
-`20261019-mobile-23`. GitHub Pages publishes the `main` branch from the repository root.
+Run locally with `python3 -m http.server 8767 --bind 127.0.0.1`, then open `http://127.0.0.1:8767/`.
