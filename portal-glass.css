@@ -36,15 +36,16 @@
 .phone #app .onboarding-composer .kn-date-trigger:hover{background:transparent!important;border-color:transparent!important;box-shadow:none!important;filter:none!important;transform:none!important}
 .phone #app .onboarding-composer .kn-date-trigger svg{color:#4b4852}
 .phone[data-card-handoff="presenting"]>.klin-world-host{filter:none}
-/* Add space below the complete flow group, rather than transforming either
-   child: two auto margins share 96px and move brand plus form up by 48px.
-   Short viewports and keyboard-visible layouts retain their current flow. */
-@container(min-height:740px){
-  .phone #app .page.auth-page{padding-bottom:calc(var(--app-safe-bottom) + 96px)}
+/* Anchor the whole login group in the upper area. Auto-centering placed it
+   too low even with an added bottom inset. Keyboard layouts keep natural flow. */
+@container(min-height:621px){
+  .phone #app .page.auth-page{padding-top:calc(var(--app-safe-top) + clamp(54px,10cqh,96px));padding-bottom:var(--app-safe-bottom)}
+  .phone #app .auth-page>.auth-brand{margin:0}
+  .phone #app .auth-page>.auth-panel{margin:0}
 }
 @media(max-height:740px){.phone #app .auth-login .auth-panel{padding:21px 23px}.phone #app .auth-page>.auth-brand{height:38px;min-height:38px}.phone #app .auth-page>.auth-brand .brand-logo{width:114px}}
 @container(max-height:620px){
-  .phone #app .page.auth-page{gap:12px;padding-top:calc(var(--app-safe-top) + 8px)}
+  .phone #app .page.auth-page{gap:12px;padding-top:calc(var(--app-safe-top) + 48px)}
   .phone #app .auth-login .auth-panel{padding:16px 22px}
   .phone #app .auth-page>.auth-brand{height:32px;min-height:32px}
   .phone #app .auth-page>.auth-brand .brand-logo{width:96px}

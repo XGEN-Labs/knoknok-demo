@@ -4,7 +4,7 @@
 .phone #app .room-chat-page .home-top>.volume-toggle{grid-column:3;grid-row:1;justify-self:end}
 .phone #app .communication-mode{display:none!important}
 .phone #app :is(.scene-icon,.visit-entry) :is(svg.nav-icon,img.restored-control-icon,img.centered-volume-icon){display:block;width:26px!important;height:26px!important;min-width:26px;flex:none;object-fit:contain;object-position:center;margin:0!important;transform:none!important;opacity:1}
-.phone #app .scene-icon img.centered-volume-icon{width:22px!important;height:22px!important;min-width:22px}
+.phone #app .scene-icon :is(img,svg).centered-volume-icon{display:block!important;visibility:visible!important;opacity:1!important;width:22px!important;height:22px!important;min-width:22px;color:var(--kn-glass-ink,#26242c);stroke:currentColor;fill:none;overflow:visible}
 .phone #app :is(.scene-icon,.volume-toggle){align-items:center!important;justify-content:center!important;text-align:center;line-height:1}
 .phone #app :is(.icon-button,.scene-icon,.onboarding-back,.auth-back) .back-chevron{display:block;width:24px!important;height:24px!important;flex:none;margin:0!important;transform:none!important}
 .phone #app .profile-card-page .page-top{display:flex;align-items:center;min-height:44px;height:44px;padding:0;gap:12px}
@@ -23,6 +23,9 @@
 .phone[data-conversation="true"] #app .home-chat-actions>.visit-entry{display:flex!important;opacity:0;visibility:hidden;pointer-events:none;padding-left:0;padding-right:0;border-width:0!important;transform:translateX(8px) scale(.94);transition:opacity 260ms ease,transform 400ms cubic-bezier(.22,.61,.24,1),padding 400ms ease,visibility 0ms 400ms}
 .phone #app .home-composer .composer-row,.phone[data-conversation="true"] #app .home-composer .composer-row{position:relative;display:flex;box-sizing:border-box;width:100%;height:60px;min-height:60px;max-height:60px;align-items:center;padding:7px;gap:3px;transition:border-radius 400ms ease,background-color 200ms ease}
 .phone #app .home-composer textarea,.phone[data-conversation="true"] #app .home-composer textarea{order:1;flex:1;width:0;min-width:0;height:32px;min-height:32px;max-height:32px;padding:4px 7px;line-height:24px;resize:none;overflow-y:auto}
+.phone #app .home-composer textarea{font-size:16px}
+.phone #app .home-composer textarea::placeholder{font-size:14px;font-weight:400;color:#777;opacity:1;text-shadow:none;filter:none}
+.phone #app [data-voice-fallback="true"] .home-composer textarea::placeholder{font-size:13px;color:#777;opacity:1}
 .phone #app .home-composer .send-button{order:4;display:none;align-self:center;flex:0 0 44px;width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0;place-items:center}
 .phone #app .home-composer .send-button svg{display:block;width:24px;height:24px;margin:0}
 .phone #app [data-has-draft="true"] .home-composer .send-button{display:grid}
@@ -30,15 +33,15 @@
 .phone #app .voice-icon-control{display:grid;place-items:center;flex:0 0 44px;width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--kn-glass-ink,#26242c);line-height:1;box-shadow:none;cursor:pointer}
 .phone #app .voice-icon-control img{display:block;flex:none;width:24px!important;height:24px!important;margin:0!important;object-fit:contain;transform:none!important}
 .phone #app .voice-open-button{order:4;background:#202020!important;color:#fff!important}
+.phone #app .voice-open-button .voice-speaker-icon{display:block;width:22px!important;height:22px!important;min-width:22px;color:#fff!important;stroke:currentColor;fill:none;margin:0!important;transform:none!important}
 .phone #app :is(.voice-open-button,.voice-finish-button) img{filter:brightness(0) invert(1)}
-.phone #app .voice-capture-controls{order:1;display:flex;align-items:center;gap:3px;width:100%;min-width:0;height:44px}
+.phone #app .voice-capture-controls{order:1;display:flex;align-items:center;gap:10px;width:100%;min-width:0;height:44px}
 .phone #app .voice-capture-controls[hidden]{display:none!important}
 .phone #app [data-voice-capture="true"] .home-composer :is(textarea,.voice-open-button,.send-button){display:none!important}
 .phone #app .voice-capture-stage{position:relative;display:grid;place-items:center;flex:1;min-width:0;height:40px;overflow:hidden}
 .phone #app .voice-capture-stage canvas{display:block;width:100%;height:32px}
 .phone #app .voice-capture-stage canvas[hidden]{display:none!important}
-.phone #app [data-voice-caption]{display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;line-height:24px;color:#68636c;text-align:center}
-.phone #app [data-voice-caption].voice-caption-with-meter{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.phone #app [data-voice-caption]{display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:13px;font-weight:400;line-height:24px;color:#666;text-align:center;text-shadow:none}
 .phone #app :is(.voice-cancel-button,.voice-stop-button){background:var(--kn-glass-fill,rgba(255,255,255,.30));border:var(--kn-glass-edge-width,1px) solid var(--kn-glass-edge,rgba(255,255,255,.65))}
 .phone #app .voice-stop-button img{width:20px!important;height:20px!important}
 .phone #app .voice-finish-button{position:relative;background:#202020!important;color:#fff!important}

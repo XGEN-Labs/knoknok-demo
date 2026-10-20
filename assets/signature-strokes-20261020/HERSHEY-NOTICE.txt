@@ -1,0 +1,3 @@
+Source: https://github.com/techninja/hersheytextjs
+README license statement: The JSON data is Public Domain, while all code is licensed MIT.
+This distribution contains only the cursive entries from hersheytext.json, extracted on 2026-10-20, with original path coordinates unchanged. The MIT code is not included; its LICENSE is retained for attribution.

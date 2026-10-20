@@ -1,29 +1,29 @@
-import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261020-refine-25d';
-import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261020-refine-25d';
-import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261020-refine-25d';
-import { showCompanionContract } from './contract-story.mjs?v=20261020-refine-25d';
-import { prepareAvatar } from './avatar-upload.mjs?v=20261020-refine-25d';
-import { initFormControls } from './form-controls.mjs?v=20261020-refine-25d';
-import { initDatePickers } from './date-picker.mjs?v=20261020-refine-25d';
-import { initTypography } from './typography.mjs?v=20261020-refine-25d';
-import { createSceneSound } from './scene-sound.mjs?v=20261020-refine-25d';
-import { landingComplete, onboardingDestination } from './landing.mjs?v=20261020-refine-25d';
-import { navIcon, backArrow, sendArrow, volumeIcon } from './ui-icons.mjs?v=20261020-refine-25d';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261020-refine-25d';
-import { createKlinWorld } from './klin-world.mjs?v=20261020-refine-25d';
-import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261020-refine-25d';
-import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261020-refine-25d';
-import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261020-refine-25d';
+import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261020-refine-26c';
+import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261020-refine-26c';
+import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261020-refine-26c';
+import { showCompanionContract } from './contract-story.mjs?v=20261020-refine-26c';
+import { prepareAvatar } from './avatar-upload.mjs?v=20261020-refine-26c';
+import { initFormControls } from './form-controls.mjs?v=20261020-refine-26c';
+import { initDatePickers } from './date-picker.mjs?v=20261020-refine-26c';
+import { initTypography } from './typography.mjs?v=20261020-refine-26c';
+import { createSceneSound } from './scene-sound.mjs?v=20261020-refine-26c';
+import { landingComplete, onboardingDestination } from './landing.mjs?v=20261020-refine-26c';
+import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261020-refine-26c';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261020-refine-26c';
+import { createKlinWorld } from './klin-world.mjs?v=20261020-refine-26c';
+import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261020-refine-26c';
+import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261020-refine-26c';
+import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261020-refine-26c';
 import { initPixelRoom } from './pixel-room.mjs?v=20261010-pixel-scene-1';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261010-natural-greeting-1';
 import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261009-gif-2';
-import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261020-refine-25d';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261020-refine-25d';
+import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261020-refine-26c';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261020-refine-26c';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
 const sceneSound = createSceneSound();
-let cleanFormControls,cleanSheetControls,cleanDatePickers,cleanSheetDates,cleanCommunication;
+let cleanFormControls,cleanSheetControls,cleanDatePickers,cleanSheetDates,cleanCommunication,voiceRefreshPending=false;
 let cardAvatarDraft='';
 let avatarUploadSequence=0;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -264,7 +264,7 @@ function knockVisit(friendId){
  visitTimer=setTimeout(()=>{if(token!==visitAttempt||ui.selectedVisitId!==friendId)return;ui.visitPhase=ui.route==='relations'?'open':'idle';save();if(ui.route==='relations'){render(false);if(ui.visitDialog)visitSheet();}},prefersStillness(ui.motion)?0:1350);
 }
 function myCard(){return publicCardData(me(),{includeRegion:me().shareRegion===true,tags:me().cardTags||[],avatar:me().cardAvatar});}
-function profile(){return shell(top('我的名片','',`<button class="scene-icon" type="button" data-action="private-profile" aria-label="私人資料與帳號">${restoredControlIcon('more')}</button>`)+`<div class="profile-stage">${cardMarkup(myCard(),{showAllTags:true})}<div class="profile-card-tools"><button type="button" class="text-button" data-action="preview-card">↗ 訪客視角</button><button type="button" class="text-button" data-action="edit-card">編輯與標籤</button></div></div><div class="profile-footer"><div class="card-actions split-buttons">${btn('保存圖片','download-card','white')}${btn('分享名片','share-card')}</div></div>`,'profile-card-page');}
+function profile(){return shell(top('我的名片','',`<button class="scene-icon" type="button" data-action="private-profile" aria-label="私人資料與帳號">${restoredControlIcon('more')}</button>`)+`<div class="profile-stage">${cardMarkup(myCard(),{showAllTags:true,editable:true})}</div><div class="profile-footer"><div class="card-actions split-buttons">${btn('保存圖片','download-card','white')}${btn('分享名片','share-card')}</div></div>`,'profile-card-page');}
 function publicCardPage(){const data=sharedCard||myCard();return shell(`<header class="page-top"><button type="button" class="icon-button" data-action="leave-card" aria-label="返回">${backIcon}</button><div><h2>${sharedCard?'你好，新朋友':'訪客眼中的你'}</h2></div></header><div class="profile-stage">${cardMarkup(data,{showAllTags:true})}</div><div class="profile-footer">${btn(sharedCard?'認識我的 Klin':'回到我的名片','leave-card')}</div>`,'public-card-page');}
 function editCard(){
  cardAvatarDraft=normalizeCardAvatar(me().cardAvatar);avatarUploadSequence++;
@@ -345,6 +345,12 @@ function render(animate=false,motion={}){
   // Incoming messages may refresh the same route during travel. Keep the UI
   // cleared until arrival instead of exposing it over the moving character.
   if(!animate&&stopTransition&&$('#app > .page[data-screen]')?.dataset.screen===ui.route){pendingSceneRefresh=true;return;}
+  // Keep the native recognition session alive when incoming content refreshes home.
+  // Navigation still disposes it; a finished capture applies the queued refresh.
+  if(ui.route==='home'&&$('#app > .page[data-screen]')?.dataset.screen==='home'&&cleanCommunication?.isCapturing()){
+    voiceRefreshPending=true;return;
+  }
+  voiceRefreshPending=false;
   const sequence=++renderSequence;
   if(comparisonMode)window.parent.postMessage({type:'knok-compare-state',route:ui.route,character:pixelVariant?'pixel':'soft'},location.origin);
   if(['demand','preview','search','candidate','onboard','initializing','companion','memory'].includes(ui.route))ui.route=setupRoute();
@@ -367,7 +373,7 @@ function render(animate=false,motion={}){
   app.innerHTML=views[ui.route]();
   cleanFormControls=initFormControls(app);cleanDatePickers=initDatePickers(app);initTypography(app);
   if(['chat','connected'].includes(ui.route)){const rel=latestRelationship();klinWorld?.setParticipants?.((rel?.members||[]).map(id=>state.users[id]),{activeId:actor()});}
-  if(ui.route==='home')cleanCommunication=bindVoiceComposer({root:$('#app>.home-page'),getDraft:()=>ui.companionDrafts?.[actor()]||'',onDraft:text=>{ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:text};save();},onConversationStart:()=>setHomeConversation(true)});
+  if(ui.route==='home')cleanCommunication=bindVoiceComposer({root:$('#app>.home-page'),lang:()=>me().language,getDraft:()=>ui.companionDrafts?.[actor()]||'',onDraft:text=>{ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:text};save();},onConversationStart:()=>setHomeConversation(true),onStatus:flushVoiceRefresh});
   syncHomeScene();syncLoginScene();initWorld();
   $('#phone').dataset.conversation=String(conversationActive&&ui.route==='home');
   $('#phone').dataset.worldPage=currentSceneRoute();
@@ -406,6 +412,17 @@ function render(animate=false,motion={}){
     if(previous)stopTransition=transitionScene({host:$('#phone'),app,previous,current:app.querySelector('.page'),source,world:worldReady?klinWorld:null,stage:growthPending?'juvenile':currentCompanionStage(),layout:currentWorldLayout(),scrollPositions,direction:motion.direction,onFinish:arrived});
     else {$('.page h2')?.focus({preventScroll:true});arrived();}
   }else if(growthPending&&!growthPlaying)playGrowth();
+}
+
+function flushVoiceRefresh(state){
+  // Keep the just-received failure visible instead of replacing it with idle UI.
+  if(['error','unsupported'].includes(state?.status))return;
+  if(!voiceRefreshPending||cleanCommunication?.isCapturing())return;
+  const composer=cleanCommunication;
+  queueMicrotask(()=>{
+    if(!voiceRefreshPending||ui.route!=='home'||cleanCommunication!==composer||composer?.isCapturing())return;
+    voiceRefreshPending=false;render(false);
+  });
 }
 
 function guideButtons(){if(ui.route==='chat'&&latestRelationship()?.status==='active')return `<button class="review-btn" type="button" data-action="simulate-reply">模擬朋友回覆</button>`;return '';}
@@ -504,7 +521,12 @@ async function runAction(action,element){
     case 'retry-initialization':if(dispatch({type:'BEGIN_INITIALIZATION'},false)){go('initializing');startInitialization();}return;
 
     case 'boop':klinWorld?.interact('wave');sceneSound.cue('reply');ui.boopReply=['我在。今天過得怎麼樣？','被你發現了，我一直在等你。','要聊聊，還是一起去串門？'][(ui.boopCount=(ui.boopCount||0)+1)%3];return render(false);
-    case 'toggle-sound':ui.soundOn=await sceneSound.setEnabled(!ui.soundOn).catch(()=>false);save();render(false);return;
+    case 'toggle-sound':{
+      ui.soundOn=await sceneSound.setEnabled(!ui.soundOn).catch(()=>false);save();
+      const button=$('.volume-toggle');
+      if(button){button.innerHTML=centeredVolumeIcon(!ui.soundOn);button.setAttribute('aria-pressed',String(Boolean(ui.soundOn)));button.setAttribute('aria-label',ui.soundOn?'關閉聲音':'開啟聲音');}
+      return;
+    }
     case 'visit-from-chat':return go('relations');
     case 'withdraw-invite':return confirmSheet('撤回這份邀約？','撤回後，對方將無法再接受這份邀約。','confirm-withdraw','撤回邀約');
     case 'confirm-withdraw':if(dispatch({type:'WITHDRAW_INVITATION',invitationId:latestInvite()?.id},false))go('invite',{replace:true});return;
