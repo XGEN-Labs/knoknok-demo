@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-20T13:01:01.748Z",
+  "createdAt": "2026-10-20T13:31:44.543Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 101481331,
+  "payloadBytes": 101483595,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 95352,
-      "sha256": "55f1519e233187c7420f6999cc4ab6e53b77e85311df8ec08a83f1962edbb305"
+      "bytes": 95997,
+      "sha256": "438e349a3be986c9c3fa45b8f5bfcf595e9b542e9b67294a99587100981ad675"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -914,8 +914,8 @@
     {
       "source": "communication-mode.mjs",
       "path": "communication-mode.mjs",
-      "bytes": 16819,
-      "sha256": "6c2f50a4a51aae17a30ef0079619df7ad837c41f70ac1a651d1005969165c979"
+      "bytes": 16878,
+      "sha256": "9ec6161caaccab374e11b91af07e6f3644e3c4441c9af2ab98b4cb72eae3db5a"
     },
     {
       "source": "companion-animation.mjs",
@@ -1010,8 +1010,8 @@
     {
       "source": "home-controls-v24.css",
       "path": "home-controls-v24.css",
-      "bytes": 7972,
-      "sha256": "5649ce56284f603261527f2d568d8ff5ca73094feb2a9f1e20fcfce741eb6e60"
+      "bytes": 7924,
+      "sha256": "2e811f0028ff57966d446a017d88178bfcafd7c54a006c26bdd5def5f507efe0"
     },
     {
       "source": "home-greeting.mjs",
@@ -1029,7 +1029,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 6046,
-      "sha256": "01259da46d8f4718aef413c727f2767e06265d7f946cdd3b06e4c470a735b0bd"
+      "sha256": "64fbbd6c02f998cb9208d4e3b0b41a599aa3d4bd304aa3f31d90d3a26ea9a891"
     },
     {
       "source": "journey-experience.css",
@@ -1154,8 +1154,8 @@
     {
       "source": "portal-glass.css",
       "path": "portal-glass.css",
-      "bytes": 6918,
-      "sha256": "bc569c68bb3ccd18f74fa4261fa2d77812c9850f5bc31bd903b5c8ebd6f81e82"
+      "bytes": 8144,
+      "sha256": "5dc668908e4638763d442f6760af3024d510fb94a4e71d02d36d6704241d77d9"
     },
     {
       "source": "portal-social-v24.css",
@@ -1184,8 +1184,8 @@
     {
       "source": "refinement-v25.css",
       "path": "refinement-v25.css",
-      "bytes": 3937,
-      "sha256": "a798d952cdbd70ef8f3360dc2a8b471944407790b0396a75de849377136aa54c"
+      "bytes": 4319,
+      "sha256": "320aff3c7e60f029a6883a41d7ac3074d2e96f6157b520623abd3170db7b1562"
     },
     {
       "source": "refinement-v8.css",

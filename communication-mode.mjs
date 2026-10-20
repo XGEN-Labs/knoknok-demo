@@ -2,6 +2,7 @@
 // results are held until the session ends, then placed in a draft, never sent.
 export function communicationModeMarkup(){return '';}
 const iconAssets=Object.freeze({
+  microphone:'./assets/ui/microphone.svg',
   'x-mark':'./assets/ui/x-mark.svg',
   stop:'./assets/ui/stop.svg',
   'arrow-up':'./assets/ui/arrow-up.svg',
@@ -17,7 +18,7 @@ const speakerPaths=Object.freeze({
 });
 const speaker=(muted=false,className='')=>`<svg xmlns="http://www.w3.org/2000/svg" class="${className}" data-speaker-state="${muted?'muted':'sound'}" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="${speakerPaths[muted?'muted':'sound']}"/></svg>`;
 export function voiceComposerMarkup(){
-  return `<button type="button" class="voice-open-button voice-icon-control" data-voice-open aria-label="開始語音輸入">${speaker(false,'voice-speaker-icon')}</button><div class="voice-capture-controls" data-voice-capture hidden><button type="button" class="voice-cancel-button voice-icon-control" data-voice-cancel aria-label="取消錄音">${image('x-mark')}</button><div class="voice-capture-stage"><span data-voice-caption role="status" aria-live="polite"></span></div><button type="button" class="voice-stop-button voice-icon-control" data-voice-stop aria-label="停止錄音並轉錄">${image('stop')}</button><button type="button" class="voice-finish-button voice-icon-control" data-voice-finish aria-label="完成錄音並轉成文字">${image('arrow-up')}</button></div><span class="voice-input-status" data-voice-status role="status" aria-live="polite"></span>`;
+  return `<button type="button" class="voice-open-button voice-icon-control" data-voice-open aria-label="開始語音輸入">${image('microphone','class="voice-microphone-icon"')}</button><div class="voice-capture-controls" data-voice-capture hidden><button type="button" class="voice-cancel-button voice-icon-control" data-voice-cancel aria-label="取消錄音">${image('x-mark')}</button><div class="voice-capture-stage"><span data-voice-caption role="status" aria-live="polite"></span></div><button type="button" class="voice-stop-button voice-icon-control" data-voice-stop aria-label="停止錄音並轉錄">${image('stop')}</button><button type="button" class="voice-finish-button voice-icon-control" data-voice-finish aria-label="完成錄音並轉成文字">${image('arrow-up')}</button></div><span class="voice-input-status" data-voice-status role="status" aria-live="polite"></span>`;
 }
 export function restoredControlIcon(name){
   const source=name==='profile'?'./assets/figma-nav-20261009/nav-profile.svg':name==='visit'?'./assets/figma-nav-20261009/nav-visit.svg':name==='more'?'./assets/ui/ellipsis-horizontal.svg':null;

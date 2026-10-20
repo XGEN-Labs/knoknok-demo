@@ -47,6 +47,10 @@
 .phone[data-growing="true"] #app .companion-name-anchor,
 .phone[data-card-handoff] #app .companion-name-anchor{visibility:hidden}
 .phone[data-growing="true"] #app :is(.home-chat-actions,.home-chat-actions>.visit-entry){visibility:hidden!important;pointer-events:none}
+/* Gate the entire control groups before their first home frame, through travel
+   and awakening. Parent opacity also contains descendants that explicitly set
+   visibility:visible, such as the visit button and volume glyph. */
+.phone #app .home-page.home-entry-pending :is(.home-top,.home-chat-bottom){opacity:0!important;visibility:hidden!important;pointer-events:none!important}
 .phone[data-scene-overlay="true"] #app>.setup-page{
   background:transparent!important;backdrop-filter:none;-webkit-backdrop-filter:none;
 }

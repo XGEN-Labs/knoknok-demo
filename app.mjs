@@ -1,24 +1,24 @@
-import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261020-refine-26c';
-import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261020-refine-26c';
-import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261020-refine-26c';
-import { showCompanionContract } from './contract-story.mjs?v=20261020-refine-26c';
-import { prepareAvatar } from './avatar-upload.mjs?v=20261020-refine-26c';
-import { initFormControls } from './form-controls.mjs?v=20261020-refine-26c';
-import { initDatePickers } from './date-picker.mjs?v=20261020-refine-26c';
-import { initTypography } from './typography.mjs?v=20261020-refine-26c';
-import { createSceneSound } from './scene-sound.mjs?v=20261020-refine-26c';
-import { landingComplete, onboardingDestination } from './landing.mjs?v=20261020-refine-26c';
-import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261020-refine-26c';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261020-refine-26c';
-import { createKlinWorld } from './klin-world.mjs?v=20261020-refine-26c';
-import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261020-refine-26c';
-import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261020-refine-26c';
-import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261020-refine-26c';
+import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261020-refine-26g';
+import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261020-refine-26g';
+import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261020-refine-26g';
+import { showCompanionContract } from './contract-story.mjs?v=20261020-refine-26g';
+import { prepareAvatar } from './avatar-upload.mjs?v=20261020-refine-26g';
+import { initFormControls } from './form-controls.mjs?v=20261020-refine-26g';
+import { initDatePickers } from './date-picker.mjs?v=20261020-refine-26g';
+import { initTypography } from './typography.mjs?v=20261020-refine-26g';
+import { createSceneSound } from './scene-sound.mjs?v=20261020-refine-26g';
+import { landingComplete, onboardingDestination } from './landing.mjs?v=20261020-refine-26g';
+import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261020-refine-26g';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261020-refine-26g';
+import { createKlinWorld } from './klin-world.mjs?v=20261020-refine-26g';
+import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261020-refine-26g';
+import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261020-refine-26g';
+import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261020-refine-26g';
 import { initPixelRoom } from './pixel-room.mjs?v=20261010-pixel-scene-1';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261010-natural-greeting-1';
 import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261009-gif-2';
-import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261020-refine-26c';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261020-refine-26c';
+import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261020-refine-26g';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261020-refine-26g';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
@@ -303,24 +303,30 @@ function initWorld() {
   setKlinLoadingState($('#phone'),'loading');
   const host=document.createElement('div');
   host.className='klin-world-host';host.setAttribute('aria-hidden','true');
-  host.addEventListener('klinworlderror',()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');if(growthPlaying)finishGrowth();});
+  host.addEventListener('klinworlderror',()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');if(growthPlaying||growthPending)finishGrowth();});
   host.addEventListener('klinworldready',()=>{worldReady=true;setKlinLoadingState($('#phone'),'ready');klinWorld?.setActive?.(!['welcome','login','register','verify','landing'].includes(ui.route));klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});});
   $('#phone').prepend(host);
   try {
     klinWorld=createKlinWorld({host,reducedMotion:prefersStillness(ui.motion)});
     Promise.resolve(klinWorld?.ready).then(ok=>{
-      if(ok===false||!klinWorld){klinWorld=null;growthPending=false;host.remove();setKlinLoadingState($('#phone'),'fallback');return;}
+      if(ok===false||!klinWorld){klinWorld=null;host.remove();setKlinLoadingState($('#phone'),'fallback');if(growthPending||growthPlaying)finishGrowth();return;}
       worldReady=true;setKlinLoadingState($('#phone'),'ready');
       klinWorld.setActive?.(!['welcome','login','register','verify','landing'].includes(ui.route));
       klinWorld.setPage(currentSceneRoute(),{stage:growthPending?'juvenile':currentCompanionStage(),layout:currentWorldLayout(),immediate:true});
       if(growthPending&&!stopTransition)playGrowth();
-    }).catch(()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');});
-  } catch { worldReady=false;setKlinLoadingState($('#phone'),'fallback'); }
+    }).catch(()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');if(growthPending||growthPlaying)finishGrowth();});
+  } catch { worldReady=false;setKlinLoadingState($('#phone'),'fallback');if(growthPending||growthPlaying)finishGrowth(); }
+}
+function setHomeEntryControlsHidden(hidden){
+  const page=$('#app > .home-page');
+  page?.classList.toggle('home-entry-pending',hidden);
+  for(const control of page?.querySelectorAll('.home-top,.home-chat-bottom')||[])control.inert=hidden;
 }
 function finishGrowth(){
   const cancel=stopGrowth;stopGrowth=null;cancel?.();
   growthTimers.forEach(clearTimeout);growthTimers=[];
   growthPending=false;growthPlaying=false;
+  setHomeEntryControlsHidden(ui.route==='home'&&Boolean(stopTransition));
   $('#phone').removeAttribute('data-growing');
   $('#phone > .growth-story')?.remove();
   if(ui.route==='home')klinWorld?.setPage('home',{stage:'adult',immediate:true});
@@ -328,10 +334,11 @@ function finishGrowth(){
 }
 function playGrowth({replay=false}={}){
   if(ui.route!=='home'||growthPlaying)return;
+  setHomeEntryControlsHidden(true);
   if(stopTransition){growthPending=true;return;}
   if(prefersStillness(ui.motion)||!worldReady){
     if(!worldReady&&klinWorld&&!prefersStillness(ui.motion))return;
-    growthPending=false;klinWorld?.setStage?.('adult');return;
+    klinWorld?.setStage?.('adult');finishGrowth();return;
   }
   growthPending=false;growthPlaying=true;
   const phone=$('#phone');phone.dataset.growing='true';
@@ -371,6 +378,7 @@ function render(animate=false,motion={}){
   const source=useTransition?captureCompanion(oldPage,$('#phone')):null;
   cleanDatePickers?.();cleanFormControls?.();cleanCommunication?.dispose();cleanCommunication=null;
   app.innerHTML=views[ui.route]();
+  if(ui.route==='home')setHomeEntryControlsHidden(growthPending||growthPlaying);
   cleanFormControls=initFormControls(app);cleanDatePickers=initDatePickers(app);initTypography(app);
   if(['chat','connected'].includes(ui.route)){const rel=latestRelationship();klinWorld?.setParticipants?.((rel?.members||[]).map(id=>state.users[id]),{activeId:actor()});}
   if(ui.route==='home')cleanCommunication=bindVoiceComposer({root:$('#app>.home-page'),lang:()=>me().language,getDraft:()=>ui.companionDrafts?.[actor()]||'',onDraft:text=>{ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:text};save();},onConversationStart:()=>setHomeConversation(true),onStatus:flushVoiceRefresh});
@@ -405,6 +413,7 @@ function render(animate=false,motion={}){
     if(sequence!==renderSequence)return;
     stopTransition=null;syncWorldAnchor();
     if(growthPending&&ui.route==='home')playGrowth();
+    else if(ui.route==='home'&&!growthPlaying)setHomeEntryControlsHidden(false);
     if(pendingSceneRefresh){pendingSceneRefresh=false;queueMicrotask(()=>render(false));}
   };
   if(animate){

@@ -33,7 +33,7 @@
 .phone #app .voice-icon-control{display:grid;place-items:center;flex:0 0 44px;width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--kn-glass-ink,#26242c);line-height:1;box-shadow:none;cursor:pointer}
 .phone #app .voice-icon-control img{display:block;flex:none;width:24px!important;height:24px!important;margin:0!important;object-fit:contain;transform:none!important}
 .phone #app .voice-open-button{order:4;background:#202020!important;color:#fff!important}
-.phone #app .voice-open-button .voice-speaker-icon{display:block;width:22px!important;height:22px!important;min-width:22px;color:#fff!important;stroke:currentColor;fill:none;margin:0!important;transform:none!important}
+.phone #app .voice-open-button .voice-microphone-icon{display:block;width:22px!important;height:22px!important;min-width:22px;margin:0!important;transform:none!important}
 .phone #app :is(.voice-open-button,.voice-finish-button) img{filter:brightness(0) invert(1)}
 .phone #app .voice-capture-controls{order:1;display:flex;align-items:center;gap:10px;width:100%;min-width:0;height:44px}
 .phone #app .voice-capture-controls[hidden]{display:none!important}
