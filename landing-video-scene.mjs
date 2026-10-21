@@ -10,8 +10,8 @@ export const LANDING_VIDEO_CUES = Object.freeze([
   {key:'birthPlace',start:4.55,end:4.95},
   {key:'response',start:4.95,end:5.4},
   {key:'name',start:5.4,end:5.9},
-  {key:'companionName',start:5.9,end:6.25},
-  {key:'complete',start:6.25,end:6.25},
+  {key:'companionName',start:5.9,end:6.05},
+  {key:'complete',start:6.05,end:6.25},
 ].map(Object.freeze));
 
 export function createLandingVideoScene({phone}={}) {

@@ -1,6 +1,6 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-21T04:42:38.228Z",
+  "createdAt": "2026-10-21T04:47:37.126Z",
   "entry": "index.html",
   "variant": "klin",
   "payloadBytes": 117478989,
@@ -9,7 +9,7 @@
       "source": "app.mjs",
       "path": "app.mjs",
       "bytes": 103584,
-      "sha256": "e6da874f1343e59662708009e24083f920d50fe144abbedd3acbcd0f04c1ab7d"
+      "sha256": "5153c4eb940541199ef274f3a1d1864a2ba7ddfd5600ff5adc3f8e4c66fbbb34"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1077,7 +1077,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 6361,
-      "sha256": "256894251a51ae6ce3d7b38d8afea4ceef806210a41430396d1339d5cd7fb457"
+      "sha256": "7a510419bbc74bd061f15a0539095efe52ee61d6581e15f05d02b6a80d51f17f"
     },
     {
       "source": "journey-experience.css",
@@ -1131,7 +1131,7 @@
       "source": "klin-world.mjs",
       "path": "klin-world.mjs",
       "bytes": 68871,
-      "sha256": "c23e87d568e48e7d88ab74d7a25f513954e97037fb18a5f76e139e922f2b105b"
+      "sha256": "2fc26b595d79af4d5ece5eea48c81152db4e069bd457fb2197d2d55dc8d4c297"
     },
     {
       "source": "landing-video-player.mjs",
@@ -1143,7 +1143,7 @@
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
       "bytes": 3453,
-      "sha256": "40019590fd71b50a7b4e02b99fd73a71f7f0009fa2dff1325d723fd9f5ece168"
+      "sha256": "eafad94abc4fa98b5bcdfb54d780ccbe8abf0c000c83e89de6eea009ee35ff3a"
     },
     {
       "source": "landing-video.css",

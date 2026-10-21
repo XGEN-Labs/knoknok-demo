@@ -1,8 +1,8 @@
 # Knoknok interactive demo
 
-Current release: `20261021-video-28a` (2026-10-21).
+Current release: `20261021-video-28b` (2026-10-21).
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261021-video-28a)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261021-video-28b)
 
 Onboarding now uses a persistent inline video scene. It pauses at each question, shows the existing 60% white glass UI, and continues only after a valid answer. Back navigation restores the previous frame; reduced motion, blocked autoplay and media failures keep the flow usable. The supplied 10-second concept film contains baked forms and a contract, so this interactive cut skips those sections. Its original bytes, audio track and watermark are retained; runtime playback is muted. Replace the source and cue sheet with a UI-free master for a continuous final film.
 
