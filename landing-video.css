@@ -2,6 +2,11 @@
 .phone>.landing-video-scene{position:absolute;inset:0;z-index:1;border-radius:inherit;overflow:hidden;background:#202624}
 .phone>.landing-video-scene[hidden]{display:none}
 .landing-video-plate{display:block;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none}
+/* A decoded still is the backdrop while users read/type. Keeping the paused
+   decoder texture out of the glass pass prevents partial-surface repaints. */
+.landing-video-still{position:absolute;inset:0;visibility:hidden}
+.landing-video-scene.has-held-frame>video{visibility:hidden}
+.landing-video-scene.has-held-frame>.landing-video-still{visibility:visible}
 .phone.landing-video-active>#app{z-index:2}
 .phone.landing-video-active>.klin-world-host,
 .phone.landing-video-active>.portal-scene-host,
@@ -9,6 +14,14 @@
 .phone.landing-video-active #app .onboarding-klin{display:none!important}
 .phone.landing-video-active #app .onboarding-thread,
 .phone.landing-video-active #app .onboarding-composer{opacity:1;transform:none;will-change:auto;transition:none}
+/* The glass itself must stop moving once shown. A forwards-filled transform
+   on the newest bubble kept its backdrop in a separate compositing surface. */
+.phone.landing-video-active #app .conversation-onboarding .onboarding-message{
+  animation:none;
+  transform:none;
+  opacity:1;
+  will-change:auto;
+}
 .phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-thread,
 .phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-composer{opacity:0;visibility:hidden;pointer-events:none}
 .phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-header{visibility:hidden;pointer-events:none}

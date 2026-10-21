@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-21T08:18:37.187Z",
+  "createdAt": "2026-10-21T08:44:24.533Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 116163739,
+  "payloadBytes": 116170572,
   "files": [
     {
       "source": "app.mjs",
@@ -1083,7 +1083,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 6485,
-      "sha256": "16ca7c0b353e89bd052a41f95035edc6624cd2d8e73aa470285bb19ceb19924c"
+      "sha256": "c4257563779ac221a762734922ebfd962ca0c6c7d5c6d5c3ebabc526d81e8e5d"
     },
     {
       "source": "journey-experience.css",
@@ -1140,6 +1140,12 @@
       "sha256": "8aa2ce0bdd6161c8a843ea6ac322c2dbf13e8f72743f3c010a80b1f693a5da8f"
     },
     {
+      "source": "landing-held-frame.mjs",
+      "path": "landing-held-frame.mjs",
+      "bytes": 4943,
+      "sha256": "a622104859277327187e01d3b1d0381175bbabc105371ae5d067ab2c175933da"
+    },
+    {
       "source": "landing-video-player.mjs",
       "path": "landing-video-player.mjs",
       "bytes": 11543,
@@ -1148,14 +1154,14 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 4120,
-      "sha256": "b371234d3b9e5b1ae42257b611ff0b3d2026f047a918505a97f913c2ec1c6eb0"
+      "bytes": 5343,
+      "sha256": "7195ef8be8821e759d84084e468a1b549de1a93d3e2df1fb46e39e68bbba9ef8"
     },
     {
       "source": "landing-video.css",
       "path": "landing-video.css",
-      "bytes": 4267,
-      "sha256": "ba1fd445fa5873c7934921068606e6edd7731d6adcc0c28d7aa18542695eb9b6"
+      "bytes": 4934,
+      "sha256": "e8c5ec4b36638d50509004ddb6fa135ecb1dde0637fcaea2700d4693d3448d75"
     },
     {
       "source": "landing.mjs",
@@ -1736,6 +1742,11 @@
     {
       "from": "landing-video-scene.mjs",
       "to": "landing-video-player.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-held-frame.mjs",
       "kind": "module"
     },
     {
