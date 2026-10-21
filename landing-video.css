@@ -1,0 +1,27 @@
+/* Keep the existing glass/input typography; only the scene and its timing change. */
+.phone>.landing-video-scene{position:absolute;inset:0;z-index:1;border-radius:inherit;overflow:hidden;background:#202624}
+.phone>.landing-video-scene[hidden]{display:none}
+.landing-video-plate{display:block;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none}
+.phone.landing-video-active>#app{z-index:2}
+.phone.landing-video-active>.klin-world-host,
+.phone.landing-video-active>.portal-scene-host,
+.phone.landing-video-active>.home-scene{visibility:hidden!important;opacity:0!important}
+.phone.landing-video-active #app .onboarding-klin{display:none!important}
+.phone.landing-video-active #app .onboarding-thread,
+.phone.landing-video-active #app .onboarding-composer{transition:opacity .24s ease,transform .24s ease}
+.phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-thread,
+.phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-composer{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px)}
+.phone.landing-video-active #app .onboarding-thread{top:58%;bottom:22%;overflow:auto;overscroll-behavior:contain}
+.phone.landing-video-active #app .is-birth-time .onboarding-thread{top:47%;bottom:16%}
+.phone.landing-video-active #app .onboarding-thread>:is(.onboarding-messages,.birth-hour-grid){flex:none}
+.phone.landing-video-active[data-landing-cue="birthDate"] #app .onboarding-thread{top:44%;bottom:25%}
+.phone.landing-video-active #app .is-final-turn .onboarding-thread{top:62%;bottom:22%}
+.phone.landing-video-active #app .onboarding-header{z-index:4}
+.landing-video-resume{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);min-height:52px;padding:0 30px;border-radius:30px;font-family:inherit;font-size:16px;font-weight:600;z-index:5;pointer-events:auto}
+.landing-video-resume[hidden]{display:none}
+.phone.landing-video-active[data-landing-playback="fallback"]>.landing-video-scene{background:url('assets/portal-scenes-20261021/onboarding-empty.png') center/cover}
+.phone.landing-video-active[data-landing-playback="fallback"] .landing-video-plate{visibility:hidden}
+@container(max-height:740px){.phone.landing-video-active #app .is-birth-time .onboarding-thread{top:40%;bottom:16%}}
+@container(max-height:620px){.phone.landing-video-active #app .onboarding-thread{top:39%;bottom:26%}.phone.landing-video-active #app .is-birth-time .onboarding-thread{top:25%;bottom:17%}.phone.landing-video-active #app .is-final-turn .onboarding-thread{top:39%;bottom:25%}}
+@media(prefers-reduced-motion:reduce){.phone.landing-video-active #app .onboarding-thread,.phone.landing-video-active #app .onboarding-composer{transition:none}}
+body.reduced-motion .phone.landing-video-active #app .onboarding-thread,body.reduced-motion .phone.landing-video-active #app .onboarding-composer{transition:none}

@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-21T03:40:38.079Z",
+  "createdAt": "2026-10-21T04:42:38.228Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 112921794,
+  "payloadBytes": 117478989,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 102979,
-      "sha256": "800aa88060102dff697ac12d2a3344c0396aeed6861b147aa77fe8b38be2fe84"
+      "bytes": 103584,
+      "sha256": "e6da874f1343e59662708009e24083f920d50fe144abbedd3acbcd0f04c1ab7d"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -156,6 +156,12 @@
       "sha256": "98a71caac2461f1c20a099257756930db28010726901c89b1cf54558be80a8bf"
     },
     {
+      "source": "assets/landing-video-20261021/encounter.mp4",
+      "path": "assets/landing-video-20261021/encounter.mp4",
+      "bytes": 2507671,
+      "sha256": "2da943d1e29ca519fe785298bf17db4b7711626d27496869934a22facc14b975"
+    },
+    {
       "source": "assets/login-world-20261019/source/character-transparent.png",
       "path": "assets/login-world-20261019/source/character-transparent.png",
       "bytes": 1932038,
@@ -172,6 +178,12 @@
       "path": "assets/login-world-20261019/source/original-login-world.png",
       "bytes": 1902641,
       "sha256": "77633e4702a6b254d29406bed33f837d9b492e0821b941486970e859a35724d1"
+    },
+    {
+      "source": "assets/palette-20261021/periwinkle-room.png",
+      "path": "assets/palette-20261021/periwinkle-room.png",
+      "bytes": 2031165,
+      "sha256": "3cf4374718c89c502fba1640f85a880ff6872947af2e7e3402c3bb5afb642f4f"
     },
     {
       "source": "assets/portal-scenes-20261020/champagne-metal-room.png",
@@ -1064,8 +1076,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 6334,
-      "sha256": "c56eac4a5508d2632c702e77dfa398066849891cf5d69f15e00d8bda24be1220"
+      "bytes": 6361,
+      "sha256": "256894251a51ae6ce3d7b38d8afea4ceef806210a41430396d1339d5cd7fb457"
     },
     {
       "source": "journey-experience.css",
@@ -1112,14 +1124,32 @@
     {
       "source": "klin-reference-scene.mjs",
       "path": "klin-reference-scene.mjs",
-      "bytes": 3799,
-      "sha256": "3396decfa9cf89ab2907cc25216ac9da122d31c720f00dbb2d13a7acc138c8d8"
+      "bytes": 3788,
+      "sha256": "32b9741b6b4c6e1c105751d3ef15fa1cbaeca7674415739dd503af718264dc99"
     },
     {
       "source": "klin-world.mjs",
       "path": "klin-world.mjs",
-      "bytes": 68872,
-      "sha256": "9d53fe886bbf7417c3e8efae9f1fc6242b9fede8553a74cd38ff356587b914b1"
+      "bytes": 68871,
+      "sha256": "c23e87d568e48e7d88ab74d7a25f513954e97037fb18a5f76e139e922f2b105b"
+    },
+    {
+      "source": "landing-video-player.mjs",
+      "path": "landing-video-player.mjs",
+      "bytes": 11298,
+      "sha256": "3c33a7ebc70e7d038c1d70a47aec1319c244fac7e3fc931c230278cbd2c990a4"
+    },
+    {
+      "source": "landing-video-scene.mjs",
+      "path": "landing-video-scene.mjs",
+      "bytes": 3453,
+      "sha256": "40019590fd71b50a7b4e02b99fd73a71f7f0009fa2dff1325d723fd9f5ece168"
+    },
+    {
+      "source": "landing-video.css",
+      "path": "landing-video.css",
+      "bytes": 2982,
+      "sha256": "8c923a43a993fcafc0507ce636bd195dd9d665d5616dd930486961c41724bc53"
     },
     {
       "source": "landing.mjs",
@@ -1197,7 +1227,7 @@
       "source": "portal-glass.css",
       "path": "portal-glass.css",
       "bytes": 8789,
-      "sha256": "76bb8e3adaa943fe3fb4e345f32f5f1fc3328a7015e8d41308ed55adf014ab40"
+      "sha256": "ffcfe387ed12dfa5c5dd6f4bb66a7dc8de381ce987671d70c49c1eddf41dcd1e"
     },
     {
       "source": "portal-social-v24.css",
@@ -1268,8 +1298,8 @@
     {
       "source": "social-refinement.css",
       "path": "social-refinement.css",
-      "bytes": 16374,
-      "sha256": "575aa51db209ca8a20996b4c7b9c9ed37ce659ed45e894c526f10224ec3f2057"
+      "bytes": 16380,
+      "sha256": "871c30def4c82f5f8e19f0f5764c967db2b0eeaa1ca5b62f05619579faaa58e1"
     },
     {
       "source": "soft-companion.css",
@@ -1573,6 +1603,16 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "landing-video.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "landing-video-scene.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "communication-mode.mjs",
       "kind": "module"
@@ -1681,6 +1721,11 @@
       "from": "conversation-experience.css",
       "to": "public-card.css",
       "kind": "resource"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-video-player.mjs",
+      "kind": "module"
     },
     {
       "from": "form-controls.mjs",

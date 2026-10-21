@@ -120,7 +120,7 @@ body.reduced-motion .phone .onboarding-message.is-new{animation:none}
 .phone .sheet-inner .echo-pass-title strong{line-height:1.2}
 @media(max-height:740px){.phone .profile-stage>.share-card .share-card-brand{top:108px;height:18px}.phone .profile-stage>.share-card .share-card-brand-mark,.phone .profile-stage>.share-card .share-card-brand-logo{width:60px;height:20px}}
 /* Keep the same environment visible while the live character first loads. */
-.phone:not(.klin-world-ready)>.home-scene{display:block;opacity:1;position:absolute;inset:0;background:url('assets/cloud-realm-20261019/home.webp') center/cover no-repeat;pointer-events:none}
+.phone:not(.klin-world-ready)>.home-scene{display:block;opacity:1;position:absolute;inset:0;background:url('assets/palette-20261021/periwinkle-room.png') center/cover no-repeat;pointer-events:none}
 .phone:not(.klin-world-ready)[data-world-page="relations"]>.home-scene{background-image:url('assets/cloud-realm-20261019/porch.webp')}
 .phone:not(.klin-world-ready):is([data-world-page="chat"],[data-world-page="connected"])>.home-scene{background-image:url('assets/cloud-realm-20261019/shared.webp')}
 .phone:not(.klin-world-ready):is([data-scene-overlay="true"],.sheet-open)>.home-scene{filter:blur(14px)}

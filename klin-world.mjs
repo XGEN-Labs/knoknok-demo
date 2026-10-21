@@ -2,7 +2,7 @@ import * as THREE from './vendor/three/three.module.js';
 import { loadNativeKlinStage } from './klin-native-model.mjs';
 import { createContractLight } from './klin-contract-light.mjs';
 import { createAwakeningField } from './klin-awakening-field.mjs?v=20261021-refine-27c';
-import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261021-refine-27c';
+import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261021-video-28a';
 
 // Persistent world; supplied Blender juvenile/adult meshes and native hair curves
 // are loaded once, then carried through all scenes by the same locomotion rig.
@@ -223,7 +223,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   camera.position.set(0, 5.1, 13); camera.lookAt(0, 1.8, 0); camera.updateMatrixWorld();
   const hemisphere=new THREE.HemisphereLight(0xdce6ff,0xbab8d4,1.13);scene.add(hemisphere);
   // The analytical contact field avoids a hard spiky silhouette in the haze.
-  const key = new THREE.DirectionalLight(0xffe8d8, 2.30); key.position.set(3.8, 7.4, 5.7); key.castShadow = true;
+  const key = new THREE.DirectionalLight(0xfff6ee, 2.30); key.position.set(3.8, 7.4, 5.7); key.castShadow = true;
   key.shadow.mapSize.set(1024, 1024); key.shadow.camera.left = key.shadow.camera.bottom = -5; key.shadow.camera.right = key.shadow.camera.top = 5;
   key.shadow.camera.near = .2; key.shadow.camera.far = 28; key.shadow.bias = -.0004; key.shadow.normalBias = .015; key.shadow.radius = 7;
   key.target.position.set(0, 1, 0); scene.add(key, key.target);
