@@ -1,7 +1,7 @@
 /* A level cotton-paper scroll. Visible ink lives above the paper and world. */
 .phone .contract-story{
   --contract-ink:#34302e;--contract-muted:#796d5f;
-  --paper-font:"Songti TC","Songti SC","Noto Serif CJK TC","Noto Serif CJK SC","PMingLiU",serif;
+  --paper-font:var(--kn-paper-font,"Klin Paper Serif",serif);
   box-sizing:border-box;container-type:size;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:clamp(15px,2.2cqh,21px);
   padding:var(--app-safe-top,max(18px,env(safe-area-inset-top,0px))) 7% calc(var(--app-safe-bottom,max(22px,env(safe-area-inset-bottom,0px))) + 80px);

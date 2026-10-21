@@ -1,12 +1,13 @@
-import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261015-universe-5';
-export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261015-universe-5';
+import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
+export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
 
 const DEFAULT_COMPANION = 'assets/klin-native-20261016-0907/adult.png';
 const BRAND_LOGO = 'assets/brand-20261016/knoknok-logo-latest.png';
 export const DEFAULT_CARD_AVATAR = 'assets/brand-20261016/default-cloud-avatar.svg';
 const LIMITS = Object.freeze({ name: 40, bio: 180, language: 24, region: 60, encoded: 32768, jsonBytes: 24576 });
-const TAG_FILLS = ['#f6e8dd', '#ede9f7', '#e4edf4', '#f7edcf', '#f5e3e9', '#e6edf7', '#f2e7f4'];
+const TAG_FILLS = ['#f4d3b8', '#ddd3f1', '#cddfe8', '#eee1a9', '#eacbd0', '#d4deef', '#e6d1e9'];
 const TAG_EDGES = ['#ddcbbc', '#d1c9e2', '#c6d6e0', '#dfd2aa', '#dfc4ce', '#c8d3e3', '#d9c7dd'];
+const TAG_ANGLES = [-1.5, 1.5, -1, 1, -1.5, 1, -1];
 // A few almost transparent edge pixels begin at 218; the visible letter ink
 // starts at 312. Align the actual printed strokes with the content column.
 const BRAND_INK_INSET = 312 / 2172;
@@ -93,12 +94,12 @@ export function cardMarkup(value, { companionSrc = DEFAULT_COMPANION, compact = 
   // standalone shared snapshots remain complete without an unhandled control.
   const interactiveTags = showAllTags === true && !compact && data.tags.length > 0;
   const previewTags = interactiveTags ? data.tags.slice(0, 3) : data.tags;
-  const stickers = previewTags.map((tag, index) => `<span class="personality-sticker sticker-${index + 1}" title="${escape(tag)}" style="--tag-fill:${TAG_FILLS[index]};--tag-edge:${TAG_EDGES[index]}">${escape(tag)}</span>`).join('');
+  const stickers = previewTags.map((tag, index) => `<span class="personality-sticker sticker-${index + 1}" title="${escape(tag)}" style="--tag-fill:${TAG_FILLS[index]};--tag-edge:${TAG_EDGES[index]};--tag-angle:${TAG_ANGLES[index]}deg">${escape(tag)}</span>`).join('');
   const tagsLink = interactiveTags ? `<button class="share-card-tags-link" type="button" data-action="view-card-tags" aria-label="查看所有 ${data.tags.length} 個標籤">所有標籤<span aria-hidden="true"> · ${data.tags.length} ↗</span></button>` : '';
   // Editing belongs only to an explicitly editable, full personal card. It is
   // absent from standalone/compact share snapshots and the exported artwork.
   const edit = editable === true && !compact ? '<button class="share-card-edit" type="button" data-action="edit-card" aria-label="編輯名片" title="編輯名片"><img src="assets/ui/pencil-square.svg" width="19" height="19" alt="" aria-hidden="true"></button>' : '';
-  return `<article class="share-card${compact ? ' is-compact' : ''}" data-print-card aria-label="${escape(data.name)}的分享名片"><div class="paper-card-postage" aria-hidden="true"><div class="paper-card-stamp"><img class="paper-card-landscape" src="assets/cloud-realm-20261019/arrival.webp" alt=""><img class="paper-card-spirit" src="${image}" alt="" draggable="false"></div><span class="paper-card-postage-label">彼之境 · 來客</span></div><header class="share-card-brand"><div class="share-card-brand-top"><span class="share-card-brand-mark"><img class="share-card-brand-logo" src="${BRAND_LOGO}" width="2172" height="724" alt="Knoknok"></span>${edit}</div><span class="share-card-brand-label">一張名片，一次相遇。</span></header><div class="share-card-identity"><div class="share-card-avatar">${avatar}</div><div class="share-card-name-block"><h2 class="share-card-name${length(data.name) > 12 ? ' is-long-name' : ''}" title="${escape(data.name)}">${escape(data.name)}</h2></div></div><div class="share-card-about">${data.bio ? `<p class="share-card-bio" title="${escape(data.bio)}">${escape(data.bio)}</p>` : ''}${meta ? `<div class="share-card-meta">${meta}</div>` : ''}</div><section class="personality-stickers${data.tags.length ? '' : ' is-empty'}" aria-label="我的標籤${data.tags.length ? ` · ${data.tags.length}` : ''}"><div class="personality-sticker-box${data.tags.length ? '' : ' is-empty'}">${stickers}</div>${tagsLink}</section></article>`;
+  return `<article class="share-card${compact ? ' is-compact' : ''}" data-print-card${edit ? ' data-card-editable' : ''} aria-label="${escape(data.name)}的分享名片"><div class="paper-card-postage" aria-hidden="true"><div class="paper-card-stamp"><img class="paper-card-landscape" src="assets/cloud-realm-20261019/arrival.webp" alt=""><img class="paper-card-spirit" src="${image}" alt="" draggable="false"></div><span class="paper-card-postage-label">彼之境 · 來客</span></div><header class="share-card-brand"><div class="share-card-brand-top"><span class="share-card-brand-mark"><img class="share-card-brand-logo" src="${BRAND_LOGO}" width="2172" height="724" alt="Knoknok"></span></div><span class="share-card-brand-label">一張名片，一次相遇。</span></header><div class="share-card-identity"><div class="share-card-avatar">${avatar}</div><div class="share-card-name-block"><h2 class="share-card-name${length(data.name) > 12 ? ' is-long-name' : ''}" title="${escape(data.name)}">${escape(data.name)}</h2></div></div><div class="share-card-about">${data.bio ? `<p class="share-card-bio" title="${escape(data.bio)}">${escape(data.bio)}</p>` : ''}${meta ? `<div class="share-card-meta">${meta}</div>` : ''}</div><section class="personality-stickers${data.tags.length ? '' : ' is-empty'}" aria-label="我的標籤${data.tags.length ? ` · ${data.tags.length}` : ''}"><div class="personality-sticker-box${data.tags.length ? '' : ' is-empty'}">${stickers}</div>${tagsLink}</section>${edit}</article>`;
 }
 
 export function cardShareURL(value, baseURL) {
@@ -145,7 +146,8 @@ export async function downloadCard(value) {
   const canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 2200;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('瀏覽器暫時無法繪製名片。');
-  const family = '"Songti TC","Songti SC","Noto Serif CJK TC","Noto Serif CJK SC","PMingLiU",serif';
+  try { await document.fonts?.load?.('600 50px "Klin Paper Serif"'); } catch { /* Keep the installed serif fallback if the local font cannot load. */ }
+  const family = '"Klin Paper Serif","Songti TC","Songti SC","Noto Serif CJK TC","Noto Serif CJK SC","PMingLiU",serif';
   const [logo, companion, avatar, landscape] = await Promise.all([
     cardImage(BRAND_LOGO), cardImage(DEFAULT_COMPANION), cardImage(data.avatar || DEFAULT_CARD_AVATAR),
     cardImage('assets/cloud-realm-20261019/arrival.webp'),
@@ -223,9 +225,12 @@ export async function downloadCard(value) {
   });
   if (meta) { ctx.fillStyle = '#776b5f'; ctx.font = '42px ' + family; ctx.fillText(meta, left, metaY); }
   for (const { index, display, x, y, width } of tags) {
-    ctx.save(); ctx.translate(x + width / 2, y + 38);
-    ctx.fillStyle = TAG_FILLS[index]; rounded(ctx, -width / 2, -38, width, 77, 20); ctx.fill();
-    ctx.strokeStyle = TAG_EDGES[index]; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#493c43'; ctx.font = '600 43px ' + family; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(display, 0, 2); ctx.restore();
+    ctx.save(); ctx.translate(x + width / 2, y + 38); ctx.rotate(TAG_ANGLES[index] * Math.PI / 180);
+    ctx.fillStyle = TAG_FILLS[index]; rounded(ctx, -width / 2, -38, width, 77, 10); ctx.fill();
+    ctx.strokeStyle = TAG_EDGES[index]; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = '#ffffff60'; ctx.lineWidth = 1;
+    for (let stripe = -width / 2 + 10; stripe < width / 2 - 4; stripe += 11) { ctx.beginPath(); ctx.moveTo(stripe, -32); ctx.lineTo(stripe + 1, 32); ctx.stroke(); }
+    ctx.fillStyle = '#493c43'; ctx.font = '600 43px ' + family; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(display, 0, 2); ctx.restore();
   }
   const portrait = document.createElement('canvas'); portrait.width = 1080; portrait.height = height;
   const portraitContext = portrait.getContext('2d');

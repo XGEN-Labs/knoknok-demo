@@ -1,7 +1,7 @@
 /* The print-card scope beats retired poster positioning in profile and share sheet.
    The article transform remains free for the existing same-card handoff. */
 .phone :is(#app,#sheet) .share-card[data-print-card]{
- --card-ink:#302c29;--card-muted:#75695e;--paper-font:"Songti TC","Songti SC","Noto Serif CJK TC","Noto Serif CJK SC","PMingLiU",serif;
+ --card-ink:#302c29;--card-muted:#75695e;--paper-font:var(--kn-paper-font,"Songti TC","Songti SC","Noto Serif CJK TC","Noto Serif CJK SC","PMingLiU",serif);
  position:relative;isolation:isolate;display:flex;flex-direction:column;gap:0;
  flex:0 0 auto;width:100%;min-width:0;min-height:276px;max-height:none;height:auto;
  box-sizing:border-box;padding:24px 23px 22px;overflow:hidden;border:1px solid #fffdf8;border-radius:8px;
@@ -20,13 +20,15 @@
    Align those strokes while preserving the original logo bytes and weight. */
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-brand-logo{position:static;display:block;width:102px;height:34px;object-fit:contain;filter:brightness(0)!important;opacity:.84;transform:translateX(-14.3646%)}
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-brand-label{display:block;font-size:12px;line-height:1.5;letter-spacing:.05em;color:#7a6e62;white-space:normal;text-shadow:none}
-.phone :is(#app,#sheet) .share-card[data-print-card] .share-card-edit{display:grid;place-items:center;flex:none;width:36px;height:36px;min-width:36px;min-height:36px;padding:8px;margin:0;border:1px solid #d8cfc1;border-radius:10px;background:#fffaf0;color:var(--card-ink);box-shadow:none;filter:none;transform:none;line-height:0;cursor:pointer}
-.phone :is(#app,#sheet) .share-card[data-print-card] .share-card-edit img{display:block;flex:none;width:19px;height:19px;object-fit:contain;filter:none}
+.phone :is(#app,#sheet) .share-card[data-print-card][data-card-editable]{padding-bottom:64px}
+.phone :is(#app,#sheet) .share-card[data-print-card]>.share-card-edit{position:absolute;inset:auto 14px 12px auto;display:grid;place-items:center;flex:none;width:44px;height:44px;min-width:44px;min-height:44px;max-width:none;padding:10px;margin:0;border:0;border-radius:0;background:transparent;color:var(--card-ink);box-shadow:none;filter:none;transform:none;line-height:0;cursor:pointer;backdrop-filter:none;-webkit-backdrop-filter:none}
+.phone :is(#app,#sheet) .share-card[data-print-card]>.share-card-edit:is(:hover,:focus,:active){border:0;background:transparent;box-shadow:none;outline:0;transform:none}
+.phone :is(#app,#sheet) .share-card[data-print-card] .share-card-edit img{display:block;flex:none;width:22px;height:22px;object-fit:contain;filter:none}
 .phone :is(#app,#sheet) .share-card[data-print-card] .paper-card-postage{position:absolute;top:20px;right:21px;width:66px;transform:rotate(6deg);pointer-events:none;text-align:center}
 .phone :is(#app,#sheet) .share-card[data-print-card] .paper-card-stamp{position:relative;width:66px;height:75px;box-sizing:border-box;border:4px solid #fffefb;outline:1px dashed #c9bdad;outline-offset:-1px;overflow:hidden;background:#c8d1f0;box-shadow:0 1px 3px #746a5412}
 .phone :is(#app,#sheet) .share-card[data-print-card] .paper-card-landscape{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 35%;filter:saturate(.68);opacity:.9}
 .phone :is(#app,#sheet) .share-card[data-print-card] .paper-card-spirit{position:absolute;left:13px;bottom:0;width:39px;height:39px;object-fit:contain;filter:sepia(.1);opacity:.92}
-.phone :is(#app,#sheet) .share-card[data-print-card] .paper-card-postage-label{display:block;margin-top:5px;font-size:12px;line-height:1.5;letter-spacing:.04em;color:#7b6a59}
+.phone :is(#app,#sheet) .share-card[data-print-card] .paper-card-postage-label{display:block;position:relative;left:50%;width:max-content;max-width:none;transform:translateX(-50%);margin-top:5px;font-size:12px;line-height:1.5;letter-spacing:.02em;color:#7b6a59;white-space:nowrap}
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-identity{display:flex;align-items:center;gap:12px;padding:0;margin:16px 0 0;width:100%;min-height:46px}
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-avatar{display:block;flex:0 0 46px;width:46px;height:46px;border-radius:50%;padding:0;overflow:hidden;background:#e4e4ee;border:1px solid #fffef9;box-shadow:0 0 0 1px #d8d1c65c;color:#302c29}
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-avatar img{display:block;width:100%;height:100%;object-fit:cover}
@@ -39,14 +41,39 @@
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0;padding:0;font-size:14px;line-height:1.6;font-weight:500;color:#776b5f}
 .phone :is(#app,#sheet) .share-card[data-print-card] .personality-stickers{display:block;min-height:0;max-height:none;margin:14px 0 0;padding:0;overflow:visible}
 .phone :is(#app,#sheet) .share-card[data-print-card] .personality-stickers.is-empty{display:none}
-.phone :is(#app,#sheet) .share-card[data-print-card] .personality-sticker-box{display:flex;flex-wrap:wrap;align-items:center;align-content:flex-start;justify-content:flex-start;gap:8px 7px;min-height:0;max-height:none;margin:0;padding:0;background:transparent;border:0;border-radius:0;overflow:visible}
-.phone :is(#app,#sheet) .share-card[data-print-card] .personality-sticker{display:inline-block;min-width:0;max-width:100%;box-sizing:border-box;padding:5px 9px;border:1px solid var(--tag-edge,#d1c9e2);border-radius:8px;background:var(--tag-fill,#ede9f7);color:#493c43;font-size:14px;font-weight:600;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform:none;box-shadow:none}
+.phone :is(#app,#sheet) .share-card[data-print-card] .personality-sticker-box{display:flex;flex-wrap:wrap;align-items:center;align-content:flex-start;justify-content:flex-start;gap:11px 9px;min-height:0;max-height:none;margin:0;padding:3px 2px;background:transparent;border:0;border-radius:0;overflow:visible}
+.phone :is(#app,#sheet) .share-card[data-print-card] .personality-sticker{display:inline-block;min-width:0;max-width:calc(100% - 4px);box-sizing:border-box;padding:6px 11px;border:1px solid var(--tag-edge,#d1c9e2);border-radius:3px 6px 4px 7px;background-color:var(--tag-fill,#ddd3f1);background-image:repeating-linear-gradient(88deg,#ffffff24 0,#ffffff24 .6px,transparent .6px,transparent 4px);color:#493c43;font-size:14px;font-weight:600;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform:rotate(var(--tag-angle,-1deg));box-shadow:0 1px 1px #76604414,inset 0 1px #ffffff80}
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-tags-link{display:flex;align-items:center;gap:3px;width:fit-content;min-width:0;min-height:32px;height:auto;margin:7px 0 -4px;padding:3px 0;border:0;border-radius:0;background:transparent;box-shadow:none;color:#302c29;font:600 14px/1.5 var(--paper-font);letter-spacing:.02em;text-align:left;text-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
 .phone :is(#app,#sheet) .share-card[data-print-card] .share-card-tags-link span{color:#6d6258;font:inherit}
 .phone #sheet .share-card[data-print-card].is-compact{padding:19px 21px 17px;min-height:258px}
 .phone #sheet .share-card[data-print-card].is-compact .share-card-name.is-long-name{font-size:20px}
 .phone #sheet .share-card[data-print-card].is-compact .paper-card-postage{top:18px;right:20px}
 .phone #sheet .share-card[data-print-card].is-compact .share-card-about{margin-top:14px}
+/* The two 44px side tracks put the title at the actual phone centre. */
+.phone #app .page:is(.profile-card-page,.public-card-page)>.page-top{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:10px;min-height:44px;height:44px;padding:0}
+.phone #app .page:is(.profile-card-page,.public-card-page)>.page-top>div:not(.top-right){display:block;min-width:0;width:100%;margin:0;text-align:center}
+.phone #app .page:is(.profile-card-page,.public-card-page)>.page-top h2{width:100%;margin:0;text-align:center;line-height:44px;white-space:nowrap}
+.phone #app .page:is(.profile-card-page,.public-card-page)>.page-top>.top-right{position:static;display:flex;align-items:center;justify-content:flex-end;width:44px;height:44px;margin:0}
+/* Sharing is one preview, one primary action and a pair of secondary actions. */
+.phone #sheet .card-share-sheet{display:flex;flex-direction:column;gap:16px;min-width:0}
+.phone #sheet .card-share-preview{min-width:0;padding:0 1px 5px}
+.phone #sheet .card-share-sheet .share-card[data-print-card].is-compact{min-height:0;padding:18px 20px 20px}
+.phone #sheet .card-share-sheet .share-card[data-print-card] .share-card-brand{min-height:76px}
+.phone #sheet .card-share-sheet .share-card[data-print-card] .share-card-bio{font-size:14px;line-height:1.6}
+.phone #sheet .card-share-sheet .share-card[data-print-card] .share-card-identity{margin-top:12px}
+.phone #sheet .card-share-sheet .share-card[data-print-card] .personality-stickers{margin-top:12px}
+.phone #sheet .card-share-sheet .share-card[data-print-card] .personality-sticker{font-size:12px;padding:5px 9px}
+.phone #sheet .card-share-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
+.phone #sheet .card-share-actions>.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;min-height:48px;margin:0;padding:12px 10px;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);border-radius:24px;background:var(--kn-glass-fill);color:var(--kn-glass-ink);box-shadow:var(--kn-glass-control-shadow);font-size:14px;line-height:22px;white-space:normal;text-align:center;backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation))}
+.phone #sheet .card-share-actions>.btn.card-share-primary{grid-column:1/-1}
+.phone #sheet .card-share-status{font-size:12px;line-height:1.6;color:var(--kn-glass-ink);overflow-wrap:anywhere}
+.phone #sheet .card-share-status:empty{display:none}
+.phone #sheet .card-share-status .field{display:flex;flex-direction:column;gap:7px;margin:0}
+.phone #sheet .card-share-status .input{width:100%;min-width:0;font-size:12px}
+.phone #sheet .all-card-tags{gap:13px 11px;padding:8px 2px 16px}
+.phone #sheet .all-card-tags>span{max-width:100%;box-sizing:border-box;padding:8px 13px;border:1px solid #d8c9e1;border-radius:3px 7px 4px 7px;background-color:#ddd3f1;background-image:repeating-linear-gradient(88deg,#ffffff24 0,#ffffff24 .6px,transparent .6px,transparent 4px);color:#493c43;font-family:var(--kn-paper-font,"Songti TC",serif);font-size:14px;line-height:1.6;overflow-wrap:anywhere;transform:rotate(1deg);box-shadow:0 1px 1px #76604414,inset 0 1px #ffffff80}
+.phone #sheet .all-card-tags>span:nth-child(3n+1){background-color:#f4d3b8;border-color:#ddcbbc;transform:rotate(-1.5deg)}
+.phone #sheet .all-card-tags>span:nth-child(3n){background-color:#cddfe8;border-color:#c6d6e0;transform:rotate(-1deg)}
 @container(max-height:720px){
  .phone #app .profile-stage>.share-card[data-print-card]{padding:19px 21px 17px;min-height:258px}
  .phone #app .profile-stage>.share-card[data-print-card] .share-card-brand{min-height:76px}
@@ -54,4 +81,5 @@
  .phone #app .profile-stage>.share-card[data-print-card] .share-card-about{margin-top:10px}
  .phone #app .profile-stage>.share-card[data-print-card] .paper-card-postage{top:18px;right:20px}
  .phone #app .profile-stage>.share-card[data-print-card] .personality-stickers{margin-top:10px}
+ .phone #app .profile-stage>.share-card[data-print-card][data-card-editable]{padding-bottom:60px}
 }

@@ -1,6 +1,7 @@
 // Enhanced single selects keep the native control as the actual form value.
 // Load form-controls.css before calling initFormControls(root). Without this
 // module, the original select remains an ordinary, keyboard-accessible select.
+import { initAuthCaret } from './auth-caret.mjs';
 const instances = new WeakMap();
 let controlSequence = 0;
 
@@ -53,6 +54,7 @@ export function initFormControls(root = globalThis.document, { suppressAutofill 
   const signal = controller.signal;
   const records = [];
   const attributes = [];
+  const destroyCaret = initAuthCaret(root);
   let opened = null;
   let destroyed = false;
   const all = selector => [...(root.matches?.(selector) ? [root] : []), ...root.querySelectorAll(selector)];
@@ -312,7 +314,7 @@ export function initFormControls(root = globalThis.document, { suppressAutofill 
 
   const destroy = () => {
     if (destroyed) return;
-    destroyed = true; close(); controller.abort(); rootObserver.disconnect();
+    destroyed = true; close(); controller.abort(); rootObserver.disconnect(); destroyCaret();
     for (const record of records) {
       record.observer.disconnect(); record.select.classList.remove('klin-native-select');
       if (record.wrapper.parentNode) { record.wrapper.before(record.select); record.wrapper.remove(); }

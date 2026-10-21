@@ -1,9 +1,9 @@
-/* Knoknok glass material v1. Approved by the user on 2026-10-20.
+/* Knoknok glass material v1.3. White fill raised to 60% by user request on 2026-10-21.
    Baseline: portal-24d / login-glass-review.png. Keep geometry in components. */
 .phone{
-  --kn-glass-fill:rgba(255,255,255,.50);
+  --kn-glass-fill:rgba(255,255,255,.60);
   --kn-glass-panel-fill:rgba(255,255,255,.30);
-  --kn-glass-conversation-fill:rgba(255,255,255,.50);
+  --kn-glass-conversation-fill:rgba(255,255,255,.60);
   --kn-glass-edge:rgba(255,255,255,.65);
   --kn-glass-edge-width:1px;
   --kn-glass-ink:#26242c;
@@ -14,7 +14,7 @@
   --kn-glass-panel-radius:30px;
   --kn-glass-panel-shadow:inset 0 1px 0 #ffffffa6,inset 0 -1px 0 #ffffff30,0 18px 55px #6f6a8c1c;
   --kn-glass-control-shadow:inset 0 1px 0 #ffffff85,inset 0 -1px 0 #ffffff24,0 5px 22px #3e436510;
-  --kn-glass-input-fill:rgba(255,255,255,.50);
+  --kn-glass-input-fill:rgba(255,255,255,.60);
   --kn-glass-input-edge:#ffffffa6;
   --kn-glass-input-shadow:inset 0 1px 0 #ffffff52;
 }

@@ -1,5 +1,5 @@
 const WELCOME='assets/portal-scenes-20261020/welcome-user.png';
-const ARRIVAL='assets/portal-scenes-20261020/onboarding-doorlight.png';
+const ARRIVAL='assets/portal-scenes-20261021/onboarding-empty.png';
 const authRoutes=new Set(['login','register','verify']);
 export function createPortalArrival({phone}={}){
   if(!phone)throw new TypeError('The portal arrival requires a phone host.');

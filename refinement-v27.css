@@ -1,0 +1,21 @@
+/* 2026-10-21 feedback: spacing, consistent paper, and uninterrupted card focus. */
+.phone{--kn-paper-font:"Klin Paper Serif",serif}
+.phone .page.auth-login .auth-form .auth-submit{margin-top:18px!important}
+.phone .page.auth-login .auth-form .auth-field>.input{font-weight:400;caret-color:#767078}
+.phone .auth-field{position:relative}
+.phone .auth-fine-caret{position:absolute;pointer-events:none;width:1px;background:#625d65;border-radius:1px;animation:auth-caret-blink 1.1s step-end infinite}
+.phone input.has-fine-caret{caret-color:transparent!important}
+@keyframes auth-caret-blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.phone .auth-fine-caret{animation:none}}
+.phone .onboarding-error{padding:0 10px;color:#824b48;font-size:12px;line-height:1.5;background:transparent;border:0}
+.phone .contract-story .contract-seal{width:49px;height:49px;right:22px;bottom:35px;background:transparent;border:0;border-radius:0;box-shadow:none;display:block}
+.phone .contract-story .contract-seal img{display:block;width:100%;height:100%;object-fit:contain}
+/* Apply the room blur on the first render, including the entire card handoff. */
+.phone[data-scene-overlay="true"]>.klin-world-host,
+.phone[data-card-handoff]>.klin-world-host,
+.phone[data-scene-travel][data-travel-from="profile"]>.klin-world-host{filter:blur(28px)!important;transition:none!important}
+.phone[data-scene-overlay="true"] .home-scene{filter:blur(28px)!important;transition:none!important}
+/* Opacity on the whole group cannot be undone by visible descendants. */
+.phone[data-scene-travel] #app .home-page :is(.home-top,.home-chat-bottom),
+.phone[data-card-handoff] #app .home-page :is(.home-top,.home-chat-bottom),
+.phone #app.scene-transitioning .home-page :is(.home-top,.home-chat-bottom){opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:none!important}

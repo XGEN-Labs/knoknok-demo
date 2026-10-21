@@ -1,0 +1,152 @@
+/* Saved account details are a room overlay, separate from the first encounter. */
+.phone #app .profile-edit-page {
+  color: var(--kn-glass-ink);
+}
+.phone #app .profile-edit-header {
+  position: absolute;
+  top: var(--app-safe-top, 76px);
+  left: 6%;
+  right: 6%;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) 54px;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 10px;
+  border-radius: 25px;
+}
+.phone #app .profile-edit-page :is(h1, h2, label, p) {
+  color: var(--kn-glass-ink) !important;
+  text-shadow: none;
+}
+.phone #app .profile-edit-header h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.phone #app .profile-edit-cancel {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--kn-glass-ink);
+  font-size: 14px;
+}
+.phone #app .profile-edit-surface {
+  position: absolute;
+  top: calc(var(--app-safe-top, 76px) + 62px);
+  bottom: calc(var(--app-safe-bottom, 24px) + 68px);
+  left: 6%;
+  right: 6%;
+  padding: 22px 19px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-padding-block: 18px;
+}
+.phone #app .profile-edit-surface::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.phone #app .profile-edit-form {
+  display: grid;
+  gap: 26px;
+}
+.phone #app .profile-edit-group {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.phone #app .profile-edit-group + .profile-edit-group {
+  border-top: 1px solid var(--kn-glass-edge);
+  padding-top: 23px;
+}
+.phone #app .profile-edit-group h2 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 23px;
+  font-weight: 600;
+}
+.phone #app .profile-edit-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+.phone #app .profile-edit-field > label {
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 500;
+}
+.phone #app .profile-edit-field :is(.input, .klin-select-trigger, .kn-date-trigger) {
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  border: var(--kn-glass-edge-width) solid var(--kn-glass-input-edge);
+  border-radius: 15px;
+  background: var(--kn-glass-input-fill);
+  color: var(--kn-glass-ink);
+  box-shadow: var(--kn-glass-input-shadow);
+  -webkit-backdrop-filter: blur(var(--kn-glass-input-blur)) saturate(var(--kn-glass-saturation));
+  backdrop-filter: blur(var(--kn-glass-input-blur)) saturate(var(--kn-glass-saturation));
+  padding: 11px 13px;
+  font-size: 16px;
+  line-height: 24px;
+}
+.phone #app .profile-edit-field .kn-date-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.phone #app .profile-edit-field [aria-invalid="true"] {
+  border-color: #ad5b52;
+}
+.phone #app .profile-edit-page .profile-edit-note {
+  margin: -4px 0 0;
+  font-size: 11px;
+  line-height: 1.75;
+}
+.phone #app .profile-edit-page :is(.profile-edit-field-error, .profile-edit-error) {
+  margin: 0;
+  color: #8c3930 !important;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.phone #app .profile-edit-page [hidden] {
+  display: none;
+}
+.phone #app .profile-edit-footer {
+  position: absolute;
+  bottom: var(--app-safe-bottom, 24px);
+  left: 6%;
+  right: 6%;
+}
+.phone #app .page.profile-edit-page .profile-edit-footer .btn,
+.phone #app .page.profile-edit-page .profile-edit-footer .btn:hover:not(:disabled) {
+  min-height: 50px;
+  border-radius: 26px;
+  background: #202020 !important;
+  border: 1px solid #202020 !important;
+  color: #fff !important;
+  text-shadow: none;
+  box-shadow: none;
+}
+@container (max-height: 540px) {
+  .phone #app .profile-edit-header {
+    min-height: 44px;
+  }
+  .phone #app .profile-edit-surface {
+    top: calc(var(--app-safe-top, 76px) + 54px);
+    bottom: calc(var(--app-safe-bottom, 24px) + 58px);
+    padding: 17px 17px;
+    border-radius: 24px;
+  }
+  .phone #app .page.profile-edit-page .profile-edit-footer .btn {
+    min-height: 44px;
+    padding-block: 9px;
+  }
+}

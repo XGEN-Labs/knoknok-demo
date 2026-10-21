@@ -11,10 +11,16 @@
 .portal-warm-light{position:absolute;inset:-64px;background:radial-gradient(ellipse at 73% 33%,#fffbef 0,#fff8e8d9 28%,#f6ebdf80 58%,#e9e6f300 100%);filter:blur(24px);opacity:0;transition:opacity 1.7s ease .15s;pointer-events:none}
 .phone[data-portal-scene="login"] .portal-welcome-plate{transform:translate(-32%,25%) scale(3.8);filter:blur(34px)}
 .phone[data-portal-scene="login"] .portal-warm-light{opacity:.74}
-.phone[data-portal-scene="landing"] .portal-arrival-plate{opacity:1}
+.phone[data-portal-scene="landing"] .portal-arrival-plate{opacity:1;filter:brightness(calc(1 - var(--klin-appearance-dim,0)))}
 .phone[data-portal-scene="landing"] .portal-warm-light{opacity:.15}
 .phone[data-portal-scene="landing"] .onboarding-klin>*{visibility:hidden!important}
-.phone[data-portal-scene="landing"]>.klin-world-host{visibility:hidden!important}
+.phone.klin-login-scene-active[data-portal-scene="landing"]>.klin-world-host{visibility:visible!important;z-index:1;filter:none!important}
+.phone[data-portal-scene="landing"]>#app{z-index:2}
+/* Match the native foot anchor when WebGL is unavailable. No duplicate sprite
+   flashes while the native meshes load or gather from particles. */
+.phone[data-portal-scene="landing"] .onboarding-klin{top:18.84%;height:17.16%;left:28%;width:44%}
+.phone[data-portal-scene="landing"] .is-birth-time .onboarding-klin{top:16.74%;height:13.26%}
+.phone[data-portal-scene="landing"].klin-world-fallback .onboarding-klin>.klin-art{visibility:visible!important;animation:none!important}
 .phone #app .auth-login .auth-header{justify-content:flex-start}
 .phone #app .page.auth-page{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px;box-sizing:border-box;padding:calc(var(--app-safe-top) + 60px) 0 var(--app-safe-bottom);overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:16px}
 .phone #app .auth-page>.auth-brand{position:static;display:block;flex:none;width:86%;max-width:358px;height:43px;min-height:43px;margin:auto 0 0;padding:0;line-height:0;align-self:center}

@@ -183,6 +183,26 @@ export function validateBirth(birth = {}, now = Date.now()) {
   return errors;
 }
 
+/** Later edits update saved details without replaying the first encounter. */
+export function validateAccountProfile(profile = {}, now = Date.now()) {
+  const errors = validateBasics(profile);
+  for (const [key, limit, message] of [
+    ['name', 18, '名字請保持在 18 個字以內。'],
+    ['language', 24, '請選擇有效的對話語言。'],
+    ['region', 60, '城市名稱請保持在 60 個字以內。'],
+    ['companionName', 18, '伙伴的名字請保持在 18 個字以內。'],
+    ['gender', 24, '性別稱呼請保持在 24 個字以內。'],
+  ]) if (Array.from(clean(profile[key])).length > limit) errors[key] = message;
+  if (!clean(profile.companionName)) errors.companionName = '請填寫伙伴的名字。';
+  const birth = profile.birth && typeof profile.birth === 'object' && !Array.isArray(profile.birth) ? profile.birth : {};
+  const birthErrors = validateBirth(birth, now);
+  if (birthErrors.date) errors.birthDate = birthErrors.date;
+  if (birthErrors.time) errors.birthTime = birthErrors.time;
+  if (Array.from(clean(birth.place)).length > 60) errors.birthPlace = '出生地請保持在 60 個字以內。';
+  if (Array.from(clean(birth.timezone)).length > 60) errors.timezone = '請選擇有效的出生時區。';
+  return errors;
+}
+
 export function validateDemand(draft = {}, now = Date.now()) {
   const errors = {};
   if (!clean(draft.topic)) errors.topic = '請填寫這次想一起做甚麼。';
@@ -395,6 +415,30 @@ export function reduce(previous, action = {}) {
       if (patch.cardAvatar !== undefined) state.users[actorId].cardAvatar = normalizeCardAvatar(patch.cardAvatar);
       if (patch.shareRegion !== undefined) state.users[actorId].shareRegion = patch.shareRegion === true;
       state.users[actorId].introVersion += 1;
+      return state;
+    }
+    case 'UPDATE_ACCOUNT_PROFILE': {
+      if (!landingComplete(state)) return fail(state, '先完成這次相遇，再編輯已保存的資料。');
+      const patch = action.patch && typeof action.patch === 'object' && !Array.isArray(action.patch) ? action.patch : {};
+      const user = state.users[actorId];
+      const profile = {
+        name: patch.name === undefined ? user.name : patch.name,
+        language: patch.language === undefined ? user.language : patch.language,
+        region: patch.region === undefined ? user.region : patch.region,
+        companionName: patch.companionName === undefined ? user.companionName : patch.companionName,
+        gender: patch.gender === undefined ? space.about?.gender || '' : patch.gender,
+        birth: { ...space.birth, ...(patch.birth && typeof patch.birth === 'object' && !Array.isArray(patch.birth) ? patch.birth : {}) },
+      };
+      const errors = validateAccountProfile(profile, state.now);
+      if (Object.keys(errors).length) return fail(state, Object.values(errors)[0]);
+      const publicChanged = ['name', 'language', 'region'].some(key => user[key] !== clean(profile[key]));
+      for (const key of ['name', 'language', 'region', 'companionName']) user[key] = clean(profile[key]);
+      if (publicChanged) user.introVersion += 1;
+      space.birth = { date: clean(profile.birth.date), time: profile.birth.unknownTime ? '' : clean(profile.birth.time), unknownTime: Boolean(profile.birth.unknownTime), place: clean(profile.birth.place), timezone: clean(profile.birth.timezone) };
+      space.about = { ...(space.about || {}), gender: clean(profile.gender) };
+      space.companion = { ...space.companion, name: user.companionName };
+      // The original conversation, paper agreement and all later messages are history.
+      // Do not rewrite them or change onboarding / growth state for a profile edit.
       return state;
     }
     case 'UPDATE_DRAFT': {
@@ -731,4 +775,4 @@ export function hydrateState(serialized, now = Date.now()) {
     return expire(state);
   } catch { return initialState(now); }
 }
-import { migrateCardTags, normalizeCardAvatar } from './card-labels.mjs?v=20261015-universe-5';
+import { migrateCardTags, normalizeCardAvatar } from './card-labels.mjs?v=20261021-refine-27c';
