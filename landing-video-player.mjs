@@ -286,6 +286,13 @@ export function createLandingVideoPlayer({
     return true;
   }
 
+  /** Skip only this film interval. The caller still owns and validates its answer. */
+  function skip() {
+    if (disposed || !active || !cue() || (mode !== 'play' && mode !== 'blocked')) return false;
+    finish();
+    return true;
+  }
+
   function listen(target, event, handler) {
     if (!target?.addEventListener) return;
     target.addEventListener(event, handler);
@@ -333,5 +340,5 @@ export function createLandingVideoPlayer({
     for (const remove of listeners.splice(0)) remove();
   }
 
-  return Object.freeze({ update, retry, getDiagnostics, dispose });
+  return Object.freeze({ update, retry, skip, getDiagnostics, dispose });
 }

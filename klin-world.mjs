@@ -2,7 +2,7 @@ import * as THREE from './vendor/three/three.module.js';
 import { loadNativeKlinStage } from './klin-native-model.mjs';
 import { createContractLight } from './klin-contract-light.mjs';
 import { createAwakeningField } from './klin-awakening-field.mjs?v=20261021-refine-27c';
-import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261021-video-28b';
+import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261021-refine-29b';
 
 // Persistent world; supplied Blender juvenile/adult meshes and native hair curves
 // are loaded once, then carried through all scenes by the same locomotion rig.
@@ -307,9 +307,9 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
   const horizontalTarget = new THREE.WebGLRenderTarget(128, 256, { ...linearHDR, depthBuffer: false });
   const postScene = new THREE.Scene(), postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   const blurMaterial = new THREE.ShaderMaterial({
-    uniforms: { image: { value: backgroundTarget.texture }, stepUV: { value: new THREE.Vector2() } },
+    uniforms: { image: { value: backgroundTarget.texture }, stepUV: { value: new THREE.Vector2() }, referencePlate: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}',
-    fragmentShader: `uniform sampler2D image;uniform vec2 stepUV;varying vec2 vUv;
+    fragmentShader: `uniform sampler2D image;uniform vec2 stepUV;uniform float referencePlate;varying vec2 vUv;
       void main(){
         vec4 color=vec4(0.0); float total=0.0;
         for(int i=-16;i<=16;i++){
@@ -318,11 +318,13 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
         }
         color/=total;
         gl_FragColor=color;
-        #include <tonemapping_fragment>
+        if(referencePlate<.5){
+          #include <tonemapping_fragment>
+        }
         #include <colorspace_fragment>
       }`,
-    // The physical warm surfaces are linear in the HDR targets; apply the
-    // same ACES display transform as the unblurred room exactly once.
+    // Physical surfaces use ACES. The authored reference plate already opts
+    // out of ACES, so its isolated handoff pass must preserve that same color.
     toneMapped: true, depthTest: false, depthWrite: false,
   });
   const postQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), blurMaterial); postQuad.frustumCulled = false; postScene.add(postQuad);
@@ -428,7 +430,11 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     if(nextPage==='onboard')room.metalChoices.visible=true;
     const targetGrowth = state.stage === 'adult' ? 1 : 0;
     const driftDirection = Math.sign(placement.sceneX - current.sceneX) || (direction === 'back' || direction === 'backward' ? -1 : 1);
-    return beginAction({ kind: 'transition', duration: state.reduced ? 1 : presentingCard?1850:1150, from: current, to: placement, layout, sceneMoves, fromWorld:state.mode, direction: driftDirection, targetGrowth, presentingCard, onComplete, onCardFrame });
+    const cancel=beginAction({ kind: 'transition', duration: state.reduced ? 1 : presentingCard?1850:1150, from: current, to: placement, layout, sceneMoves, fromWorld:state.mode, direction: driftDirection, targetGrowth, presentingCard, onComplete, onCardFrame });
+    // The overlay disables the full-canvas CSS blur for the offering actor.
+    // Draw its isolated room blur now, before the browser can paint that change.
+    if(presentingCard){updatePose(state.time);render();}
+    return cancel;
   }
   function signContract({onComplete,onSigned}={}){
     if(state.action?.kind==='contract')return ()=>{};
@@ -512,7 +518,9 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
             turn=-Math.sin(Math.PI*elapsed)*.07;wave=smooth(elapsed/.27)*(1-smooth((elapsed-.76)/.24));waveLeft=wave*.75;
             position.z-=smooth((elapsed-.76)/.24)*scale*.18;scale*=1-smooth((elapsed-.76)/.24)*.07;
             state.transitionPhase=elapsed<.25?'present-card':elapsed<.76?'offer-card':'handoff';
-            state.blur=0;
+            // Blur only the room pass, leaving the native hands and face sharp.
+            // The shader's 8px step and sigma near 6 give about a 28px blur here.
+            state.blur=.60;
           }else{
             state.transitionPhase=elapsed<.24?'rise':elapsed<.78?'glide':'settle';
             if(elapsed>.44&&state.mode!==activity.layout.world)updateWorldMode(activity.layout);
@@ -766,6 +774,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
         scene.background=background;scene.fog=fog;room.environment.visible=environmentVisible;otherRig.root.visible=otherVisible;otherContact.visible=contactVisible;
         renderer.setClearColor(palette.background,1);backgroundDirty=true;
       } else if (state.blur > .005) {
+        blurMaterial.uniforms.referencePlate.value=state.action?.presentingCard?1:0;
         const primaryVisible=rig.root.visible,miniVisible = room.miniGround.visible, contactVisible = room.contact.visible;
         if (backgroundDirty) {
           const secondVisible=otherRig.root.visible,secondContactVisible=otherContact.visible;

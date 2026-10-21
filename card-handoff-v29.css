@@ -1,0 +1,6 @@
+/* The room is blurred in the renderer from the very first offer frame.
+   A CSS blur on the whole canvas also blurs Klin and hides the hand gesture. */
+.phone.klin-world-ready[data-card-handoff] > .klin-world-host {
+  filter: none !important;
+  transition: none !important;
+}
