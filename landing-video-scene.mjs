@@ -1,5 +1,6 @@
 import { createLandingVideoPlayer } from './landing-video-player.mjs';
 import { createLandingHeldFrame } from './landing-held-frame.mjs';
+import { createLandingGlass } from './landing-glass.mjs';
 
 // The runtime asset physically excludes the supplied film's baked UI.
 // Original frames [0,16) + [116,190), 30fps; source bytes remain archived.
@@ -31,10 +32,12 @@ export function createLandingVideoScene({phone}={}) {
   host.append(video,still);phone.prepend(host);phone.append(resume,skip,status);
   let active=false,lastState={state:'inactive',readyForInput:false},disposed=false;
   let presentedState='inactive',presentedReady=false;
+  const landingGlass=createLandingGlass({phone,sourceCanvas:still});
   const heldFrame=createLandingHeldFrame({video,canvas:still,onSettled:()=>applyPresentation()});
   function applyPresentation() {
     if(!active||disposed)return;
     const next=lastState,held=heldFrame.getDiagnostics();
+    landingGlass.update({active:true,ready:next.state==='waiting'&&held.captured,key:next.key});
     const settling=next.state==='waiting'&&held.state==='settling';
     presentedState=settling?'settling':next.state;
     presentedReady=next.readyForInput&&!settling;
@@ -62,13 +65,13 @@ export function createLandingVideoScene({phone}={}) {
   skip.addEventListener('click',()=>{if(player.skip())status.textContent='影片已跳過，請回答這一題。';});
   return {
     update({active:enabled=false,key='birthDate',reducedMotion=false,restore=false}={}) {
-      active=enabled;host.hidden=!active;if(!active){resume.hidden=true;skip.hidden=true;heldFrame.release();host.classList.remove('has-held-frame');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
+      active=enabled;host.hidden=!active;if(!active){resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
       if(!active){delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;}
       player.update({active,key,reducedMotion,restore});
       if(active)applyState(lastState);
     },
     get readyForInput(){return active&&presentedReady;},
     getDiagnostics:()=>({...player.getDiagnostics(),state:presentedState,readyForInput:active&&presentedReady,heldFrame:heldFrame.getDiagnostics()}),
-    dispose(){disposed=true;heldFrame.dispose();player.dispose();host.remove();resume.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;}
+    dispose(){disposed=true;landingGlass.dispose();heldFrame.dispose();player.dispose();host.remove();resume.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;}
   };
 }

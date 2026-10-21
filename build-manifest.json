@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-21T08:44:24.533Z",
+  "createdAt": "2026-10-21T09:04:24.459Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 116170572,
+  "payloadBytes": 116181195,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 97569,
-      "sha256": "5febf64f2262e5f9a29bb01be6287dcdc8e4fc606ad310c9ea8cd41d38185d83"
+      "bytes": 97593,
+      "sha256": "312552da994259626c125de2a5343851fa0927718e96c0bbbfc38381b459d828"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1082,8 +1082,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 6485,
-      "sha256": "c4257563779ac221a762734922ebfd962ca0c6c7d5c6d5c3ebabc526d81e8e5d"
+      "bytes": 6558,
+      "sha256": "4568076faca6a2b588539fe73d39f6f5b3ff7b9afb57c7362fbb94f77c80a2e9"
     },
     {
       "source": "journey-experience.css",
@@ -1140,6 +1140,18 @@
       "sha256": "8aa2ce0bdd6161c8a843ea6ac322c2dbf13e8f72743f3c010a80b1f693a5da8f"
     },
     {
+      "source": "landing-glass.css",
+      "path": "landing-glass.css",
+      "bytes": 1338,
+      "sha256": "27cb45622f25ca871b497b12cae2945aaa8273ffa80e08912a6b8e315140625e"
+    },
+    {
+      "source": "landing-glass.mjs",
+      "path": "landing-glass.mjs",
+      "bytes": 8905,
+      "sha256": "ef55d5a541b031e404ef63da3883967cd1c1b296f5b3ea43dbb9724db8ef7269"
+    },
+    {
       "source": "landing-held-frame.mjs",
       "path": "landing-held-frame.mjs",
       "bytes": 4943,
@@ -1154,8 +1166,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 5343,
-      "sha256": "7195ef8be8821e759d84084e468a1b549de1a93d3e2df1fb46e39e68bbba9ef8"
+      "bytes": 5626,
+      "sha256": "63fb166ebf02fea4e1ac3007892baaaef2583a06eff58b875687d76ac32a8946"
     },
     {
       "source": "landing-video.css",
@@ -1625,6 +1637,11 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "landing-glass.css",
+      "kind": "resource"
+    },
+    {
       "from": "app.mjs",
       "to": "landing-video-scene.mjs",
       "kind": "module"
@@ -1747,6 +1764,11 @@
     {
       "from": "landing-video-scene.mjs",
       "to": "landing-held-frame.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-glass.mjs",
       "kind": "module"
     },
     {

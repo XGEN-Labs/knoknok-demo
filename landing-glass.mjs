@@ -1,0 +1,116 @@
+// A paused scene sampled once into an ordinary image: no live backdrop-filter
+// surface is retained under editable text or reflowing conversation content.
+export const LANDING_GLASS_TARGETS = '.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn)';
+const PROPERTIES = ['--landing-glass-image','--landing-glass-size','--landing-glass-position'];
+
+export function coverRect(sourceWidth,sourceHeight,width,height) {
+  const scale=Math.max(width/sourceWidth,height/sourceHeight);
+  return {x:(width-sourceWidth*scale)/2,y:(height-sourceHeight*scale)/2,width:sourceWidth*scale,height:sourceHeight*scale};
+}
+
+export function glassPosition(sceneRect,targetRect,width,height) {
+  return {x:(sceneRect.left-targetRect.left)*width/sceneRect.width,y:(sceneRect.top-targetRect.top)*height/sceneRect.height};
+}
+
+// Three separable box passes approximate a Gaussian when CanvasRenderingContext2D
+// has no filter support (older WebKit). Clamped edges avoid transparent seams.
+export function softwareGlassBlur(image,width,height,sigma,saturation=1.35) {
+  const data=image.data, ideal=Math.sqrt(4*sigma*sigma+1);
+  const lower=Math.max(1,Math.floor(ideal)-(Math.floor(ideal)%2===0?1:0)),upper=lower+2;
+  const count=Math.round((12*sigma*sigma-3*lower*lower-12*lower-9)/(-4*lower-4));
+  const temp=new Uint8ClampedArray(data.length);
+  for(let pass=0;pass<3;pass++){
+    const radius=Math.max(0,((pass<count?lower:upper)-1)/2),diameter=radius*2+1;
+    for(let axis=0;axis<2;axis++){
+      const input=axis?temp:data,output=axis?data:temp;
+      const rows=axis?width:height,length=axis?height:width,stride=axis?width*4:4;
+      for(let row=0;row<rows;row++){
+        const base=axis?row*4:row*width*4,sums=[0,0,0];
+        for(let k=-radius;k<=radius;k++){const p=base+Math.max(0,Math.min(length-1,k))*stride;for(let c=0;c<3;c++)sums[c]+=input[p+c];}
+        for(let col=0;col<length;col++){
+          const p=base+col*stride;for(let c=0;c<3;c++)output[p+c]=sums[c]/diameter;output[p+3]=255;
+          const from=base+Math.max(0,col-radius)*stride,to=base+Math.min(length-1,col+radius+1)*stride;
+          for(let c=0;c<3;c++)sums[c]+=input[to+c]-input[from+c];
+        }
+      }
+    }
+  }
+  for(let p=0;p<data.length;p+=4){const gray=.213*data[p]+.715*data[p+1]+.072*data[p+2];for(let c=0;c<3;c++)data[p+c]=gray+(data[p+c]-gray)*saturation;}
+  return image;
+}
+
+export function renderGlassTexture({sourceCanvas,width,height,ratio=1,blur=30,saturation=1.35,fill='rgba(255,255,255,.60)',createCanvas}) {
+  const w=Math.max(1,Math.round(width*ratio)),h=Math.max(1,Math.round(height*ratio)),radius=blur*ratio,pad=Math.ceil(radius*3);
+  const make=(cw,ch)=>{const canvas=createCanvas();canvas.width=cw;canvas.height=ch;const context=canvas.getContext('2d',{alpha:false});if(!context)throw new Error('2D canvas unavailable');return [canvas,context];};
+  const [scene,paint]=make(w+2*pad,h+2*pad),rect=coverRect(sourceCanvas.width,sourceCanvas.height,w,h);
+  paint.fillStyle='#e7e5f4';paint.fillRect(0,0,scene.width,scene.height);
+  paint.drawImage(sourceCanvas,pad+rect.x,pad+rect.y,rect.width,rect.height);
+  // Extend the visible plate's edge pixels throughout the blur sampling margin.
+  if(pad){
+    paint.drawImage(scene,pad,pad,w,1,pad,0,w,pad);
+    paint.drawImage(scene,pad,pad+h-1,w,1,pad,pad+h,w,pad);
+    paint.drawImage(scene,pad,0,1,scene.height,0,0,pad,scene.height);
+    paint.drawImage(scene,pad+w-1,0,1,scene.height,pad+w,0,pad,scene.height);
+  }
+  const [filtered,filter]=make(scene.width,scene.height);
+  const expression=`blur(${radius}px) saturate(${saturation})`;
+  let method='software';
+  if('filter' in filter){filter.filter=expression;if(filter.filter===expression)method='native';}
+  if(method==='native'){filter.drawImage(scene,0,0);filter.filter='none';}
+  else {const pixels=paint.getImageData(0,0,scene.width,scene.height);filter.putImageData(softwareGlassBlur(pixels,scene.width,scene.height,radius,saturation),0,0);}
+  const [result,output]=make(w,h);output.drawImage(filtered,pad,pad,w,h,0,0,w,h);
+  output.fillStyle=fill;output.fillRect(0,0,w,h);
+  return {url:result.toDataURL('image/png'),method,width,height};
+}
+
+export function createLandingGlass({phone,sourceCanvas,environment={}}={}) {
+  if(!phone||!sourceCanvas)throw new TypeError('A phone and held source canvas are required.');
+  const doc=phone.ownerDocument,win=doc.defaultView;
+  const createCanvas=environment.createCanvas||(()=>doc.createElement('canvas'));
+  const computed=environment.getComputedStyle||(node=>win.getComputedStyle(node));
+  const Resize=environment.ResizeObserver||win.ResizeObserver,Mutation=environment.MutationObserver||win.MutationObserver;
+  let active=false,ready=false,key='',disposed=false,texture=null,signature='',renders=0,error='',refreshing=false;
+  const touched=new Map(),observed=new Set();
+  const resize=Resize?new Resize(()=>refresh()):null;
+  const mutation=Mutation?new Mutation(()=>refresh()):null;
+  function restore(node,previous){for(const [index,property] of PROPERTIES.entries()){const value=previous.styles[index];if(value[0])node.style.setProperty(property,...value);else node.style.removeProperty(property);}if(previous.marker===null)node.removeAttribute('data-landing-glass');else node.setAttribute('data-landing-glass',previous.marker);}
+  function clear(){for(const [node,previous] of touched)restore(node,previous);touched.clear();for(const node of observed)resize?.unobserve(node);observed.clear();}
+  function refresh(){
+    if(disposed||refreshing||!active||!ready)return false;
+    refreshing=true;
+    try {
+      const nodes=[...phone.querySelectorAll(LANDING_GLASS_TARGETS)];
+      const rect=sourceCanvas.getBoundingClientRect(),width=sourceCanvas.clientWidth,height=sourceCanvas.clientHeight;
+      if(!nodes.length||!width||!height||!rect.width||!rect.height||!sourceCanvas.width||!sourceCanvas.height){clear();return false;}
+      const style=computed(nodes[0]),blur=parseFloat(style.getPropertyValue('--kn-glass-blur'))||30;
+      const sat=style.getPropertyValue('--kn-glass-saturation').trim()||'135%',saturation=(parseFloat(sat)||135)/(sat.endsWith('%')?100:1);
+      const fill=style.getPropertyValue('--kn-glass-fill').trim()||'rgba(255,255,255,.60)';
+      const ratio=Math.min(2,Math.max(1,win.devicePixelRatio||1));
+      const nextSignature=JSON.stringify([key,sourceCanvas.width,sourceCanvas.height,width,height,ratio,blur,saturation,fill]);
+      if(nextSignature!==signature||!texture){texture=renderGlassTexture({sourceCanvas,width,height,ratio,blur,saturation,fill,createCanvas});signature=nextSignature;renders++;}
+      const current=new Set(nodes);
+      for(const [node,previous] of touched)if(!current.has(node)){restore(node,previous);touched.delete(node);resize?.unobserve(node);observed.delete(node);}
+      for(const node of nodes){
+        const target=node.getBoundingClientRect();if(!target.width||!target.height)continue;
+        if(!touched.has(node))touched.set(node,{marker:node.getAttribute('data-landing-glass'),styles:PROPERTIES.map(property=>[node.style.getPropertyValue(property),node.style.getPropertyPriority(property)])});
+        const position=glassPosition(rect,target,width,height);
+        const values=[`url("${texture.url}")`,`${width}px ${height}px`,`${position.x}px ${position.y}px`];
+        for(const [index,property] of PROPERTIES.entries())if(node.style.getPropertyValue(property)!==values[index])node.style.setProperty(property,values[index]);
+        node.setAttribute('data-landing-glass','ready');
+        if(!observed.has(node)){observed.add(node);resize?.observe(node);}
+      }
+      error='';return true;
+    }catch(cause){error=String(cause?.message||cause);clear();return false;}
+    finally{refreshing=false;}
+  }
+  resize?.observe(sourceCanvas);resize?.observe(phone);
+  mutation?.observe(phone,{childList:true,subtree:true});
+  phone.addEventListener('scroll',refresh,true);win.addEventListener('resize',refresh);
+  win.visualViewport?.addEventListener('resize',refresh);win.visualViewport?.addEventListener('scroll',refresh);
+  doc.fonts?.addEventListener('loadingdone',refresh);
+  return {
+    update({active:enabled=false,ready:settled=false,key:cue=''}={}){if(disposed)return false;active=enabled;ready=settled;key=cue;if(!active||!ready){clear();return false;}return refresh();},
+    getDiagnostics:()=>({active,ready,surfaces:touched.size,renders,method:texture?.method||'',error}),
+    dispose(){if(disposed)return;disposed=true;clear();resize?.disconnect();mutation?.disconnect();phone.removeEventListener('scroll',refresh,true);win.removeEventListener('resize',refresh);win.visualViewport?.removeEventListener('resize',refresh);win.visualViewport?.removeEventListener('scroll',refresh);doc.fonts?.removeEventListener('loadingdone',refresh);texture=null;signature='';}
+  };
+}
