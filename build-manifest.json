@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-21T04:47:37.126Z",
+  "createdAt": "2026-10-21T06:09:45.544Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 117478989,
+  "payloadBytes": 116179004,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
       "bytes": 103584,
-      "sha256": "5153c4eb940541199ef274f3a1d1864a2ba7ddfd5600ff5adc3f8e4c66fbbb34"
+      "sha256": "4b1d9caf64fc345909ebd5ebb96bfd77c14dd5b6c813cd358b1c6896ba134fbf"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -156,10 +156,10 @@
       "sha256": "98a71caac2461f1c20a099257756930db28010726901c89b1cf54558be80a8bf"
     },
     {
-      "source": "assets/landing-video-20261021/encounter.mp4",
-      "path": "assets/landing-video-20261021/encounter.mp4",
-      "bytes": 2507671,
-      "sha256": "2da943d1e29ca519fe785298bf17db4b7711626d27496869934a22facc14b975"
+      "source": "assets/landing-video-20261021/encounter-clean-cut-v2.mp4",
+      "path": "assets/landing-video-20261021/encounter-clean-cut-v2.mp4",
+      "bytes": 1207572,
+      "sha256": "b2b3a9a6273e34210e09675c3b6f488173ce3fcd351b340ee8301fb753027389"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -1077,7 +1077,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 6361,
-      "sha256": "7a510419bbc74bd061f15a0539095efe52ee61d6581e15f05d02b6a80d51f17f"
+      "sha256": "97b32df499dbddb78d3253e6a53b539bd820e856502bd420043e227ee763bec4"
     },
     {
       "source": "journey-experience.css",
@@ -1142,8 +1142,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 3453,
-      "sha256": "eafad94abc4fa98b5bcdfb54d780ccbe8abf0c000c83e89de6eea009ee35ff3a"
+      "bytes": 3567,
+      "sha256": "4bad917389acba6ed0e3d69ed9ee464c0f353790a821032cdd747eab93388440"
     },
     {
       "source": "landing-video.css",

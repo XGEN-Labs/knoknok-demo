@@ -1,10 +1,10 @@
 # Knoknok interactive demo
 
-Current release: `20261021-video-28b` (2026-10-21).
+Current release: `20261021-video-28c` (2026-10-21).
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261021-video-28b)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261021-video-28c)
 
-Onboarding now uses a persistent inline video scene. It pauses at each question, shows the existing 60% white glass UI, and continues only after a valid answer. Back navigation restores the previous frame; reduced motion, blocked autoplay and media failures keep the flow usable. The supplied 10-second concept film contains baked forms and a contract, so this interactive cut skips those sections. Its original bytes, audio track and watermark are retained; runtime playback is muted. Replace the source and cue sheet with a UI-free master for a continuous final film.
+Onboarding now uses a persistent inline video scene. It pauses at each question, shows the existing 60% white glass UI, and continues only after a valid answer. Back navigation restores the previous frame; reduced motion, blocked autoplay and media failures keep the flow usable. The runtime film is now a frame-accurate 3-second edit with the baked forms, faint opening title, and contract sections physically removed. Eight pause points use the revised timeline. The full original video/audio remains in the private project; the original watermark and framing are retained in the cut. Playback remains muted.
 
 The room, login light and blurred card backdrop now follow the welcome scene's periwinkle, cream and restrained warm-gold palette. The supplied onboarding video keeps its own meadow colors. Native white-particle evolution, centered cards, full profile editing, self-hosted paper fonts and the seal are retained. Room controls appear only after signing and evolution finish.
 
