@@ -3,28 +3,29 @@ import * as THREE from './vendor/three/three.module.js';
 // Authored environment plates, with live native Klin rendered in front. UI is
 // entirely HTML and uses the pre-scene-redesign components and styles.
 const assets={
- home:'./assets/palette-20261021/ivory-blue-room.png',
+ home:'./assets/landing-video-20261022/room-empty.png',
  porch:'./assets/portal-scenes-20261020/three-avatar-porches.png',
  shared:'./assets/cloud-realm-20261019/shared.webp',
  arrival:'./assets/cloud-realm-20261019/arrival.webp',
 };
 export function createReferenceField(){
  const group=new THREE.Group();group.name='klin-reference-environments';
- const loader=new THREE.TextureLoader(),uniforms={time:{value:0},aspect:{value:402/874},conversation:{value:0},sceneFrom:{value:0},sceneTo:{value:0},sceneMix:{value:0},visitIndex:{value:0},visitPhase:{value:0},keepsake:{value:0}};
+ const loader=new THREE.TextureLoader(),uniforms={time:{value:0},aspect:{value:402/874},homeAspect:{value:854/1842},conversation:{value:0},sceneFrom:{value:0},sceneTo:{value:0},sceneMix:{value:0},visitIndex:{value:0},visitPhase:{value:0},keepsake:{value:0}};
  const ready=Promise.all(Object.entries(assets).map(([key,url])=>new Promise((resolve,reject)=>{
-  loader.load(url,texture=>{texture.colorSpace=THREE.SRGBColorSpace;texture.minFilter=THREE.LinearMipmapLinearFilter;uniforms[key].value=texture;resolve(texture);},undefined,reject);
+  loader.load(url,texture=>{texture.colorSpace=THREE.SRGBColorSpace;texture.minFilter=THREE.LinearMipmapLinearFilter;uniforms[key].value=texture;if(key==='home')uniforms.homeAspect.value=texture.image.width/texture.image.height;resolve(texture);},undefined,reject);
   uniforms[key]={value:null};
  })));
  const material=new THREE.ShaderMaterial({uniforms,depthWrite:false,depthTest:false,toneMapped:false,
   vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,.9999,1.);}',
   fragmentShader:`varying vec2 vUv;uniform sampler2D home;uniform sampler2D porch;uniform sampler2D shared;uniform sampler2D arrival;
-   uniform float aspect;uniform float time;uniform float sceneFrom;uniform float sceneTo;uniform float sceneMix;uniform float visitIndex;uniform float visitPhase;uniform float keepsake;
-   vec4 sampleScene(float id,vec2 uv){if(id>2.5)return texture2D(arrival,uv);if(id>1.5)return texture2D(shared,uv);if(id>.5)return texture2D(porch,uv);return texture2D(home,uv);}
+   uniform float aspect;uniform float homeAspect;uniform float time;uniform float sceneFrom;uniform float sceneTo;uniform float sceneMix;uniform float visitIndex;uniform float visitPhase;uniform float keepsake;
+   vec2 coverUV(vec2 uv,float sourceAspect){if(aspect>sourceAspect)uv.y=.5+(uv.y-.5)*sourceAspect/aspect;else uv.x=.5+(uv.x-.5)*aspect/sourceAspect;return uv;}
+   vec4 sampleScene(float id,vec2 uv){if(id>2.5)return texture2D(arrival,coverUV(uv,854./1842.));if(id>1.5)return texture2D(shared,coverUV(uv,854./1842.));if(id>.5)return texture2D(porch,coverUV(uv,854./1842.));return texture2D(home,coverUV(uv,homeAspect));}
    void main(){
     vec2 uv=vUv;float sourceAspect=854./1842.;
     if(aspect>sourceAspect)uv.y=.5+(uv.y-.5)*sourceAspect/aspect;
     else uv.x=.5+(uv.x-.5)*aspect/sourceAspect;
-    vec4 color=mix(sampleScene(sceneFrom,uv),sampleScene(sceneTo,uv),sceneMix);
+    vec4 color=mix(sampleScene(sceneFrom,vUv),sampleScene(sceneTo,vUv),sceneMix);
     float porchWeight=mix(step(.5,sceneFrom)*(1.-step(1.5,sceneFrom)),step(.5,sceneTo)*(1.-step(1.5,sceneTo)),sceneMix);
     vec2 door=vec2(.20+visitIndex*.30,.59);float halo=exp(-dot((uv-door)*vec2(1.8,1.),(uv-door)*vec2(1.8,1.))*180.);
     float replyPulse=visitPhase<.9?.75+.25*sin(time*7.):1.;

@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-21T09:04:24.459Z",
+  "createdAt": "2026-10-22T06:48:10.294Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 116181195,
+  "payloadBytes": 124936394,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 97593,
-      "sha256": "312552da994259626c125de2a5343851fa0927718e96c0bbbfc38381b459d828"
+      "bytes": 96061,
+      "sha256": "78c9b45f4cc8ae3f55527916be3cb3ae1468ca2592904ecd78d0fd823c0e0225"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -156,10 +156,16 @@
       "sha256": "98a71caac2461f1c20a099257756930db28010726901c89b1cf54558be80a8bf"
     },
     {
-      "source": "assets/landing-video-20261021/encounter-clean-cut-v2.mp4",
-      "path": "assets/landing-video-20261021/encounter-clean-cut-v2.mp4",
-      "bytes": 1207572,
-      "sha256": "b2b3a9a6273e34210e09675c3b6f488173ce3fcd351b340ee8301fb753027389"
+      "source": "assets/landing-video-20261022/nok-complete-30s-draft.mp4",
+      "path": "assets/landing-video-20261022/nok-complete-30s-draft.mp4",
+      "bytes": 7840549,
+      "sha256": "2f7de7723229916bd3cd0e8884da1f98ed1fc21a8253df22f82246b3b97d1b43"
+    },
+    {
+      "source": "assets/landing-video-20261022/room-empty.png",
+      "path": "assets/landing-video-20261022/room-empty.png",
+      "bytes": 2119103,
+      "sha256": "e16ea586e2566ad86267c8950f4083c2561607abe25c9cb942b3810c893f128b"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -1038,6 +1044,12 @@
       "sha256": "9b8ad3cf80eca8aba652e0c31c5f13912eebb07fee20eaefa525a5dc7272549f"
     },
     {
+      "source": "film-scenes-v30.css",
+      "path": "film-scenes-v30.css",
+      "bytes": 1317,
+      "sha256": "8c62ff539dab6258a4eb31d1199e5a2aaedff6f34868f4afd0adf83c48df229b"
+    },
+    {
       "source": "form-controls.css",
       "path": "form-controls.css",
       "bytes": 7264,
@@ -1082,8 +1094,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 6558,
-      "sha256": "4568076faca6a2b588539fe73d39f6f5b3ff7b9afb57c7362fbb94f77c80a2e9"
+      "bytes": 6586,
+      "sha256": "63e68436f474d3aa4e95c0baa65df56647d2161ff1ae877797bea52f0de575ec"
     },
     {
       "source": "journey-experience.css",
@@ -1130,14 +1142,20 @@
     {
       "source": "klin-reference-scene.mjs",
       "path": "klin-reference-scene.mjs",
-      "bytes": 3788,
-      "sha256": "bfef446ce864eb2df219cecfa3b9df3be511b2951723da50f92022e463cc264c"
+      "bytes": 4167,
+      "sha256": "a475c6718a0ddc08ec5b84dd462e4a3cc5617e835cba4686e72a03a4fe2af463"
     },
     {
       "source": "klin-world.mjs",
       "path": "klin-world.mjs",
-      "bytes": 69477,
-      "sha256": "8aa2ce0bdd6161c8a843ea6ac322c2dbf13e8f72743f3c010a80b1f693a5da8f"
+      "bytes": 69476,
+      "sha256": "24b5e8bc649bf8ae30a41c72802ed9ebbc40f969bdfaf274aa980d30122d9b9b"
+    },
+    {
+      "source": "landing-departure.mjs",
+      "path": "landing-departure.mjs",
+      "bytes": 1165,
+      "sha256": "563e1daa17b60a45e8440de2c0c789cd09a6f1b69a3aa1ffc0ff1efb429cac68"
     },
     {
       "source": "landing-glass.css",
@@ -1166,14 +1184,14 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 5626,
-      "sha256": "63fb166ebf02fea4e1ac3007892baaaef2583a06eff58b875687d76ac32a8946"
+      "bytes": 7072,
+      "sha256": "e18c76e69e11754462968d817f1734ec1fd978fde2b0eefedf32b3ca3bf12612"
     },
     {
       "source": "landing-video.css",
       "path": "landing-video.css",
-      "bytes": 4934,
-      "sha256": "e8c5ec4b36638d50509004ddb6fa135ecb1dde0637fcaea2700d4693d3448d75"
+      "bytes": 5258,
+      "sha256": "f69d62bbbf850b2777e0a68a84487c51f45a492a9e47726ef3029371acfc407e"
     },
     {
       "source": "landing.mjs",
@@ -1244,8 +1262,8 @@
     {
       "source": "portal-arrival.mjs",
       "path": "portal-arrival.mjs",
-      "bytes": 2482,
-      "sha256": "e564b48d04310081b7b5590864376976a848cef6f8f621c34a4517b4dcfb663a"
+      "bytes": 2474,
+      "sha256": "23c613864542fa4c9325950322ca26506b847a6e72eb58be749701881f745960"
     },
     {
       "source": "portal-glass.css",
@@ -1322,8 +1340,8 @@
     {
       "source": "social-refinement.css",
       "path": "social-refinement.css",
-      "bytes": 16380,
-      "sha256": "e09c082e46e1f1fe2b8b51774e500e3a98a8cec1fc33ea465297f344b41471dc"
+      "bytes": 16381,
+      "sha256": "5ddecfc9d35cc9cc603a63bee1cebd4ab52b7385c3a46086bec406e6fdcb4337"
     },
     {
       "source": "soft-companion.css",
@@ -1642,6 +1660,11 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "film-scenes-v30.css",
+      "kind": "resource"
+    },
+    {
       "from": "app.mjs",
       "to": "landing-video-scene.mjs",
       "kind": "module"
@@ -1769,6 +1792,11 @@
     {
       "from": "landing-video-scene.mjs",
       "to": "landing-glass.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-departure.mjs",
       "kind": "module"
     },
     {

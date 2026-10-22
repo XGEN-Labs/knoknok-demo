@@ -1,25 +1,25 @@
-import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261021-refine-29b';
-import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261021-refine-29b';
-import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261021-refine-29b';
-import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261021-refine-29b';
-import { showCompanionContract } from './contract-story.mjs?v=20261021-refine-29b';
-import { prepareAvatar } from './avatar-upload.mjs?v=20261021-refine-29b';
-import { initFormControls } from './form-controls.mjs?v=20261021-refine-29b';
-import { initDatePickers } from './date-picker.mjs?v=20261021-refine-29b';
-import { initTypography } from './typography.mjs?v=20261021-refine-29b';
-import { createSceneSound } from './scene-sound.mjs?v=20261021-refine-29b';
-import { landingComplete, onboardingDestination } from './landing.mjs?v=20261021-refine-29b';
-import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261021-refine-29b';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261021-refine-29b';
-import { createKlinWorld } from './klin-world.mjs?v=20261021-refine-29b';
-import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261021-refine-29b';
-import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261021-refine-29b';
-import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261021-refine-29b';
-import { initPixelRoom } from './pixel-room.mjs?v=20261021-refine-29b';
-import { createHomeGreeting } from './home-greeting.mjs?v=20261021-refine-29b';
-import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261021-refine-29b';
-import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261021-refine-29b';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261021-refine-29b';
+import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-video-30b';
+import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261022-video-30b';
+import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261022-video-30b';
+import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261022-video-30b';
+import { showCompanionContract } from './contract-story.mjs?v=20261022-video-30b';
+import { prepareAvatar } from './avatar-upload.mjs?v=20261022-video-30b';
+import { initFormControls } from './form-controls.mjs?v=20261022-video-30b';
+import { initDatePickers } from './date-picker.mjs?v=20261022-video-30b';
+import { initTypography } from './typography.mjs?v=20261022-video-30b';
+import { createSceneSound } from './scene-sound.mjs?v=20261022-video-30b';
+import { landingComplete, onboardingDestination } from './landing.mjs?v=20261022-video-30b';
+import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261022-video-30b';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261022-video-30b';
+import { createKlinWorld } from './klin-world.mjs?v=20261022-video-30b';
+import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261022-video-30b';
+import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261022-video-30b';
+import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261022-video-30b';
+import { initPixelRoom } from './pixel-room.mjs?v=20261022-video-30b';
+import { createHomeGreeting } from './home-greeting.mjs?v=20261022-video-30b';
+import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261022-video-30b';
+import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261022-video-30b';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261022-video-30b';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
@@ -52,7 +52,7 @@ let sharedCard=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card'
 if(sharedCard)ui.route='public-card';
 let landingHelloTimer,landingReveal=null,landingReaction='';
 let visitTimer,visitAttempt=0;
-let growthPending=false, growthPlaying=false, stopGrowth, growthTimers=[], worldReady=false, klinWorld=null;
+let worldReady=false, klinWorld=null;
 let loginScene=null,landingVideoScene=null,closeContractUI=null;
 let renderSequence=0;
 let conversationActive=false,conversationEnterTimer;
@@ -121,7 +121,6 @@ function go(route,options={}){
     Promise.resolve(loadingWorld.ready).then(enterCard,enterCard);
     return promise;
   }
-  if(growthPlaying||growthPending)finishGrowth();
   clearTimeout(landingHelloTimer);if(route!=='landing'){landingReveal=null;landingReaction='';}closeSheet();
   if(isRoomOverlayRoute(route)&&!isRoomOverlayRoute(ui.route)){ui.sceneRoute=ui.route;ui.sceneConversation=conversationActive;}
   if(conversationActive&&route!=='home'&&!['profile','public-card'].includes(route))setHomeConversation(false);
@@ -131,11 +130,10 @@ function go(route,options={}){
   if(options.replace!==true&&ui.route!==route)ui.history.push(ui.route);
   ui.route=route;
   if(route==='home'&&!pixelVariant){
-    const juvenile=companionProfile(state).stage==='juvenile';
     const next=reduce(state,{type:'ENTER_COMPANION_HOME'});
-    if(next.error){ui.route=setupRoute();}else{state=next;if(juvenile&&companionProfile(state).stage==='adult')growthPending=true;}
+    if(next.error){ui.route=setupRoute();}else state=next;
   }
-  ui.history=ui.history.slice(-16);save();render(true,{direction:options.direction||'forward'});
+  ui.history=ui.history.slice(-16);save();render(!options.skipTransition,{direction:options.direction||'forward'});
   if(ui.route==='initializing'&&state.onboarding.status==='preparing')startInitialization();
 }
 function back(){let route=ui.history.pop();while(route==='initializing'&&state.onboarding?.status==='ready')route=ui.history.pop();go(route||(state.session.authenticated?'home':'welcome'),{replace:true,direction:'back'});}
@@ -144,7 +142,7 @@ function nav(){return '';}
 function content(body,cls=''){return `<div class="content ${cls}">${body}</div>`;}
 function field(label,name,value,attrs='',type='text'){return `<div class="field"><label for="${name}">${label}</label><input class="input" id="${name}" name="${name}" type="${type}" value="${esc(value)}" ${attrs}></div>`;}
 function shell(body,cls=''){return `<section class="page ${roomSceneRoutes.has(ui.route)||isRoomOverlayRoute(ui.route)?'room-page':''} ${cls}" data-screen="${ui.route}">${body}</section>`;}
-function welcome(){return shell(`<div class="klin-welcome">${spiritImage('幼年態 Klin','','juvenile')}</div><h2 class="brand">${logoImage}</h2><div class="welcome-actions">${btn('帳號登錄','login','kn-glass-control')}</div>`,'welcome');}
+function welcome(){return shell(`<div class="klin-welcome"><span class="klin-art" role="img" aria-label="幼年態 Klin"><img class="figma-companion-image" src="assets/login-world-20261019/source/character-transparent.png" width="1359" height="1157" alt="" draggable="false"></span></div><h2 class="brand">${logoImage}</h2><div class="welcome-actions">${btn('帳號登錄','login','kn-glass-control')}</div>`,'welcome');}
 function auth(verification=false){
   const fields=verification?`<div class="field auth-field"><label for="auth-code">驗證碼</label><input class="input" id="auth-code" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6 位數驗證碼" value="${esc(authDraft.code)}"></div>`:`<div class="field auth-field"><label for="auth-account">帳號</label><input class="input" id="auth-account" name="account" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" value="${esc(authDraft.account)}" aria-describedby="auth-error"></div><div class="field auth-field"><label for="auth-password">密碼</label><input class="input" id="auth-password" name="password" type="password" autocomplete="current-password" value="${esc(authDraft.password)}" aria-describedby="auth-error"></div>`;
   return shell(`<header class="auth-header"><button type="button" class="icon-button auth-back" data-go="welcome" data-direction="back" aria-label="返回歡迎頁">${backIcon}</button></header><h2 class="auth-brand">${logoImage}</h2><div class="auth-panel"><div class="auth-heading"><h1>帳號密碼登錄</h1><p>讓我們把這次相遇記住。</p></div><form id="auth-form" class="auth-form" data-form="${verification?'verify':'login'}" novalidate>${fields}<div id="auth-error" class="auth-error" role="alert"></div><div class="auth-submit"><button class="btn dark" type="submit"><span>登錄</span></button></div></form></div>`,'auth-page '+(verification?'auth-verify':'auth-login'));
@@ -196,6 +194,20 @@ function answerOnboarding(text,skip=false){
  if(dispatch(skip?{type:'ONBOARDING_SKIP'}:{type:'ONBOARDING_REPLY',text},false)){ui.onboardingDraft='';ui.onboardingCoda=0;landingReaction='';save();klinWorld?.interact('look');revealOnboarding(previous+1);}
  render(false);const thread=$('.onboarding-thread');if(thread)thread.scrollTop=0;
 }
+function departToHome(){
+ if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt)return;
+ const originUI=ui,who=actor(),signature=state.onboarding.contract.signedAt;
+ clearTimeout(landingHelloTimer);
+ const arrive=()=>{
+  if(ui!==originUI||ui.route!=='landing'||!state.session.authenticated||actor()!==who||state.onboarding?.contract?.signedAt!==signature)return;
+  if(dispatch({type:'FINISH_CONVERSATION'},false))go('home',{replace:true,skipTransition:true});
+  else render(false);
+ };
+ initWorld({prewarm:true});
+ if(!landingVideoScene){arrive();return;}
+ // Repeated taps/renders retain the same departure and its one completion.
+ landingVideoScene.depart({onComplete:arrive,reducedMotion:prefersStillness(ui.motion)});
+}
 function setupCompanion(){return `<div class="setup-companion"><span class="dialogue-dot" aria-hidden="true"></span><div><strong>Klin 正在聽你說</strong><p>${state.onboarding.basicsComplete?`${esc(me().name)}，再認識你一點點。`:'先從你的名字開始吧。'}</p></div></div>`;}
 function setupBasics(){const d=basicsDraft();return shell(top(state.onboarding.status==='ready'?'編輯資料':'我該怎麼稱呼你？')+content(`${landingProgress(2)}${setupCompanion()}<form id="setup-basics-form" autocomplete="off" data-form="setup-basics" novalidate><div class="landing-form-card">${field('你的名字','setup-name',state.onboarding.basicsComplete||ui.setupBasics?d.name:'','maxlength="18" autocomplete="off" placeholder="讓我記住你"')}<div class="field"><label for="setup-language">想用什麼語言聊天？</label><select id="setup-language" name="language">${['粵語','普通話','英語'].map(x=>`<option ${d.language===x?'selected':''}>${x}</option>`).join('')}</select></div>${field('你現在住在哪座城市？','setup-region',d.region,'maxlength="60" placeholder="例如：香港"')}</div><div id="basics-error" role="alert"></div></form>`,'with-footer setup-content')+`<div class="fixed-footer"><button type="submit" form="setup-basics-form" class="btn">告訴 Klin ${sendArrow}</button></div>`,'setup-page landing-setup');}
 function setupBirth(){
@@ -222,7 +234,7 @@ function conversationMarkup(messages){
 }
 function setHomeConversation(active){
   const entering=Boolean(active)&&!conversationActive;
-  conversationActive=Boolean(active)&&ui.route==='home'&&!growthPlaying;
+  conversationActive=Boolean(active)&&ui.route==='home';
   const phone=$('#phone');phone.dataset.conversation=String(conversationActive);
   if(!conversationActive){clearTimeout(conversationEnterTimer);delete phone.dataset.conversationEntering;}
   else if(entering&&!prefersStillness(ui.motion)){phone.dataset.conversationEntering='true';clearTimeout(conversationEnterTimer);conversationEnterTimer=setTimeout(()=>{delete phone.dataset.conversationEntering;const log=$('#conversation-log');if(conversationActive&&log)log.scrollTop=log.scrollHeight;},450);}
@@ -317,7 +329,7 @@ function isRoomOverlayRoute(route){return ['profile','public-card'].includes(rou
 function currentSceneRoute(){return isRoomOverlayRoute(ui.route)?(['home','relations','chat','connected','welcome','landing'].includes(ui.sceneRoute)?ui.sceneRoute:state.session.authenticated&&landingComplete(state)?'home':'welcome'):ui.route;}
 function currentWorldLayout(){const route=currentSceneRoute();if(route==='relations')return {x:.5,footY:.62,height:.18,world:'porch',blur:false,mini:false,character:false};if(route==='landing')return {x:.5,footY:getOnboardingTurn(state).key==='birthTime'?.30:.36,height:getOnboardingTurn(state).key==='birthTime'?.17:.22,world:'welcome',blur:false,mini:false};return (conversationActive||['profile','public-card'].includes(ui.route)&&ui.sceneConversation)&&route==='home'?{x:.5,footY:.37,height:.13,world:'home',blur:false,mini:false}:undefined;}
 function syncWorldAnchor(){
-  if(!worldReady||growthPlaying||klinWorld.status?.action!=='idle')return;
+  if(!worldReady||['welcome','login','register','verify','landing'].includes(ui.route)||klinWorld.status?.action!=='idle')return;
   const layout=currentWorldLayout();if(layout)klinWorld.setLayout(layout,{immediate:true});
 }
 function syncLandingVideo(){
@@ -330,55 +342,34 @@ function syncLoginScene(){
   loginScene.update({route:ui.route,active,reducedMotion:prefersStillness(ui.motion)});
   klinWorld?.setActive?.(!active&&ui.route!=='landing');
 }
-function initWorld() {
-  if(klinWorld || pixelVariant || ['welcome','login','register','verify','landing'].includes(ui.route))return;
+function initWorld({prewarm=false}={}) {
+  if(klinWorld || pixelVariant || (!prewarm&&['welcome','login','register','verify','landing'].includes(ui.route)))return;
   setKlinLoadingState($('#phone'),'loading');
   const host=document.createElement('div');
   host.className='klin-world-host';host.setAttribute('aria-hidden','true');
-  host.addEventListener('klinworlderror',()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');if(growthPlaying||growthPending)finishGrowth();});
-  host.addEventListener('klinworldready',()=>{worldReady=true;setKlinLoadingState($('#phone'),'ready');klinWorld?.setActive?.(!['welcome','login','register','verify','landing'].includes(ui.route));klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});});
+  const placeWorld=()=>{
+    const filmOwnsScene=['welcome','login','register','verify','landing'].includes(ui.route);
+    klinWorld?.setActive?.(!filmOwnsScene);
+    // Preload the adult room behind the film; never initialize landing's old
+    // native appearance/evolution while the supplied movie owns that sequence.
+    klinWorld?.setPage(filmOwnsScene?'home':currentSceneRoute(),{stage:filmOwnsScene?'adult':currentCompanionStage(),layout:filmOwnsScene?undefined:currentWorldLayout(),immediate:true});
+  };
+  host.addEventListener('klinworlderror',()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');});
+  host.addEventListener('klinworldready',()=>{worldReady=true;setKlinLoadingState($('#phone'),'ready');placeWorld();});
   $('#phone').prepend(host);
   try {
     klinWorld=createKlinWorld({host,reducedMotion:prefersStillness(ui.motion)});
+    placeWorld();
     Promise.resolve(klinWorld?.ready).then(ok=>{
-      if(ok===false||!klinWorld){klinWorld=null;host.remove();setKlinLoadingState($('#phone'),'fallback');if(growthPending||growthPlaying)finishGrowth();return;}
-      worldReady=true;setKlinLoadingState($('#phone'),'ready');
-      klinWorld.setActive?.(!['welcome','login','register','verify','landing'].includes(ui.route));
-      klinWorld.setPage(currentSceneRoute(),{stage:growthPending?'juvenile':currentCompanionStage(),layout:currentWorldLayout(),immediate:true});
-      if(growthPending&&!stopTransition)playGrowth();
-    }).catch(()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');if(growthPending||growthPlaying)finishGrowth();});
-  } catch { worldReady=false;setKlinLoadingState($('#phone'),'fallback');if(growthPending||growthPlaying)finishGrowth(); }
+      if(ok===false||!klinWorld){klinWorld=null;host.remove();setKlinLoadingState($('#phone'),'fallback');return;}
+      worldReady=true;setKlinLoadingState($('#phone'),'ready');placeWorld();
+    }).catch(()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');});
+  } catch { worldReady=false;setKlinLoadingState($('#phone'),'fallback'); }
 }
 function setHomeEntryControlsHidden(hidden){
   const page=$('#app > .home-page');
   page?.classList.toggle('home-entry-pending',hidden);
   for(const control of page?.querySelectorAll('.home-top,.home-chat-bottom')||[])control.inert=hidden;
-}
-function finishGrowth(){
-  const cancel=stopGrowth;stopGrowth=null;cancel?.();
-  growthTimers.forEach(clearTimeout);growthTimers=[];
-  growthPending=false;growthPlaying=false;
-  setHomeEntryControlsHidden(ui.route==='home'&&Boolean(stopTransition));
-  $('#phone').removeAttribute('data-growing');
-  $('#phone > .growth-story')?.remove();
-  if(ui.route==='home')klinWorld?.setPage('home',{stage:'adult',immediate:true});
-  
-}
-function playGrowth({replay=false}={}){
-  if(ui.route!=='home'||growthPlaying)return;
-  setHomeEntryControlsHidden(true);
-  if(stopTransition){growthPending=true;return;}
-  if(prefersStillness(ui.motion)||!worldReady){
-    if(!worldReady&&klinWorld&&!prefersStillness(ui.motion))return;
-    klinWorld?.setStage?.('adult');finishGrowth();return;
-  }
-  growthPending=false;growthPlaying=true;
-  const phone=$('#phone');phone.dataset.growing='true';
-  phone.insertAdjacentHTML('beforeend',`<div class="growth-story"><div class="growth-story-heading"><h2>和你一起，慢慢長大。</h2><p data-growth-copy role="status" aria-live="polite">因為認識了你，我又長大了一點。</p></div></div>`);
-  for(const [delay,text] of [[1500,'把剛才的對話，記在心裡。'],[3400,'長大一點，更靠近你一點。']])growthTimers.push(setTimeout(()=>{const copy=$('[data-growth-copy]');if(copy)copy.textContent=text;},delay));
-  klinWorld.setPage('home',{stage:'juvenile',immediate:true});
-  stopGrowth=klinWorld.grow({replay:true,onComplete:finishGrowth});
-  growthTimers.push(setTimeout(finishGrowth,6000));
 }
 function render(animate=false,motion={}){
   // Incoming messages may refresh the same route during travel. Keep the UI
@@ -410,7 +401,7 @@ function render(animate=false,motion={}){
   const source=useTransition?captureCompanion(oldPage,$('#phone')):null;
   cleanDatePickers?.();cleanFormControls?.();cleanCommunication?.dispose();cleanCommunication=null;
   app.innerHTML=views[ui.route]();
-  if(ui.route==='home')setHomeEntryControlsHidden(growthPending||growthPlaying);
+  if(ui.route==='home')setHomeEntryControlsHidden(useTransition);
   cleanFormControls=initFormControls(app);cleanDatePickers=initDatePickers(app);initTypography(app);
   if(['chat','connected'].includes(ui.route)){const rel=latestRelationship();klinWorld?.setParticipants?.((rel?.members||[]).map(id=>state.users[id]),{activeId:actor()});}
   if(ui.route==='home')cleanCommunication=bindVoiceComposer({root:$('#app>.home-page'),lang:()=>me().language,getDraft:()=>ui.companionDrafts?.[actor()]||'',onDraft:text=>{ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:text};save();},onConversationStart:()=>setHomeConversation(true),onStatus:flushVoiceRefresh});
@@ -422,8 +413,7 @@ function render(animate=false,motion={}){
   klinWorld?.setPortalState?.('idle');
   if(ui.route==='relations'){const friends=getDemoFriends(state),index=Math.max(0,friends.findIndex(friend=>friend.id===ui.selectedVisitId));klinWorld?.setLoungeState?.({count:friends.length,activeId:String(index),phase:ui.visitPhase||'idle'});}
   klinWorld?.setRealmState?.({recognition:ui.route==='landing'?Math.min(1,(getOnboardingTurn(state).progress.index-1)/6):1,conversationPhase:ui.route==='landing'?getOnboardingTurn(state).key:null,thinking:ui.route==='landing'&&landingReveal?.count<getOnboardingMessages(state).length,resting:ui.realmResting===true,keepsake:state.relationships.some(rel=>rel.members.includes(actor())&&rel.sharedMoment?.completedAt)});
-  if(!useTransition&&(!sceneOverlay||!oldPage)&&(!growthPlaying||prefersStillness(ui.motion)))klinWorld?.setPage(currentSceneRoute(),{stage:growthPending?'juvenile':currentCompanionStage(),layout:currentWorldLayout(),immediate:!oldPage||routeChanged});
-  if(growthPlaying&&prefersStillness(ui.motion))finishGrowth();
+  if(!useTransition&&!['welcome','login','register','verify','landing'].includes(ui.route)&&(!sceneOverlay||!oldPage))klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:!oldPage||routeChanged});
   if(ui.route==='home'&&!useTransition)klinWorld?.setConversationMode?.(conversationActive);
   if(conversationActive&&ui.route==='home'){const log=$('#conversation-log');if(log)log.scrollTop=log.scrollHeight;}
   if(restoreComposerFocus){const composer=$('#private-message');composer?.focus({preventScroll:true});composer?.setSelectionRange(...selection);}
@@ -444,15 +434,14 @@ function render(animate=false,motion={}){
   const arrived=()=>{
     if(sequence!==renderSequence)return;
     stopTransition=null;syncWorldAnchor();
-    if(growthPending&&ui.route==='home')playGrowth();
-    else if(ui.route==='home'&&!growthPlaying)setHomeEntryControlsHidden(false);
+    if(ui.route==='home')setHomeEntryControlsHidden(false);
     if(pendingSceneRefresh){pendingSceneRefresh=false;queueMicrotask(()=>render(false));}
   };
   if(animate){
     $('.page h2')?.setAttribute('tabindex','-1');
-    if(previous)stopTransition=transitionScene({host:$('#phone'),app,previous,current:app.querySelector('.page'),source,world:worldReady?klinWorld:null,stage:growthPending?'juvenile':currentCompanionStage(),layout:currentWorldLayout(),scrollPositions,direction:motion.direction,onFinish:arrived});
+    if(previous)stopTransition=transitionScene({host:$('#phone'),app,previous,current:app.querySelector('.page'),source,world:worldReady?klinWorld:null,stage:currentCompanionStage(),layout:currentWorldLayout(),scrollPositions,direction:motion.direction,onFinish:arrived});
     else {$('.page h2')?.focus({preventScroll:true});arrived();}
-  }else if(growthPending&&!growthPlaying)playGrowth();
+  }else if(ui.route==='home')setHomeEntryControlsHidden(false);
 }
 
 function flushVoiceRefresh(state){
@@ -519,15 +508,14 @@ async function runAction(action,element){
     case 'onboarding-history':return showSheet('我們剛才的對話',`<div class="onboarding-messages">${getOnboardingMessages(state).map(m=>`<div class="onboarding-message ${m.role==='user'?'is-user':'is-klin'}"><p>${esc(m.text)}</p></div>`).join('')}</div>`);
     case 'clear-network-search':filterNetwork('');$('#network-query').value='';$('#network-query').focus();return;
     case 'open-contract':{
-      if(!getOnboardingTurn(state).canFinish)return;closeContractUI?.();
+      if(!getOnboardingTurn(state).canFinish||landingVideoScene&&!landingVideoScene.readyForInput)return;closeContractUI?.();
       const who=actor(),name=me().name,partner=companionName();
-      closeContractUI=showCompanionContract({phone:$('#phone'),getWorld:()=>null,userName:name,companionName:partner,reduced:prefersStillness(ui.motion),onClose:()=>{closeContractUI=null;},onCommit:()=>{if(ui.route!=='landing'||actor()!==who||me().name!==name||companionName()!==partner)return;if(dispatch({type:'SIGN_COMPANION_CONTRACT'},false)&&dispatch({type:'FINISH_CONVERSATION'},false))go('home');else render(false);}});return;
+      closeContractUI=showCompanionContract({phone:$('#phone'),getWorld:()=>null,userName:name,companionName:partner,reduced:prefersStillness(ui.motion),onClose:()=>{closeContractUI=null;},onCommit:()=>{if(ui.route!=='landing'||actor()!==who||me().name!==name||companionName()!==partner)return;if(dispatch({type:'SIGN_COMPANION_CONTRACT'},false))departToHome();else render(false);}});return;
     }
-    case 'finish-conversation':if(dispatch({type:'FINISH_CONVERSATION'},false))go('home');return;
+    case 'finish-conversation':return departToHome();
     case 'view-card-tags':{const data=ui.route==='public-card'&&sharedCard?sharedCard:myCard();return showSheet('所有標籤',`<div class="all-card-tags">${data.tags.length?data.tags.map(tag=>`<span>${esc(tag)}</span>`).join(''):'<p>還沒有留下標籤。</p>'}</div>`);}
     case 'open-demo-friend':return requestVisit(element.dataset.id);
     case 'talk-friends':go('home');setHomeConversation(true);$('#private-message')?.focus({preventScroll:true});return;
-    case 'skip-growth':return finishGrowth();
     case 'close-sheet': return closeSheet();
     case 'edit-card':return editCard();
     case 'choose-card-avatar':$('#card-avatar-upload')?.click();return;
@@ -650,7 +638,6 @@ window.addEventListener('storage',e=>{
   if(comparisonMode||e.key!==STATE_KEY)return;
   closeContractUI?.();
   clearTimeout(landingHelloTimer);landingReveal=null;landingReaction='';
-  if(growthPlaying)finishGrowth();growthPending=false;
   const before=actor(),authenticated=state.session.authenticated;
   state=hydrateState(e.newValue);
   if(before!==actor()||authenticated!==state.session.authenticated){
@@ -663,12 +650,6 @@ window.addEventListener('storage',e=>{
   }
   render(false);
   if(ui.route==='initializing')startInitialization();
-});
-document.addEventListener('animationend',e=>{
-  if(e.animationName!=='klin-arrive')return;
-  const companion=e.target.closest('.home-companion.is-growing');
-  companion?.classList.remove('is-growing');
-  companion?.querySelector('.growth-origin')?.remove();
 });
 setInterval(()=>{if(!state.session.authenticated)return;const previous=JSON.stringify([state.demand?.status,state.invitations.map(x=>x.status)]);state=reduce(state,{type:'ADVANCE_TIME'});if(previous!==JSON.stringify([state.demand?.status,state.invitations.map(x=>x.status)])){save();render(false);}},15000);
 if(ui.route!=='public-card'&&state.session.authenticated&&actor()==='a'&&!landingComplete(state))ui.route=setupRoute();
@@ -703,6 +684,6 @@ if(pixelVariant)initCompanionAnimation();
 if(ui.route==='initializing')startInitialization();
 
 
-matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();klinWorld?.setReducedMotion(event.matches||ui.motion);if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();if(growthPlaying||growthPending)finishGrowth();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
 
 window.addEventListener('hashchange',()=>{const card=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');if(card){sharedCard=card;go('public-card');}else if(sharedCard){sharedCard=null;go(state.session.authenticated?setupRoute():'welcome',{replace:true});}});

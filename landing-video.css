@@ -25,6 +25,9 @@
 .phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-thread,
 .phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-composer{opacity:0;visibility:hidden;pointer-events:none}
 .phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-header{visibility:hidden;pointer-events:none}
+/* The film owns the signed journey home, including its last held frame and
+   failure/reduced-motion completion. No encounter UI may reappear underneath. */
+.phone.landing-video-active:is([data-landing-phase="departing"],[data-landing-phase="arriving"],[data-landing-phase="arrived"])>#app{visibility:hidden;pointer-events:none}
 /* Let content determine its own height. The empty grid tracks place the group
    in the lower scene without putting messages or hour choices in a crop box.
    When a keyboard leaves too little room, the whole page scrolls as one group. */
@@ -85,7 +88,7 @@
 .landing-video-resume{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);min-height:52px;padding:0 30px;border-radius:30px;font-family:inherit;font-size:16px;font-weight:600;z-index:5;pointer-events:auto}
 .landing-video-skip{position:absolute;right:6%;bottom:var(--app-safe-bottom,24px);min-height:44px;padding:10px 22px;border-radius:28px;font-family:inherit;font-size:16px;line-height:22px;font-weight:600;z-index:5;pointer-events:auto;cursor:pointer}
 .landing-video-resume[hidden],.landing-video-skip[hidden]{display:none}
-.phone.landing-video-active[data-landing-playback="fallback"]>.landing-video-scene{background:url('assets/portal-scenes-20261021/onboarding-empty.png') center/cover}
+.phone.landing-video-active[data-landing-playback="fallback"]>.landing-video-scene{background:url('assets/landing-video-20261022/room-empty.png') center/cover}
 .phone.landing-video-active[data-landing-playback="fallback"] .landing-video-plate{visibility:hidden}
 @media(prefers-reduced-motion:reduce){.phone.landing-video-active #app .onboarding-thread,.phone.landing-video-active #app .onboarding-composer{transition:none}}
 body.reduced-motion .phone.landing-video-active #app .onboarding-thread,body.reduced-motion .phone.landing-video-active #app .onboarding-composer{transition:none}
