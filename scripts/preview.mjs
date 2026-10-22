@@ -16,7 +16,7 @@ const types = { '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/ja
   '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.gif': 'image/gif',
   '.woff': 'font/woff', '.woff2': 'font/woff2', '.glb': 'model/gltf-binary', '.mp3': 'audio/mpeg' };
 const apiPaths = new Map([
-  ['/api/auth/me', 'GET'], ['/api/auth/login', 'POST'], ['/api/auth/logout', 'POST'], ['/api/web/chat', 'POST'],
+  ['/api/auth/me', 'GET'], ['/api/auth/login', 'POST'], ['/api/auth/logout', 'POST'], ['/api/web/chat', 'POST'], ['/api/companion', 'GET,POST'], ['/api/companion/characters','GET'],
 ]);
 // The static payload is an allowlist: never serve env files, scripts or backend files.
 const manifest = JSON.parse(await readFile(path.join(root, 'build-manifest.json'), 'utf8'));
@@ -27,7 +27,7 @@ export const server = createServer(async (req, res) => {
   catch { res.writeHead(400).end(); return; }
   res.setHeader('Cache-Control', 'no-store');
   if (pathname.startsWith('/api/')) {
-    if (apiPaths.get(pathname) !== req.method) { res.writeHead(404).end(); return; }
+    if (!apiPaths.get(pathname)?.split(',').includes(req.method)) { res.writeHead(404).end(); return; }
     // This is a local preview proxy; require same-origin writes, including logout.
     const origin = req.headers.origin;
     if (req.method === 'POST' && origin !== `http://${req.headers.host}`) {

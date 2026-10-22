@@ -48,3 +48,9 @@ Validation: 271 automated tests passed. The build contains 238 files including i
 
 This public repository contains only the deployable web build and required notices. Development history, references, source model packages and private handoff documents remain in the private development repository. Video seeks require an HTTP server supporting byte-range requests; the hosted demo supports this.
 
+
+### 账号自己的 Agent
+
+在线 landing 完成时调用 `/api/companion`；后台确认 ready 后才进入主页。登录恢复从后台读取同一份绑定，浏览器缓存不代表创建成功。当前页面呈现 Klin，因此只能选择唯一的已发布 Klin；多个同名发布版本时明确拒绝，部署需给出无歧义的可选目录。绑定包含固定 character/世界观发布版本，昵称不改变角色模板。
+
+需要与支持 companion 接口的平台 API 和 Agent 服务配套部署。预览代理与生产反代均须放行 `/api/companion`（GET/POST）及 `/api/companion/characters`（GET），保留 Cookie 和 `X-Knok-User-Id`；静态发布需包含 `api.mjs` 与 `companion-state.mjs`。旧账号若收到迁移提示，保留原 Agent 和历史，由受控宿主迁移后重试，不在前端替换成默认 Agent。

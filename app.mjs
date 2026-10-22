@@ -1,3 +1,4 @@
+import { applyCompanionBinding, selectLandingCharacter } from './companion-state.mjs?v=20261022-binding-1';
 import { createApi, chatHistory } from './api.mjs?v=20261022-binding-1';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-video-30b';
 import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261022-video-30b';
@@ -39,9 +40,9 @@ const flowStudioMode = comparisonMode && variantParams.get('studio') === '1';
 const BASE_STATE_KEY = shareDemo ? `${STORAGE_KEY}-klin-demo-v1` : pixelVariant ? `${STORAGE_KEY}-pixel` : STORAGE_KEY;
 const offlineDemo = variantParams.get('offline') === '1' || comparisonMode;
 const api = createApi();
-let serverUser = null, startupError = '';
+let serverUser = null, startupError = '', serverCompanion = {state:'missing'}, companionBusy=false;
 if (!offlineDemo) {
-  try { serverUser = await api.me(); } catch (error) { startupError = error.message; }
+  try { serverUser = await api.me(); if(serverUser)serverCompanion=await api.companion(); } catch (error) { startupError = error.message; }
 }
 let STATE_KEY = offlineDemo ? BASE_STATE_KEY : `${BASE_STATE_KEY}-account-${serverUser?.id ?? 'guest'}`;
 let UI_KEY = `${STATE_KEY}-ui`;
@@ -53,6 +54,7 @@ let state, ui;
 try { state=comparisonMode?initialState():hydrateState(localStorage.getItem(STATE_KEY)); ui=comparisonMode?null:JSON.parse(localStorage.getItem(UI_KEY)||'null'); } catch { state=initialState(); }
 if (!offlineDemo) {
   state.session = { authenticated: Boolean(serverUser), activeUserId: 'a', provider: 'account' };
+  applyCompanionBinding(state,serverCompanion);
   for (const message of state.private.a.companionMessages) {
     if (message.status === 'pending') { message.status = 'failed'; message.error = '上次連線已中斷，請重新發送。'; }
   }
@@ -212,9 +214,23 @@ function answerOnboarding(text,skip=false){
  if(dispatch(skip?{type:'ONBOARDING_SKIP'}:{type:'ONBOARDING_REPLY',text},false)){ui.onboardingDraft='';ui.onboardingCoda=0;landingReaction='';save();klinWorld?.interact('look');revealOnboarding(previous+1);}
  render(false);const thread=$('.onboarding-thread');if(thread)thread.scrollTop=0;
 }
-function departToHome(){
+async function departToHome(){
  if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt)return;
  const originUI=ui,who=actor(),signature=state.onboarding.contract.signedAt;
+ if(!offlineDemo) {
+  if(companionBusy || !serverUser)return;
+  const epoch=sessionEpoch,owner=serverUser.id,companionNameAtSubmit=me().companionName,userNameAtSubmit=me().name;
+  companionBusy=true;
+  try {
+   const selected=selectLandingCharacter(await api.characters(),serverCompanion?.state==='pending'?serverCompanion:null);
+   if(epoch!==sessionEpoch || serverUser?.id!==owner || ui!==originUI)return;
+   const binding=await api.initializeCompanion({characterKey:selected.key,companionName:companionNameAtSubmit,userName:userNameAtSubmit},owner);
+   if(epoch!==sessionEpoch || serverUser?.id!==owner || ui!==originUI)return;
+   if(binding.state!=='ready')throw Error('伙伴仍在準備，請稍後重試。');
+   serverCompanion=binding;applyCompanionBinding(state,binding);save();
+  } catch(error) { if(epoch===sessionEpoch){toast(error.message);render(false);}return; }
+  finally { if(epoch===sessionEpoch)companionBusy=false; }
+ }
  clearTimeout(landingHelloTimer);
  const arrive=()=>{
   if(ui!==originUI||ui.route!=='landing'||!state.session.authenticated||actor()!==who||state.onboarding?.contract?.signedAt!==signature)return;
@@ -609,11 +625,12 @@ document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!
 function sendOfflineCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
 function cancelChat() { sessionEpoch++; chatAbort?.abort(); chatAbort=null; companionTyping=false; }
 function announceSession() { try { localStorage.setItem(SESSION_EVENT, crypto.randomUUID()); } catch {} }
-function activateAccount(user) {
-  cancelChat(); serverUser=user;
+function activateAccount(user, binding={state:"missing"}) {
+  cancelChat(); companionBusy=false; serverUser=user;serverCompanion=binding;
   STATE_KEY=`${BASE_STATE_KEY}-account-${user?.id ?? 'guest'}`; UI_KEY=`${STATE_KEY}-ui`;
   try { state=hydrateState(localStorage.getItem(STATE_KEY)); } catch { state=initialState(); }
   state.session={authenticated:Boolean(user),activeUserId:'a',provider:'account'};
+  applyCompanionBinding(state,binding);
   for(const message of state.private.a.companionMessages)if(message.status==='pending'){message.status='failed';message.error='上次連線已中斷，請重新發送。';}
   ui={route:user?onboardingDestination(state):'welcome',history:[],motion:false,matchResult:'found',failNext:false};
   homeGreeting.reset(); clearMatching(); clearTimeout(initializeTimer); clearTimeout(landingHelloTimer);
@@ -635,6 +652,7 @@ async function sendCompanion(text, retryId) {
   if(offlineDemo)return sendOfflineCompanion(text);
   if(companionTyping)return;
   if(!serverUser)return go('login');
+  if(serverCompanion?.state!=='ready')return go('landing');
   text=text.trim(); if(!text)return toast('先寫一句想說的話吧。');
   const epoch=sessionEpoch, owner=serverUser.id;
   const messages=chatHistory(privateSpace().companionMessages,text);
@@ -646,6 +664,7 @@ async function sendCompanion(text, retryId) {
   try {
     const result=await api.chat(messages,owner,chatAbort.signal);
     if(epoch!==sessionEpoch)return;
+    if(result.agentId!==serverCompanion.agentId||result.contentKey!==serverCompanion.character.key)throw Error('伙伴設定已變更，請重新登入。');
     dispatch({type:'COMPANION_RESOLVE',id,...result},false);
     sceneSound.cue('reply');klinWorld?.interact('wave');
   } catch(error) {
@@ -664,7 +683,7 @@ document.addEventListener('submit',async e=>{const form=e.target.closest('form[d
   authDraft.account=account;authDraft.password=password;
   if(!offlineDemo){
     if(authBusy)return; authBusy=true; updateAuthControls();
-    try { const user=await api.login(account,password); activateAccount(user); announceSession(); revealOnboarding(); }
+    try { const user=await api.login(account,password); const binding=await api.companion(); activateAccount(user,binding); announceSession(); revealOnboarding(); }
     catch(error){const target=$('#auth-error');if(target)target.textContent=error.message;}
     finally {authBusy=false;authDraft.password='';const input=$('#auth-password');if(input)input.value='';updateAuthControls();}
     return;

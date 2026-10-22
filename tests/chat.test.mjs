@@ -41,12 +41,12 @@ test('denials propagate without browser retries or fake fallback', async () => {
   assert.equal(count, 1);
 });
 
-test('empty/malformed model replies are errors; valid server fallback is retained', async () => {
+test('empty, malformed and different-provider replies are rejected', async () => {
   for (const data of [{ text: '', source: 'model', provider: 'knok-agent' }, { text: 'fake' }]) {
     await assert.rejects(createApi({ fetchImpl: async () => reply(data) }).chat([], 1), /回覆未完成/);
   }
   const data = { text: 'fallback', source: 'model', provider: 'gemini', fallback: true };
-  assert.deepEqual(await createApi({ fetchImpl: async () => reply(data) }).chat([], 1), data);
+  await assert.rejects(createApi({ fetchImpl: async () => reply(data) }).chat([], 1), /回覆未完成/);
 });
 
 test('cancelled request propagates cancellation without fallback', async () => {

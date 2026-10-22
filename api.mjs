@@ -50,11 +50,14 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
     async login(username, password) {
       return userFrom(await request('/auth/login', { body: { username, password } }));
     },
+    companion: () => request('/companion'),
+    characters: async () => (await request('/companion/characters')).characters,
+    initializeCompanion: (body, owner) => request('/companion', {body,owner}),
     logout: () => request('/auth/logout', { body: {} }),
     async chat(messages, owner, signal) {
       const data = await request('/web/chat', { body: { messages }, owner, signal });
       if (typeof data?.text !== 'string' || !data.text.trim() ||
-          !['knok-agent', 'gemini'].includes(data.provider) || data.source !== 'model') {
+          data.provider !== 'knok-agent' || data.source !== 'model') {
         throw new ApiError('回覆未完成，請稍後再試。');
       }
       return data;
