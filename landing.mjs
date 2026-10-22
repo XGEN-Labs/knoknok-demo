@@ -20,6 +20,7 @@ export const METAL_VOICES = {
 export const validMetalVoice = tone => typeof tone === 'string' && Object.hasOwn(METAL_VOICES, tone);
 
 export function landingComplete(state) {
+  if(state.session.provider==='account')return state.companionBinding?.state==='ready';
   if (state.session.activeUserId !== 'a') return true;
   const o = state.onboarding;
   return o?.status === 'ready' && o.basicsComplete === true && o.birthComplete === true &&

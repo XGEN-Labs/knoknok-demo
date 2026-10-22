@@ -1,15 +1,21 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-22T06:48:10.294Z",
+  "createdAt": "2026-10-22T10:28:11.076Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 124936394,
+  "payloadBytes": 124950479,
   "files": [
+    {
+      "source": "api.mjs",
+      "path": "api.mjs",
+      "bytes": 3367,
+      "sha256": "1ad26d7a0dd7869b343bf3a42874b976d04153568bb35704cce96a399a1d8dee"
+    },
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 96061,
-      "sha256": "78c9b45f4cc8ae3f55527916be3cb3ae1468ca2592904ecd78d0fd823c0e0225"
+      "bytes": 103974,
+      "sha256": "5237a8f984fa4b8d1a27f1cd7952f21ffeb69d31610060970b8e47dbd08eb013"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -228,12 +234,6 @@
       "sha256": "5590533436c70f10f2f524ee61456238c290175c6662fbe1c700b5f038a6d328"
     },
     {
-      "source": "assets/signature-strokes-20261020/hershey-cursive.json",
-      "path": "assets/signature-strokes-20261020/hershey-cursive.json",
-      "bytes": 12542,
-      "sha256": "0e200d80b8f3282fdd33129879d3fdb45ec9ccbd312d1973a7ec626e8033cd2b"
-    },
-    {
       "source": "assets/signature-strokes-20261020/HERSHEY-LICENSE",
       "path": "assets/signature-strokes-20261020/HERSHEY-LICENSE",
       "bytes": 1073,
@@ -244,6 +244,12 @@
       "path": "assets/signature-strokes-20261020/HERSHEY-NOTICE.txt",
       "bytes": 354,
       "sha256": "cd04cc8417779cbb5a6de67be733bcdf1ce882b53b7a4492bfbbecfdaca42fbb"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "path": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "bytes": 12542,
+      "sha256": "0e200d80b8f3282fdd33129879d3fdb45ec9ccbd312d1973a7ec626e8033cd2b"
     },
     {
       "source": "assets/signature-strokes-20261020/manifest.json",
@@ -984,6 +990,12 @@
       "sha256": "7522944652f4809db5bd7517dd48566e2799b8731d1cbcacade58f19e9714eec"
     },
     {
+      "source": "companion-state.mjs",
+      "path": "companion-state.mjs",
+      "bytes": 1127,
+      "sha256": "28a7421d2ff81de3c30939d75b261454cc39c3522fc89b6830ba8e9e8621b7b6"
+    },
+    {
       "source": "contract-centered-paper.css",
       "path": "contract-centered-paper.css",
       "bytes": 10744,
@@ -1095,7 +1107,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 6586,
-      "sha256": "63e68436f474d3aa4e95c0baa65df56647d2161ff1ae877797bea52f0de575ec"
+      "sha256": "05bf4f8402015c2426c91eac8007c1f9d3a6df64edce1b9bbc74bd93bccbd983"
     },
     {
       "source": "journey-experience.css",
@@ -1196,8 +1208,8 @@
     {
       "source": "landing.mjs",
       "path": "landing.mjs",
-      "bytes": 1574,
-      "sha256": "c6389f3ea984094e15441d5c6970578130203d2c502ed88d93bab9e71d34d24b"
+      "bytes": 1662,
+      "sha256": "7b43cb70baabb785bb580a3fc0f7fa2e080c39f96e58334d1d1e677c9aea2258"
     },
     {
       "source": "login-scene.css",
@@ -1232,8 +1244,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 54193,
-      "sha256": "8f3f6c91a0c5a5fcee7c683d23e1ad3692a9874162064955a758fa12df1d4ddb"
+      "bytes": 55783,
+      "sha256": "83860d0d203a3b51d54a79b7cd637ab0cec4ca530871b085228312ae0dc29099"
     },
     {
       "source": "motion.css",
@@ -1392,6 +1404,12 @@
       "sha256": "16fbda482ab4b2602f6e5fc3b29d9a4224d84616a8ace50cea9798eb0d368880"
     },
     {
+      "source": "vendor/three/LICENSE",
+      "path": "vendor/three/LICENSE",
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    },
+    {
       "source": "vendor/three/addons/loaders/GLTFLoader.js",
       "path": "vendor/three/addons/loaders/GLTFLoader.js",
       "bytes": 114899,
@@ -1402,12 +1420,6 @@
       "path": "vendor/three/addons/utils/BufferGeometryUtils.js",
       "bytes": 35555,
       "sha256": "748066188940e858e5d48985866e84a6e6691fc31776ea59d9d89c1a7f6fe6cd"
-    },
-    {
-      "source": "vendor/three/LICENSE",
-      "path": "vendor/three/LICENSE",
-      "bytes": 1081,
-      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
     },
     {
       "source": "vendor/three/three.core.js",
