@@ -4,6 +4,14 @@ import { initialState } from '../model.mjs';
 import { landingComplete } from '../landing.mjs';
 import { applyCompanionBinding, selectLandingCharacter } from '../companion-state.mjs';
 import { createApi } from '../api.mjs';
+test('binding and catalogue reads reject responses for another login',async()=>{
+ const api=createApi({fetchImpl:async(url,opts)=>{
+   assert.equal(opts.headers['X-Knok-User-Id'],'1');
+   return new Response(JSON.stringify({accountId:2,state:'ready',characters:[]}));
+ }});
+ for(const request of [()=>api.companion(1),()=>api.characters(1),()=>api.initializeCompanion({},1)])
+   await assert.rejects(request,e=>e.code==='SESSION_CHANGED');
+});
 test('server binding overrides stale local completion and restores across devices',()=>{
  const state=initialState();state.session.provider='account';
  state.onboarding.status='ready';state.onboarding.basicsComplete=true;state.onboarding.birthComplete=true;state.onboarding.conversation.complete=true;
@@ -20,7 +28,7 @@ test('visual Klin is an explicit published character selection; ambiguous or mis
  assert.equal(selectLandingCharacter([one,two],{character:two}).key,'r2');
 });
 test('initialization transmits only approved names and content key, with owner check',async()=>{
- let sent;const api=createApi({fetchImpl:async(url,opts)=>{sent={url,...opts};return new Response(JSON.stringify({state:'ready'}))}});
+ let sent;const api=createApi({fetchImpl:async(url,opts)=>{sent={url,...opts};return new Response(JSON.stringify({state:'ready',accountId:2}))}});
  const body={characterKey:'r1',companionName:'Klin',userName:'甲'};
  await api.initializeCompanion(body,2);assert.equal(sent.url,'/api/companion');assert.equal(sent.headers['X-Knok-User-Id'],'2');assert.deepEqual(JSON.parse(sent.body),body);
 });

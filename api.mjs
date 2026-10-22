@@ -20,7 +20,7 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
           ...(owner === undefined ? {} : { 'X-Knok-User-Id': String(owner) }),
         },
         body: body === undefined ? undefined : JSON.stringify(body),
-        // Allow three 15s Agent attempts plus the shared route's 15s fallback.
+        // Allow bounded Agent retries and binding verification.
         signal: signal ? AbortSignal.any([signal, AbortSignal.timeout(70000)]) : AbortSignal.timeout(15000),
       });
     } catch (error) {
@@ -42,6 +42,12 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
     }
     return data.user;
   }
+  async function companionRequest(path, owner, body) {
+    const data=await request(path,{owner,body});
+    if(owner===undefined || String(data.accountId)!==String(owner))
+      throw new ApiError('登入帳號已變更，請重新登入。',409,'SESSION_CHANGED');
+    return data;
+  }
   return {
     async me() {
       try { return userFrom(await request('/auth/me')); }
@@ -50,9 +56,9 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
     async login(username, password) {
       return userFrom(await request('/auth/login', { body: { username, password } }));
     },
-    companion: () => request('/companion'),
-    characters: async () => (await request('/companion/characters')).characters,
-    initializeCompanion: (body, owner) => request('/companion', {body,owner}),
+    companion: owner => companionRequest('/companion',owner),
+    characters: async owner => (await companionRequest('/companion/characters',owner)).characters,
+    initializeCompanion: (body, owner) => companionRequest('/companion',owner,body),
     logout: () => request('/auth/logout', { body: {} }),
     async chat(messages, owner, signal) {
       const data = await request('/web/chat', { body: { messages }, owner, signal });
@@ -66,7 +72,7 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
 }
 
 export function chatHistory(messages, text) {
-  // Exclude local scenario dialogue, failed sends and pending turns from fallback context.
+  // Keep local scenario dialogue, failed sends and pending turns out of model history.
   return [
     ...messages.filter(m => m.source === 'model' && m.status === 'complete')
       .slice(-11).map(m => ({ role: m.role, content: m.text })),

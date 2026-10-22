@@ -42,7 +42,7 @@ const offlineDemo = variantParams.get('offline') === '1' || comparisonMode;
 const api = createApi();
 let serverUser = null, startupError = '', serverCompanion = {state:'missing'}, companionBusy=false;
 if (!offlineDemo) {
-  try { serverUser = await api.me(); if(serverUser)serverCompanion=await api.companion(); } catch (error) { startupError = error.message; }
+  try { serverUser = await api.me(); if(serverUser)serverCompanion=await api.companion(serverUser.id); } catch (error) { startupError = error.message; }
 }
 let STATE_KEY = offlineDemo ? BASE_STATE_KEY : `${BASE_STATE_KEY}-account-${serverUser?.id ?? 'guest'}`;
 let UI_KEY = `${STATE_KEY}-ui`;
@@ -222,7 +222,7 @@ async function departToHome(){
   const epoch=sessionEpoch,owner=serverUser.id,companionNameAtSubmit=me().companionName,userNameAtSubmit=me().name;
   companionBusy=true;
   try {
-   const selected=selectLandingCharacter(await api.characters(),serverCompanion?.state==='pending'?serverCompanion:null);
+   const selected=selectLandingCharacter(await api.characters(owner),serverCompanion?.state==='pending'?serverCompanion:null);
    if(epoch!==sessionEpoch || serverUser?.id!==owner || ui!==originUI)return;
    const binding=await api.initializeCompanion({characterKey:selected.key,companionName:companionNameAtSubmit,userName:userNameAtSubmit},owner);
    if(epoch!==sessionEpoch || serverUser?.id!==owner || ui!==originUI)return;
@@ -683,7 +683,7 @@ document.addEventListener('submit',async e=>{const form=e.target.closest('form[d
   authDraft.account=account;authDraft.password=password;
   if(!offlineDemo){
     if(authBusy)return; authBusy=true; updateAuthControls();
-    try { const user=await api.login(account,password); const binding=await api.companion(); activateAccount(user,binding); announceSession(); revealOnboarding(); }
+    try { const user=await api.login(account,password); const binding=await api.companion(user.id); activateAccount(user,binding); announceSession(); revealOnboarding(); }
     catch(error){const target=$('#auth-error');if(target)target.textContent=error.message;}
     finally {authBusy=false;authDraft.password='';const input=$('#auth-password');if(input)input.value='';updateAuthControls();}
     return;
