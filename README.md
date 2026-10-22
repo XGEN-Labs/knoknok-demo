@@ -6,9 +6,9 @@ Current release: `20261022-video-30b` (2026-10-22).
 
 The new 30-second landing film pauses at 2 seconds while all seven profile questions are answered. After the final answer, the encounter and contract reveal play continuously to 19.75 seconds. Signing becomes available after that reveal. Signing then continues the film through growth and arrival at 29.958 seconds, before the room controls appear. Skip finishes the active film interval. There is no back button in the film or information entry phase.
 
-Normal sessions use an account from the shared `vouch-client` backend, the same backend used by iOS. Klin chat calls `/api/web/chat`, which uses the existing knok-agent service, server-owned account bindings, bounded retries, and Gemini fallback for transient availability failures. Authorization and policy denials do not fall back.
+Normal sessions use an account from the shared `vouch-client` backend, the same backend used by iOS. Landing completes only after `/api/companion` persists that account’s own Agent and pinned character/worldbook release. Klin chat calls `/api/web/chat` with server-owned bindings and bounded retries. Failures return an error without switching to Gemini or another character.
 
-Onboarding, visits and friend interactions remain demonstrations. Browser progress and chat bubbles are stored separately for each backend user ID. Agent memory remains on the server; clearing browser progress does not erase it. Logging in on another browser does not synchronize local chat bubbles.
+Onboarding questions, visits and friend interactions remain local demonstrations; the final companion binding and subsequent Agent chat use the authenticated backend. Browser progress and chat bubbles are stored separately for each backend user ID. Agent memory remains on the server; clearing browser progress does not erase it. Logging in on another browser does not synchronize local chat bubbles.
 
 For the original local simulation, open `?offline=1`. Only in that mode, the prefilled account is `knoknok.demo` and password is `Knoknok2026`.
 
@@ -18,7 +18,7 @@ Complete the first conversation, choose a birthday and optional birth period, si
 
 ## Local preview
 
-Use Node.js 22 or later. In the sibling `vouch-client` repository, configure and start the existing backend following its [iOS setup](../vouch-client/docs/mobile/IOS_LOCAL.md). That backend must include the `/api/web/chat` route from this change. For local HTTP, set `VOUCH_SECURE_COOKIE=0` on the backend.
+Use Node.js 22 or later. In the sibling `vouch-client` repository, configure and start the existing backend following its [iOS setup](../vouch-client/docs/mobile/IOS_LOCAL.md). That backend must include the `/api/companion`, `/api/companion/characters` and `/api/web/chat` routes from this change. For local HTTP, set `VOUCH_SECURE_COOKIE=0` on the backend.
 
 Then run in this repository:
 
