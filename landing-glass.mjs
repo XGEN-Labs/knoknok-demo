@@ -39,7 +39,7 @@ export function softwareGlassBlur(image,width,height,sigma,saturation=1.35) {
   return image;
 }
 
-export function renderGlassTexture({sourceCanvas,width,height,ratio=1,blur=30,saturation=1.35,fill='rgba(255,255,255,.60)',createCanvas}) {
+export function renderGlassTexture({sourceCanvas,width,height,ratio=1,blur=30,saturation=1.35,fill='rgba(255,255,255,.70)',createCanvas}) {
   const w=Math.max(1,Math.round(width*ratio)),h=Math.max(1,Math.round(height*ratio)),radius=blur*ratio,pad=Math.ceil(radius*3);
   const make=(cw,ch)=>{const canvas=createCanvas();canvas.width=cw;canvas.height=ch;const context=canvas.getContext('2d',{alpha:false});if(!context)throw new Error('2D canvas unavailable');return [canvas,context];};
   const [scene,paint]=make(w+2*pad,h+2*pad),rect=coverRect(sourceCanvas.width,sourceCanvas.height,w,h);
@@ -84,7 +84,7 @@ export function createLandingGlass({phone,sourceCanvas,environment={}}={}) {
       if(!nodes.length||!width||!height||!rect.width||!rect.height||!sourceCanvas.width||!sourceCanvas.height){clear();return false;}
       const style=computed(nodes[0]),blur=parseFloat(style.getPropertyValue('--kn-glass-blur'))||30;
       const sat=style.getPropertyValue('--kn-glass-saturation').trim()||'135%',saturation=(parseFloat(sat)||135)/(sat.endsWith('%')?100:1);
-      const fill=style.getPropertyValue('--kn-glass-fill').trim()||'rgba(255,255,255,.60)';
+      const fill=style.getPropertyValue('--kn-glass-fill').trim()||'rgba(255,255,255,.70)';
       const ratio=Math.min(2,Math.max(1,win.devicePixelRatio||1));
       const nextSignature=JSON.stringify([key,sourceCanvas.width,sourceCanvas.height,width,height,ratio,blur,saturation,fill]);
       if(nextSignature!==signature||!texture){texture=renderGlassTexture({sourceCanvas,width,height,ratio,blur,saturation,fill,createCanvas});signature=nextSignature;renders++;}

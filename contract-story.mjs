@@ -76,7 +76,7 @@ export function showCompanionContract({phone,getWorld,userName,companionName,red
  function dispose(restore=true){if(disposed)return;disposed=true;for(const timer of timers)clearTimeout(timer);timers.clear();stopWorld?.();stopWorld=null;document.removeEventListener('keydown',escapeKey);layer.remove();phone.classList.remove('contract-open');if(app)app.inert=previousInert;onClose?.();if(restore)app?.querySelector('[data-action="open-contract"]')?.focus({preventScroll:true});}
  function seal(){if(disposed||!paperSealReady||!(worldSigned||worldComplete))return;layer.classList.add('is-sealed');layer.querySelector('.contract-status').textContent='約定收到了。我們一起長大。';}
  function complete(){if(disposed||!paperComplete||!worldComplete)return;seal();stopWorld=null;dispose(false);onCommit?.();}
- async function sign(){if(disposed||signing)return;signing=true;layer.querySelector('.contract-sign').disabled=true;layer.querySelector('.contract-sign').textContent='正在寫下我們的約定…';await ready;if(disposed)return;layer.classList.add('is-signing');layer.querySelector('.contract-status').textContent='你的名字，正在成為第一段回響。';
+ async function sign(){if(disposed||signing)return;signing=true;layer.querySelector('.contract-sign').disabled=true;layer.querySelector('.contract-sign').setAttribute('aria-busy','true');layer.querySelector('.contract-sign').textContent='正在寫下我們的約定…';await ready;if(disposed)return;layer.classList.add('is-signing');layer.querySelector('.contract-status').textContent='你的名字，正在成為第一段回響。';
   later(()=>{paperSealReady=true;seal();},reduced?CONTRACT_TIMELINE.reducedSeal:signature.timeline.seal);
   later(()=>{paperComplete=true;complete();},reduced?CONTRACT_TIMELINE.reducedComplete:signature.timeline.complete);
   const world=getWorld?.();

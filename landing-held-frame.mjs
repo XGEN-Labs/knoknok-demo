@@ -3,13 +3,14 @@
  * samples it. A paused decoder texture can still be replaced while seeking;
  * neither currentTime nor the player's logical waiting state proves it is ready.
  */
-export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, scheduler = {}, timeoutMs = 1500 } = {}) {
+export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, scheduler = {}, timeoutMs = 1500, frameRate = 30 } = {}) {
   if (!video?.addEventListener || !canvas) throw new TypeError('A video and canvas are required');
   const later = scheduler.setTimeout || globalThis.setTimeout.bind(globalThis);
   const cancelLater = scheduler.clearTimeout || globalThis.clearTimeout.bind(globalThis);
   const requestFrame = scheduler.requestAnimationFrame || globalThis.requestAnimationFrame?.bind(globalThis)
     || ((callback) => later(callback, 16));
   const cancelFrame = scheduler.cancelAnimationFrame || globalThis.cancelAnimationFrame?.bind(globalThis) || cancelLater;
+  const sourceFrameDuration = 1 / (Number.isFinite(frameRate) && frameRate > 0 ? frameRate : 30);
   let epoch = 0, disposed = false, state = 'idle', key = null, targetTime = null;
   let frameId = null, videoFrameId = null, timeoutId = null, stableFrames = 0;
   let captured = false, reason = '', captures = 0;
@@ -68,8 +69,8 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
             if (!pending(token)) return;
             videoFrameId = null;
             // Metadata describes the decoded frame; a frame can span a target
-            // boundary, so allow one source frame (the runtime is 30fps).
-            if (Number.isFinite(metadata?.mediaTime) && Math.abs(metadata.mediaTime - targetTime) <= 1 / 30 + 0.001) capture(token);
+            // boundary, so allow one frame at this source video's frame rate.
+            if (Number.isFinite(metadata?.mediaTime) && Math.abs(metadata.mediaTime - targetTime) <= sourceFrameDuration + 0.001) capture(token);
           });
         }
       }

@@ -1,7 +1,7 @@
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
 export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
 
-const DEFAULT_COMPANION = 'assets/klin-native-20261016-0907/adult.png';
+const DEFAULT_COMPANION = 'assets/klin-native-v16-20261022/adult.png';
 const BRAND_LOGO = 'assets/brand-20261016/knoknok-logo-latest.png';
 export const DEFAULT_CARD_AVATAR = 'assets/brand-20261016/default-cloud-avatar.svg';
 const LIMITS = Object.freeze({ name: 40, bio: 180, language: 24, region: 60, encoded: 32768, jsonBytes: 24576 });

@@ -1,0 +1,108 @@
+/* UI standard v1 adoption. Bind the established material system to shared tokens.
+   Geometry and glyphs stay in their component rules; no extra compositing layer. */
+.phone {
+  --kn-action-height:var(--kn-ui-size-action);
+  --kn-action-radius:var(--kn-ui-radius-action);
+  --kn-navigation-size:var(--kn-ui-size-navigation);
+  --kn-navigation-inset:var(--kn-ui-layout-gutter);
+  --kn-glass-fill:var(--kn-ui-glass-fill);
+  --kn-glass-panel-fill:var(--kn-ui-glass-panel-fill);
+  --kn-glass-conversation-fill:var(--kn-ui-glass-fill);
+  --kn-glass-input-fill:var(--kn-ui-glass-fill);
+  --kn-glass-ink:var(--kn-ui-color-text);
+  --kn-glass-edge:var(--kn-ui-glass-edge);
+  --kn-glass-input-edge:var(--kn-ui-glass-edge);
+  --kn-glass-edge-width:var(--kn-ui-glass-edge-width);
+  --kn-glass-blur:var(--kn-ui-glass-blur);
+  --kn-glass-panel-blur:var(--kn-ui-glass-panel-blur);
+  --kn-glass-input-blur:var(--kn-ui-glass-input-blur);
+  --kn-glass-saturation:var(--kn-ui-glass-saturation);
+  --kn-glass-panel-radius:var(--kn-ui-radius-panel);
+  --kn-glass-panel-shadow:var(--kn-ui-shadow-panel);
+  --kn-glass-control-shadow:var(--kn-ui-shadow-control);
+  --kn-glass-input-shadow:var(--kn-ui-shadow-input);
+}
+
+/* Keyboard-visible focus must survive older mobile rules that removed it.
+   Touching a regular button does not paint a permanent focus decoration. */
+/* Route/sheet headings use tabindex=-1 for announcements, not an action ring. */
+.phone :is(button,a,input,textarea,select,[tabindex]:not([tabindex="-1"])):focus-visible {
+  outline:2px solid var(--kn-ui-color-focus)!important;
+  outline-offset:3px!important;
+}
+.phone :is(.composer-row,.onboarding-input-row):has(:focus-visible) {
+  outline:2px solid var(--kn-ui-color-focus)!important;
+  outline-offset:3px!important;
+}
+.phone :is(.composer-row,.onboarding-input-row) :is(input,textarea):focus-visible {
+  outline:none!important;
+}
+/* The wheel itself is masked; put keyboard focus outside that fade. */
+.phone .kn-date-column:has(.kn-date-wheel:focus-visible) {
+  outline:2px solid var(--kn-ui-color-focus);
+  outline-offset:3px;
+  border-radius:8px;
+}
+.phone .kn-date-column .kn-date-wheel:focus-visible {outline:none!important}
+
+/* Invalid / unavailable is separate from an operation already in progress.
+   Change the surface and foreground only, never the opacity of the whole UI. */
+.phone#phone #app :is(button,input,textarea,select):disabled:not([aria-busy="true"]):not(.kn-date-source):not(.klin-native-select),
+.phone#phone #sheet :is(button,input,textarea,select):disabled:not([aria-busy="true"]):not(.kn-date-source):not(.klin-native-select),
+.phone#phone .kn-date-picker button:disabled:not([aria-busy="true"]) {
+  opacity:1!important;
+  color:var(--kn-ui-color-disabled-text)!important;
+  -webkit-text-fill-color:var(--kn-ui-color-disabled-text);
+  background-color:var(--kn-ui-color-disabled-surface)!important;
+  border-color:var(--kn-ui-color-disabled-edge)!important;
+  box-shadow:none!important;
+  filter:none!important;
+  cursor:not-allowed;
+}
+.phone#phone :is(button,input,textarea,select)[aria-busy="true"],
+.phone#phone #app [data-voice-state="starting"] .voice-icon-control:disabled {
+  opacity:1!important;
+  cursor:progress;
+}
+.phone#phone .contract-story .contract-sign[aria-busy="true"] {
+  color:var(--kn-ui-color-text)!important;
+  -webkit-text-fill-color:var(--kn-ui-color-text);
+}
+.phone#phone #sheet #card-share-status[data-feedback="success"] {
+  color:var(--kn-ui-color-success)!important;
+}
+.phone .klin-select-popover .klin-select-option[aria-selected="true"] {font-weight:600}
+.phone .klin-select-popover .klin-select-option[aria-disabled="true"] {
+  color:var(--kn-ui-color-disabled-text);
+  font-weight:400;
+}
+
+/* Restrained press feedback: no scale, sweep or new white image over the film.
+   Positional transforms on the character, card handoff and world remain intact. */
+.phone :is(.btn,.scene-icon,.icon-button,.voice-icon-control,.send-button,.onboarding-send,.birth-hour-grid button) {
+  transition-duration:var(--kn-ui-motion-feedback);
+}
+.phone#phone :is(.btn,.scene-icon,.icon-button,.voice-icon-control,.send-button,.onboarding-send,.birth-hour-grid button):active:not(:disabled) {
+  transform:none!important;
+  filter:none!important;
+  box-shadow:inset 0 1px 4px #26242c20!important;
+}
+.phone#phone .kn-date-trigger:active:not(:disabled) {
+  transform:none!important;
+  filter:none!important;
+}
+.phone#phone #app .personality-tag-suggestions .tiny-btn[aria-pressed="true"],
+.phone#phone #sheet .personality-tag-suggestions .tiny-btn[aria-pressed="true"] {
+  background-color:var(--kn-ui-color-solid)!important;
+  border-color:var(--kn-ui-color-solid)!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff;
+}
+.phone#phone #app .birth-hour-grid button[aria-pressed="true"] {
+  border-color:var(--kn-ui-color-focus)!important;
+  box-shadow:inset 0 0 0 1px var(--kn-ui-color-focus)!important;
+}
+
+@media(prefers-reduced-motion:reduce) {
+  .phone :is(.btn,.scene-icon,.icon-button,.voice-icon-control,.send-button,.onboarding-send,.birth-hour-grid button){transition:none!important}
+}

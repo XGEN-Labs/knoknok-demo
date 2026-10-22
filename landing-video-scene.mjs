@@ -1,23 +1,23 @@
-import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261022-video-30b';
-import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261022-video-30b';
-import { createLandingGlass } from './landing-glass.mjs?v=20261022-video-30b';
-import { createLandingDeparture } from './landing-departure.mjs?v=20261022-video-30b';
+import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261022-mini-v16-32';
+import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261022-mini-v16-32';
+import { createLandingGlass } from './landing-glass.mjs?v=20261022-mini-v16-32';
+import { createLandingDeparture } from './landing-departure.mjs?v=20261022-mini-v16-32';
 
 // All information is entered on the same early meadow frame, before the group
 // approaches. Only the completed profile unlocks the encounter/contract film;
 // the actual signed contract then unlocks growth and the final trip home.
 const frame = number => number / 24;
 export const LANDING_VIDEO_CUES = Object.freeze([
-  {key:'birthDate',start:0,end:frame(48)},
-  {key:'birthTime',start:frame(48),end:frame(48)},
-  {key:'gender',start:frame(48),end:frame(48)},
-  {key:'birthPlace',start:frame(48),end:frame(48)},
-  {key:'response',start:frame(48),end:frame(48)},
-  {key:'name',start:frame(48),end:frame(48)},
-  {key:'companionName',start:frame(48),end:frame(48)},
-  {key:'complete',start:frame(48),end:frame(474)},
+  {key:'birthDate',start:0,end:frame(120)},
+  {key:'birthTime',start:frame(120),end:frame(120)},
+  {key:'gender',start:frame(120),end:frame(120)},
+  {key:'birthPlace',start:frame(120),end:frame(120)},
+  {key:'response',start:frame(120),end:frame(120)},
+  {key:'name',start:frame(120),end:frame(120)},
+  {key:'companionName',start:frame(120),end:frame(120)},
+  {key:'complete',start:frame(120),end:frame(732)},
 ].map(Object.freeze));
-export const LANDING_ARRIVAL_CUE = Object.freeze({key:'arrival',start:frame(474),end:frame(719)});
+export const LANDING_ARRIVAL_CUE = Object.freeze({key:'arrival',start:frame(732),end:frame(1156)});
 
 export function createLandingVideoScene({phone}={}) {
   if(!phone)throw new TypeError('A phone host is required.');
@@ -25,7 +25,7 @@ export function createLandingVideoScene({phone}={}) {
   const video=document.createElement('video');video.className='landing-video-plate';
   video.setAttribute('aria-hidden','true');video.setAttribute('playsinline','');video.setAttribute('webkit-playsinline','');
   video.muted=true;video.defaultMuted=true;video.playsInline=true;video.preload='auto';video.disablePictureInPicture=true;
-  video.src='assets/landing-video-20261022/nok-complete-30s-draft.mp4';
+  video.src='assets/landing-mini-20261022/nok-complete-mini-draft.mp4';
   const still=document.createElement('canvas');still.className='landing-video-still landing-video-plate';still.setAttribute('aria-hidden','true');
   const resume=document.createElement('button');resume.type='button';resume.className='landing-video-resume kn-glass-control';resume.textContent='繼續相遇';resume.hidden=true;
   const skip=document.createElement('button');skip.type='button';skip.className='landing-video-skip kn-glass-control';skip.textContent='跳過';skip.setAttribute('aria-label','跳過這段影片，開始回答');skip.hidden=true;
@@ -35,7 +35,7 @@ export function createLandingVideoScene({phone}={}) {
   const departure=createLandingDeparture();
   let presentedState='inactive',presentedReady=false;
   const landingGlass=createLandingGlass({phone,sourceCanvas:still});
-  const heldFrame=createLandingHeldFrame({video,canvas:still,onSettled:()=>applyPresentation()});
+  const heldFrame=createLandingHeldFrame({video,canvas:still,frameRate:24,onSettled:()=>applyPresentation()});
   function applyPresentation() {
     if(!active||disposed)return;
     const next=lastState,held=heldFrame.getDiagnostics();

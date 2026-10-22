@@ -1,23 +1,18 @@
 import * as THREE from './vendor/three/three.module.js';
 import { GLTFLoader } from './vendor/three/addons/loaders/GLTFLoader.js';
 
-// Direct exports of the user's frozen 09-07 blend, with intact native topology.
-// Every source groom follows its own source mesh. Browser strands are a sampled
-// approximation of Cycles Hair Curves, shaded by the same scene lights as skin.
+// v16 adult: original continuous skinned mesh plus sampled native CURVES paths.
+// This replacement package contains the adult only. Web hair uses lit lines,
+// not the offline Cycles renderer; both skin and hair follow the same skeleton.
 const SOURCE = Object.freeze({
-  juvenile: {
-    mesh: new URL('./assets/klin-native-20261016-0907/juvenile.glb', import.meta.url),
-    hair: new URL('./assets/klin-native-20261016-0907/juvenile-hair.bin', import.meta.url),
-  },
   adult: {
-    mesh: new URL('./assets/klin-native-20261016-0907/adult.glb', import.meta.url),
-    hair: new URL('./assets/klin-native-20261016-0907/adult-hair.bin', import.meta.url),
+    mesh: new URL('./assets/klin-native-v16-20261022/adult.glb?v=convex-oval-paws-face-v16', import.meta.url),
+    hair: new URL('./assets/klin-native-v16-20261022/adult-hair.bin?v=convex-oval-paws-face-v16', import.meta.url),
   },
 });
-const MANIFEST = new URL('./assets/klin-native-20261016-0907/native-model-manifest.json', import.meta.url);
+const MANIFEST = new URL('./assets/klin-native-v16-20261022/native-model-manifest.json?v=convex-oval-paws-face-v16', import.meta.url);
 const sourceCache = new Map();
 const HEIGHT = 2.72;
-const SOURCE_SHA = '0b7982122901a94d3e6e9a769bc470c50c386f2751b33c4131009f520d604d6c';
 let manifestPromise;
 const fetchChecked = async url => {
   const response = await fetch(url);
@@ -31,156 +26,221 @@ async function getSource(stage) {
       new GLTFLoader().loadAsync(SOURCE[stage].mesh.href),
       fetchChecked(SOURCE[stage].hair).then(response => response.arrayBuffer()),
       manifestPromise,
-    ]).then(([gltf, bytes, manifest]) => {
+    ]).then(async ([gltf, bytes, manifest]) => {
+      const metadata = manifest.stages[stage];
+      const skinValues = metadata.hairSkinFile ? new Float32Array(await fetchChecked(new URL(metadata.hairSkinFile + '?v=convex-oval-paws-face-v16', MANIFEST)).then(response => response.arrayBuffer())) : null;
       const values = new Float32Array(bytes), groups = new Map();
-      for (const groom of manifest.stages[stage].grooms) {
+      if (values.length % 6 || (skinValues && skinValues.length !== values.length / 6 * 8)) throw new Error('Klin hair buffer stride mismatch');
+      for (const groom of metadata.grooms) {
+        if (!Number.isSafeInteger(groom.offset) || !Number.isSafeInteger(groom.count) || groom.offset < 0 || groom.count < 0 || groom.count % 2 || (groom.offset + groom.count) * 6 > values.length) throw new Error('Klin groom range invalid');
         const geometry = new THREE.BufferGeometry();
         const data = new THREE.InterleavedBuffer(values.subarray(groom.offset * 6, (groom.offset + groom.count) * 6), 6);
         geometry.setAttribute('position', new THREE.InterleavedBufferAttribute(data, 3, 0));
         geometry.setAttribute('normal', new THREE.InterleavedBufferAttribute(data, 3, 3));
+        if (skinValues) {
+          const weights = new THREE.InterleavedBuffer(skinValues.subarray(groom.offset * 8, (groom.offset + groom.count) * 8), 8);
+          geometry.setAttribute('skinIndex', new THREE.InterleavedBufferAttribute(weights, 4, 0));
+          geometry.setAttribute('skinWeight', new THREE.InterleavedBufferAttribute(weights, 4, 4));
+        }
         geometry.computeBoundingBox(); geometry.computeBoundingSphere();
         if (!groups.has(groom.mesh)) groups.set(groom.mesh, []);
         groups.get(groom.mesh).push({ geometry, name: groom.name, undercoat: groom.undercoat });
       }
-      return { mesh: gltf.scene, hairGroups: groups };
+      return { mesh: gltf.scene, hairGroups: groups, metadata, manifest };
     }).catch(error => { sourceCache.delete(stage); throw error; });
     sourceCache.set(stage, loading);
   }
   return sourceCache.get(stage);
 }
 
-function localPivot(mesh, label, point) {
-  const parent = mesh.parent;
-  mesh.geometry.computeBoundingBox();
-  const center = point || mesh.geometry.boundingBox.getCenter(new THREE.Vector3());
-  const pivot = new THREE.Group();
-  pivot.name = label; pivot.position.copy(center).add(mesh.position);
-  parent.add(pivot); pivot.add(mesh); mesh.position.sub(center);
-  return pivot;
+// Clone the full hierarchy first, then remap skeleton references to its bones.
+// Mesh geometry stays cached; every instance owns its bones, materials and GPU
+// bone textures. The same bone-remapping mechanism is used by SkeletonUtils.
+function cloneSkeletonHierarchy(source) {
+  const clone = source.clone(true), lookup = new Map();
+  const pair = (a, b) => { lookup.set(a, b); a.children.forEach((child, i) => pair(child, b.children[i])); };
+  pair(source, clone);
+  source.traverse(original => {
+    if (!original.isSkinnedMesh) return;
+    const mesh = lookup.get(original);
+    mesh.skeleton = original.skeleton.clone();
+    mesh.skeleton.bones = original.skeleton.bones.map(bone => {
+      const copied = lookup.get(bone);
+      if (!copied) throw new Error('Klin skeleton bone is outside the cloned model');
+      return copied;
+    });
+    mesh.bindMatrix.copy(original.bindMatrix);
+    mesh.bindMatrixInverse.copy(original.bindMatrixInverse);
+  });
+  return clone;
 }
 
-/** Independent instance, +Z front, Y=0 feet, canonical mesh height 2.72.
- * The source has no armature. This adapter preserves all native vertices and
- * uses modest shoulder/tail pivots, synchronizing their native groom strands.
- * setPose is layered inside root; world owns the root's position and scale.
- */
-export async function loadNativeKlinStage(requestedStage = 'juvenile') {
-  const stage = requestedStage === 'adult' ? 'adult' : 'juvenile';
-  const source = await getSource(stage);
-  const root = new THREE.Group(); root.name = `klin-native-${stage}-09-07`;
+// This local Three build tests isSkinnedMesh for shader skinning/bone updates,
+// and isLineSegments for GL_LINES. Keep isMesh false so the native line data is
+// never submitted as triangles. Attached binding matches Three.SkinnedMesh.
+class SkinnedLineSegments extends THREE.LineSegments {
+  constructor(geometry, material, emitter) {
+    super(geometry, material);
+    this.isSkinnedMesh = true;
+    this.skeleton = emitter.skeleton;
+    this.bindMatrix = emitter.bindMatrix.clone();
+    this.bindMatrixInverse = emitter.bindMatrixInverse.clone();
+    this.bindMode = emitter.bindMode;
+    this.frustumCulled = false;
+  }
+  updateMatrixWorld(force) {
+    super.updateMatrixWorld(force);
+    this.bindMatrixInverse.copy(this.bindMode === 'detached' ? this.bindMatrix : this.matrixWorld).invert();
+  }
+}
+
+const canonicalBoneName = bone => bone.userData.name || bone.name;
+const clamp = THREE.MathUtils.clamp;
+
+async function loadRiggedAdultStage() {
+  const source = await getSource('adult');
+  if (source.metadata.poseType !== 'rigged-v16' || !source.metadata.hairSkinFile) throw new Error('The v16 adapter requires its matching adult manifest and hair skin data');
+  const root = new THREE.Group(); root.name = 'klin-native-adult-v16';
   const normalized = new THREE.Group(); normalized.name = 'native-coordinate-normalization';
-  const model = source.mesh.clone(true);
-  const parts = { eyes: [], arms: [], feet: [], body: null, tail: null, armPivots: [] };
-  const meshes = [], eyeMeshes = [];
+  const model = cloneSkeletonHierarchy(source.mesh), meshes = [];
   model.traverse(object => { if (object.isMesh) meshes.push(object); });
-  for (const object of meshes) {
-    object.castShadow = true; object.receiveShadow = true;
-    object.material = Array.isArray(object.material)
-      ? object.material.map(material => material.clone()) : object.material.clone();
-    if (!/Eye_/i.test(object.name)) {
-      for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
-        // Native dense fleece hides the blush substrate; sampled web fibers need
-        // a pale base. No emissive fill: the scene now determines all shading.
+  const body = meshes.find(mesh => /OneContinuousBody/.test(mesh.name));
+  if (!body?.isSkinnedMesh) throw new Error('v16 continuous body or skeleton is missing');
+  const names = body.skeleton.bones.map(canonicalBoneName);
+  if (JSON.stringify(names) !== JSON.stringify(source.metadata.skinJointNames)) throw new Error('v16 hair joint order does not match the GLB skeleton');
+  const bones = new Map(body.skeleton.bones.map(bone => [canonicalBoneName(bone), bone]));
+  for (const name of ['upper_arm.L', 'upper_arm.R', 'forearm.L', 'forearm.R', 'hand.L', 'hand.R', 'eye.L', 'eye.R', 'tail_root']) {
+    if (!bones.has(name)) throw new Error('v16 pose bone missing: ' + name);
+  }
+  // All three mesh skins refer to the same original armature. The GLTF loader
+  // can materialize independent Skeleton objects; consolidate the cloned body
+  // skeleton so their GPU matrix textures and matching hair update together.
+  for (const mesh of meshes) {
+    if (mesh.isSkinnedMesh && JSON.stringify(mesh.skeleton.bones.map(canonicalBoneName)) === JSON.stringify(names)) mesh.skeleton = body.skeleton;
+    mesh.castShadow = true; mesh.receiveShadow = true;
+    mesh.material = Array.isArray(mesh.material) ? mesh.material.map(material => material.clone()) : mesh.material.clone();
+    const isEye = /InsetEye/.test(mesh.name);
+    if (!isEye) {
+      for (const material of [].concat(mesh.material)) {
+        // Use the existing Demo's pale substrate for its sampled strand LOD.
+        // Eye material remains the exported v16 polished shallow-eye material.
         material.color.set('#eee4df'); material.roughness = .94; material.metalness = 0;
-        material.emissive?.set(0x000000); material.emissiveIntensity = 0;
+        material.emissive?.set(0); material.emissiveIntensity = 0;
       }
     }
-    object.userData.nativeKlin = true;
-    if (/Eye_/i.test(object.name)) eyeMeshes.push(object);
-    else if (/Arm_/i.test(object.name)) parts.arms.push(object);
-    else if (/Tail/i.test(object.name)) parts.tail = object;
-    else if (/Body/i.test(object.name)) parts.body = object;
+    mesh.userData.nativeKlin = true;
   }
   model.updateMatrixWorld(true);
-  const bounds = new THREE.Box3().setFromObject(model);
-  const center = bounds.getCenter(new THREE.Vector3());
+  const bounds = new THREE.Box3().setFromObject(model), center = bounds.getCenter(new THREE.Vector3());
   const nativeHeight = bounds.max.y - bounds.min.y, scale = HEIGHT / nativeHeight;
+  if (!(nativeHeight > 0 && Number.isFinite(nativeHeight))) throw new Error('v16 model bounds invalid');
+  const hairObjects = [];
   for (const mesh of meshes) {
-    for (const groom of source.hairGroups.get(mesh.name) || []) {
-      const filament = new THREE.LineSegments(groom.geometry, new THREE.MeshStandardMaterial({
+    for (const groom of source.hairGroups.get(mesh.userData.name || mesh.name) || []) {
+      if (!groom.geometry.getAttribute('skinIndex') || !mesh.isSkinnedMesh) throw new Error('v16 hair has no matching skin binding');
+      const hair = new SkinnedLineSegments(groom.geometry, new THREE.MeshStandardMaterial({
         color: '#f7f1ed', roughness: .96, metalness: 0,
         transparent: true, opacity: groom.undercoat ? .24 : .32, depthWrite: false,
-      }));
-      filament.name = groom.name; filament.frustumCulled = false; filament.renderOrder = 1;
-      // Native mesh and groom positions both use source coordinates. The mesh
-      // transform is identity in these exports; keeping groom as child makes all
-      // later shoulder/tail movement affect body and fur together.
-      mesh.add(filament);
+      }), mesh);
+      hair.name = groom.name; hair.renderOrder = 1;
+      hair.userData.nativeKlin = true; hair.userData.nativeHairSkin = true;
+      mesh.add(hair); hairObjects.push(hair);
     }
   }
-  eyeMeshes.forEach((mesh, index) => parts.eyes.push(localPivot(mesh, `native-eye-pivot-${index}`)));
-  for (const mesh of parts.arms) {
-    const box = mesh.geometry.boundingBox || (mesh.geometry.computeBoundingBox(), mesh.geometry.boundingBox);
-    const c = box.getCenter(new THREE.Vector3()), raised = /Raised/.test(mesh.name);
-    const shoulder = new THREE.Vector3(raised ? box.min.x + .10 : box.max.x - .06,
-      raised ? box.min.y + .10 : box.max.y - .12, c.z);
-    const pivot = localPivot(mesh, `native-shoulder-${raised ? 'raised' : 'lowered'}`, shoulder);
-    pivot.userData.raised = raised; pivot.userData.restPosition = pivot.position.clone(); parts.armPivots.push(pivot);
-  }
-  let tailPivot;
-  if (parts.tail) tailPivot = localPivot(parts.tail, 'native-tail-pivot');
-  // Whole-creature breathing stays very small. The body's feet are integrated
-  // topology, so a skeleton or independent foot motion would be fabricated.
+  if (!hairObjects.length) throw new Error('v16 native groom is missing');
+  const rest = new Map([...bones].map(([name, bone]) => [name, {
+    position: bone.position.clone(), quaternion: bone.quaternion.clone(), scale: bone.scale.clone(),
+  }]));
+  const parts = {
+    body, eyes: ['eye.L', 'eye.R'].map(name => bones.get(name)),
+    arms: ['hand.L', 'hand.R'].map(name => bones.get(name)),
+    armPivots: ['upper_arm.L', 'upper_arm.R'].map(name => bones.get(name)),
+    feet: ['foot.L', 'foot.R'].map(name => bones.get(name)), tail: bones.get('tail_root'), hair: hairObjects,
+  };
   const posture = new THREE.Group(); posture.name = 'native-soft-posture';
   posture.position.set(center.x, bounds.min.y + nativeHeight * .43, center.z);
   model.position.sub(posture.position); posture.add(model); normalized.add(posture);
   normalized.scale.setScalar(scale);
   normalized.position.set(-center.x * scale, -bounds.min.y * scale, -center.z * scale);
   root.add(normalized);
-  root.userData.nativeKlinStage = stage; root.userData.sourceVersion = '09-07';
-  root.userData.sourceBlendSha256 = SOURCE_SHA;
-  root.userData.geometryPolicy = 'Native mesh, no decimation; sampled grouped native hair paths.';
-  root.userData.posePolicy = 'No source skeleton; small shoulder and tail pivots, shared-groom transforms.';
-  const postureOrigin = posture.position.clone();
-  return { root, height: HEIGHT, nativeHeight, sourceStage: stage, parts,
+  root.userData.nativeKlinStage = 'adult'; root.userData.sourceVersion = 'convex-oval-paws-face-v16';
+  root.userData.sourceBlendSha256 = source.metadata.sourceBlendSha256;
+  root.userData.geometryPolicy = 'Original v16 continuous skinned mesh; no decimation. Native CURVES paths sampled into lit web line segments.';
+  root.userData.posePolicy = '23-bone v16 armature; skin and strand roots share normalized native weights.';
+  const postureOrigin = posture.position.clone(), delta = new THREE.Quaternion(), parent = new THREE.Quaternion();
+  const modelQ = new THREE.Quaternion(), euler = new THREE.Euler(), unit = new THREE.Vector3();
+  let blink = 1, disposed = false;
+  // Rest bone roll differs per limb. Convert small model-space rotations into
+  // the actual parent's frame instead of treating every bone as world aligned.
+  function rotateBone(name, x, y, z) {
+    const bone = bones.get(name);
+    if (!bone) return;
+    root.updateMatrixWorld(true);
+    model.getWorldQuaternion(modelQ); bone.parent.getWorldQuaternion(parent);
+    parent.premultiply(modelQ.invert());
+    delta.setFromEuler(euler.set(x, y, z));
+    delta.premultiply(parent.clone().invert()).multiply(parent);
+    bone.quaternion.premultiply(delta);
+  }
+  // Eye bones point out of the face; their local Y is depth. Find the local
+  // axis corresponding to model vertical, then blink around the native center.
+  root.updateMatrixWorld(true);
+  const eyeVerticalAxes = parts.eyes.map(bone => {
+    model.getWorldQuaternion(modelQ); bone.getWorldQuaternion(parent);
+    unit.set(0, 1, 0).applyQuaternion(modelQ).applyQuaternion(parent.invert());
+    const values = [Math.abs(unit.x), Math.abs(unit.y), Math.abs(unit.z)];
+    return ['x', 'y', 'z'][values.indexOf(Math.max(...values))];
+  });
+  function applyBlink() {
+    parts.eyes.forEach((bone, i) => {
+      bone.scale.copy(rest.get(canonicalBoneName(bone)).scale);
+      bone.scale[eyeVerticalAxes[i]] *= blink;
+    });
+  }
+  const frontAnchor = (bounds.max.z - center.z) * scale + .10;
+  const result = { root, height: HEIGHT, nativeHeight, sourceStage: 'adult', parts,
     setPose({ time = 0, breath, lean = 0, pitch = 0, yaw = 0, offer = 0, waveLeft = 0, waveRight = 0, lift = 0, reduced = false } = {}) {
-      const t = Number.isFinite(time) ? time : 0;
-      const idle = reduced ? 0 : 1;
-      const breathing = THREE.MathUtils.clamp(breath ?? Math.sin(t * 1.45) * .0055 * idle, -.015, .015);
-      const presenting = THREE.MathUtils.clamp(offer, 0, 1);
+      if (disposed) return;
+      const t = Number.isFinite(time) ? time : 0, idle = reduced ? 0 : 1;
+      const breathing = clamp(breath ?? Math.sin(t * 1.45) * .0055 * idle, -.015, .015), presenting = clamp(offer, 0, 1);
       posture.scale.set(1 - breathing * .28, 1 + breathing, 1 + breathing * .12);
-      posture.rotation.set(THREE.MathUtils.clamp(pitch, -.15, .15) + presenting * .035,
-        THREE.MathUtils.clamp(yaw, -.16, .16), THREE.MathUtils.clamp(lean, -.14, .14) + Math.sin(t * .66) * .008 * idle);
-      posture.position.copy(postureOrigin); posture.position.y += THREE.MathUtils.clamp(lift, -.04, .08) / scale;
-      for (const pivot of parts.armPivots) {
-        const raised = pivot.userData.raised;
-        const wave = THREE.MathUtils.clamp(raised ? waveRight : waveLeft, 0, 1);
-        const drift = Math.sin(t * 1.2 + (raised ? .7 : 2.4)) * .025 * idle;
-        pivot.position.copy(pivot.userData.restPosition);
-        pivot.position.z += presenting * (raised ? .72 : .68);
-        pivot.position.x += presenting * (raised ? -.32 : .15);
-        pivot.position.y += presenting * (raised ? -.06 : .02);
-        // Lower the source raised mitten toward the other hand for an offer.
-        // Both hands meet below the eyes; the original mesh and groom stay together.
-        pivot.rotation.set(presenting * (raised ? .45 : -.75) + drift * .6,
-          presenting * (raised ? -.35 : .10),
-          drift + presenting * (raised ? -1.55 : .55) + wave * (raised ? Math.sin(t * 4.2) * .16 : -.45));
+      posture.rotation.set(clamp(pitch, -.15, .15) + presenting * .035, clamp(yaw, -.16, .16), clamp(lean, -.14, .14) + Math.sin(t * .66) * .008 * idle);
+      posture.position.copy(postureOrigin); posture.position.y += clamp(lift, -.04, .08) / scale;
+      for (const [name, bone] of bones) {
+        const r = rest.get(name); bone.position.copy(r.position); bone.quaternion.copy(r.quaternion); bone.scale.copy(r.scale);
       }
-      if (tailPivot) tailPivot.rotation.set(Math.sin(t * .83 + .8) * .035 * idle, Math.sin(t * .71) * .045 * idle, 0);
+      const raisedWave = clamp(waveRight, 0, 1) * Math.sin(t * 4.2) * .16;
+      const loweredWave = clamp(waveLeft, 0, 1) * .30;
+      const raisedDrift = Math.sin(t * 1.2 + .7) * .025 * idle, loweredDrift = Math.sin(t * 1.2 + 2.4) * .025 * idle;
+      // Gentle native-arm gesture only; never translate detached mitten meshes
+      // or stretch the short reference limbs to manufacture a different pose.
+      rotateBone('upper_arm.L', presenting * .12, -presenting * .75, -presenting * .40 + raisedDrift);
+      rotateBone('forearm.L', 0, -presenting * .30, raisedWave + raisedDrift * .6);
+      rotateBone('upper_arm.R', -presenting * .18, presenting * .65, -presenting * .32 - loweredWave + loweredDrift);
+      rotateBone('forearm.R', 0, presenting * .25, loweredDrift * .6);
+      rotateBone('tail_root', Math.sin(t * .83 + .8) * .025 * idle, Math.sin(t * .71) * .035 * idle, 0);
+      applyBlink(); root.updateMatrixWorld(true); body.skeleton.update();
     },
+    setBlink(value = 1) { blink = clamp(value, .06, 1); applyBlink(); },
     getOfferAnchor() {
       root.updateMatrixWorld(true);
-      const anchor = new THREE.Vector3();
-      for (const arm of parts.arms) {
-        arm.geometry.computeBoundingBox();
-        const hand = arm.geometry.boundingBox.getCenter(new THREE.Vector3());
-        arm.localToWorld(hand); root.worldToLocal(hand); anchor.add(hand);
-      }
-      if (parts.arms.length) anchor.multiplyScalar(1 / parts.arms.length);
-      else anchor.set(0, HEIGHT * .47, HEIGHT * .36);
-      // Hold the card just in front of the chest; the unrigged source hands
-      // have broad side attachments, so the card must not intersect its fleece.
-      anchor.z = Math.max(anchor.z, HEIGHT * .41);
+      const anchor = new THREE.Vector3(), hand = new THREE.Vector3();
+      for (const bone of parts.arms) { bone.getWorldPosition(hand); root.worldToLocal(hand); anchor.add(hand); }
+      anchor.multiplyScalar(.5); anchor.z = Math.max(anchor.z, frontAnchor);
       return anchor;
     },
-    setBlink(value = 1) { parts.eyes.forEach(eye => { eye.scale.y = THREE.MathUtils.clamp(value, .06, 1); }); },
     dispose() {
-      root.traverse(object => {
-        const materials = Array.isArray(object.material) ? object.material : [object.material];
-        materials.forEach(material => material?.dispose());
-      });
-      root.removeFromParent();
+      if (disposed) return; disposed = true;
+      const materials = new Set(); root.traverse(object => { for (const material of [].concat(object.material || [])) materials.add(material); });
+      for (const material of materials) material.dispose();
+      body.skeleton.dispose(); root.removeFromParent();
     },
   };
+  result.setPose({ reduced: true });
+  return result;
 }
-export function preloadNativeKlin() { return Promise.all(['juvenile', 'adult'].map(getSource)); }
+
+// The legacy Demo calls this with both stage names. Every call gets its own
+// adult instance, including an omitted argument; no unavailable age is fetched.
+export async function loadNativeKlinStage(_requestedStage = 'adult') { return loadRiggedAdultStage(); }
+export function preloadNativeKlin() { return getSource('adult'); }

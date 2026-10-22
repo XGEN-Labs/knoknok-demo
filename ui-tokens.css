@@ -1,0 +1,113 @@
+/* Knoknok UI 1.0 · 2026-10-22
+ * Shared tokens for the specification and UI v31 runtime.
+ * existing = source baseline; recommended = original proposal; adopted = implemented.
+ * Generated from ui-standard/tokens.json: node ui-standard/export-tokens.mjs
+ */
+:root {
+  /* existing | typography.css */
+  --kn-ui-font-ui: "PingFang TC", "PingFang SC", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  /* existing | refinement-v27.css */
+  --kn-ui-font-paper: "Klin Paper Serif", serif;
+  /* existing | glass-material.css */
+  --kn-ui-color-text: #26242c;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-color-text-secondary: #625d65;
+  /* existing | home-controls-v24.css */
+  --kn-ui-color-solid: #202020;
+  /* existing | public-card.css */
+  --kn-ui-color-paper: #fffdf8;
+  /* existing | public-card.css */
+  --kn-ui-color-paper-ink: #302c29;
+  /* existing | public-card.css */
+  --kn-ui-color-paper-muted: #75695e;
+  /* existing | film-scenes-v30.css */
+  --kn-ui-color-scene-base: #e7dfd0;
+  /* existing | film-scenes-v30.css; decorative light tint */
+  --kn-ui-color-scene-sage: #b7c8bf;
+  /* existing | refinement-v27.css */
+  --kn-ui-color-error: #824b48;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-color-success: #526b59;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-color-focus: #4d665d;
+  /* adopted | 2026-10-22 user adjustment; glass-material.css / ui-tokens.css */
+  --kn-ui-glass-fill: rgba(255,255,255,.70);
+  /* existing | glass-material.css */
+  --kn-ui-glass-panel-fill: rgba(255,255,255,.30);
+  /* existing | glass-material.css */
+  --kn-ui-glass-edge: rgba(255,255,255,.65);
+  /* existing | glass-material.css */
+  --kn-ui-glass-edge-width: 1px;
+  /* existing | glass-material.css */
+  --kn-ui-glass-blur: 30px;
+  /* existing | glass-material.css */
+  --kn-ui-glass-panel-blur: 40px;
+  /* existing | glass-material.css */
+  --kn-ui-glass-input-blur: 18px;
+  /* existing | glass-material.css */
+  --kn-ui-glass-saturation: 135%;
+  /* existing | refinement-v29.css */
+  --kn-ui-size-action: 52px;
+  /* existing | refinement-v29.css */
+  --kn-ui-size-navigation: 44px;
+  /* existing | home-controls-v24.css */
+  --kn-ui-size-composer: 60px;
+  /* existing | home-controls-v24.css */
+  --kn-ui-size-glyph-small: 22px;
+  /* existing | home-controls-v24.css */
+  --kn-ui-size-glyph-default: 24px;
+  /* existing | home-controls-v24.css */
+  --kn-ui-size-glyph-artwork: 26px;
+  /* existing | public-card.css */
+  --kn-ui-radius-paper: 8px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-radius-option: 16px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-radius-field: 24px;
+  /* existing | refinement-v29.css */
+  --kn-ui-radius-action: 26px;
+  /* existing | glass-material.css */
+  --kn-ui-radius-panel: 30px;
+  /* recommended | Use for flexible capsules; do not override paper */
+  --kn-ui-radius-pill: 999px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-space-4: 4px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-space-8: 8px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-space-12: 12px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-space-16: 16px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-space-24: 24px;
+  /* recommended | New shared spacing scale; legacy component exceptions documented */
+  --kn-ui-space-32: 32px;
+  /* recommended | New shared spacing scale; legacy component exceptions documented */
+  --kn-ui-space-48: 48px;
+  /* existing | refinement-v29.css */
+  --kn-ui-layout-gutter: 7%;
+  /* existing | home-controls-v24.css */
+  --kn-ui-layout-compound-gap: 10px;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-layout-touch-min: 44px;
+  /* existing | glass-material.css */
+  --kn-ui-shadow-control: inset 0 1px 0 #ffffff85, inset 0 -1px 0 #ffffff24, 0 5px 22px #3e436510;
+  /* existing | glass-material.css */
+  --kn-ui-shadow-panel: inset 0 1px 0 #ffffffa6, inset 0 -1px 0 #ffffff30, 0 18px 55px #6f6a8c1c;
+  /* existing | glass-material.css */
+  --kn-ui-shadow-input: inset 0 1px 0 #ffffff52;
+  /* existing | public-card.css */
+  --kn-ui-shadow-paper: 0 1px 0 #f2e8d7, 0 3px 0 -1px #fffdf9, 0 4px 0 -1px #e7dfd2, 0 18px 34px #37303f24;
+  /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
+  --kn-ui-motion-feedback: 160ms;
+  /* existing | home-controls-v24.css */
+  --kn-ui-motion-composer: 400ms;
+  /* existing | home-controls-v24.css */
+  --kn-ui-motion-ease: cubic-bezier(.22,.61,.24,1);
+  /* adopted | ui-states-v31.css; UI v1 disabled state */
+  --kn-ui-color-disabled-text: #7d8279;
+  /* adopted | ui-states-v31.css; UI v1 disabled state */
+  --kn-ui-color-disabled-surface: #eff1eb;
+  /* adopted | ui-states-v31.css; UI v1 disabled state */
+  --kn-ui-color-disabled-edge: #e2e5dd;
+}

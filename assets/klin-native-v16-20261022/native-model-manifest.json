@@ -1,0 +1,151 @@
+{
+  "version": "convex-oval-paws-face-v16",
+  "source": "Current v16 adult native Blender model",
+  "sourceBlendSha256": "651e533bd6a769de83b371d2bb4b58317257357db4f3f4a6ea8ea48dc86c222a",
+  "meshPolicy": "Exports existing v16 skinned mesh, without topology changes, verification clips, lights or cameras.",
+  "hairPolicy": "Samples actual native bound rest paths, with deterministic web LOD and root-derived skeletal weights; browser lines approximate Cycles hair.",
+  "stages": {
+    "adult": {
+      "meshFile": "adult.glb",
+      "hairFile": "adult-hair.bin",
+      "hairStride": 6,
+      "hairSkinFile": "adult-hair-skin.bin",
+      "hairSkinStride": 8,
+      "skinJointNames": [
+        "root",
+        "COM",
+        "pelvis",
+        "spine",
+        "chest",
+        "head",
+        "crown",
+        "eye.L",
+        "eye.R",
+        "upper_arm.L",
+        "forearm.L",
+        "hand.L",
+        "upper_arm.R",
+        "forearm.R",
+        "hand.R",
+        "thigh.L",
+        "shin.L",
+        "foot.L",
+        "thigh.R",
+        "shin.R",
+        "foot.R",
+        "tail_root",
+        "tail_tip"
+      ],
+      "poseType": "rigged-v16",
+      "sourceVersion": "convex-oval-paws-face-v16",
+      "sourceBlendSha256": "651e533bd6a769de83b371d2bb4b58317257357db4f3f4a6ea8ea48dc86c222a",
+      "meshSha256": "f5be796bcd719c8631b53ed228ec1357621bbe8e01c2b5eb4b128a634e4d69d3",
+      "hairSha256": "bdc2266011b3b8c7e830328d073f9e405023387d740b3b33751a12e67a1e1310",
+      "hairSkinSha256": "407cfa117b4857c6d6b811c63084768247cef2f01126a55b7a2d6724dcb4c625",
+      "meshes": [
+        {
+          "name": "adult_InsetEye_L",
+          "vertices": 1281,
+          "polygons": 1280,
+          "boundsMin": [
+            0.0820000022649765,
+            -1.0654027462005615,
+            1.0119999647140503
+          ],
+          "boundsMax": [
+            0.2680000066757202,
+            -1.0080971717834473,
+            1.378000020980835
+          ]
+        },
+        {
+          "name": "adult_InsetEye_R",
+          "vertices": 1281,
+          "polygons": 1280,
+          "boundsMin": [
+            -0.2680000066757202,
+            -1.065413475036621,
+            1.0119999647140503
+          ],
+          "boundsMax": [
+            -0.0820000022649765,
+            -1.00810968875885,
+            1.378000020980835
+          ]
+        },
+        {
+          "name": "adult_OneContinuousBody",
+          "vertices": 142727,
+          "polygons": 285450,
+          "boundsMin": [
+            -1.2149983644485474,
+            -1.0649685859680176,
+            0.011993728578090668
+          ],
+          "boundsMax": [
+            1.3049174547195435,
+            1.1848856210708618,
+            2.393620729446411
+          ]
+        }
+      ],
+      "grooms": [
+        {
+          "name": "adult_adult_OneContinuousBody_NativeFur_flyaway",
+          "mesh": "adult_OneContinuousBody",
+          "offset": 0,
+          "count": 1058,
+          "sourceStrands": 23,
+          "retainedStrands": 23,
+          "undercoat": false,
+          "curveStride": 1,
+          "maximumKnotsPerStrand": 24,
+          "maxSourcePointToRetainedChordDistance": 0.0,
+          "maxDiscardedRootJointWeight": 2.9802322387695312e-08
+        },
+        {
+          "name": "adult_adult_OneContinuousBody_NativeFur_outer",
+          "mesh": "adult_OneContinuousBody",
+          "offset": 1058,
+          "count": 318090,
+          "sourceStrands": 6915,
+          "retainedStrands": 6915,
+          "undercoat": false,
+          "curveStride": 1,
+          "maximumKnotsPerStrand": 24,
+          "maxSourcePointToRetainedChordDistance": 0.009518756034446995,
+          "maxDiscardedRootJointWeight": 0.045904658380063856
+        },
+        {
+          "name": "adult_adult_OneContinuousBody_NativeFur_undercoat",
+          "mesh": "adult_OneContinuousBody",
+          "offset": 319148,
+          "count": 116896,
+          "sourceStrands": 58446,
+          "retainedStrands": 14612,
+          "undercoat": true,
+          "curveStride": 4,
+          "maximumKnotsPerStrand": 5,
+          "maxSourcePointToRetainedChordDistance": 0.0035585280965665274,
+          "maxDiscardedRootJointWeight": 0.08292427598707164
+        }
+      ],
+      "hairSkinLayout": [
+        "joint0",
+        "joint1",
+        "joint2",
+        "joint3",
+        "weight0",
+        "weight1",
+        "weight2",
+        "weight3"
+      ],
+      "coordinateSystem": "glTF Y-up; front +Z; source rig placed at origin",
+      "limitations": [
+        "Line width and scene illumination differ from native Cycles curves.",
+        "Hair uses constant root-derived joint weights per strand; not a full GeometryNodeDeformCurvesOnSurface implementation.",
+        "Visual reference match remains a draft, not a claimed 100 percent match."
+      ]
+    }
+  }
+}

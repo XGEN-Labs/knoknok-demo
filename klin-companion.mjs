@@ -1,6 +1,6 @@
 export const klinAssets = Object.freeze({
   juvenile: 'assets/klin-native-20261016-0907/juvenile.png',
-  adult: 'assets/klin-native-20261016-0907/adult.png',
+  adult: 'assets/klin-native-v16-20261022/adult.png',
 });
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

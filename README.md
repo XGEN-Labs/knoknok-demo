@@ -1,15 +1,15 @@
 # Knoknok interactive demo
 
-Current release: `20261022-video-30b` (2026-10-22).
+Current release: `20261022-mini-v16-32` (2026-10-22).
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261022-video-30b)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261022-mini-v16-32)
 
-The new 30-second landing film pauses at 2 seconds while all seven profile questions are answered. After the final answer, the encounter and contract reveal play continuously to 19.75 seconds. Signing becomes available after that reveal. Signing then continues the film through growth and arrival at 29.958 seconds, before the room controls appear. Skip finishes the active film interval. There is no back button in the film or information entry phase.
+The updated landing film is 48.208333 seconds at 24 fps. It pauses at 5 seconds while all seven profile questions are answered. After the final answer, the encounter and contract reveal play continuously to 30.5 seconds. The contract interaction becomes available after that reveal. Completing the signature continues the film to its final frame at 48.166667 seconds, then enters the room. Skip finishes the active film interval; it does not skip profile validation or sign the contract. The film and information entry stages have no back button.
 
-The welcome screen uses the existing static fluffy portrait. The room connects to the film with cream surfaces, sage hills and champagne-gold lighting, arch trim and ornaments. The older app-generated particle growth animation is removed from the flow. The native adult room character and card handoff remain.
+The adult room character uses the new v16 model, including its rigged mesh and matching hair data. Room interactions and the card handoff remain part of the experience. The welcome screen retains its static portrait. Cream surfaces, sage hills and champagne-gold room elements continue the existing scene styling. Evolution is presented by the film, without a second app-generated particle sequence.
 
-Input glass uses a held video frame and precomposed blur. All information stages reuse the same held frame. Conversation content retains natural height, with whole-page scrolling on smaller screens.
+The UI uses the shared typography, spacing, buttons and icons. Standard glass has 70% white fill; landing input glass uses a decoded held frame and precomposed blur. All information stages reuse the same held frame. Conversation content retains natural height, with whole-page scrolling on smaller screens.
 
-Validation: 271 automated tests passed. The build contains 238 files including its manifest and 151 assets, with no missing assets. Browser checks recorded 1,660 onboarding frames and 1,003 signing/arrival frames, with no premature input, room controls or duplicate growth animation. No physical-device verification is claimed.
+Validation: 272 automated tests passed. The runtime build contains 240 files before its generated manifest and 150 assets, with no missing assets. Browser verification is recorded separately in the private development project. No physical-device verification is claimed.
 
-This public repository contains only the deployable web build and required notices. Development history, references, source model packages and private handoff documents remain in the private development repository. Video seeks require an HTTP server supporting byte-range requests; the hosted demo supports this.
+This public repository contains only the deployable web build and required notices. Development history, references, source model packages and private handoff documents remain in the private development repository. Video seeks require an HTTP server supporting byte-range requests.

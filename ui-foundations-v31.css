@@ -1,0 +1,209 @@
+/* UI standard v1: adopted typography, semantic ink and spacing.
+ * Load after the historical page styles and ui-standard/tokens.css.
+ * Controls/state rules follow this file. Paper artwork, video compositing,
+ * button/input geometry and navigation/content gutters remain separate. */
+.phone {
+  --klin-hand: var(--kn-ui-font-ui);
+  --klin-display: var(--kn-ui-font-ui);
+  --system-type: var(--kn-ui-font-ui);
+  --kn-paper-font: var(--kn-ui-font-paper);
+  --ink: var(--kn-ui-color-text);
+  --muted: var(--kn-ui-color-text-secondary);
+  --talk-ink: var(--kn-ui-color-text);
+  --talk-muted: var(--kn-ui-color-text-secondary);
+  --klin-ink: var(--kn-ui-color-text);
+  --klin-muted: var(--kn-ui-color-text-secondary);
+  --kn-muted-ink: var(--kn-ui-color-text-secondary);
+  font-family: var(--kn-ui-font-ui);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--kn-ui-color-text);
+  font-synthesis: none;
+}
+
+/* Explicit controls avoid the browser's default form font. Paper buttons and
+ * the signature fallback keep their dedicated typography. */
+.phone :is(button, input, textarea, select):not(:where(.share-card[data-print-card] *, .contract-document *)),
+.phone :is(.page, .sheet-inner, .kn-date-picker),
+.klin-select-popover {
+  font-family: var(--kn-ui-font-ui);
+  font-synthesis: none;
+}
+.phone #app .page .page-top h2,
+.phone #app .page .auth-heading h1,
+.phone #sheet .sheet-inner .sheet-title h3,
+.phone #sheet.card-editor-sheet .sheet-title h3 {
+  font-family: var(--kn-ui-font-ui) !important;
+  font-size: 23px;
+  font-weight: 700 !important;
+  line-height: 31.05px;
+  letter-spacing: 0;
+}
+/* The paper-card page retains its 44px navigation line box. */
+.phone #app .page:is(.profile-card-page, .public-card-page) > .page-top h2 {
+  line-height: 44px;
+}
+.phone #app :is(.onboard-copy h3, .initializing-content h3, .visit-heading h3,
+  .portal-intro h3, .shared-welcome h3, .setup-content h3, .profile-edit-section h3,
+  .onboarding-reading h3, .section-label),
+.phone .kn-date-picker header h2 {
+  font-family: var(--kn-ui-font-ui) !important;
+  font-size: 20px;
+  font-weight: 600 !important;
+  line-height: 28px;
+  letter-spacing: 0;
+}
+
+/* A natural-height paragraph has one baseline across onboarding and rooms.
+ * No max-height, clipping, opacity or backdrop rules are introduced here. */
+.phone #app .page.conversation-onboarding .onboarding-message,
+.phone #app .page.conversation-onboarding.is-birth-time .onboarding-message,
+.phone #app .room-speech,
+.phone #app .conversation-message,
+.phone #app .shared-chat-page .shared-messages .bubble,
+.phone #app :is(.setup-content, .onboarding-reading, .shared-first-hello) > p,
+.phone #sheet .sheet-inner > p:not(.small-note) {
+  font-family: var(--kn-ui-font-ui);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: var(--kn-ui-color-text);
+  text-shadow: none;
+  overflow-wrap: anywhere;
+}
+.phone #app .page.conversation-onboarding .onboarding-message p,
+.phone #app .page.conversation-onboarding.is-birth-time .onboarding-message p {
+  color: var(--kn-ui-color-text) !important;
+  font: inherit;
+  margin: 0;
+}
+.phone #app .page :is(.input, textarea, select, .klin-select-trigger, .kn-date-trigger),
+.phone #app .friends-lounge .network-search input,
+.phone #sheet .sheet-inner :is(.input, textarea, select, .klin-select-trigger, .kn-date-trigger),
+.phone #sheet.card-editor-sheet :is(input.input, textarea),
+.klin-select-popover .klin-select-option {
+  font-family: var(--kn-ui-font-ui);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0;
+  color: var(--kn-ui-color-text);
+}
+.phone #app .page .auth-panel :is(h1, label) {
+  color: var(--kn-ui-color-text) !important;
+}
+.phone #app .page :is(.field > label, .auth-field > label),
+.phone #app .page.auth-login .auth-form .auth-field > label,
+.phone #sheet .sheet-inner .field > label,
+.phone #sheet.card-editor-sheet .field > label,
+.phone #app .friends-lounge .network-friend strong {
+  font-family: var(--kn-ui-font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: var(--kn-ui-color-text) !important;
+  text-shadow: none;
+}
+
+/* Placeholder is secondary input text, not miniature helper text. */
+.phone #app .page :is(input, textarea)::placeholder,
+.phone #app .home-composer textarea::placeholder,
+.phone #app [data-voice-fallback="true"] .home-composer textarea::placeholder,
+.phone #sheet :is(input, textarea)::placeholder {
+  font-family: var(--kn-ui-font-ui);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--kn-ui-color-text-secondary);
+  opacity: 1;
+  text-shadow: none;
+}
+.phone #app .page .auth-panel .auth-heading p,
+.phone #app :is(.small-note, .field-help, .scene-hint, .meta, .onboarding-note,
+  .onboarding-step, .network-search-status, .network-friend small,
+  .conversation-message .message-label, .conversation-speaker,
+  .shared-messages .message-label),
+.phone #app .friends-lounge .network-friend small,
+.phone #sheet .sheet-inner :is(.small-note, .field-help, .avatar-editor p, .sheet-private-label),
+.phone #sheet.card-editor-sheet .avatar-editor p,
+.phone .kn-date-picker :is(.kn-date-column, .kn-date-selection),
+.klin-select-popover .klin-select-group {
+  font-family: var(--kn-ui-font-ui) !important;
+  font-size: 12px;
+  font-weight: 400 !important;
+  line-height: 18px;
+  letter-spacing: 0;
+  color: var(--kn-ui-color-text-secondary) !important;
+  text-shadow: none;
+}
+.phone #app .voice-input-status,
+.phone #app [data-voice-caption] {
+  font-family: var(--kn-ui-font-ui);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--kn-ui-color-text-secondary);
+  text-shadow: none;
+}
+.phone #app :is(.auth-error, .form-error, .onboarding-error),
+.phone #sheet .form-error,
+.phone .kn-date-picker .kn-date-error {
+  font-family: var(--kn-ui-font-ui);
+  font-size: 12px !important;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--kn-ui-color-error) !important;
+  text-shadow: none;
+}
+.phone #sheet .card-share-status {
+  font-family: var(--kn-ui-font-ui);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: var(--kn-ui-color-text-secondary);
+}
+.phone [data-feedback="success"] { color: var(--kn-ui-color-success); }
+.phone [data-feedback="error"] { color: var(--kn-ui-color-error); }
+.phone :is(.birth-hour-grid small, .kn-date-wheel-row, .kn-date-selection) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Normalize ordinary groups, keeping scene-specific 6%/7% gutters,
+ * the room/share 10px compound gap and printed paper spacing unchanged. */
+.phone #app .page.auth-page { gap: var(--kn-ui-space-16); }
+.phone #app .page.auth-login .auth-panel { padding: var(--kn-ui-space-24); }
+.phone #app .page.auth-login .auth-heading { margin-bottom: var(--kn-ui-space-24); }
+.phone #app .page.auth-login .auth-heading p { margin-top: var(--kn-ui-space-8); }
+.phone #app .page.auth-login .auth-form { gap: var(--kn-ui-space-12); }
+.phone #app .page.auth-login .auth-form .auth-field { gap: var(--kn-ui-space-8); }
+.phone #app .page.auth-login .auth-form .auth-submit { margin-top: var(--kn-ui-space-16) !important; }
+.phone #app .conversation-onboarding :is(.onboarding-thread, .onboarding-messages, .onboarding-composer) {
+  gap: var(--kn-ui-space-12);
+}
+.phone #app .page.conversation-onboarding .onboarding-message,
+.phone #app .page.conversation-onboarding.is-birth-time .onboarding-message {
+  padding: var(--kn-ui-space-16);
+}
+.phone #app :is(.conversation-message, .room-speech),
+.phone #app .shared-chat-page .shared-messages .bubble { padding: var(--kn-ui-space-16); }
+.phone #app .conversation-replies { gap: var(--kn-ui-space-8); margin-bottom: var(--kn-ui-space-12); }
+.phone #app .onboarding-composer .quick-replies { gap: var(--kn-ui-space-8); }
+.phone #sheet.card-editor-sheet form[data-form="profile"] { gap: var(--kn-ui-space-12); }
+.phone #sheet.card-editor-sheet .field { gap: var(--kn-ui-space-8); }
+.phone #sheet.card-editor-sheet .sheet-title { margin-bottom: var(--kn-ui-space-16); }
+.phone #sheet.card-editor-sheet .avatar-editor { gap: var(--kn-ui-space-12); }
+.phone #sheet.card-editor-sheet .avatar-editor p { margin-top: var(--kn-ui-space-8); }
+.phone #sheet.card-editor-sheet .personality-tag-suggestions { gap: var(--kn-ui-space-8); }
+.phone #sheet .card-share-sheet { gap: var(--kn-ui-space-16); }
+.phone #sheet .card-share-status .field { gap: var(--kn-ui-space-8); }
+@container (max-height: 700px) {
+  .phone #app .page.auth-login .auth-panel { padding: var(--kn-ui-space-16) var(--kn-ui-space-24); }
+  .phone #app .page.auth-page { gap: var(--kn-ui-space-12); }
+  .phone #app .page.auth-login .auth-heading { margin-bottom: var(--kn-ui-space-16); }
+  .phone #app .page.conversation-onboarding .onboarding-message,
+  .phone #app .page.conversation-onboarding.is-birth-time .onboarding-message {
+    padding: var(--kn-ui-space-12) var(--kn-ui-space-16);
+  }
+}

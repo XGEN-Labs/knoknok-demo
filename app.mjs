@@ -1,25 +1,25 @@
-import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-video-30b';
-import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261022-video-30b';
-import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261022-video-30b';
-import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261022-video-30b';
-import { showCompanionContract } from './contract-story.mjs?v=20261022-video-30b';
-import { prepareAvatar } from './avatar-upload.mjs?v=20261022-video-30b';
-import { initFormControls } from './form-controls.mjs?v=20261022-video-30b';
-import { initDatePickers } from './date-picker.mjs?v=20261022-video-30b';
-import { initTypography } from './typography.mjs?v=20261022-video-30b';
-import { createSceneSound } from './scene-sound.mjs?v=20261022-video-30b';
-import { landingComplete, onboardingDestination } from './landing.mjs?v=20261022-video-30b';
-import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261022-video-30b';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261022-video-30b';
-import { createKlinWorld } from './klin-world.mjs?v=20261022-video-30b';
-import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261022-video-30b';
-import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261022-video-30b';
-import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261022-video-30b';
-import { initPixelRoom } from './pixel-room.mjs?v=20261022-video-30b';
-import { createHomeGreeting } from './home-greeting.mjs?v=20261022-video-30b';
-import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261022-video-30b';
-import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261022-video-30b';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261022-video-30b';
+import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-mini-v16-32';
+import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261022-mini-v16-32';
+import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261022-mini-v16-32';
+import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261022-mini-v16-32';
+import { showCompanionContract } from './contract-story.mjs?v=20261022-mini-v16-32';
+import { prepareAvatar } from './avatar-upload.mjs?v=20261022-mini-v16-32';
+import { initFormControls } from './form-controls.mjs?v=20261022-mini-v16-32';
+import { initDatePickers } from './date-picker.mjs?v=20261022-mini-v16-32';
+import { initTypography } from './typography.mjs?v=20261022-mini-v16-32';
+import { createSceneSound } from './scene-sound.mjs?v=20261022-mini-v16-32';
+import { landingComplete, onboardingDestination } from './landing.mjs?v=20261022-mini-v16-32';
+import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261022-mini-v16-32';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261022-mini-v16-32';
+import { createKlinWorld } from './klin-world.mjs?v=20261022-mini-v16-32';
+import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261022-mini-v16-32';
+import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261022-mini-v16-32';
+import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261022-mini-v16-32';
+import { initPixelRoom } from './pixel-room.mjs?v=20261022-mini-v16-32';
+import { createHomeGreeting } from './home-greeting.mjs?v=20261022-mini-v16-32';
+import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261022-mini-v16-32';
+import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261022-mini-v16-32';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261022-mini-v16-32';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
@@ -531,15 +531,15 @@ async function runAction(action,element){
     case 'account-menu':return accountMenuSheet();
     case 'copy-card-link':{
       const url=cardShareURL(myCard(),location.href);
-      try{await navigator.clipboard.writeText(url);toast('名片連結已複製，可以傳給新朋友。');$('#card-share-status').textContent='連結已複製';}
-      catch{const target=$('#card-share-status');if(target)target.innerHTML=`<label class="field">名片連結<input class="input" readonly value="${esc(url)}" aria-label="複製名片連結"></label>`;target?.querySelector('input')?.select();}
+      try{await navigator.clipboard.writeText(url);toast('名片連結已複製，可以傳給新朋友。');$('#card-share-status').textContent='連結已複製';$('#card-share-status').dataset.feedback='success';}
+      catch{const target=$('#card-share-status');target?.removeAttribute('data-feedback');if(target)target.innerHTML=`<label class="field">名片連結<input class="input" readonly value="${esc(url)}" aria-label="複製名片連結"></label>`;target?.querySelector('input')?.select();}
       return;
     }
     case 'native-share-card':{
       try{await navigator.share({title:`${me().name}的 Knoknok 名片`,text:'從一個你好開始。',url:cardShareURL(myCard(),location.href)});}catch(error){if(error.name!=='AbortError')toast('暫時無法打開分享選單，可以複製連結。');}return;
     }
     case 'download-card':{
-      element.disabled=true;try{await downloadCard(myCard());toast('名片圖片已準備下載。');}catch{toast('圖片暫時無法匯出，可以先分享名片連結。');}finally{element.disabled=false;}return;
+      element.disabled=true;element.setAttribute('aria-busy','true');try{await downloadCard(myCard());toast('名片圖片已準備下載。');}catch{toast('圖片暫時無法匯出，可以先分享名片連結。');}finally{element.disabled=false;element.removeAttribute('aria-busy');}return;
     }
     case 'google': return showSheet('使用 Google 演示帳號',`<p>選擇虛構帳號體驗登入。這裡不會連接 Google，也不會讀取你的真實帳號。</p><button type="button" class="row-button glass-card list-row" data-action="google-confirm">${avatar('a')}<span class="row-main"><strong>Frank</strong><small>frank@example.com · 演示帳號</small></span><span>›</span></button>`);
     case 'google-confirm':dispatch({type:'DEMO_LOGIN',provider:'google'},false);go(setupRoute());if(ui.route==='landing'&&!getOnboardingMessages(state).some(m=>m.role==='user')){revealOnboarding();render(false);}return;

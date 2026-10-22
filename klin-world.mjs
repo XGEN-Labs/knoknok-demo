@@ -1,5 +1,5 @@
 import * as THREE from './vendor/three/three.module.js';
-import { loadNativeKlinStage } from './klin-native-model.mjs';
+import { loadNativeKlinStage } from './klin-native-model.mjs?v=20261022-mini-v16-32';
 import { createContractLight } from './klin-contract-light.mjs';
 import { createAwakeningField } from './klin-awakening-field.mjs?v=20261021-refine-27c';
 import { createReferenceField as createWarmField, createReferenceDepth as createWarmDepth, updateReferenceDepth as updateWarmDepth, createReferenceGates as createFriendLounge, updateReferenceGates as updateFriendLounge, updateReferenceField } from './klin-reference-scene.mjs?v=20261022-video-30b';
@@ -882,7 +882,7 @@ export function createKlinWorld({ host, reducedMotion = false } = {}) {
     for(const model of Object.values(nativeModels.primary))rig.root.add(model.root);
     for(const model of Object.values(nativeModels.secondary))otherRig.root.add(model.root);
     awakeningField.setModels(nativeModels.primary);
-    nativeReady=true;if(state.page==='landing'&&!state.appearanceShown){state.appearanceStarted=state.time;state.appearanceShown=true;}host.dataset.model='blender-09-07';backgroundDirty=true;updatePose(state.time);render();requestFrame();
+    nativeReady=true;if(state.page==='landing'&&!state.appearanceShown){state.appearanceStarted=state.time;state.appearanceShown=true;}host.dataset.model='convex-oval-paws-face-v16';backgroundDirty=true;updatePose(state.time);render();requestFrame();
   }).catch(error=>{
     if(state.disposed)return;
     host.dataset.model='native-load-failed';host.dataset.world='fallback';host.dataset.worldError=String(error?.message||error).slice(0,180);
