@@ -107,7 +107,27 @@
   text-shadow: none;
 }
 
+/* Inputs use one sage-gray family across landing, room, search and forms.
+   Keep it separate from secondary labels and paper text. Safari autofill and
+   enhanced date/select labels must use the same foreground as native fields. */
+.phone#phone :is(input,textarea,select,.klin-select-trigger,.kn-date-trigger),
+.phone#phone :is(input,textarea,select,.klin-select-trigger,.kn-date-trigger):focus,
+.phone#phone input:-webkit-autofill {
+  color:var(--kn-ui-color-input-text)!important;
+  -webkit-text-fill-color:var(--kn-ui-color-input-text);
+  caret-color:var(--kn-ui-color-input-text);
+}
+.phone#phone :is(.klin-select-trigger,.kn-date-trigger) :is(span,svg) {
+  color:inherit!important;
+  -webkit-text-fill-color:inherit;
+}
+.phone#phone .kn-date-trigger.is-empty,
+.phone#phone .kn-date-trigger.is-empty:focus {
+  color:var(--kn-ui-color-input-placeholder)!important;
+  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder);
+}
 /* Placeholder is secondary input text, not miniature helper text. */
+.phone#phone :is(input,textarea)::placeholder,
 .phone #app .page :is(input, textarea)::placeholder,
 .phone #app .home-composer textarea::placeholder,
 .phone #app [data-voice-fallback="true"] .home-composer textarea::placeholder,
@@ -116,7 +136,8 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
-  color: var(--kn-ui-color-text-secondary);
+  color: var(--kn-ui-color-input-placeholder)!important;
+  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder);
   opacity: 1;
   text-shadow: none;
 }

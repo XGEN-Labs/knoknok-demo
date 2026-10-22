@@ -110,4 +110,12 @@
   --kn-ui-color-disabled-surface: #eff1eb;
   /* adopted | ui-states-v31.css; UI v1 disabled state */
   --kn-ui-color-disabled-edge: #e2e5dd;
+  /* adopted | ui-foundations-v31.css; unified editable field text */
+  --kn-ui-color-input-text: #3f554b;
+  /* adopted | ui-foundations-v31.css; unified sage-gray placeholders */
+  --kn-ui-color-input-placeholder: #4d6057;
+  /* adopted | ui-states-v31.css; rounded input boundary */
+  --kn-ui-color-input-focus: #7c9488;
+  /* adopted | ui-states-v31.css; soft outer input focus halo */
+  --kn-ui-color-input-focus-halo: rgba(91,120,104,.18);
 }

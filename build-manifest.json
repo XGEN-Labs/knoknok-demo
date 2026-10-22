@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-22T12:45:29.517Z",
+  "createdAt": "2026-10-22T16:34:26.374Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 115561562,
+  "payloadBytes": 116363973,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 96275,
-      "sha256": "79e8596ba8f8bec9aa2d26dfc17b6ebee34442b1e54f26a9184caf860c99810f"
+      "bytes": 101650,
+      "sha256": "0aeee375bb4b9e1814b28ab6b883201e929b35f693210184b96772b7ae9a4342"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -214,6 +214,126 @@
       "path": "assets/portal-scenes-20261021/onboarding-empty.png",
       "bytes": 1527227,
       "sha256": "89f9e92a23cc7f46b12992b00ab86c0d4a966a9edf7d03dffcf583f99f37b4af"
+    },
+    {
+      "source": "assets/scene-audio-20261022/approach.m4a",
+      "path": "assets/scene-audio-20261022/approach.m4a",
+      "bytes": 17238,
+      "sha256": "8c9e8488b5d99b4cbc6c2fa3e85e70e3c2f9fb8585df33be163a69a0123bef8c"
+    },
+    {
+      "source": "assets/scene-audio-20261022/arrival-awake.m4a",
+      "path": "assets/scene-audio-20261022/arrival-awake.m4a",
+      "bytes": 18916,
+      "sha256": "c2125117a5d014f46ea5dfc3b43cfb6bfce0c34cacae41edd31b966990e495fa"
+    },
+    {
+      "source": "assets/scene-audio-20261022/arrival-light.m4a",
+      "path": "assets/scene-audio-20261022/arrival-light.m4a",
+      "bytes": 28088,
+      "sha256": "5c24ff00ce49a68172c357f894d2a5147e4b0bb28ebc5da9da8de67b732e895f"
+    },
+    {
+      "source": "assets/scene-audio-20261022/birth-place.m4a",
+      "path": "assets/scene-audio-20261022/birth-place.m4a",
+      "bytes": 23129,
+      "sha256": "d6e58d05208f66c7d95d394b3bf11bceb313102068f3e2091f0aa9e6fb4cc5a8"
+    },
+    {
+      "source": "assets/scene-audio-20261022/birth-time.m4a",
+      "path": "assets/scene-audio-20261022/birth-time.m4a",
+      "bytes": 34909,
+      "sha256": "fee6f8649afd5dd601e7c71581f906d7ec0adef877d8c4429fb75ec6a3ed4b13"
+    },
+    {
+      "source": "assets/scene-audio-20261022/birthday.m4a",
+      "path": "assets/scene-audio-20261022/birthday.m4a",
+      "bytes": 18733,
+      "sha256": "a3e8418628664ed9cf9ac3bb5aaf1553d986125d4e012f0fcef0c29abe59119a"
+    },
+    {
+      "source": "assets/scene-audio-20261022/companion-name.m4a",
+      "path": "assets/scene-audio-20261022/companion-name.m4a",
+      "bytes": 28776,
+      "sha256": "40ad2a47b5bb9f950c82e3c1430a0712759f105236fbf5f136499859889b7ab2"
+    },
+    {
+      "source": "assets/scene-audio-20261022/connections.m4a",
+      "path": "assets/scene-audio-20261022/connections.m4a",
+      "bytes": 22102,
+      "sha256": "d3f70617f6cd2bcb5ef8f082a338b8fb712daf23b7fe722963ba8689c08ea5e4"
+    },
+    {
+      "source": "assets/scene-audio-20261022/gender.m4a",
+      "path": "assets/scene-audio-20261022/gender.m4a",
+      "bytes": 8403,
+      "sha256": "101a6b4328874ebd7f9522651126f06b834723eb7fdda837f58e97fe72deba5a"
+    },
+    {
+      "source": "assets/scene-audio-20261022/meadow-original-score.m4a",
+      "path": "assets/scene-audio-20261022/meadow-original-score.m4a",
+      "bytes": 276040,
+      "sha256": "925264916a0a3b146ebab923910dafff9fd216cd3712de04b750543b532407e0"
+    },
+    {
+      "source": "assets/scene-audio-20261022/name.m4a",
+      "path": "assets/scene-audio-20261022/name.m4a",
+      "bytes": 14565,
+      "sha256": "e8a16afc8020a54b45e7acedc26999856e74c3a993762cc01b4fba13a6481005"
+    },
+    {
+      "source": "assets/scene-audio-20261022/promise.m4a",
+      "path": "assets/scene-audio-20261022/promise.m4a",
+      "bytes": 55102,
+      "sha256": "6ea8514632d3a2a3c9d9f86eec53ab7618d0444dcfee02ea9dc2055f5e954320"
+    },
+    {
+      "source": "assets/scene-audio-20261022/reading-heading.m4a",
+      "path": "assets/scene-audio-20261022/reading-heading.m4a",
+      "bytes": 26915,
+      "sha256": "8d005681fbfe0b4211b5f5803f89cdcde415ce41e206aa5651104b25a25990ea"
+    },
+    {
+      "source": "assets/scene-audio-20261022/reading.m4a",
+      "path": "assets/scene-audio-20261022/reading.m4a",
+      "bytes": 68656,
+      "sha256": "f46d6cefb8f8a9b681e0d0c7fcd5627ab59040c6907ca34c0630fa4a5589dc15"
+    },
+    {
+      "source": "assets/scene-audio-20261022/ready-home.m4a",
+      "path": "assets/scene-audio-20261022/ready-home.m4a",
+      "bytes": 29553,
+      "sha256": "766ad69d37b1fd9b2cce8836f110c30e9799049d436e71272577e88b69655643"
+    },
+    {
+      "source": "assets/scene-audio-20261022/realm.m4a",
+      "path": "assets/scene-audio-20261022/realm.m4a",
+      "bytes": 14169,
+      "sha256": "08f73c817649028e31a8a31b11f84276b6c6ee6ba2e99e927a8a0ab3b364c3a7"
+    },
+    {
+      "source": "assets/scene-audio-20261022/thinking.m4a",
+      "path": "assets/scene-audio-20261022/thinking.m4a",
+      "bytes": 11071,
+      "sha256": "ee7bc3b7b1566f14edd4818c0e2a7e08810c7a05f2232e3ae9b03872b28ce25a"
+    },
+    {
+      "source": "assets/scene-audio-20261022/time-clear.m4a",
+      "path": "assets/scene-audio-20261022/time-clear.m4a",
+      "bytes": 21095,
+      "sha256": "36ed5482c9f8191a8cf3fba670c64fe939ebd8592fc790aff6cd0293165be280"
+    },
+    {
+      "source": "assets/scene-audio-20261022/time-remember.m4a",
+      "path": "assets/scene-audio-20261022/time-remember.m4a",
+      "bytes": 16901,
+      "sha256": "e90218d92b7de7e3b8a182a243eef764c91d976f54bc5cd0497f38d989110b56"
+    },
+    {
+      "source": "assets/scene-audio-20261022/time-skipped.m4a",
+      "path": "assets/scene-audio-20261022/time-skipped.m4a",
+      "bytes": 24427,
+      "sha256": "b38af89d8636d56e68a881569a473999edf8ea558d280d5af90f0024eed79e98"
     },
     {
       "source": "assets/signature-strokes-20261020/ARPHICPL.TXT",
@@ -1032,6 +1152,12 @@
       "sha256": "572c1c4581b9211ea2b5560b2abc8342baae4d1fdda5f64a399b61e66899e715"
     },
     {
+      "source": "experience-v33.css",
+      "path": "experience-v33.css",
+      "bytes": 1440,
+      "sha256": "c601ade523e6b3a00455405aa12bcde0dfcc911aa161b7b2277988bebe5fe3e7"
+    },
+    {
       "source": "figma-ui.css",
       "path": "figma-ui.css",
       "bytes": 10466,
@@ -1088,8 +1214,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 6976,
-      "sha256": "2c3cc2c0c3d96d2fc14300028f7e894269ce8c8294b19b73c34fb0156966bc97"
+      "bytes": 8592,
+      "sha256": "7558d55c9a9fe8faa977f7b82889cb8b75c422be48d00bfb4d30ac2f3b720d0c"
     },
     {
       "source": "journey-experience.css",
@@ -1146,6 +1272,18 @@
       "sha256": "6cbd7843ebb876df52968069474e393139c957e2ac13d166fa1b4e56e786ac1e"
     },
     {
+      "source": "landing-audio-clips.mjs",
+      "path": "landing-audio-clips.mjs",
+      "bytes": 2536,
+      "sha256": "039bb4c4b6f8659e631b4500bb4f509b171cb264c470c143127e628877777ab9"
+    },
+    {
+      "source": "landing-audio-engine.mjs",
+      "path": "landing-audio-engine.mjs",
+      "bytes": 13153,
+      "sha256": "e13be850247ed34fa0321fe80237d33f17ebeb83d4e9b8088adf3d29ee12ae30"
+    },
+    {
       "source": "landing-departure.mjs",
       "path": "landing-departure.mjs",
       "bytes": 1165,
@@ -1178,8 +1316,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 7108,
-      "sha256": "aacf3cf4e9ff9c6faf50f054324b215cb2b055dfda078a0d0debbee3b7c105f0"
+      "bytes": 7809,
+      "sha256": "9f9bc185b0c4036b617173d407eee1eb1bf0c123ffd63a04ae233b31f1c3e7a2"
     },
     {
       "source": "landing-video.css",
@@ -1192,6 +1330,18 @@
       "path": "landing.mjs",
       "bytes": 1574,
       "sha256": "c6389f3ea984094e15441d5c6970578130203d2c502ed88d93bab9e71d34d24b"
+    },
+    {
+      "source": "loading-state.css",
+      "path": "loading-state.css",
+      "bytes": 2695,
+      "sha256": "03e829450fbbcd413eef9fcc1b79b8662f4b086c6035d20af479b43d9eef781a"
+    },
+    {
+      "source": "loading-state.mjs",
+      "path": "loading-state.mjs",
+      "bytes": 9333,
+      "sha256": "b09a75a9fffa0b728e0f945348ecf529254916fb38f7de5a1e8e6c3810eae4ed"
     },
     {
       "source": "login-scene.css",
@@ -1314,6 +1464,12 @@
       "sha256": "022a926695cd450076f661e7f8e5a7a161ce08f43e4803d4301de0d86118d0ae"
     },
     {
+      "source": "scene-asset-readiness.mjs",
+      "path": "scene-asset-readiness.mjs",
+      "bytes": 5154,
+      "sha256": "25e72374c3fefe80c7ad929627cb32975da767f9c0ea6248d5e34cdf24beda31"
+    },
+    {
       "source": "scene-experience.css",
       "path": "scene-experience.css",
       "bytes": 18784,
@@ -1322,8 +1478,8 @@
     {
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
-      "bytes": 1172,
-      "sha256": "50b53ee7eaa185b0cfadaad8acb6a3191aa62be9a8db94314ad1e874badc6de2"
+      "bytes": 251,
+      "sha256": "408234af942fbec911149bbc8f586280e19ec0f35aa45ecb2c15da186e1f2882"
     },
     {
       "source": "sheet-dismiss.mjs",
@@ -1370,8 +1526,8 @@
     {
       "source": "ui-foundations-v31.css",
       "path": "ui-foundations-v31.css",
-      "bytes": 8907,
-      "sha256": "fc7a99182350ad4473f4054a26d2355093edd0a599a79e147c1483cd816adc26"
+      "bytes": 9965,
+      "sha256": "828140cf53e9e029ea6a68d1675ff9201a8ef9c3f43af5af406bc51ab651f291"
     },
     {
       "source": "ui-icons.mjs",
@@ -1388,14 +1544,14 @@
     {
       "source": "ui-states-v31.css",
       "path": "ui-states-v31.css",
-      "bytes": 5095,
-      "sha256": "d384cd697564fdc42b97ac77edf88594a61fe0951512c860cbb98dce61dd0a57"
+      "bytes": 6135,
+      "sha256": "31f4d75e4d1bd5b8438a51fa648603c74c86c6b74d296f7fa12bc7fc2845d372"
     },
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 5168,
-      "sha256": "d42cc43713ce0b7c69234d982720443c057436e784cf8e7922f8f09b1367bf28"
+      "bytes": 5611,
+      "sha256": "23acdbf6b74581202eea7a2c5ba201b0b3d985a938b0a1754c89b1a501a0f0ca"
     },
     {
       "source": "universe-experience.css",
@@ -1703,8 +1859,28 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "loading-state.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "experience-v33.css",
+      "kind": "resource"
+    },
+    {
       "from": "app.mjs",
       "to": "landing-video-scene.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "loading-state.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "scene-asset-readiness.mjs",
       "kind": "module"
     },
     {
@@ -1848,6 +2024,11 @@
       "kind": "module"
     },
     {
+      "from": "scene-sound.mjs",
+      "to": "landing-audio-engine.mjs",
+      "kind": "module"
+    },
+    {
       "from": "public-card.mjs",
       "to": "card-labels.mjs",
       "kind": "module"
@@ -1905,6 +2086,11 @@
     {
       "from": "model.mjs",
       "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-audio-engine.mjs",
+      "to": "landing-audio-clips.mjs",
       "kind": "module"
     },
     {

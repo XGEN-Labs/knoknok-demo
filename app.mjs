@@ -1,25 +1,27 @@
-import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-mini-v16-32';
-import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261022-mini-v16-32';
-import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261022-mini-v16-32';
-import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261022-mini-v16-32';
-import { showCompanionContract } from './contract-story.mjs?v=20261022-mini-v16-32';
-import { prepareAvatar } from './avatar-upload.mjs?v=20261022-mini-v16-32';
-import { initFormControls } from './form-controls.mjs?v=20261022-mini-v16-32';
-import { initDatePickers } from './date-picker.mjs?v=20261022-mini-v16-32';
-import { initTypography } from './typography.mjs?v=20261022-mini-v16-32';
-import { createSceneSound } from './scene-sound.mjs?v=20261022-mini-v16-32';
-import { landingComplete, onboardingDestination } from './landing.mjs?v=20261022-mini-v16-32';
-import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261022-mini-v16-32';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261022-mini-v16-32';
-import { createKlinWorld } from './klin-world.mjs?v=20261022-mini-v16-32';
-import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261022-mini-v16-32';
-import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261022-mini-v16-32';
-import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261022-mini-v16-32';
-import { initPixelRoom } from './pixel-room.mjs?v=20261022-mini-v16-32';
-import { createHomeGreeting } from './home-greeting.mjs?v=20261022-mini-v16-32';
-import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261022-mini-v16-32';
-import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261022-mini-v16-32';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261022-mini-v16-32';
+import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-experience-33';
+import { createLoadingState } from './loading-state.mjs?v=20261022-experience-33';
+import { createSceneAssetReadiness } from './scene-asset-readiness.mjs?v=20261022-experience-33';
+import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261022-experience-33';
+import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261022-experience-33';
+import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261022-experience-33';
+import { showCompanionContract } from './contract-story.mjs?v=20261022-experience-33';
+import { prepareAvatar } from './avatar-upload.mjs?v=20261022-experience-33';
+import { initFormControls } from './form-controls.mjs?v=20261022-experience-33';
+import { initDatePickers } from './date-picker.mjs?v=20261022-experience-33';
+import { initTypography } from './typography.mjs?v=20261022-experience-33';
+import { createSceneSound } from './scene-sound.mjs?v=20261022-experience-33';
+import { landingComplete, onboardingDestination } from './landing.mjs?v=20261022-experience-33';
+import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261022-experience-33';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261022-experience-33';
+import { createKlinWorld } from './klin-world.mjs?v=20261022-experience-33';
+import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261022-experience-33';
+import { klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261022-experience-33';
+import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261022-experience-33';
+import { initPixelRoom } from './pixel-room.mjs?v=20261022-experience-33';
+import { createHomeGreeting } from './home-greeting.mjs?v=20261022-experience-33';
+import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261022-experience-33';
+import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261022-experience-33';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261022-experience-33';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
@@ -53,6 +55,9 @@ if(sharedCard)ui.route='public-card';
 let landingHelloTimer,landingReveal=null,landingReaction='';
 let visitTimer,visitAttempt=0;
 let worldReady=false, klinWorld=null;
+let worldFailed=false,sceneLoading=null,sceneImages=null,audioToggleSequence=0;
+let filmAudioState={active:false,playing:false,time:0};
+const expiredLoading=new Set();
 let loginScene=null,landingVideoScene=null,closeContractUI=null;
 let renderSequence=0;
 let conversationActive=false,conversationEnterTimer;
@@ -91,6 +96,7 @@ function save(){if(comparisonMode)return;try{localStorage.setItem(STATE_KEY,seri
 function dispatch(action, renderNow=true){state=reduce(state,action);save();if(renderNow)render(false);if(state.error&&ui.route!=='landing')toast(state.error);return !state.error;}
 function toast(text){const node=$('#toast');node.textContent=text;node.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.classList.remove('visible'),3300);}
 function go(route,options={}){
+  if(route!==ui.route)sceneSound.stopSpeech();
   if(typeof closeContractUI==='function')closeContractUI();
   if(route==='profile-edit')route='profile';
   if(route==='invite')route='relations';
@@ -190,12 +196,14 @@ function revealOnboarding(from=0){
 }
 function answerOnboarding(text,skip=false){
  if(landingVideoScene&&!landingVideoScene.readyForInput)return;
+ sceneSound.stopSpeech();
  const previous=getOnboardingMessages(state).length;
  if(dispatch(skip?{type:'ONBOARDING_SKIP'}:{type:'ONBOARDING_REPLY',text},false)){ui.onboardingDraft='';ui.onboardingCoda=0;landingReaction='';save();klinWorld?.interact('look');revealOnboarding(previous+1);}
  render(false);const thread=$('.onboarding-thread');if(thread)thread.scrollTop=0;
 }
 function departToHome(){
  if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt)return;
+ sceneSound.stopSpeech();
  const originUI=ui,who=actor(),signature=state.onboarding.contract.signedAt;
  clearTimeout(landingHelloTimer);
  const arrive=()=>{
@@ -333,9 +341,67 @@ function syncWorldAnchor(){
   const layout=currentWorldLayout();if(layout)klinWorld.setLayout(layout,{immediate:true});
 }
 function syncLandingVideo(){
- if(ui.route==='landing'&&!landingVideoScene)landingVideoScene=createLandingVideoScene({phone:$('#phone')});
+ if(ui.route==='landing'&&!landingVideoScene)landingVideoScene=createLandingVideoScene({phone:$('#phone'),
+  onPresentation:next=>{setScenePending('landing-video',ui.route==='landing'&&['loading','settling'].includes(next.state),'landing');queueMicrotask(syncNarration);},
+  onMediaChange:next=>{filmAudioState=next;sceneSound.syncFilm(next);}
+ });
  landingVideoScene?.update({active:ui.route==='landing',key:getOnboardingTurn(state).key,reducedMotion:prefersStillness(ui.motion)});
 }
+function ensureExperience(){
+ if(sceneLoading)return;
+ const phone=$('#phone');
+ sceneLoading=createLoadingState({host:phone,blockTargets:[$('#app')],onChange:()=>queueMicrotask(syncNarration),onTimeout:({key})=>{
+  expiredLoading.add(key);
+  if(key==='world'){worldFailed=true;setKlinLoadingState(phone,'fallback');}
+ }});
+ phone.querySelector('.scene-loading-retry')?.remove();
+ sceneImages=createSceneAssetReadiness({loading:sceneLoading,onChange:()=>queueMicrotask(syncNarration)});
+ phone.insertAdjacentHTML('beforeend',volumeButton().replace('scene-icon volume-toggle','scene-icon volume-toggle landing-volume-toggle kn-glass-control'));
+ phone.dataset.bootReady='true';
+}
+function setScenePending(key,pending,scene){
+ if(!pending)expiredLoading.delete(key);
+ sceneLoading?.setPending(key,pending&&!expiredLoading.has(key),{scene});
+}
+function syncAudioControls(){
+ const phone=$('#phone');phone.dataset.sound=ui.soundOn?'on':'off';
+ for(const button of phone.querySelectorAll('.volume-toggle')){
+  button.innerHTML=centeredVolumeIcon(!ui.soundOn);button.setAttribute('aria-pressed',String(Boolean(ui.soundOn)));
+  button.setAttribute('aria-label',ui.soundOn?'關閉聲音':'開啟聲音');
+ }
+ const floating=$('.landing-volume-toggle');if(floating)floating.hidden=ui.route!=='landing';
+}
+function syncExperience(){
+ ensureExperience();sceneLoading.setReducedMotion(prefersStillness(ui.motion));syncAudioControls();
+ const opening=['welcome','login','register','verify'].includes(ui.route),landing=ui.route==='landing';
+ const scene=landing?'landing':opening?'welcome':'room';
+ const images=landing?[]:['assets/landing-video-20261022/room-empty.png'];
+ if(opening)images.push('assets/login-world-20261019/source/character-transparent.png','assets/brand-20261016/knoknok-logo-latest.png');
+ else if(!landing)images.push('assets/klin-native-v16-20261022/adult.png');
+ if(ui.route==='relations')images.push('assets/portal-scenes-20261020/three-avatar-porches.png',DEFAULT_CARD_AVATAR);
+ if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261016/knoknok-logo-latest.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
+ if(['chat','connected'].includes(ui.route))images.push('assets/cloud-realm-20261019/shared.webp');
+ sceneImages.update({key:ui.route,urls:images,scene});
+ setScenePending('world',!opening&&!landing&&!worldReady&&!worldFailed,'room');
+ if(!landing){setScenePending('landing-video',false,'landing');sceneSound.syncFilm({active:false,playing:false,time:0});}
+ queueMicrotask(syncNarration);
+}
+function syncNarration(){
+ if(!ui.soundOn||document.hidden||sceneLoading?.visible||!sceneImages?.ready||closeContractUI)return;
+ if(ui.route==='landing'){
+  if(!landingVideoScene?.readyForInput)return;
+  const turn=getOnboardingTurn(state);
+  if(landingReveal?.key===turn.key&&landingReveal.count<getOnboardingMessages(state).length)return;
+  const scope=`landing:${turn.key}:${ui.onboardingCoda||0}`;
+  const texts=[...document.querySelectorAll('.onboarding-message.is-klin p,.onboarding-reading h3,.onboarding-reading>p')].map(node=>node.textContent.trim()).filter(Boolean);
+  sceneSound.speakSequence(texts.map((text,index)=>({text,key:`${scope}:${index}:${text}`})),{scope,lang:'zh-CN'});
+ }else if(ui.route==='home'&&!companionTyping){
+  const node=conversationActive?[...document.querySelectorAll('.conversation-message:not(.own):not([hidden]) p')].at(-1):$('.room-speech');
+  const text=node?.textContent.trim();
+  if(text)sceneSound.speakSequence([{text,key:`home:${actor()}:${ui.boopCount||0}:${text}`}],{scope:`home:${actor()}`,lang:me().language==='粵語'?'zh-HK':me().language==='English'?'en-US':'zh-CN'});
+ }
+}
+function resetSound(){audioToggleSequence++;ui.soundOn=false;sceneSound.setEnabled(false);sceneSound.resetSession();filmAudioState={active:false,playing:false,time:0};syncAudioControls();}
 function syncLoginScene(){
   if(!loginScene)loginScene=createLoginSceneBridge({phone:$('#phone')});
   const active=['welcome','login','register','verify'].includes(ui.route);
@@ -343,7 +409,7 @@ function syncLoginScene(){
   klinWorld?.setActive?.(!active&&ui.route!=='landing');
 }
 function initWorld({prewarm=false}={}) {
-  if(klinWorld || pixelVariant || (!prewarm&&['welcome','login','register','verify','landing'].includes(ui.route)))return;
+  if(klinWorld || worldFailed || pixelVariant || (!prewarm&&['welcome','login','register','verify','landing'].includes(ui.route)))return;
   setKlinLoadingState($('#phone'),'loading');
   const host=document.createElement('div');
   host.className='klin-world-host';host.setAttribute('aria-hidden','true');
@@ -354,17 +420,17 @@ function initWorld({prewarm=false}={}) {
     // native appearance/evolution while the supplied movie owns that sequence.
     klinWorld?.setPage(filmOwnsScene?'home':currentSceneRoute(),{stage:filmOwnsScene?'adult':currentCompanionStage(),layout:filmOwnsScene?undefined:currentWorldLayout(),immediate:true});
   };
-  host.addEventListener('klinworlderror',()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');});
-  host.addEventListener('klinworldready',()=>{worldReady=true;setKlinLoadingState($('#phone'),'ready');placeWorld();});
+  host.addEventListener('klinworlderror',()=>{worldReady=false;worldFailed=true;setKlinLoadingState($('#phone'),'fallback');setScenePending('world',false,'room');});
+  host.addEventListener('klinworldready',()=>{worldReady=true;worldFailed=false;setKlinLoadingState($('#phone'),'ready');placeWorld();setScenePending('world',false,'room');});
   $('#phone').prepend(host);
   try {
     klinWorld=createKlinWorld({host,reducedMotion:prefersStillness(ui.motion)});
     placeWorld();
     Promise.resolve(klinWorld?.ready).then(ok=>{
-      if(ok===false||!klinWorld){klinWorld=null;host.remove();setKlinLoadingState($('#phone'),'fallback');return;}
-      worldReady=true;setKlinLoadingState($('#phone'),'ready');placeWorld();
-    }).catch(()=>{worldReady=false;setKlinLoadingState($('#phone'),'fallback');});
-  } catch { worldReady=false;setKlinLoadingState($('#phone'),'fallback'); }
+      if(ok===false||!klinWorld){worldFailed=true;klinWorld=null;host.remove();setKlinLoadingState($('#phone'),'fallback');setScenePending('world',false,'room');return;}
+      worldReady=true;worldFailed=false;setKlinLoadingState($('#phone'),'ready');placeWorld();setScenePending('world',false,'room');
+    }).catch(()=>{worldReady=false;worldFailed=true;setKlinLoadingState($('#phone'),'fallback');setScenePending('world',false,'room');});
+  } catch { worldReady=false;worldFailed=true;setKlinLoadingState($('#phone'),'fallback');setScenePending('world',false,'room'); }
 }
 function setHomeEntryControlsHidden(hidden){
   const page=$('#app > .home-page');
@@ -372,6 +438,7 @@ function setHomeEntryControlsHidden(hidden){
   for(const control of page?.querySelectorAll('.home-top,.home-chat-bottom')||[])control.inert=hidden;
 }
 function render(animate=false,motion={}){
+  ensureExperience();
   // Incoming messages may refresh the same route during travel. Keep the UI
   // cleared until arrival instead of exposing it over the moving character.
   if(!animate&&stopTransition&&$('#app > .page[data-screen]')?.dataset.screen===ui.route){pendingSceneRefresh=true;return;}
@@ -406,6 +473,7 @@ function render(animate=false,motion={}){
   if(['chat','connected'].includes(ui.route)){const rel=latestRelationship();klinWorld?.setParticipants?.((rel?.members||[]).map(id=>state.users[id]),{activeId:actor()});}
   if(ui.route==='home')cleanCommunication=bindVoiceComposer({root:$('#app>.home-page'),lang:()=>me().language,getDraft:()=>ui.companionDrafts?.[actor()]||'',onDraft:text=>{ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:text};save();},onConversationStart:()=>setHomeConversation(true),onStatus:flushVoiceRefresh});
   syncHomeScene();syncLoginScene();syncLandingVideo();initWorld();
+  syncExperience();
   $('#phone').dataset.conversation=String(conversationActive&&ui.route==='home');
   $('#phone').dataset.worldPage=currentSceneRoute();
   $('#phone').dataset.sceneOverlay=String(sceneOverlay);
@@ -509,8 +577,9 @@ async function runAction(action,element){
     case 'clear-network-search':filterNetwork('');$('#network-query').value='';$('#network-query').focus();return;
     case 'open-contract':{
       if(!getOnboardingTurn(state).canFinish||landingVideoScene&&!landingVideoScene.readyForInput)return;closeContractUI?.();
-      const who=actor(),name=me().name,partner=companionName();
-      closeContractUI=showCompanionContract({phone:$('#phone'),getWorld:()=>null,userName:name,companionName:partner,reduced:prefersStillness(ui.motion),onClose:()=>{closeContractUI=null;},onCommit:()=>{if(ui.route!=='landing'||actor()!==who||me().name!==name||companionName()!==partner)return;if(dispatch({type:'SIGN_COMPANION_CONTRACT'},false))departToHome();else render(false);}});return;
+      sceneSound.stopSpeech();
+      const who=actor(),name=me().name,partner=companionName(),soundControl=$('.landing-volume-toggle');
+      closeContractUI=showCompanionContract({phone:$('#phone'),getWorld:()=>null,userName:name,companionName:partner,reduced:prefersStillness(ui.motion),onClose:()=>{closeContractUI=null;if(soundControl)$('#phone').append(soundControl);},onCommit:()=>{if(ui.route!=='landing'||actor()!==who||me().name!==name||companionName()!==partner)return;if(dispatch({type:'SIGN_COMPANION_CONTRACT'},false))departToHome();else render(false);}});if(soundControl)$('.contract-story')?.append(soundControl);return;
     }
     case 'finish-conversation':return departToHome();
     case 'view-card-tags':{const data=ui.route==='public-card'&&sharedCard?sharedCard:myCard();return showSheet('所有標籤',`<div class="all-card-tags">${data.tags.length?data.tags.map(tag=>`<span>${esc(tag)}</span>`).join(''):'<p>還沒有留下標籤。</p>'}</div>`);}
@@ -550,9 +619,10 @@ async function runAction(action,element){
 
     case 'boop':klinWorld?.interact('wave');sceneSound.cue('reply');ui.boopReply=['我在。今天過得怎麼樣？','被你發現了，我一直在等你。','要聊聊，還是一起去串門？'][(ui.boopCount=(ui.boopCount||0)+1)%3];return render(false);
     case 'toggle-sound':{
-      ui.soundOn=await sceneSound.setEnabled(!ui.soundOn).catch(()=>false);save();
-      const button=$('.volume-toggle');
-      if(button){button.innerHTML=centeredVolumeIcon(!ui.soundOn);button.setAttribute('aria-pressed',String(Boolean(ui.soundOn)));button.setAttribute('aria-label',ui.soundOn?'關閉聲音':'開啟聲音');}
+      const request=++audioToggleSequence,desired=!ui.soundOn;ui.soundOn=desired;syncAudioControls();
+      const enabled=await sceneSound.setEnabled(desired).catch(()=>false);
+      if(request!==audioToggleSequence)return;
+      ui.soundOn=enabled;save();syncAudioControls();sceneSound.syncFilm(filmAudioState);syncNarration();
       return;
     }
     case 'visit-from-chat':return go('relations');
@@ -579,14 +649,14 @@ async function runAction(action,element){
     case 'report-relationship':return showSheet('回報這段互動',`<form data-form="report"><p>此原型只記錄模擬回報，不會送交真人審核。</p><div class="field"><label for="report-reason">發生了什麼？</label><select id="report-reason" name="reason"><option>不合適或令人不舒服的內容</option><option>冒充身份</option><option>騷擾或重複邀請</option></select></div><button type="submit" class="btn">記錄模擬回報</button></form>`);
     case 'toggle-motion':closeContractUI?.();ui.motion=!ui.motion;save();render(false);if($('#sheet').open)showControls();return;
     case 'fail-next':ui.failNext=!ui.failNext;save();render(false);if($('#sheet').open)showControls();return toast(ui.failNext?'下次提交、AI 建議或消息發送將模擬失敗。':'已恢復正常發送。');
-    case 'logout':clearMatching();homeGreeting.reset();clearAuthDraft();dispatch({type:'DEMO_LOGOUT'},false);ui.history=[];return go('welcome',{replace:true});
+    case 'logout':resetSound();clearMatching();homeGreeting.reset();clearAuthDraft();dispatch({type:'DEMO_LOGOUT'},false);ui.history=[];return go('welcome',{replace:true});
     case 'reset':return confirmSheet('重新體驗整個流程？','將清除這份原型在本機的演示資料，從歡迎頁重新開始。','confirm-reset','重新開始');
-    case 'confirm-reset':landingVideoScene?.dispose();landingVideoScene=null;homeGreeting.reset();clearAuthDraft();clearMatching();clearTimeout(initializeTimer);busy=false;companionTyping=false;state=initialState();ui={route:'welcome',history:[],motion:ui.motion,matchResult:'found',failNext:false};closeSheet();save();return render(true);
+    case 'confirm-reset':resetSound();landingVideoScene?.dispose();landingVideoScene=null;homeGreeting.reset();clearAuthDraft();clearMatching();clearTimeout(initializeTimer);busy=false;companionTyping=false;state=initialState();ui={route:'welcome',history:[],motion:ui.motion,matchResult:'found',failNext:false};closeSheet();save();return render(true);
   }
 }
 
 document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!el)return;if(el.dataset.go){e.preventDefault();if(el.closest('.bottom-nav')&&el.dataset.go===ui.route)return;return go(el.dataset.go,{direction:el.dataset.direction});}if(el.dataset.action){e.preventDefault();return runAction(el.dataset.action,el);}if(el.dataset.topic){$('#topic').value=el.dataset.topic;return;}if(el.dataset.mode){dispatch({type:'UPDATE_DRAFT',patch:{...formPatch(),mode:el.dataset.mode}},false);return render(false);}if(el.dataset.invitation){ui.selectedInvite=el.dataset.invitation;return go('invite');}if(el.dataset.relationship){ui.selectedRelationship=el.dataset.relationship;return go('chat');}if(el.dataset.say){return sendCompanion(el.dataset.say);}if(el.dataset.publicSay){dispatch({type:'SET_PUBLIC_DRAFT',text:el.dataset.publicSay},false);render(false);$('#public-message')?.focus();return;}if(el.dataset.retry){dispatch({type:'RETRY_MESSAGE',messageId:el.dataset.retry,fail:consumeFailure()});return;}});
-function sendCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
+function sendCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
 document.addEventListener('submit',e=>{const form=e.target.closest('form[data-form]');if(!form)return;e.preventDefault();const data=new FormData(form);switch(form.dataset.form){case 'login':case 'register':{
   const account=String(data.get('account')||'').trim(),password=String(data.get('password')||'');
   authDraft.account=account;authDraft.password=password;
@@ -640,6 +710,7 @@ window.addEventListener('storage',e=>{
   clearTimeout(landingHelloTimer);landingReveal=null;landingReaction='';
   const before=actor(),authenticated=state.session.authenticated;
   state=hydrateState(e.newValue);
+  if(authenticated&&!state.session.authenticated)resetSound();
   if(before!==actor()||authenticated!==state.session.authenticated){
     closeSheet();companionTyping=false;clearMatching();ui.history=[];
     ui.route=state.session.authenticated?(actor()==='a'?setupRoute():'relations'):'welcome';
@@ -657,6 +728,7 @@ if(ui.route==='initializing'&&state.onboarding.status==='ready')ui.route=setupRo
 // Comparison frames use disposable demo state; the main prototype stays untouched.
 function prepareComparison(route) {
   if(route==='welcome') {
+    resetSound();
     landingVideoScene?.dispose();landingVideoScene=null;homeGreeting.reset();clearAuthDraft();clearMatching(); clearTimeout(initializeTimer); companionTyping=false; busy=false;
     state=initialState(); ui={route:'welcome',history:[],motion:ui.motion,matchResult:'found',failNext:false};
   } else if(!state.session.authenticated || !landingComplete(state)) {

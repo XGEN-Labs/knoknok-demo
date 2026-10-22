@@ -1,0 +1,18 @@
+/* Persistent audio stays usable while the video waits and the form is inert. */
+.phone .landing-volume-toggle {
+  position:absolute;top:var(--app-safe-top);right:var(--kn-navigation-inset,7%);z-index:55;
+  display:grid;place-items:center;box-sizing:border-box;
+  width:var(--kn-navigation-size,44px);height:var(--kn-navigation-size,44px);padding:0;margin:0;
+  border:1px solid rgba(255,255,255,.85);border-radius:50%;
+  background:rgba(255,255,255,.7)!important;color:var(--kn-ui-color-text,#26242c)!important;
+  box-shadow:var(--kn-glass-control-shadow,0 8px 24px #413a2914)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+.phone .landing-volume-toggle[hidden]{display:none}
+.phone .landing-volume-toggle .centered-volume-icon{display:block;width:22px;height:22px;color:var(--kn-ui-color-text,#26242c)!important;stroke:currentColor!important;fill:none}
+.phone .landing-volume-toggle:focus-visible{outline:2px solid var(--kn-ui-color-focus,#4d665d);outline-offset:4px}
+.phone > :is(.landing-video-skip,.landing-video-resume){z-index:40}
+.phone[data-loading-state="visible"] :is(.klin-loading-light,.klin-loading-status),
+.phone[data-loading-state="leaving"] :is(.klin-loading-light,.klin-loading-status){visibility:hidden}
+.phone{background-color:#e7e8dd}
+.scene-loading-retry{border:1px solid #fff;border-radius:999px;background:#ffffffb3;color:#3f554b;padding:12px 24px;font:inherit;cursor:pointer}

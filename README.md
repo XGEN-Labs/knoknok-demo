@@ -1,15 +1,27 @@
-# Knoknok interactive demo
+# Knoknok Demo
 
-Current release: `20261022-mini-v16-32` (2026-10-22).
+交互原型版本：`20261022-experience-33`。
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261022-mini-v16-32)
+影片引导初次相遇，在对应画面暂停收集信息及签署约定，然后进入带有 3D 伙伴的小屋。支持名片编辑、递名片、保存图片与分享。账号、朋友、聊天和数据仍为本地原型演示。
 
-The updated landing film is 48.208333 seconds at 24 fps. It pauses at 5 seconds while all seven profile questions are answered. After the final answer, the encounter and contract reveal play continuously to 30.5 seconds. The contract interaction becomes available after that reveal. Completing the signature continues the film to its final frame at 48.166667 seconds, then enters the room. Skip finishes the active film interval; it does not skip profile validation or sign the contract. The film and information entry stages have no back button.
+本版统一了输入字色和焦点外观，并为视频、图片与 3D 场景提供加载状态。右上角声音开关默认关闭；点击后可听到配乐和配合 UI 的系统合成角色语音。部分动态文案使用设备系统语音，音色随浏览器和系统而变化。
 
-The adult room character uses the new v16 model, including its rigged mesh and matching hair data. Room interactions and the card handoff remain part of the experience. The welcome screen retains its static portrait. Cream surfaces, sage hills and champagne-gold room elements continue the existing scene styling. Evolution is presented by the film, without a second app-generated particle sequence.
+## 本地运行
 
-The UI uses the shared typography, spacing, buttons and icons. Standard glass has 70% white fill; landing input glass uses a decoded held frame and precomposed blur. All information stages reuse the same held frame. Conversation content retains natural height, with whole-page scrolling on smaller screens.
+需要现代浏览器、WebGL 和 Node.js。在此运行包目录执行：
 
-Validation: 272 automated tests passed. The runtime build contains 240 files before its generated manifest and 150 assets, with no missing assets. Browser verification is recorded separately in the private development project. No physical-device verification is claimed.
+```sh
+npx --yes serve . --listen 8767
+```
 
-This public repository contains only the deployable web build and required notices. Development history, references, source model packages and private handoff documents remain in the private development repository. Video seeks require an HTTP server supporting byte-range requests.
+打开 <http://localhost:8767/>。请通过 HTTP 访问，不要直接双击 `index.html`。视频定位需要静态服务器支持 HTTP Range；部署平台同样需要保留该能力。
+
+## 使用
+
+- 从欢迎页进入，按画面提示填写资料。
+- 视频播放时可使用右下角跳过，到达当前片段对应的交互节点。
+- 初见的资料填写、签署和进入房间均由真实用户操作推进。
+- 声音默认静音，手动开启后才播放；可随时关闭。
+- 点击房间里的名片入口查看递卡动作，继续编辑、保存或分享名片。
+
+体验资料保存在当前浏览器。此仓库是可部署的静态运行包。

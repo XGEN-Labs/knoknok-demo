@@ -30,12 +30,28 @@
   outline:2px solid var(--kn-ui-color-focus)!important;
   outline-offset:3px!important;
 }
-.phone :is(.composer-row,.onboarding-input-row):has(:focus-visible) {
-  outline:2px solid var(--kn-ui-color-focus)!important;
-  outline-offset:3px!important;
-}
-.phone :is(.composer-row,.onboarding-input-row) :is(input,textarea):focus-visible {
+/* Editable fields use their own rounded surface. The generic selector above
+   contains two attribute selectors in :is(); these scoped rules deliberately
+   outrank it so a textarea never receives a second rectangular focus ring. */
+.phone#phone :where(input:not([type="checkbox"]):not([type="radio"]),textarea,select,.klin-select-trigger,.kn-date-trigger):is(:focus,:focus-visible) {
   outline:none!important;
+  outline-offset:0!important;
+  border-color:var(--kn-ui-color-input-focus)!important;
+  box-shadow:0 0 0 2px var(--kn-ui-color-input-focus-halo)!important;
+}
+.phone#phone :is(.composer-row,.onboarding-input-row,.network-search):focus-within,
+.phone#phone :is(.composer-row,.onboarding-input-row,.network-search):has(:focus-visible) {
+  outline:none!important;
+  outline-offset:0!important;
+  border-color:var(--kn-ui-color-input-focus)!important;
+  box-shadow:var(--kn-ui-shadow-control),0 0 0 2px var(--kn-ui-color-input-focus-halo)!important;
+}
+.phone#phone :is(.composer-row,.onboarding-input-row,.network-search) :is(input,textarea,.kn-date-trigger),
+.phone#phone :is(.composer-row,.onboarding-input-row,.network-search) :is(input,textarea,.kn-date-trigger):is(:focus,:focus-visible) {
+  outline:none!important;
+  outline-offset:0!important;
+  border:0!important;
+  box-shadow:none!important;
 }
 /* The wheel itself is masked; put keyboard focus outside that fade. */
 .phone .kn-date-column:has(.kn-date-wheel:focus-visible) {

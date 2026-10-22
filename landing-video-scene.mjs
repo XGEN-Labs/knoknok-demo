@@ -19,7 +19,7 @@ export const LANDING_VIDEO_CUES = Object.freeze([
 ].map(Object.freeze));
 export const LANDING_ARRIVAL_CUE = Object.freeze({key:'arrival',start:frame(732),end:frame(1156)});
 
-export function createLandingVideoScene({phone}={}) {
+export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChange=()=>{}}={}) {
   if(!phone)throw new TypeError('A phone host is required.');
   const host=document.createElement('div');host.className='landing-video-scene';host.hidden=true;
   const video=document.createElement('video');video.className='landing-video-plate';
@@ -34,6 +34,9 @@ export function createLandingVideoScene({phone}={}) {
   let active=false,lastState={state:'inactive',readyForInput:false},disposed=false,reducedMotion=false;
   const departure=createLandingDeparture();
   let presentedState='inactive',presentedReady=false;
+  const reportMedia=()=>onMediaChange({active:active&&!disposed,playing:active&&!disposed&&presentedState==='playing'&&!video.paused&&!video.seeking&&video.readyState>=3,time:video.currentTime||0,rate:video.playbackRate||1});
+  const mediaEvents=['timeupdate','playing','pause','waiting','seeking','seeked','ratechange','ended'];
+  for(const event of mediaEvents)video.addEventListener(event,reportMedia);
   const landingGlass=createLandingGlass({phone,sourceCanvas:still});
   const heldFrame=createLandingHeldFrame({video,canvas:still,frameRate:24,onSettled:()=>applyPresentation()});
   function applyPresentation() {
@@ -61,6 +64,7 @@ export function createLandingVideoScene({phone}={}) {
       layer.inert=!presentedReady;
       if(presentedReady)layer.removeAttribute('aria-hidden');else layer.setAttribute('aria-hidden','true');
     }
+    onPresentation({state:presentedState,readyForInput:presentedReady});reportMedia();
   }
   function applyState(next) {
     lastState=next;if(!active||disposed)return;
@@ -79,7 +83,7 @@ export function createLandingVideoScene({phone}={}) {
       active=enabled;host.hidden=!active;if(!active){departure.cancel();resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
       if(!active){delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
       player.update({active,key:departure.phase!=='idle'?'arrival':key,reducedMotion,restore});
-      if(active)applyState(lastState);
+      if(active)applyState(lastState);else{onPresentation({state:'inactive',readyForInput:false});reportMedia();}
     },
     depart({onComplete,reducedMotion:stillness=reducedMotion}={}) {
       if(disposed||!active||!departure.begin(onComplete))return false;
@@ -90,6 +94,6 @@ export function createLandingVideoScene({phone}={}) {
     },
     get readyForInput(){return active&&presentedReady;},
     getDiagnostics:()=>({...player.getDiagnostics(),state:presentedState,readyForInput:active&&presentedReady,phase:departure.phase,heldFrame:heldFrame.getDiagnostics()}),
-    dispose(){disposed=true;departure.dispose();landingGlass.dispose();heldFrame.dispose();player.dispose();host.remove();resume.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
+    dispose(){disposed=true;reportMedia();for(const event of mediaEvents)video.removeEventListener(event,reportMedia);departure.dispose();landingGlass.dispose();heldFrame.dispose();player.dispose();host.remove();resume.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
   };
 }

@@ -1,0 +1,70 @@
+/* Resource waiting uses a stable matte scene, not another live glass compositor.
+ * Keep explicit skip / volume above --kn-loading-z so they remain available. */
+.phone > .scene-loading {
+  position: absolute;
+  inset: 0;
+  z-index: var(--kn-loading-z, 30);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 68% 25%, #fbf4e6 0%, transparent 47%),
+    radial-gradient(ellipse at 22% 72%, #cbd6ca 0%, transparent 57%),
+    linear-gradient(160deg, #eee9de 0%, #e5e8de 58%, #e7dfd0 100%);
+  color: var(--kn-ui-color-focus, #4d665d);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+  isolation: isolate;
+}
+.phone > .scene-loading[data-loading-state="visible"],
+.phone > .scene-loading[data-loading-state="leaving"] {
+  visibility: visible;
+  pointer-events: auto;
+}
+.phone > .scene-loading[data-loading-state="visible"] { opacity: 1; }
+.scene-loading-content {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 24px;
+  transform: translateY(-12px);
+}
+.scene-loading-symbol { position: relative; width: 96px; height: 112px; }
+.scene-loading-symbol svg { display: block; position: relative; width: 96px; height: 112px; overflow: visible; }
+.scene-loading-glow {
+  position: absolute;
+  inset: -38px -43px -16px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #fffdf7 0%, #f8eed7a3 36%, #f8eed700 70%);
+  opacity: .66;
+  transform: scale(.96);
+  animation: kn-scene-loading-breathe 2600ms ease-in-out infinite alternate;
+}
+.scene-loading-door-fill { fill: #fffdf855; }
+.scene-loading-door { stroke: #7c8e7c; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.scene-loading-inner { stroke: #c0a77e; stroke-width: 1; stroke-linecap: round; opacity: .8; }
+.scene-loading-light { fill: #c4a77a; }
+.phone .scene-loading .scene-loading-label {
+  margin: 0;
+  font-family: var(--kn-ui-font-ui, -apple-system, BlinkMacSystemFont, "PingFang TC", sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: .03em;
+  color: var(--kn-ui-color-focus, #4d665d);
+  text-align: center;
+}
+@keyframes kn-scene-loading-breathe {
+  to { opacity: .9; transform: scale(1.04); }
+}
+.scene-loading[data-reduced-motion="true"],
+body.reduced-motion .scene-loading { transition: none; }
+.scene-loading[data-reduced-motion="true"] .scene-loading-glow,
+body.reduced-motion .scene-loading .scene-loading-glow { animation: none; opacity: .76; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .phone > .scene-loading { transition: none; }
+  .scene-loading-glow { animation: none; opacity: .76; transform: none; }
+}
