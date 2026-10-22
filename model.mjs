@@ -514,6 +514,37 @@ export function reduce(previous, action = {}) {
       }
       return state;
     }
+    case 'COMPANION_REQUEST': {
+      const text = clean(action.text);
+      if (!text || !action.id) return fail(state, '先寫一句想說的話吧。');
+      const existing = space.companionMessages.find(message => message.id === action.id);
+      if (existing) {
+        if (existing.role !== 'user' || existing.status !== 'failed') return state;
+        existing.status = 'pending'; delete existing.error;
+        // A retry is a new send after any intervening completed turns.
+        space.companionMessages.splice(space.companionMessages.indexOf(existing), 1);
+        space.companionMessages.push(existing);
+      } else {
+        space.companionMessages.push({ id: action.id, role: 'user', text, source: 'model', status: 'pending', createdAt: state.now });
+      }
+      return state;
+    }
+    case 'COMPANION_RESOLVE': {
+      const message = space.companionMessages.find(message => message.id === action.id);
+      if (!message || message.status !== 'pending' || !clean(action.text)) return state;
+      message.status = 'complete';
+      space.companionMessages.push({
+        id: nextId(state, 'private-message'), role: 'assistant', text: action.text,
+        status: 'complete', source: 'model', provider: action.provider,
+        fallback: action.fallback === true, createdAt: state.now,
+      });
+      return state;
+    }
+    case 'COMPANION_REJECT': {
+      const message = space.companionMessages.find(message => message.id === action.id);
+      if (message?.status === 'pending') { message.status = 'failed'; message.error = action.error; }
+      return state;
+    }
     case 'COMPANION_SEND': {
       const text = clean(action.text);
       if (!text) return fail(state, '先寫一句想說的話吧。');
