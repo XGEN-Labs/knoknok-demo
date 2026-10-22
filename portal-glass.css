@@ -1,0 +1,85 @@
+/* Portal scene and existing-component bindings to the approved glass v1 tokens. */
+.phone[data-portal-scene]:not([data-portal-scene="inactive"]){background:#e7e5f4}
+.phone>.portal-scene-host{z-index:0;background:#e7e5f4;filter:none!important;transition:opacity .8s ease;opacity:1;overflow:hidden;border-radius:inherit}
+.phone>.portal-scene-host.portal-departing{opacity:0}
+.portal-scene-host>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.portal-welcome-plate{transform-origin:82% 25%;transform:none;filter:none;transition:transform 1.8s cubic-bezier(.28,.6,.2,1),filter 1.8s ease}
+.portal-arrival-plate{opacity:0;transition:opacity .75s ease}
+/* Keep the light larger than the viewport at every frame. Scaling a clipped
+   layer first exposed a rectangle, then an ellipse; only its opacity now
+   changes, while the camera image retains the actual doorway push-in. */
+.portal-warm-light{position:absolute;inset:-64px;background:radial-gradient(ellipse at 73% 33%,#fffaf0 0,#eeeaffb8 28%,#bfc8f26b 58%,#b9c7f300 100%);filter:blur(24px);opacity:0;transition:opacity 1.7s ease .15s;pointer-events:none}
+.phone[data-portal-scene="login"] .portal-welcome-plate{transform:translate(-32%,25%) scale(3.8);filter:blur(34px)}
+.phone[data-portal-scene="login"] .portal-warm-light{opacity:.48}
+.phone[data-portal-scene="landing"] .portal-arrival-plate{opacity:1;filter:brightness(calc(1 - var(--klin-appearance-dim,0)))}
+.phone[data-portal-scene="landing"] .portal-warm-light{opacity:.15}
+.phone[data-portal-scene="landing"] .onboarding-klin>*{visibility:hidden!important}
+.phone.klin-login-scene-active[data-portal-scene="landing"]>.klin-world-host{visibility:visible!important;z-index:1;filter:none!important}
+.phone[data-portal-scene="landing"]>#app{z-index:2}
+/* Match the native foot anchor when WebGL is unavailable. No duplicate sprite
+   flashes while the native meshes load or gather from particles. */
+.phone[data-portal-scene="landing"] .onboarding-klin{top:18.84%;height:17.16%;left:28%;width:44%}
+.phone[data-portal-scene="landing"] .is-birth-time .onboarding-klin{top:16.74%;height:13.26%}
+.phone[data-portal-scene="landing"].klin-world-fallback .onboarding-klin>.klin-art{visibility:visible!important;animation:none!important}
+.phone #app .auth-login .auth-header{justify-content:flex-start}
+.phone #app .page.auth-page{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px;box-sizing:border-box;padding:calc(var(--app-safe-top) + 60px) 0 var(--app-safe-bottom);overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:16px}
+.phone #app .auth-page>.auth-brand{position:static;display:block;flex:none;width:86%;max-width:358px;height:43px;min-height:43px;margin:auto 0 0;padding:0;line-height:0;align-self:center}
+.phone #app .auth-page>.auth-brand .brand-logo{display:block;width:128px;height:100%;object-fit:contain;object-position:left center;filter:brightness(0)!important}
+.phone #app .auth-page>.auth-panel{position:relative;flex:none;top:auto;bottom:auto;left:auto;right:auto;width:86%;max-width:358px;height:auto;max-height:none;transform:none;margin:0 0 auto;overflow:visible}
+.phone #app .auth-login .auth-panel{background:var(--kn-glass-panel-fill)!important;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;box-shadow:var(--kn-glass-panel-shadow);backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));border-radius:var(--kn-glass-panel-radius);padding:25px}
+.phone #app .auth-login .auth-form .auth-field>.input{background:var(--kn-glass-input-fill);border:var(--kn-glass-edge-width) solid var(--kn-glass-input-edge);backdrop-filter:blur(var(--kn-glass-input-blur));-webkit-backdrop-filter:blur(var(--kn-glass-input-blur));box-shadow:var(--kn-glass-input-shadow)}
+.phone[data-portal-phase="entering"] #app .auth-page>:is(.auth-brand,.auth-panel){animation:portal-auth-arrive .6s ease 1.25s both!important}
+@keyframes portal-auth-arrive{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+.phone #app :is(.icon-button,.scene-icon,.onboarding-back,.onboarding-history,.auth-back),
+.phone #app .conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn),
+.phone #app .home-composer .composer-row,
+.phone #app .home-chat-actions>.visit-entry{background:var(--kn-glass-fill)!important;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;box-shadow:var(--kn-glass-control-shadow)!important;backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));color:var(--kn-glass-ink)!important}
+/* Give editable onboarding controls one full-capsule glass layer. Keep the
+   native textarea paint separate from the backdrop so focus/repaint cannot
+   split the translucent surface into horizontal compositing bands. */
+.phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row{
+  position:relative;overflow:hidden;background:transparent!important;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+.phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
+  background:var(--kn-glass-fill);
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row>*{position:relative;z-index:1}
+.phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row textarea{
+  appearance:none;-webkit-appearance:none;background:transparent!important;
+  background-image:none!important;box-shadow:none!important;filter:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+.phone #app :is(.icon-button,.scene-icon,.onboarding-back,.auth-back) svg{color:inherit;stroke:currentColor}
+.phone #app .conversation-onboarding .onboarding-message p{color:var(--kn-glass-ink)!important}
+.phone #app .conversation-onboarding .birth-hour-grid :is(strong,small){color:var(--kn-glass-ink)!important}
+.phone #app .conversation-onboarding .onboarding-header .onboarding-history{display:none}
+.phone #app .onboarding-composer .kn-date-trigger{flex-direction:row-reverse;justify-content:flex-end;gap:10px;background:transparent!important;border-color:transparent!important;box-shadow:none!important;filter:none!important;transform:none!important}
+.phone #app .onboarding-composer .kn-date-trigger:hover{background:transparent!important;border-color:transparent!important;box-shadow:none!important;filter:none!important;transform:none!important}
+.phone #app .onboarding-composer .kn-date-trigger svg{color:#4b4852}
+.phone[data-card-handoff="presenting"]>.klin-world-host{filter:none}
+/* Anchor the whole login group in the upper area. Auto-centering placed it
+   too low even with an added bottom inset. Keyboard layouts keep natural flow. */
+@container(min-height:621px){
+  .phone #app .page.auth-page{padding-top:calc(var(--app-safe-top) + clamp(54px,10cqh,96px));padding-bottom:var(--app-safe-bottom)}
+  .phone #app .auth-page>.auth-brand{margin:0}
+  .phone #app .auth-page>.auth-panel{margin:0}
+}
+@media(max-height:740px){.phone #app .auth-login .auth-panel{padding:21px 23px}.phone #app .auth-page>.auth-brand{height:38px;min-height:38px}.phone #app .auth-page>.auth-brand .brand-logo{width:114px}}
+@container(max-height:620px){
+  .phone #app .page.auth-page{gap:12px;padding-top:calc(var(--app-safe-top) + 48px)}
+  .phone #app .auth-login .auth-panel{padding:16px 22px}
+  .phone #app .auth-page>.auth-brand{height:32px;min-height:32px}
+  .phone #app .auth-page>.auth-brand .brand-logo{width:96px}
+  .phone #app .auth-login .auth-heading{margin-bottom:12px}
+  .phone #app .auth-login .auth-heading h1{font-size:22px}
+  .phone #app .auth-login .auth-heading p{margin-top:5px;font-size:11px}
+  .phone #app .auth-login .auth-form{gap:10px}
+  .phone #app .auth-login .auth-form .auth-field>.input{height:44px;min-height:44px}
+  .phone #app .auth-login .auth-submit .btn{height:44px;min-height:44px}
+}
+@media(prefers-reduced-motion:reduce){.portal-scene-host :is(.portal-welcome-plate,.portal-warm-light,.portal-arrival-plate){transition:none}.phone[data-portal-phase="entering"] #app .auth-page>:is(.auth-brand,.auth-panel){animation:none!important}}
+.phone[data-portal-motion="still"] .portal-scene-host>*{transition:none}

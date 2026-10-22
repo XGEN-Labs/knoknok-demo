@@ -1,0 +1,18 @@
+/* Stable glass for the paused film: the sampled scene, blur and white fill are
+   painted once into an ordinary image. Text and controls remain normal DOM. */
+.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn),
+.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn):hover:not(:disabled){
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-thread,.onboarding-composer) [data-landing-glass="ready"],
+.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-thread,.onboarding-composer) [data-landing-glass="ready"]:hover:not(:disabled){
+  background-color:var(--kn-glass-fill)!important;
+  background-image:var(--landing-glass-image)!important;
+  background-size:var(--landing-glass-size)!important;
+  background-position:var(--landing-glass-position)!important;
+  background-repeat:no-repeat!important;
+  background-origin:border-box!important;
+  background-clip:border-box!important;
+  filter:none!important;
+}

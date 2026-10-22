@@ -1,0 +1,54 @@
+/* Geometry and original artwork. Material continues to use approved glass v1. */
+.phone #app .room-chat-page .home-top{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;justify-content:stretch;column-gap:12px;left:7%;right:7%;height:44px;min-height:44px}
+.phone #app .room-chat-page .home-top>.scene-icon:first-child{grid-column:1;grid-row:1;justify-self:start}
+.phone #app .room-chat-page .home-top>.volume-toggle{grid-column:3;grid-row:1;justify-self:end}
+.phone #app .communication-mode{display:none!important}
+.phone #app :is(.scene-icon,.visit-entry) :is(svg.nav-icon,img.restored-control-icon,img.centered-volume-icon){display:block;width:26px!important;height:26px!important;min-width:26px;flex:none;object-fit:contain;object-position:center;margin:0!important;transform:none!important;opacity:1}
+.phone #app .scene-icon :is(img,svg).centered-volume-icon{display:block!important;visibility:visible!important;opacity:1!important;width:22px!important;height:22px!important;min-width:22px;color:var(--kn-glass-ink,#26242c);stroke:currentColor;fill:none;overflow:visible}
+.phone #app :is(.scene-icon,.volume-toggle){align-items:center!important;justify-content:center!important;text-align:center;line-height:1}
+.phone #app :is(.icon-button,.scene-icon,.onboarding-back,.auth-back) .back-chevron{display:block;width:24px!important;height:24px!important;flex:none;margin:0!important;transform:none!important}
+.phone #app .profile-card-page .page-top{display:flex;align-items:center;min-height:44px;height:44px;padding:0;gap:12px}
+.phone #app .profile-card-page .page-top>div{display:flex;align-items:center;min-height:44px;margin-top:0;margin-bottom:0}
+.phone #app .profile-card-page .page-top h2{margin:0;line-height:44px}
+.phone #app .profile-card-page .page-top .top-right{position:static;display:flex;align-items:center;align-self:center;margin-left:auto;height:44px;min-height:44px}
+.phone #app .profile-card-page .page-top .scene-icon{margin:0;line-height:1;vertical-align:middle}
+/* Interpolating the second grid column gives the form room to widen smoothly.
+   The visit button stays laid out during the transition instead of display:none. */
+.phone #app .home-chat-actions{position:relative;display:grid!important;grid-template-columns:minmax(0,1fr) 90px;column-gap:10px;align-items:stretch;transition:grid-template-columns 400ms cubic-bezier(.22,.61,.24,1),column-gap 400ms cubic-bezier(.22,.61,.24,1)}
+.phone #app .home-composer{min-width:0;width:100%}
+.phone #app .home-chat-actions>.visit-entry{display:flex!important;flex-direction:row!important;align-items:center;justify-content:center;gap:7px;box-sizing:border-box;width:100%;min-width:0!important;min-height:60px;height:60px;padding:10px 8px;overflow:hidden;white-space:nowrap;opacity:1;visibility:visible;transform:none;transition:opacity 360ms ease,transform 400ms cubic-bezier(.22,.61,.24,1),padding 400ms ease,visibility 0ms}
+.phone #app .home-chat-actions>.visit-entry span{display:block;flex:none;line-height:22px;margin:0}
+.phone #app .visit-entry .restored-control-icon{width:26px!important;height:26px!important;min-width:26px}
+.phone[data-conversation="true"] #app .home-chat-actions{grid-template-columns:minmax(0,1fr) 0;column-gap:0}
+.phone[data-conversation="true"] #app .home-chat-actions>.visit-entry{display:flex!important;opacity:0;visibility:hidden;pointer-events:none;padding-left:0;padding-right:0;border-width:0!important;transform:translateX(8px) scale(.94);transition:opacity 260ms ease,transform 400ms cubic-bezier(.22,.61,.24,1),padding 400ms ease,visibility 0ms 400ms}
+.phone #app .home-composer .composer-row,.phone[data-conversation="true"] #app .home-composer .composer-row{position:relative;display:flex;box-sizing:border-box;width:100%;height:60px;min-height:60px;max-height:60px;align-items:center;padding:7px;gap:3px;transition:border-radius 400ms ease,background-color 200ms ease}
+.phone #app .home-composer textarea,.phone[data-conversation="true"] #app .home-composer textarea{order:1;flex:1;width:0;min-width:0;height:32px;min-height:32px;max-height:32px;padding:4px 7px;line-height:24px;resize:none;overflow-y:auto}
+.phone #app .home-composer textarea{font-size:16px}
+.phone #app .home-composer textarea::placeholder{font-size:14px;font-weight:400;color:#777;opacity:1;text-shadow:none;filter:none}
+.phone #app [data-voice-fallback="true"] .home-composer textarea::placeholder{font-size:13px;color:#777;opacity:1}
+.phone #app .home-composer .send-button{order:4;display:none;align-self:center;flex:0 0 44px;width:44px!important;min-width:44px!important;height:44px!important;min-height:44px!important;padding:0;place-items:center}
+.phone #app .home-composer .send-button svg{display:block;width:24px;height:24px;margin:0}
+.phone #app [data-has-draft="true"] .home-composer .send-button{display:grid}
+.phone #app [data-has-draft="true"] .voice-open-button{display:none}
+.phone #app .voice-icon-control{display:grid;place-items:center;flex:0 0 44px;width:44px;min-width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--kn-glass-ink,#26242c);line-height:1;box-shadow:none;cursor:pointer}
+.phone #app .voice-icon-control img{display:block;flex:none;width:24px!important;height:24px!important;margin:0!important;object-fit:contain;transform:none!important}
+.phone #app .voice-open-button{order:4;background:#202020!important;color:#fff!important}
+.phone #app .voice-open-button .voice-microphone-icon{display:block;width:22px!important;height:22px!important;min-width:22px;margin:0!important;transform:none!important}
+.phone #app :is(.voice-open-button,.voice-finish-button) img{filter:brightness(0) invert(1)}
+.phone #app .voice-capture-controls{order:1;display:flex;align-items:center;gap:10px;width:100%;min-width:0;height:44px}
+.phone #app .voice-capture-controls[hidden]{display:none!important}
+.phone #app [data-voice-capture="true"] .home-composer :is(textarea,.voice-open-button,.send-button){display:none!important}
+.phone #app .voice-capture-stage{position:relative;display:grid;place-items:center;flex:1;min-width:0;height:40px;overflow:hidden}
+.phone #app .voice-capture-stage canvas{display:block;width:100%;height:32px}
+.phone #app .voice-capture-stage canvas[hidden]{display:none!important}
+.phone #app [data-voice-caption]{display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:13px;font-weight:400;line-height:24px;color:#666;text-align:center;text-shadow:none}
+.phone #app :is(.voice-cancel-button,.voice-stop-button){background:var(--kn-glass-fill,rgba(255,255,255,.30));border:var(--kn-glass-edge-width,1px) solid var(--kn-glass-edge,rgba(255,255,255,.65))}
+.phone #app .voice-stop-button img{width:20px!important;height:20px!important}
+.phone #app .voice-finish-button{position:relative;background:#202020!important;color:#fff!important}
+.phone #app .voice-icon-control:disabled{cursor:default;opacity:.45}
+.phone #app [data-voice-state="processing"] .voice-finish-button img{visibility:hidden}
+.phone #app [data-voice-state="processing"] .voice-finish-button::after{content:"";position:absolute;width:19px;height:19px;border:2px solid #ffffff40;border-top-color:#fff;border-radius:50%;animation:voice-transcription-spin .9s linear infinite}
+.phone #app .voice-input-status{position:absolute;display:block;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0;pointer-events:none}
+.phone[data-keyboard-open="true"] #app .room-chat-page .home-top{visibility:hidden}
+@keyframes voice-transcription-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.phone #app :is(.home-chat-actions,.home-chat-actions>.visit-entry,.home-composer .composer-row){transition-duration:0ms!important;transition-delay:0ms!important}.phone #app [data-voice-state="processing"] .voice-finish-button::after{animation:none}}

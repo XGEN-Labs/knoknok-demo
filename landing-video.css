@@ -1,0 +1,94 @@
+/* Keep the existing glass/input typography; only the scene and its timing change. */
+.phone>.landing-video-scene{position:absolute;inset:0;z-index:1;border-radius:inherit;overflow:hidden;background:#202624}
+.phone>.landing-video-scene[hidden]{display:none}
+.landing-video-plate{display:block;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none}
+/* A decoded still is the backdrop while users read/type. Keeping the paused
+   decoder texture out of the glass pass prevents partial-surface repaints. */
+.landing-video-still{position:absolute;inset:0;visibility:hidden}
+.landing-video-scene.has-held-frame>video{visibility:hidden}
+.landing-video-scene.has-held-frame>.landing-video-still{visibility:visible}
+.phone.landing-video-active>#app{z-index:2}
+.phone.landing-video-active>.klin-world-host,
+.phone.landing-video-active>.portal-scene-host,
+.phone.landing-video-active>.home-scene{visibility:hidden!important;opacity:0!important}
+.phone.landing-video-active #app .onboarding-klin{display:none!important}
+.phone.landing-video-active #app .onboarding-thread,
+.phone.landing-video-active #app .onboarding-composer{opacity:1;transform:none;will-change:auto;transition:none}
+/* The glass itself must stop moving once shown. A forwards-filled transform
+   on the newest bubble kept its backdrop in a separate compositing surface. */
+.phone.landing-video-active #app .conversation-onboarding .onboarding-message{
+  animation:none;
+  transform:none;
+  opacity:1;
+  will-change:auto;
+}
+.phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-thread,
+.phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-composer{opacity:0;visibility:hidden;pointer-events:none}
+.phone.landing-video-active:not([data-landing-playback="waiting"]):not([data-landing-playback="fallback"]) #app .onboarding-header{visibility:hidden;pointer-events:none}
+/* The film owns the signed journey home, including its last held frame and
+   failure/reduced-motion completion. No encounter UI may reappear underneath. */
+.phone.landing-video-active:is([data-landing-phase="departing"],[data-landing-phase="arriving"],[data-landing-phase="arrived"])>#app{visibility:hidden;pointer-events:none}
+/* Let content determine its own height. The empty grid tracks place the group
+   in the lower scene without putting messages or hour choices in a crop box.
+   When a keyboard leaves too little room, the whole page scrolls as one group. */
+.phone.landing-video-active #app .page.conversation-onboarding{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:minmax(0,3fr) max-content minmax(16px,1fr) max-content;
+  gap:0;
+  box-sizing:border-box;
+  padding:var(--app-safe-top) 6% var(--app-safe-bottom);
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  overflow-anchor:none;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  scroll-padding-block:var(--app-safe-top) var(--app-safe-bottom);
+}
+.phone.landing-video-active #app .conversation-onboarding .onboarding-thread{
+  grid-row:2;
+  position:relative;
+  inset:auto;
+  width:100%;
+  height:auto;
+  min-width:0;
+  min-height:0;
+  max-height:none;
+  margin:0;
+  padding:0;
+  overflow:visible;
+  justify-content:flex-start;
+}
+.phone.landing-video-active #app .conversation-onboarding .onboarding-thread>:is(.onboarding-messages,.birth-hour-grid){
+  flex:none;
+  height:auto;
+  max-height:none;
+  overflow:visible;
+}
+.phone.landing-video-active #app .conversation-onboarding .onboarding-composer{
+  grid-row:4;
+  position:relative;
+  inset:auto;
+  align-self:end;
+  width:100%;
+  min-width:0;
+  height:auto;
+  margin:0;
+  padding:0;
+  overflow:visible;
+}
+.phone.landing-video-active #app .conversation-onboarding .onboarding-composer>.quick-replies{
+  flex-wrap:wrap;
+  overflow:visible;
+  padding:0;
+}
+.phone.landing-video-active #app .conversation-onboarding .onboarding-composer :is(input,textarea,button){scroll-margin-block:16px}
+.phone.landing-video-active #app .onboarding-header{z-index:4}
+.landing-video-resume{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);min-height:52px;padding:0 30px;border-radius:30px;font-family:inherit;font-size:16px;font-weight:600;z-index:5;pointer-events:auto}
+.landing-video-skip{position:absolute;right:6%;bottom:var(--app-safe-bottom,24px);min-height:44px;padding:10px 22px;border-radius:28px;font-family:inherit;font-size:16px;line-height:22px;font-weight:600;z-index:5;pointer-events:auto;cursor:pointer}
+.landing-video-resume[hidden],.landing-video-skip[hidden]{display:none}
+.phone.landing-video-active[data-landing-playback="fallback"]>.landing-video-scene{background:url('assets/landing-video-20261022/room-empty.png') center/cover}
+.phone.landing-video-active[data-landing-playback="fallback"] .landing-video-plate{visibility:hidden}
+@media(prefers-reduced-motion:reduce){.phone.landing-video-active #app .onboarding-thread,.phone.landing-video-active #app .onboarding-composer{transition:none}}
+body.reduced-motion .phone.landing-video-active #app .onboarding-thread,body.reduced-motion .phone.landing-video-active #app .onboarding-composer{transition:none}

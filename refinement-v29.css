@@ -1,0 +1,195 @@
+/* Shared action geometry. Materials come from the approved glass tokens;
+   paper surfaces and the circular send/microphone controls are not targets. */
+.phone {
+  --kn-action-height: 52px;
+  --kn-action-radius: 26px;
+  --kn-navigation-size: 44px;
+  --kn-navigation-inset: 7%;
+}
+
+/* The explicit page selectors also override older page-specific hover rules. */
+.phone #app .page .fixed-footer .btn,
+.phone #app .page .fixed-footer .btn:hover:not(:disabled),
+.phone #app .page .profile-footer .btn,
+.phone #app .page .profile-footer .btn:hover:not(:disabled),
+.phone #app .page.profile-edit-page .profile-edit-footer .btn,
+.phone #app .page.profile-edit-page .profile-edit-footer .btn:hover:not(:disabled),
+.phone #app .page.welcome .welcome-actions > .btn,
+.phone #app .page.welcome .welcome-actions > .btn:hover:not(:disabled),
+.phone #app .page.conversation-onboarding .onboarding-composer > .btn,
+.phone #app .page.conversation-onboarding .onboarding-composer > .btn:hover:not(:disabled),
+.phone #app .page.conversation-onboarding .onboarding-composer > .quick-replies > button,
+.phone #app .page.conversation-onboarding .onboarding-composer > .quick-replies > button:hover:not(:disabled),
+.phone #app .page .lounge-footer > .btn,
+.phone #app .page .lounge-footer > .btn:hover:not(:disabled),
+.phone > .landing-video-skip:not([hidden]),
+.phone > .landing-video-skip:not([hidden]):hover:not(:disabled),
+.phone > .contract-story .contract-actions > .btn.contract-sign,
+.phone > .contract-story .contract-actions > .btn.contract-sign:hover:not(:disabled),
+.phone #sheet .card-share-actions > .btn,
+.phone #sheet .card-share-actions > .btn:hover:not(:disabled),
+.phone #sheet .account-menu-actions > .btn,
+.phone #sheet .account-menu-actions > .btn:hover:not(:disabled),
+.phone #sheet.card-editor-sheet form > .btn[type="submit"],
+.phone #sheet.card-editor-sheet form > .btn[type="submit"]:hover:not(:disabled),
+.phone #sheet .sheet-inner > .btn,
+.phone #sheet .sheet-inner > .btn:hover:not(:disabled) {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--kn-action-height);
+  min-height: var(--kn-action-height);
+  flex-shrink: 0;
+  padding: 12px 16px;
+  border-radius: var(--kn-action-radius);
+  border: var(--kn-glass-edge-width) solid var(--kn-glass-edge) !important;
+  background: var(--kn-glass-fill) !important;
+  color: var(--kn-glass-ink) !important;
+  box-shadow: var(--kn-glass-control-shadow) !important;
+  -webkit-backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  font-family: var(--klin-hand);
+  font-size: 16px;
+  font-weight: 600;
+  font-style: normal;
+  line-height: 24px;
+  letter-spacing: 0;
+  text-align: center;
+  text-shadow: none;
+  filter: none;
+}
+.phone #app .page.welcome .welcome-actions > .btn > span {
+  color: inherit !important;
+  font: inherit;
+}
+
+/* Optional-question skips are full-width footer actions. Keep the other
+   replies side by side; birth-hour choices and circular sends stay separate. */
+.phone #app .page.conversation-onboarding .onboarding-composer > .quick-replies:has(> button[data-action="onboarding-skip"]) {
+  padding-inline: 0;
+}
+.phone #app .page.conversation-onboarding .onboarding-composer > .quick-replies > button[data-action="onboarding-skip"] {
+  width: 100%;
+}
+
+/* Keep the approved solid account-submit material, but match action geometry. */
+.phone #app .page.auth-page .auth-submit .btn {
+  height: var(--kn-action-height);
+  min-height: var(--kn-action-height);
+  padding: 12px 16px;
+  border-radius: var(--kn-action-radius);
+  font-family: var(--klin-hand);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+/* A finished opacity animation with forwards/both fill keeps a backdrop root.
+   Let it expire so the signing control samples the video behind the overlay. */
+.phone > .contract-story {
+  animation-fill-mode: backwards;
+}
+.phone > .contract-story .contract-actions > .btn.contract-sign:disabled {
+  opacity: 1;
+  color: var(--kn-glass-ink) !important;
+  -webkit-text-fill-color: var(--kn-glass-ink);
+  cursor: progress;
+}
+
+/* Room, card and other page navigation share one safe-area baseline. */
+.phone #app .page > :is(.home-top, .page-top, .auth-header, .onboarding-header) {
+  top: var(--app-safe-top);
+  left: var(--kn-navigation-inset);
+  right: var(--kn-navigation-inset);
+  box-sizing: border-box;
+  height: var(--kn-navigation-size);
+  min-height: var(--kn-navigation-size);
+  margin: 0;
+  padding-block: 0;
+  align-items: center;
+}
+.phone #app .page :is(.home-top, .page-top, .auth-header, .onboarding-header) :is(.scene-icon, .icon-button, .auth-back, .onboarding-back),
+.phone #app .page :is(.home-top, .page-top, .auth-header, .onboarding-header) :is(.scene-icon, .icon-button, .auth-back, .onboarding-back):hover:not(:disabled) {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  flex: 0 0 var(--kn-navigation-size);
+  width: var(--kn-navigation-size);
+  min-width: var(--kn-navigation-size);
+  max-width: var(--kn-navigation-size);
+  height: var(--kn-navigation-size);
+  min-height: var(--kn-navigation-size);
+  max-height: var(--kn-navigation-size);
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  border: var(--kn-glass-edge-width) solid var(--kn-glass-edge) !important;
+  background: var(--kn-glass-fill) !important;
+  color: var(--kn-glass-ink) !important;
+  box-shadow: var(--kn-glass-control-shadow) !important;
+  -webkit-backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  line-height: 1;
+  filter: none;
+  transform: none;
+}
+.phone #app .page:is(.profile-card-page, .public-card-page) > .page-top {
+  grid-template-columns: var(--kn-navigation-size) minmax(0, 1fr) var(--kn-navigation-size);
+  padding: 0;
+}
+.phone #app .page:is(.profile-card-page, .public-card-page) > .page-top h2 {
+  text-align: center;
+  line-height: var(--kn-navigation-size);
+}
+
+/* A short speech failure stays next to its input, without opening a panel.
+   Reserve space above the composer so the line cannot cover quick replies. */
+.phone #app .voice-input-status {
+  position: absolute;
+  display: block;
+  left: 10px;
+  right: 10px;
+  top: auto;
+  bottom: calc(100% + 8px);
+  width: auto;
+  height: 20px;
+  min-height: 20px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--kn-glass-ink);
+  font-family: var(--klin-hand);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  clip: auto;
+  clip-path: none;
+  text-shadow: 0 1px 3px #ffffffd9;
+  pointer-events: none;
+}
+.phone #app .voice-input-status:empty {
+  display: none;
+}
+.phone #app .home-chat-bottom:has(.voice-input-status:not(:empty)) .home-chat-actions {
+  margin-top: 28px;
+}
+
+/* One glass surface per input. No nested pseudo-backdrop or clipped sampler
+   can leave a horizontal band across an editable capsule on mobile WebKit. */
+.phone.landing-video-active #app .conversation-onboarding .onboarding-composer .onboarding-input-row {
+  overflow: visible;
+  background: var(--kn-glass-fill) !important;
+  -webkit-backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone.landing-video-active #app .conversation-onboarding .onboarding-composer .onboarding-input-row::before {
+  content: none;
+  display: none;
+}

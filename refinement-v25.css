@@ -1,0 +1,66 @@
+/* Focused corrections from the 2026-10-20 screenshot review. */
+/* Original PNG alpha starts at x=218 of 2172. Align its visible ink, while
+   preserving the original asset and its lighter handwritten proportions. */
+.phone #app .auth-page>.auth-brand .brand-logo{transform:translateX(-10.0368%)}
+/* Header-home and footer hover rules used to outrank the shared glass token. */
+.phone #app .page-top :is(.icon-button,.scene-icon),
+.phone #app .page-top :is(.icon-button,.scene-icon):hover:not(:disabled),
+.phone #app .page .profile-footer .btn,
+.phone #app .page .profile-footer .btn:hover:not(:disabled){
+  background:var(--kn-glass-fill)!important;color:var(--kn-glass-ink)!important;
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;
+  box-shadow:var(--kn-glass-control-shadow)!important;
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone #app .profile-footer{bottom:var(--app-safe-bottom)}
+.phone #app .page .profile-footer .btn{border-radius:30px}
+.phone{--kn-muted-ink:#737373}
+.phone #app .auth-heading p,
+.phone :is(.small-note,.field-help,.scene-hint,.meta){
+  color:var(--kn-muted-ink)!important;font-size:12px;line-height:1.6;font-weight:400;text-shadow:none;
+}
+.phone :is(input,textarea)::placeholder{color:var(--kn-muted-ink);font-size:13px;font-weight:400;opacity:1}
+.phone #app .page.welcome .welcome-actions>.btn,
+.phone #app .page.welcome .welcome-actions>.btn:hover:not(:disabled){
+  background:var(--kn-glass-fill)!important;color:var(--kn-glass-ink)!important;
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;
+  box-shadow:var(--kn-glass-control-shadow)!important;
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone #app .conversation-onboarding{--kn-glass-fill:var(--kn-glass-conversation-fill)}
+.phone #app .conversation-onboarding .onboarding-message,
+.phone #app .conversation-onboarding.is-birth-time .onboarding-message{
+  box-sizing:border-box;width:100%;max-width:100%;min-height:58px;
+  display:flex;align-items:center;padding:15px 17px;
+  font-size:16px;line-height:1.65;border-radius:24px 24px 24px 8px;
+}
+.phone #app .conversation-onboarding .onboarding-message.is-user{border-radius:24px 24px 8px 24px}
+.phone #app .companion-name-anchor{
+  position:absolute;z-index:3;left:var(--klin-foot-x,50%);top:calc(var(--klin-foot-y,68%) + 10px);
+  transform:translateX(-50%);max-width:60%;margin:0;padding:0;border:0;background:transparent;
+  color:#473e40;font-size:14px;line-height:20px;font-weight:500;
+  text-shadow:0 1px 6px #ffffffd9;pointer-events:none;
+  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+.phone[data-growing="true"] #app .companion-name-anchor,
+.phone[data-card-handoff] #app .companion-name-anchor{visibility:hidden}
+.phone[data-growing="true"] #app :is(.home-chat-actions,.home-chat-actions>.visit-entry){visibility:hidden!important;pointer-events:none}
+/* Gate the entire control groups before their first home frame, through travel
+   and awakening. Parent opacity also contains descendants that explicitly set
+   visibility:visible, such as the visit button and volume glyph. */
+.phone #app .home-page.home-entry-pending :is(.home-top,.home-chat-bottom){opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.phone[data-scene-overlay="true"] #app>.setup-page{
+  background:transparent!important;backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+.phone[data-scene-overlay="true"] #app>.setup-page .landing-form-card{
+  background:var(--kn-glass-panel-fill);border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);
+  box-shadow:var(--kn-glass-panel-shadow);backdrop-filter:blur(var(--kn-glass-panel-blur));
+  -webkit-backdrop-filter:blur(var(--kn-glass-panel-blur));
+}
+.phone[data-scene-overlay="true"] #app>.setup-page :is(.setup-heading,.setup-content h2,.setup-content h3,.setup-content p){color:#30292c}
+@container(max-width:380px){
+  .phone #app .conversation-onboarding .onboarding-message,
+  .phone #app .conversation-onboarding.is-birth-time .onboarding-message{padding:13px 15px;min-height:56px}
+}

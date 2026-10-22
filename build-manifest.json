@@ -1,21 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-20T07:36:12.185Z",
+  "createdAt": "2026-10-22T06:48:10.294Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 63511678,
+  "payloadBytes": 124936394,
   "files": [
-    {
-      "source": "api.mjs",
-      "path": "api.mjs",
-      "bytes": 2872,
-      "sha256": "60bfa741cf65b7d454a579820e6d81b27cf9b8af5d392e6fd3ab66e10e66d4aa"
-    },
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 100257,
-      "sha256": "6682e61235a9c768708b2f7dff48d052d2ba16f660fc1a71c08269959f23bf73"
+      "bytes": 96061,
+      "sha256": "78c9b45f4cc8ae3f55527916be3cb3ae1468ca2592904ecd78d0fd823c0e0225"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -52,6 +46,12 @@
       "path": "assets/cloud-realm-20261019/shared.webp",
       "bytes": 130308,
       "sha256": "6b9de4c452885eaff96fccbb8b6b66e965d6509ec30b6adfd57986b812e7738a"
+    },
+    {
+      "source": "assets/contract-seal-20261021/realm-seal.png",
+      "path": "assets/contract-seal-20261021/realm-seal.png",
+      "bytes": 1838957,
+      "sha256": "c681cb9acff043ba66bece3d91ea4c24eae97667edd7da5f6e79f3d4a545972c"
     },
     {
       "source": "assets/figma-20261009/bubble.svg",
@@ -96,6 +96,24 @@
       "sha256": "5639102e706c66e12726a165f277292cc1395e99e9d5faeb152a10164e695932"
     },
     {
+      "source": "assets/fonts/klin-paper/NotoSerifTC-Core.woff2",
+      "path": "assets/fonts/klin-paper/NotoSerifTC-Core.woff2",
+      "bytes": 317248,
+      "sha256": "d4016256c08212b8599c486d1873480994556f2b63e7fbb542ea5ad28f034e47"
+    },
+    {
+      "source": "assets/fonts/klin-paper/NotoSerifTC-Variable.woff2",
+      "path": "assets/fonts/klin-paper/NotoSerifTC-Variable.woff2",
+      "bytes": 7657408,
+      "sha256": "f0161e80c5e583443294297c8d4954100a0d182fe6de6eb986846225e66bacc8"
+    },
+    {
+      "source": "assets/fonts/klin-paper/OFL.txt",
+      "path": "assets/fonts/klin-paper/OFL.txt",
+      "bytes": 4350,
+      "sha256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6"
+    },
+    {
       "source": "assets/klin-native-20261016-0907/adult-hair.bin",
       "path": "assets/klin-native-20261016-0907/adult-hair.bin",
       "bytes": 16125696,
@@ -138,10 +156,16 @@
       "sha256": "98a71caac2461f1c20a099257756930db28010726901c89b1cf54558be80a8bf"
     },
     {
-      "source": "assets/login-world-20261019/klin-login-scene.mjs",
-      "path": "assets/login-world-20261019/klin-login-scene.mjs",
-      "bytes": 12047,
-      "sha256": "a3b70cfa031c50453398f6d24216da82df6627d61327cdbbf51975de910eaa98"
+      "source": "assets/landing-video-20261022/nok-complete-30s-draft.mp4",
+      "path": "assets/landing-video-20261022/nok-complete-30s-draft.mp4",
+      "bytes": 7840549,
+      "sha256": "2f7de7723229916bd3cd0e8884da1f98ed1fc21a8253df22f82246b3b97d1b43"
+    },
+    {
+      "source": "assets/landing-video-20261022/room-empty.png",
+      "path": "assets/landing-video-20261022/room-empty.png",
+      "bytes": 2119103,
+      "sha256": "e16ea586e2566ad86267c8950f4083c2561607abe25c9cb942b3810c893f128b"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -162,10 +186,742 @@
       "sha256": "77633e4702a6b254d29406bed33f837d9b492e0821b941486970e859a35724d1"
     },
     {
+      "source": "assets/palette-20261021/ivory-blue-room.png",
+      "path": "assets/palette-20261021/ivory-blue-room.png",
+      "bytes": 2025197,
+      "sha256": "5eb984f2a569bcd744c95fd7ea2368409ec944996cea18644730e8da5aa5bba6"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/champagne-metal-room.png",
+      "path": "assets/portal-scenes-20261020/champagne-metal-room.png",
+      "bytes": 2064831,
+      "sha256": "c816565289e9696ac02e0e5790409c954ad405a3fca25104ec09ac9feb7f9c8f"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/onboarding-doorlight.png",
+      "path": "assets/portal-scenes-20261020/onboarding-doorlight.png",
+      "bytes": 1557686,
+      "sha256": "ff7e397e6e528d9f88a6fba1b595d297e0025d2a4202bd667869755ed7c11d9a"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/three-avatar-porches.png",
+      "path": "assets/portal-scenes-20261020/three-avatar-porches.png",
+      "bytes": 1803465,
+      "sha256": "44de83e5bb354c86af9676da197f1901317573904444a7657c3860ae77516303"
+    },
+    {
+      "source": "assets/portal-scenes-20261020/welcome-user.png",
+      "path": "assets/portal-scenes-20261020/welcome-user.png",
+      "bytes": 1781686,
+      "sha256": "35dd3ca5eba5b342082bfd7e4ba766f4a409b9122040884a4a3226719c80ed52"
+    },
+    {
+      "source": "assets/portal-scenes-20261021/onboarding-empty.png",
+      "path": "assets/portal-scenes-20261021/onboarding-empty.png",
+      "bytes": 1527227,
+      "sha256": "89f9e92a23cc7f46b12992b00ab86c0d4a966a9edf7d03dffcf583f99f37b4af"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/ARPHICPL.TXT",
+      "path": "assets/signature-strokes-20261020/ARPHICPL.TXT",
+      "bytes": 6900,
+      "sha256": "5590533436c70f10f2f524ee61456238c290175c6662fbe1c700b5f038a6d328"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "path": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "bytes": 12542,
+      "sha256": "0e200d80b8f3282fdd33129879d3fdb45ec9ccbd312d1973a7ec626e8033cd2b"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/HERSHEY-LICENSE",
+      "path": "assets/signature-strokes-20261020/HERSHEY-LICENSE",
+      "bytes": 1073,
+      "sha256": "7aacb9b29677fb61fedeb36e86f96814ad55b52997f66d1d04ed2446902e16ea"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/HERSHEY-NOTICE.txt",
+      "path": "assets/signature-strokes-20261020/HERSHEY-NOTICE.txt",
+      "bytes": 354,
+      "sha256": "cd04cc8417779cbb5a6de67be733bcdf1ce882b53b7a4492bfbbecfdaca42fbb"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/manifest.json",
+      "path": "assets/signature-strokes-20261020/manifest.json",
+      "bytes": 16284,
+      "sha256": "f59e60366b5252582acf25cd40cec553917b6d0736d3828d5404ae017f4b83ba"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u2e.json",
+      "path": "assets/signature-strokes-20261020/u2e.json",
+      "bytes": 8230,
+      "sha256": "67444beeb0fd615552020a8905395e11163dd7b9c128adc2c7a045b3a85189d2"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u34.json",
+      "path": "assets/signature-strokes-20261020/u34.json",
+      "bytes": 16670,
+      "sha256": "83581c28455cf9024cbb0cb44f1a04840521390773744a90e0d255525eb7af2c"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u35.json",
+      "path": "assets/signature-strokes-20261020/u35.json",
+      "bytes": 5526,
+      "sha256": "5a904ee2b15d700d5364e81b546395b17fe7006e5f21c019fbb90a1213058e2e"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u37.json",
+      "path": "assets/signature-strokes-20261020/u37.json",
+      "bytes": 2327,
+      "sha256": "7aba0e14b8e41cf92136f34f44be1b99b5d49e2e1fb5b4c9d94fb45d99652b42"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u38.json",
+      "path": "assets/signature-strokes-20261020/u38.json",
+      "bytes": 13507,
+      "sha256": "4447ea3d4e30bab0b9930ba28cd6c3a35e00fd766056fc88941a7fc5be3d6518"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u39.json",
+      "path": "assets/signature-strokes-20261020/u39.json",
+      "bytes": 6419,
+      "sha256": "565065d4d0e6890102e218a76e4c10d806f3b9a8a1893bc3cf9cf549a48141ce"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u3b.json",
+      "path": "assets/signature-strokes-20261020/u3b.json",
+      "bytes": 4426,
+      "sha256": "514cc2bd87b9032f1ce498fac72c48a97d5fdc508d59c1ffece61e4c35432437"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u3c.json",
+      "path": "assets/signature-strokes-20261020/u3c.json",
+      "bytes": 4932,
+      "sha256": "27a57256e9fc852dd20cedcde8629aa4e9582123ccec869921db7a07114c0fe5"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u3f.json",
+      "path": "assets/signature-strokes-20261020/u3f.json",
+      "bytes": 5678,
+      "sha256": "203d557c8b12439d5d98aaf762af654c9951d2d1cae216338b602f4ddd443b5c"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u43.json",
+      "path": "assets/signature-strokes-20261020/u43.json",
+      "bytes": 2656,
+      "sha256": "e0271cb76dbbdd5c5804268dd7c7e02763849bf0dfd494393cf1d10df3139330"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u45.json",
+      "path": "assets/signature-strokes-20261020/u45.json",
+      "bytes": 5016,
+      "sha256": "93cacc2d254fa1782e57d53213b9c60f55167464e091bcc7605e806267755970"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u46.json",
+      "path": "assets/signature-strokes-20261020/u46.json",
+      "bytes": 3680,
+      "sha256": "dd48b2a7ee8f8215410678798cf4d71983d3fbb792d82db28d0eec67d4a30317"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u47.json",
+      "path": "assets/signature-strokes-20261020/u47.json",
+      "bytes": 4608,
+      "sha256": "93e7f3f18e7798e8c2c6bbdbb231859ae45dbb319894f15e941192fc4c86ed01"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u48.json",
+      "path": "assets/signature-strokes-20261020/u48.json",
+      "bytes": 4022,
+      "sha256": "0ccba72d082adc87f2eb5bdd7900baa970696aaf9c5a3bdc036b7cb7fd8b551b"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u49.json",
+      "path": "assets/signature-strokes-20261020/u49.json",
+      "bytes": 3297,
+      "sha256": "8b84c7e5822e51994fb5d16f0839720d358f90845abefb5b514e36dd8d0de19a"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u4c.json",
+      "path": "assets/signature-strokes-20261020/u4c.json",
+      "bytes": 4201,
+      "sha256": "4426ab9ca927f52791554773a04a85d1ef020576298df915885e9526c7ecab25"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u4d.json",
+      "path": "assets/signature-strokes-20261020/u4d.json",
+      "bytes": 6087,
+      "sha256": "27d8b6efb78fec82638dad200bca33203084c5efe790eb9c5affcfda3fda121f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u4e.json",
+      "path": "assets/signature-strokes-20261020/u4e.json",
+      "bytes": 267012,
+      "sha256": "3343dada6fe7dfac0524c36a10a0b2d7ab9c6578a370ea4b654138c3a650625b"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u4f.json",
+      "path": "assets/signature-strokes-20261020/u4f.json",
+      "bytes": 305623,
+      "sha256": "2fa2735a5c9d05db02ab8d637747a2a2dbbd2d3093251c76c03bbb67d2c1add8"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u50.json",
+      "path": "assets/signature-strokes-20261020/u50.json",
+      "bytes": 314643,
+      "sha256": "1cd93abcbfe7844baeccec8e6ba4bb13347012a3c16f37910cbd6e3a9a89f238"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u51.json",
+      "path": "assets/signature-strokes-20261020/u51.json",
+      "bytes": 353629,
+      "sha256": "0390cdf3c0c7c97d5d43503bd862712661a98b24ffb28f4d2a1313811c9aeabd"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u52.json",
+      "path": "assets/signature-strokes-20261020/u52.json",
+      "bytes": 340515,
+      "sha256": "42d000be86b24b20a2c49b5d43b6a1b4a8c1232676e74ef7b9f67898e996794f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u53.json",
+      "path": "assets/signature-strokes-20261020/u53.json",
+      "bytes": 325568,
+      "sha256": "a8cf877170b30e17ee95a3682c7a5326d6ae5da2753f5ca1af1d2e8301f5054e"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u54.json",
+      "path": "assets/signature-strokes-20261020/u54.json",
+      "bytes": 370914,
+      "sha256": "c75a4a0b0fe17ab00f16748f409c13bdc447972cbed13d0f90bb92a391743336"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u55.json",
+      "path": "assets/signature-strokes-20261020/u55.json",
+      "bytes": 439954,
+      "sha256": "8836efe7f58581cf6ff395db770be53738f95ee213eb055c6bc8e79ee98a1868"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u56.json",
+      "path": "assets/signature-strokes-20261020/u56.json",
+      "bytes": 445708,
+      "sha256": "34a4f59d60154c80ae8fb9539052faa3797ffe8faddda698144eeae3e679f68a"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u57.json",
+      "path": "assets/signature-strokes-20261020/u57.json",
+      "bytes": 312516,
+      "sha256": "07be5de45e4ef0e90c0e0afa64265b9b7563e37b1088de7a7f3c48a2ef9be0e0"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u58.json",
+      "path": "assets/signature-strokes-20261020/u58.json",
+      "bytes": 297852,
+      "sha256": "7d1d32e7f23efdaa436ba8bce36889d8d8a2e6ea3c36e5d58d84d182edd2c6cb"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u59.json",
+      "path": "assets/signature-strokes-20261020/u59.json",
+      "bytes": 308371,
+      "sha256": "9359811485198f947d59439425e4e71c8d82c2c0929124088f40bc86b9658a77"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u5a.json",
+      "path": "assets/signature-strokes-20261020/u5a.json",
+      "bytes": 272917,
+      "sha256": "54b41cc2055db8dd627b1915fdfdf969b4c4ff84948b81ecdb38053e15875f0d"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u5b.json",
+      "path": "assets/signature-strokes-20261020/u5b.json",
+      "bytes": 355690,
+      "sha256": "a3fc1bd9d7de0afd0997a9c200ecd82846ce15b920ed98bdd6566739799bb59f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u5c.json",
+      "path": "assets/signature-strokes-20261020/u5c.json",
+      "bytes": 319648,
+      "sha256": "b3753c098ac7e7d46c2d8410eed4af0d75c13b13dd6c6d2439d3cbd5ea5e7fc7"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u5d.json",
+      "path": "assets/signature-strokes-20261020/u5d.json",
+      "bytes": 265661,
+      "sha256": "c5a8ef8190b235daa3918aad30e2d69bd78db6894502ec80286e9056e39dbf26"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u5e.json",
+      "path": "assets/signature-strokes-20261020/u5e.json",
+      "bytes": 362138,
+      "sha256": "129e8742bdf3af3dea8daa06fe70d8a17f8c27952ff4b1f64f2496c85d8fd5ac"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u5f.json",
+      "path": "assets/signature-strokes-20261020/u5f.json",
+      "bytes": 361097,
+      "sha256": "0fa3e2589f1c7b7512ebb19cc9c5fb157e6a1f43c64cc7325b5a2367578ab03b"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u60.json",
+      "path": "assets/signature-strokes-20261020/u60.json",
+      "bytes": 356159,
+      "sha256": "9c853d6e4b7c225e097d3ffc65e16b239949f9966be178d2a613b386e7453626"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u61.json",
+      "path": "assets/signature-strokes-20261020/u61.json",
+      "bytes": 365447,
+      "sha256": "cbbcda33ef1503193f7ef5401f687e76b84bbdb6b1d76e2ecb7d2ae9b7b697a5"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u62.json",
+      "path": "assets/signature-strokes-20261020/u62.json",
+      "bytes": 382462,
+      "sha256": "af169912b640cd96887e40987f2270eb4fe31d8464141fb6b170facd595a6ed4"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u63.json",
+      "path": "assets/signature-strokes-20261020/u63.json",
+      "bytes": 376315,
+      "sha256": "8cc305a42a56564cb6ec1ed5a63ce2df6eae4d0d7b14c2897d6add114b031ebc"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u64.json",
+      "path": "assets/signature-strokes-20261020/u64.json",
+      "bytes": 484585,
+      "sha256": "c19e82c7f37dd5a7beb38841366f9ffb70251e260166b7c68e7a838c81b8a03a"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u65.json",
+      "path": "assets/signature-strokes-20261020/u65.json",
+      "bytes": 381727,
+      "sha256": "c0cca7a48fd7f2feba831567f19ed07b4ede7a1bc44cc0f4719f93edf9c24842"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u66.json",
+      "path": "assets/signature-strokes-20261020/u66.json",
+      "bytes": 344354,
+      "sha256": "3c69ab40f9b2a2c3c857ffd9f1452e2b564ae27cbf687c8c856934992be90f3e"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u67.json",
+      "path": "assets/signature-strokes-20261020/u67.json",
+      "bytes": 281201,
+      "sha256": "ee239bfd2b8ff7e152e762340fcc5414ef7d72b2cae8b17c725148537eba5641"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u68.json",
+      "path": "assets/signature-strokes-20261020/u68.json",
+      "bytes": 314705,
+      "sha256": "03128be1f587347a2bf2c18d00b5676faebbc946a6e2ef9d357b1016342fc56d"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u69.json",
+      "path": "assets/signature-strokes-20261020/u69.json",
+      "bytes": 317341,
+      "sha256": "13b0b3800e25e463b25a8ea15a351f441898e0772dae7dfaecc2c41f40bea8b6"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u6a.json",
+      "path": "assets/signature-strokes-20261020/u6a.json",
+      "bytes": 318883,
+      "sha256": "cf6e77d10d29060dcd9ae772ed4fd52b65e7966f8ff3436abb638e7bd4061959"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u6b.json",
+      "path": "assets/signature-strokes-20261020/u6b.json",
+      "bytes": 358441,
+      "sha256": "956b7d26e10b3e4dad5a69c2cf38397c48bd1801e2cd842d27ad536c440c6d25"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u6c.json",
+      "path": "assets/signature-strokes-20261020/u6c.json",
+      "bytes": 328215,
+      "sha256": "bd3756e84cf76d49c01bf5776f0a27f562248ba355d4184e2a94ade48d4c5d19"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u6d.json",
+      "path": "assets/signature-strokes-20261020/u6d.json",
+      "bytes": 341087,
+      "sha256": "065352ae88627393a0efac340b895fd73abffae2ae132c749fe5655a51cdd4fe"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u6e.json",
+      "path": "assets/signature-strokes-20261020/u6e.json",
+      "bytes": 361641,
+      "sha256": "99905a6159d1aeb35aaf1e605693274cd0f421f66a6d8562f497382530cf4d3f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u6f.json",
+      "path": "assets/signature-strokes-20261020/u6f.json",
+      "bytes": 362189,
+      "sha256": "322046a2f13f4df3cd7f8d79a0bfeb74a9a07c2e255568e137f8f6d89cb91757"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u70.json",
+      "path": "assets/signature-strokes-20261020/u70.json",
+      "bytes": 276249,
+      "sha256": "a0d86b6b7587ed33ff2b371f554e88020066cc67e1e36d066f9ad496add6abfd"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u71.json",
+      "path": "assets/signature-strokes-20261020/u71.json",
+      "bytes": 289561,
+      "sha256": "dea2e8b241730b41aee8d13131e991d00aba008bb0b4f5af6f5e22b1e31e3015"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u72.json",
+      "path": "assets/signature-strokes-20261020/u72.json",
+      "bytes": 327784,
+      "sha256": "6ca5a6a2a07cf9c6e55299bd2166dcc45b1ee01220577e1bde6f3a2fb64eec48"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u73.json",
+      "path": "assets/signature-strokes-20261020/u73.json",
+      "bytes": 303621,
+      "sha256": "c54e6b62d3a48d491bcdf274ad3b1b02e0e1661e02643ea5bcb1fcafca1b8703"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u74.json",
+      "path": "assets/signature-strokes-20261020/u74.json",
+      "bytes": 285932,
+      "sha256": "efa48036ae231ca9797db9391685e7596f5489949e9bf1688b18b76f2e75fbd1"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u75.json",
+      "path": "assets/signature-strokes-20261020/u75.json",
+      "bytes": 395752,
+      "sha256": "f05cd028a889f214d6cdb80aa01f26ecf7eeb49b5dd6771b443233ce668aca83"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u76.json",
+      "path": "assets/signature-strokes-20261020/u76.json",
+      "bytes": 466265,
+      "sha256": "2443b1f3584e4252dbb8d574fbdc06d0c57cbe56099d09597d52f287e78a48fb"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u77.json",
+      "path": "assets/signature-strokes-20261020/u77.json",
+      "bytes": 377225,
+      "sha256": "3a299499122fcf3ae26a6c410115f6c69f94685562de74bf977833da6786bf18"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u78.json",
+      "path": "assets/signature-strokes-20261020/u78.json",
+      "bytes": 321965,
+      "sha256": "7af0e72efa30940d957367a620a853d5d91e02c20bc12244563b0ace0f4431e2"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u79.json",
+      "path": "assets/signature-strokes-20261020/u79.json",
+      "bytes": 277643,
+      "sha256": "6cae4b52ec0318ab8876071a397333243f7f776a775f644bcafa67b75beecc6c"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u7a.json",
+      "path": "assets/signature-strokes-20261020/u7a.json",
+      "bytes": 345400,
+      "sha256": "79aaa188792b121a7bdc367f38c90c0d4120e24dde77fae7bd5eb153dded226f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u7b.json",
+      "path": "assets/signature-strokes-20261020/u7b.json",
+      "bytes": 374821,
+      "sha256": "142299564015fd7032e639f71373e5acd3a51d66eaaaf8a9b08f1c3d235d5beb"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u7c.json",
+      "path": "assets/signature-strokes-20261020/u7c.json",
+      "bytes": 348031,
+      "sha256": "b6a756bc30acea379379bdbbcee9b79b342915870e6e7f616170acf41e997043"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u7d.json",
+      "path": "assets/signature-strokes-20261020/u7d.json",
+      "bytes": 316602,
+      "sha256": "da7a4ee3c930191aae34b96a77fc7bb1931715eef3b9cc31e0554d5d1079806d"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u7e.json",
+      "path": "assets/signature-strokes-20261020/u7e.json",
+      "bytes": 485313,
+      "sha256": "5f190371d13db4ba4ce9084584a8809197e40b85e9ffc14f419af1a5bd932974"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u7f.json",
+      "path": "assets/signature-strokes-20261020/u7f.json",
+      "bytes": 493855,
+      "sha256": "adf34ad84a2e5894cfa01e7e300f10f8170c2a98921b9cdeff898faafd94e329"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u80.json",
+      "path": "assets/signature-strokes-20261020/u80.json",
+      "bytes": 410496,
+      "sha256": "54e7420938f5b95e58ea890c0c61a0ab01a564d0a824f14b2effdaf4f011bc3a"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u81.json",
+      "path": "assets/signature-strokes-20261020/u81.json",
+      "bytes": 452367,
+      "sha256": "aadc01ca0756b725ffab89000d97154055a4dc61a20168fb78c4eedf46683e5f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u82.json",
+      "path": "assets/signature-strokes-20261020/u82.json",
+      "bytes": 379837,
+      "sha256": "dc084b72dcaee8e9b9ec8e9f3bb9b9f8c5184608bb5c44f113997ad553a6bb3f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u83.json",
+      "path": "assets/signature-strokes-20261020/u83.json",
+      "bytes": 350555,
+      "sha256": "31a49b74793b52bf6300e3a41851011ff833dcc42d747e89a0c14b863908bfb3"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u84.json",
+      "path": "assets/signature-strokes-20261020/u84.json",
+      "bytes": 340584,
+      "sha256": "99da3e4ee959e7ce5ef6838f82630640f161915796bc624291e6c93c0c25a8da"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u85.json",
+      "path": "assets/signature-strokes-20261020/u85.json",
+      "bytes": 391628,
+      "sha256": "0165b398b3ec5117c8f37ab20d9acbf519af437dc6cb68795027c51cb7382c51"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u86.json",
+      "path": "assets/signature-strokes-20261020/u86.json",
+      "bytes": 373282,
+      "sha256": "4d9d73739eb99d164c76d40c27468a31bfb3d09ceac144cb90067f9bfe3e4e64"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u87.json",
+      "path": "assets/signature-strokes-20261020/u87.json",
+      "bytes": 439703,
+      "sha256": "9ec044797d579e8c8ed661cd6a9d8a4921303de3d09e7e29172cb9c819621947"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u88.json",
+      "path": "assets/signature-strokes-20261020/u88.json",
+      "bytes": 392965,
+      "sha256": "1f44315ac5628f519c6659e4a54bcb04d801bae0ea27b893231535afb4dd812e"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u89.json",
+      "path": "assets/signature-strokes-20261020/u89.json",
+      "bytes": 342269,
+      "sha256": "11fc105b454ef8a89c318f4613bfaf82fa161fe5e58b3ae10ad2965bc17cacd4"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u8a.json",
+      "path": "assets/signature-strokes-20261020/u8a.json",
+      "bytes": 346554,
+      "sha256": "5f3896aa9fbf6927c4b3fb10755cc7747ee390d6f2a6841dd9e961379a349a05"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u8b.json",
+      "path": "assets/signature-strokes-20261020/u8b.json",
+      "bytes": 436414,
+      "sha256": "3fcccb38b8f26f1447ca7e9ea76f3b938f85236d2cdd98fb42549d4c034f76e2"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u8c.json",
+      "path": "assets/signature-strokes-20261020/u8c.json",
+      "bytes": 480911,
+      "sha256": "6f887179d10eca9868070df725daf89597e6c05007a73d26948f954841d0f7d5"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u8d.json",
+      "path": "assets/signature-strokes-20261020/u8d.json",
+      "bytes": 478937,
+      "sha256": "d4fe7e94cb07e38616cb12a1b400de43342b14efbca92f950960a736e5fbdfb4"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u8e.json",
+      "path": "assets/signature-strokes-20261020/u8e.json",
+      "bytes": 423574,
+      "sha256": "049d702b6dbeb76160d2442b57029bf0f5d423b09943767d0c67b0dd9def6e92"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u8f.json",
+      "path": "assets/signature-strokes-20261020/u8f.json",
+      "bytes": 473517,
+      "sha256": "21408b2bb556519c4deba10637ebc51f2f7cd292e135acd334468de6fac4a819"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u90.json",
+      "path": "assets/signature-strokes-20261020/u90.json",
+      "bytes": 461764,
+      "sha256": "162551d62637391262c4a401196c51c12f8fb99d70f62e873bb25811b5c99044"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u91.json",
+      "path": "assets/signature-strokes-20261020/u91.json",
+      "bytes": 424557,
+      "sha256": "7d8bf6dc8f17a022234fa86c693283c663b99da0c8ed3050be3d5bb72bfd3e12"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u92.json",
+      "path": "assets/signature-strokes-20261020/u92.json",
+      "bytes": 236085,
+      "sha256": "f315a41b16d2e4a52dc4f2938c17e03ca795340bb9ea00148186f5cbaecd9b09"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u93.json",
+      "path": "assets/signature-strokes-20261020/u93.json",
+      "bytes": 210609,
+      "sha256": "ee087740ca8b70bb1c1867519e7d19d89e58fd4a7248ad52427dbe2dd316dd87"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u94.json",
+      "path": "assets/signature-strokes-20261020/u94.json",
+      "bytes": 468893,
+      "sha256": "cf7ff19b04a0242919af815054210097ebaf83a883a9aecbb1f2513c78b237bb"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u95.json",
+      "path": "assets/signature-strokes-20261020/u95.json",
+      "bytes": 642360,
+      "sha256": "01e5df96fb75e1bf30ced4e2a9e5ec891076ba3f40b31caaec928abb80d54e62"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u96.json",
+      "path": "assets/signature-strokes-20261020/u96.json",
+      "bytes": 471469,
+      "sha256": "e209ebec70ef35976a2c921a7a684b6fdbd43130ff12b2d23ae54a5f4ff77852"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u97.json",
+      "path": "assets/signature-strokes-20261020/u97.json",
+      "bytes": 366712,
+      "sha256": "a9657a7a0bfe28eb82d4cc0ed50a5c4202f1c308e4e0feba386b536146e43b5f"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u98.json",
+      "path": "assets/signature-strokes-20261020/u98.json",
+      "bytes": 478666,
+      "sha256": "8f8192c0bb39892d567f5e7a1f39c379f4e461af05ef92d419277b71896c1c22"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u99.json",
+      "path": "assets/signature-strokes-20261020/u99.json",
+      "bytes": 414212,
+      "sha256": "44df8c4d47c922c704d09b967fd7122657c0d89144f968f230c379dfeb171006"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u9a.json",
+      "path": "assets/signature-strokes-20261020/u9a.json",
+      "bytes": 463153,
+      "sha256": "dfcd3c70cb9775dd7eadeed0c176db842046d2f6eabc454dd3be3c750c4e4c56"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u9b.json",
+      "path": "assets/signature-strokes-20261020/u9b.json",
+      "bytes": 322277,
+      "sha256": "2c1aee369f92fb64df71898ecdc7505ff7c1933eda66f7ef1f79b6a6eee297db"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u9c.json",
+      "path": "assets/signature-strokes-20261020/u9c.json",
+      "bytes": 537807,
+      "sha256": "b1068db86ce1c97ee00bfba25dd12a06b339595c9edef97481b0ffb11655d093"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u9d.json",
+      "path": "assets/signature-strokes-20261020/u9d.json",
+      "bytes": 314259,
+      "sha256": "29649967aae0d19b0a0976a97d946fe5d6a6b88bd646c93619767c8699295248"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u9e.json",
+      "path": "assets/signature-strokes-20261020/u9e.json",
+      "bytes": 574603,
+      "sha256": "82083ec84bfc3afce93b5527e63426b52e68a23664bd6dca7fefd3fee0fe97a0"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/u9f.json",
+      "path": "assets/signature-strokes-20261020/u9f.json",
+      "bytes": 302839,
+      "sha256": "12075927f76f257f63a4844fd66d942a52bfe0c7132b5f02524b4fcc271c2ed6"
+    },
+    {
+      "source": "assets/ui/arrow-up.svg",
+      "path": "assets/ui/arrow-up.svg",
+      "bytes": 253,
+      "sha256": "96d0150f6ca19bf60e55389884b69356718bb81f4bace10f2124853610941e46"
+    },
+    {
+      "source": "assets/ui/audio-lines.svg",
+      "path": "assets/ui/audio-lines.svg",
+      "bytes": 349,
+      "sha256": "3942b8a5d6bccc927a55f857f0d44b90e2663470cd2d569000c9b60c37578dfa"
+    },
+    {
+      "source": "assets/ui/ellipsis-horizontal.svg",
+      "path": "assets/ui/ellipsis-horizontal.svg",
+      "bytes": 362,
+      "sha256": "dd9980eb9dab3e27e0c8507182fea76f156e35a6221c55713454054de550de6c"
+    },
+    {
+      "source": "assets/ui/heroicons-LICENSE",
+      "path": "assets/ui/heroicons-LICENSE",
+      "bytes": 1071,
+      "sha256": "60e0b68c0f35c078eef3a5d29419d0b03ff84ec1df9c3f9d6e39a519a5ae7985"
+    },
+    {
+      "source": "assets/ui/lucide-LICENSE",
+      "path": "assets/ui/lucide-LICENSE",
+      "bytes": 3208,
+      "sha256": "b495047bd93a9b06913511076f504daba17d5bbeb3e0650f3bb53a4220329c57"
+    },
+    {
+      "source": "assets/ui/microphone.svg",
+      "path": "assets/ui/microphone.svg",
+      "bytes": 357,
+      "sha256": "8d01f205baa837943ecd8e36baa521894b4398d19e75348edaa719746b6c7763"
+    },
+    {
+      "source": "assets/ui/pencil-square.svg",
+      "path": "assets/ui/pencil-square.svg",
+      "bytes": 475,
+      "sha256": "21da72fcd66af3e386d554259ff8517124d0a2270975ffa3a69b5aa926959d4c"
+    },
+    {
+      "source": "assets/ui/speaker-wave.svg",
+      "path": "assets/ui/speaker-wave.svg",
+      "bytes": 492,
+      "sha256": "ac7afd8bf01135feb569004d6010289075deaad5cac9fff4243087dd701759d6"
+    },
+    {
+      "source": "assets/ui/speaker-x-mark.svg",
+      "path": "assets/ui/speaker-x-mark.svg",
+      "bytes": 491,
+      "sha256": "2b492521abd78c47eca84d3339be2c68c69a6c590e267070455c6d2394520336"
+    },
+    {
+      "source": "assets/ui/stop.svg",
+      "path": "assets/ui/stop.svg",
+      "bytes": 254,
+      "sha256": "123e8f6f00c326a8fdda42bb326ae504284d0e8c7da834cdb779f1300c11e0c2"
+    },
+    {
+      "source": "assets/ui/x-mark.svg",
+      "path": "assets/ui/x-mark.svg",
+      "bytes": 239,
+      "sha256": "f44f8d4070a779c324f07a199122b4cc8686b5a8d9705727dc38d0cfd3bb27ec"
+    },
+    {
       "source": "assets/visit-20261010/door-soft.png",
       "path": "assets/visit-20261010/door-soft.png",
       "bytes": 1345227,
       "sha256": "7488b6c1ea210268e2c8f5e175ac6b10d1c8342030a0a9abf20566c9e7e21015"
+    },
+    {
+      "source": "auth-caret.mjs",
+      "path": "auth-caret.mjs",
+      "bytes": 2400,
+      "sha256": "cd4849ff75e8cf4800c0d9a44067dba8e0c83d0a98e3c39e255359138b2437cd"
     },
     {
       "source": "auth-hours-polish.css",
@@ -182,8 +938,14 @@
     {
       "source": "card-editor-readability.css",
       "path": "card-editor-readability.css",
-      "bytes": 5087,
-      "sha256": "640f53852b236242279c2ab273c501494f7cbdb147d9c4bdc3a76a5524aa96f2"
+      "bytes": 4995,
+      "sha256": "2b13b2096b24f574df56ddbc9850c2e8717af50f81f736f9e1ee532fb009ae48"
+    },
+    {
+      "source": "card-handoff-v29.css",
+      "path": "card-handoff-v29.css",
+      "bytes": 277,
+      "sha256": "e2c857a7299345caac78522570017f54f84da389e99809340345e71dfd0389df"
     },
     {
       "source": "card-handoff.css",
@@ -210,6 +972,12 @@
       "sha256": "68f41bf7a6f6ad38652286ab27feda2d3b07d2fd528c8828d3f81915f71dd1e1"
     },
     {
+      "source": "communication-mode.mjs",
+      "path": "communication-mode.mjs",
+      "bytes": 20583,
+      "sha256": "6ac2732d488dfa987cd20e33ac67179a4754d06be91f3c8381042c241829008c"
+    },
+    {
       "source": "companion-animation.mjs",
       "path": "companion-animation.mjs",
       "bytes": 1988,
@@ -218,8 +986,8 @@
     {
       "source": "contract-centered-paper.css",
       "path": "contract-centered-paper.css",
-      "bytes": 7728,
-      "sha256": "4345370a7edcdf6a303ae46dd850e119232bfc2c5ddf2dfff3dd8b5de70a68bc"
+      "bytes": 10744,
+      "sha256": "88ded53415f1fd820571ac918880d682c01e965e7c9bf4d385b6a9863e4e8984"
     },
     {
       "source": "contract-paper-readability.css",
@@ -230,8 +998,8 @@
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 4344,
-      "sha256": "b28930cb9ecb29a92cd34812346d535d81515cb508b987377fac4f2846ce1855"
+      "bytes": 11251,
+      "sha256": "997d395876949ee57954245a6a72c3186af3408189deafc65e89758a14038d0d"
     },
     {
       "source": "conversation-experience.css",
@@ -254,8 +1022,8 @@
     {
       "source": "date-picker.mjs",
       "path": "date-picker.mjs",
-      "bytes": 16063,
-      "sha256": "59f467d32aa9579372a450b88bc4d2100113dbef5b5894a75263487616658c6b"
+      "bytes": 16064,
+      "sha256": "c4de36d6c4391cb8fe73163b2390ca1bd74566a1814d459095f89804d902dbfa"
     },
     {
       "source": "demo.css",
@@ -276,6 +1044,12 @@
       "sha256": "9b8ad3cf80eca8aba652e0c31c5f13912eebb07fee20eaefa525a5dc7272549f"
     },
     {
+      "source": "film-scenes-v30.css",
+      "path": "film-scenes-v30.css",
+      "bytes": 1317,
+      "sha256": "8c62ff539dab6258a4eb31d1199e5a2aaedff6f34868f4afd0adf83c48df229b"
+    },
+    {
       "source": "form-controls.css",
       "path": "form-controls.css",
       "bytes": 7264,
@@ -284,14 +1058,26 @@
     {
       "source": "form-controls.mjs",
       "path": "form-controls.mjs",
-      "bytes": 17292,
-      "sha256": "3b72c14fa86f84e85e3696cf9a3f7c43cb0b0ab491209d28bc2b8987f962fb12"
+      "bytes": 17402,
+      "sha256": "b6cebf7814e5077dbe52106e462132f0fcef848aa291e77bcc912f6aa5a2cccb"
     },
     {
       "source": "glass-contract.css",
       "path": "glass-contract.css",
       "bytes": 12322,
       "sha256": "738039935915d5cd816f0318e13c482ac7f85213bd3eac530adc0492344acf27"
+    },
+    {
+      "source": "glass-material.css",
+      "path": "glass-material.css",
+      "bytes": 1613,
+      "sha256": "244ba1f8f74b6edc41421b91393bb87a7f677f2365bc294bd29a02f1b21eab10"
+    },
+    {
+      "source": "home-controls-v24.css",
+      "path": "home-controls-v24.css",
+      "bytes": 7924,
+      "sha256": "2e811f0028ff57966d446a017d88178bfcafd7c54a006c26bdd5def5f507efe0"
     },
     {
       "source": "home-greeting.mjs",
@@ -308,8 +1094,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 5669,
-      "sha256": "15705e10662fcf150aadd5701dffb65efc9fb56f02860a83f9985cdd4b8de241"
+      "bytes": 6586,
+      "sha256": "63e68436f474d3aa4e95c0baa65df56647d2161ff1ae877797bea52f0de575ec"
     },
     {
       "source": "journey-experience.css",
@@ -320,8 +1106,8 @@
     {
       "source": "klin-awakening-field.mjs",
       "path": "klin-awakening-field.mjs",
-      "bytes": 16186,
-      "sha256": "ebcc7e8f3a72b281618dc03950bc60f4495d965bde417028790960070ba286a3"
+      "bytes": 10029,
+      "sha256": "d7595d374bcaf4d2e9401bc7ef2474d7b4a1895295e1f88389f512c7d568fee8"
     },
     {
       "source": "klin-companion.css",
@@ -348,12 +1134,6 @@
       "sha256": "750acc1149baca8f56fd6c5d605b4c46199778c4d77888c0217d195e335fb6a7"
     },
     {
-      "source": "klin-login-scene.mjs",
-      "path": "klin-login-scene.mjs",
-      "bytes": 2674,
-      "sha256": "185634b1b840a93379887885ca1f378cfb03768cde0f539ffe90d15cd33b7265"
-    },
-    {
       "source": "klin-native-model.mjs",
       "path": "klin-native-model.mjs",
       "bytes": 10559,
@@ -362,14 +1142,56 @@
     {
       "source": "klin-reference-scene.mjs",
       "path": "klin-reference-scene.mjs",
-      "bytes": 3766,
-      "sha256": "4dcd0ef003939e73415a9cf6f421c3cfab6f38ae729537a15710b78558dc662b"
+      "bytes": 4167,
+      "sha256": "a475c6718a0ddc08ec5b84dd462e4a3cc5617e835cba4686e72a03a4fe2af463"
     },
     {
       "source": "klin-world.mjs",
       "path": "klin-world.mjs",
-      "bytes": 66322,
-      "sha256": "c6aacaef85f8f334f41898fea53db0b3d798704af607d92e1c52662abe02b2b3"
+      "bytes": 69476,
+      "sha256": "24b5e8bc649bf8ae30a41c72802ed9ebbc40f969bdfaf274aa980d30122d9b9b"
+    },
+    {
+      "source": "landing-departure.mjs",
+      "path": "landing-departure.mjs",
+      "bytes": 1165,
+      "sha256": "563e1daa17b60a45e8440de2c0c789cd09a6f1b69a3aa1ffc0ff1efb429cac68"
+    },
+    {
+      "source": "landing-glass.css",
+      "path": "landing-glass.css",
+      "bytes": 1338,
+      "sha256": "27cb45622f25ca871b497b12cae2945aaa8273ffa80e08912a6b8e315140625e"
+    },
+    {
+      "source": "landing-glass.mjs",
+      "path": "landing-glass.mjs",
+      "bytes": 8905,
+      "sha256": "ef55d5a541b031e404ef63da3883967cd1c1b296f5b3ea43dbb9724db8ef7269"
+    },
+    {
+      "source": "landing-held-frame.mjs",
+      "path": "landing-held-frame.mjs",
+      "bytes": 4943,
+      "sha256": "a622104859277327187e01d3b1d0381175bbabc105371ae5d067ab2c175933da"
+    },
+    {
+      "source": "landing-video-player.mjs",
+      "path": "landing-video-player.mjs",
+      "bytes": 11543,
+      "sha256": "857c72671ef12eebbfbe0d7d1b2c794943aec910e6dccc92d3c10d1d2283ada8"
+    },
+    {
+      "source": "landing-video-scene.mjs",
+      "path": "landing-video-scene.mjs",
+      "bytes": 7072,
+      "sha256": "e18c76e69e11754462968d817f1734ec1fd978fde2b0eefedf32b3ca3bf12612"
+    },
+    {
+      "source": "landing-video.css",
+      "path": "landing-video.css",
+      "bytes": 5258,
+      "sha256": "f69d62bbbf850b2777e0a68a84487c51f45a492a9e47726ef3029371acfc407e"
     },
     {
       "source": "landing.mjs",
@@ -410,8 +1232,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 52612,
-      "sha256": "f8f7853d2a4033437322d6b86c926a50a9f9872102deb5c1075100115976a17f"
+      "bytes": 54193,
+      "sha256": "8f3f6c91a0c5a5fcee7c683d23e1ad3692a9874162064955a758fa12df1d4ddb"
     },
     {
       "source": "motion.css",
@@ -426,28 +1248,70 @@
       "sha256": "9f67b1e17fe6c4898952db8f9df281af7468b72e0dc95b60e47f79ca0a0880a4"
     },
     {
+      "source": "paper-font.css",
+      "path": "paper-font.css",
+      "bytes": 58986,
+      "sha256": "f813c4b1eb7f17aaca30733db3598e1e07e84dfdad552c5b767e4d7767b1531a"
+    },
+    {
       "source": "pixel-room.mjs",
       "path": "pixel-room.mjs",
       "bytes": 1156,
       "sha256": "bf9a620a2d4fa156b27a3ceab568f700a17866e1555554689e7ed3e8d7c8dd85"
     },
     {
+      "source": "portal-arrival.mjs",
+      "path": "portal-arrival.mjs",
+      "bytes": 2474,
+      "sha256": "23c613864542fa4c9325950322ca26506b847a6e72eb58be749701881f745960"
+    },
+    {
+      "source": "portal-glass.css",
+      "path": "portal-glass.css",
+      "bytes": 8789,
+      "sha256": "ffcfe387ed12dfa5c5dd6f4bb66a7dc8de381ce987671d70c49c1eddf41dcd1e"
+    },
+    {
+      "source": "portal-social-v24.css",
+      "path": "portal-social-v24.css",
+      "bytes": 2984,
+      "sha256": "44857c3d021a23942f2d1e6b722c66f942b55ba5a26425658ae152846bd8e27d"
+    },
+    {
       "source": "public-card.css",
       "path": "public-card.css",
-      "bytes": 6748,
-      "sha256": "92b6c2045f577a622a8fb45d996cb3db2fc70c6c0fdfe571c22ee1c2d33629ff"
+      "bytes": 13080,
+      "sha256": "265afc32351092c8650a226d8e4b9d0b6c4a2eb0e1196b88bc6b49a56a4a24ae"
     },
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 17030,
-      "sha256": "1d9ffbf141f4159f0d68c2e382556fe1a7afb5a71d387e4cfc178306f10a455c"
+      "bytes": 18159,
+      "sha256": "891e80006442d4d18dc995cef7166f1eab67c3ab3352dddb121c893c915ba38d"
     },
     {
       "source": "realm-scene.css",
       "path": "realm-scene.css",
       "bytes": 370,
       "sha256": "7c3938422488d29ad029de3af3216d626a3d813c7c3b516835acee7a521a50df"
+    },
+    {
+      "source": "refinement-v25.css",
+      "path": "refinement-v25.css",
+      "bytes": 4319,
+      "sha256": "320aff3c7e60f029a6883a41d7ac3074d2e96f6157b520623abd3170db7b1562"
+    },
+    {
+      "source": "refinement-v27.css",
+      "path": "refinement-v27.css",
+      "bytes": 1897,
+      "sha256": "e72e4f117d74e7338a652a7b663c7371c86908fc35078efd5fed00cc46291e17"
+    },
+    {
+      "source": "refinement-v29.css",
+      "path": "refinement-v29.css",
+      "bytes": 7634,
+      "sha256": "d63906c6d6101aa9a103fcc0bf9066996c6eaa7fb89a43270922adffa0bd5a9a"
     },
     {
       "source": "refinement-v8.css",
@@ -476,8 +1340,8 @@
     {
       "source": "social-refinement.css",
       "path": "social-refinement.css",
-      "bytes": 16374,
-      "sha256": "575aa51db209ca8a20996b4c7b9c9ed37ce659ed45e894c526f10224ec3f2057"
+      "bytes": 16381,
+      "sha256": "5ddecfc9d35cc9cc603a63bee1cebd4ab52b7385c3a46086bec406e6fdcb4337"
     },
     {
       "source": "soft-companion.css",
@@ -528,12 +1392,6 @@
       "sha256": "16fbda482ab4b2602f6e5fc3b29d9a4224d84616a8ace50cea9798eb0d368880"
     },
     {
-      "source": "vendor/three/LICENSE",
-      "path": "vendor/three/LICENSE",
-      "bytes": 1081,
-      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
-    },
-    {
       "source": "vendor/three/addons/loaders/GLTFLoader.js",
       "path": "vendor/three/addons/loaders/GLTFLoader.js",
       "bytes": 114899,
@@ -544,6 +1402,12 @@
       "path": "vendor/three/addons/utils/BufferGeometryUtils.js",
       "bytes": 35555,
       "sha256": "748066188940e858e5d48985866e84a6e6691fc31776ea59d9d89c1a7f6fe6cd"
+    },
+    {
+      "source": "vendor/three/LICENSE",
+      "path": "vendor/three/LICENSE",
+      "bytes": 1081,
+      "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
     },
     {
       "source": "vendor/three/three.core.js",
@@ -741,6 +1605,76 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "glass-material.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "portal-glass.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "home-controls-v24.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "portal-social-v24.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "refinement-v25.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "paper-font.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "refinement-v27.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "landing-video.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "refinement-v29.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "card-handoff-v29.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "landing-glass.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "film-scenes-v30.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "landing-video-scene.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "communication-mode.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "mobile-viewport.mjs",
       "kind": "module"
@@ -802,7 +1736,7 @@
     },
     {
       "from": "app.mjs",
-      "to": "klin-login-scene.mjs",
+      "to": "portal-arrival.mjs",
       "kind": "module"
     },
     {
@@ -846,6 +1780,31 @@
       "kind": "resource"
     },
     {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-video-player.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-held-frame.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-glass.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-departure.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "form-controls.mjs",
+      "to": "auth-caret.mjs",
+      "kind": "module"
+    },
+    {
       "from": "date-picker.mjs",
       "to": "sheet-dismiss.mjs",
       "kind": "module"
@@ -883,11 +1842,6 @@
     {
       "from": "klin-world.mjs",
       "to": "klin-reference-scene.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "klin-login-scene.mjs",
-      "to": "assets/login-world-20261019/klin-login-scene.mjs",
       "kind": "module"
     },
     {
@@ -970,6 +1924,108 @@
     "vendor/three/LICENSE"
   ],
   "dynamicAssets": {
+    "assets/signature-strokes-20261020/": [
+      "assets/signature-strokes-20261020/u2e.json",
+      "assets/signature-strokes-20261020/u34.json",
+      "assets/signature-strokes-20261020/u35.json",
+      "assets/signature-strokes-20261020/u37.json",
+      "assets/signature-strokes-20261020/u38.json",
+      "assets/signature-strokes-20261020/u39.json",
+      "assets/signature-strokes-20261020/u3b.json",
+      "assets/signature-strokes-20261020/u3c.json",
+      "assets/signature-strokes-20261020/u3f.json",
+      "assets/signature-strokes-20261020/u43.json",
+      "assets/signature-strokes-20261020/u45.json",
+      "assets/signature-strokes-20261020/u46.json",
+      "assets/signature-strokes-20261020/u47.json",
+      "assets/signature-strokes-20261020/u48.json",
+      "assets/signature-strokes-20261020/u49.json",
+      "assets/signature-strokes-20261020/u4c.json",
+      "assets/signature-strokes-20261020/u4d.json",
+      "assets/signature-strokes-20261020/u4e.json",
+      "assets/signature-strokes-20261020/u4f.json",
+      "assets/signature-strokes-20261020/u50.json",
+      "assets/signature-strokes-20261020/u51.json",
+      "assets/signature-strokes-20261020/u52.json",
+      "assets/signature-strokes-20261020/u53.json",
+      "assets/signature-strokes-20261020/u54.json",
+      "assets/signature-strokes-20261020/u55.json",
+      "assets/signature-strokes-20261020/u56.json",
+      "assets/signature-strokes-20261020/u57.json",
+      "assets/signature-strokes-20261020/u58.json",
+      "assets/signature-strokes-20261020/u59.json",
+      "assets/signature-strokes-20261020/u5a.json",
+      "assets/signature-strokes-20261020/u5b.json",
+      "assets/signature-strokes-20261020/u5c.json",
+      "assets/signature-strokes-20261020/u5d.json",
+      "assets/signature-strokes-20261020/u5e.json",
+      "assets/signature-strokes-20261020/u5f.json",
+      "assets/signature-strokes-20261020/u60.json",
+      "assets/signature-strokes-20261020/u61.json",
+      "assets/signature-strokes-20261020/u62.json",
+      "assets/signature-strokes-20261020/u63.json",
+      "assets/signature-strokes-20261020/u64.json",
+      "assets/signature-strokes-20261020/u65.json",
+      "assets/signature-strokes-20261020/u66.json",
+      "assets/signature-strokes-20261020/u67.json",
+      "assets/signature-strokes-20261020/u68.json",
+      "assets/signature-strokes-20261020/u69.json",
+      "assets/signature-strokes-20261020/u6a.json",
+      "assets/signature-strokes-20261020/u6b.json",
+      "assets/signature-strokes-20261020/u6c.json",
+      "assets/signature-strokes-20261020/u6d.json",
+      "assets/signature-strokes-20261020/u6e.json",
+      "assets/signature-strokes-20261020/u6f.json",
+      "assets/signature-strokes-20261020/u70.json",
+      "assets/signature-strokes-20261020/u71.json",
+      "assets/signature-strokes-20261020/u72.json",
+      "assets/signature-strokes-20261020/u73.json",
+      "assets/signature-strokes-20261020/u74.json",
+      "assets/signature-strokes-20261020/u75.json",
+      "assets/signature-strokes-20261020/u76.json",
+      "assets/signature-strokes-20261020/u77.json",
+      "assets/signature-strokes-20261020/u78.json",
+      "assets/signature-strokes-20261020/u79.json",
+      "assets/signature-strokes-20261020/u7a.json",
+      "assets/signature-strokes-20261020/u7b.json",
+      "assets/signature-strokes-20261020/u7c.json",
+      "assets/signature-strokes-20261020/u7d.json",
+      "assets/signature-strokes-20261020/u7e.json",
+      "assets/signature-strokes-20261020/u7f.json",
+      "assets/signature-strokes-20261020/u80.json",
+      "assets/signature-strokes-20261020/u81.json",
+      "assets/signature-strokes-20261020/u82.json",
+      "assets/signature-strokes-20261020/u83.json",
+      "assets/signature-strokes-20261020/u84.json",
+      "assets/signature-strokes-20261020/u85.json",
+      "assets/signature-strokes-20261020/u86.json",
+      "assets/signature-strokes-20261020/u87.json",
+      "assets/signature-strokes-20261020/u88.json",
+      "assets/signature-strokes-20261020/u89.json",
+      "assets/signature-strokes-20261020/u8a.json",
+      "assets/signature-strokes-20261020/u8b.json",
+      "assets/signature-strokes-20261020/u8c.json",
+      "assets/signature-strokes-20261020/u8d.json",
+      "assets/signature-strokes-20261020/u8e.json",
+      "assets/signature-strokes-20261020/u8f.json",
+      "assets/signature-strokes-20261020/u90.json",
+      "assets/signature-strokes-20261020/u91.json",
+      "assets/signature-strokes-20261020/u92.json",
+      "assets/signature-strokes-20261020/u93.json",
+      "assets/signature-strokes-20261020/u94.json",
+      "assets/signature-strokes-20261020/u95.json",
+      "assets/signature-strokes-20261020/u96.json",
+      "assets/signature-strokes-20261020/u97.json",
+      "assets/signature-strokes-20261020/u98.json",
+      "assets/signature-strokes-20261020/u99.json",
+      "assets/signature-strokes-20261020/u9a.json",
+      "assets/signature-strokes-20261020/u9b.json",
+      "assets/signature-strokes-20261020/u9c.json",
+      "assets/signature-strokes-20261020/u9d.json",
+      "assets/signature-strokes-20261020/u9e.json",
+      "assets/signature-strokes-20261020/u9f.json",
+      "assets/signature-strokes-20261020/hershey-cursive.json"
+    ],
     "assets/figma-nav-20261009/nav-": [
       "assets/figma-nav-20261009/nav-visit.svg",
       "assets/figma-nav-20261009/nav-memory.svg",

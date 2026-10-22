@@ -1,12 +1,16 @@
-import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261015-universe-5';
-export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261015-universe-5';
+import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
+export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
 
 const DEFAULT_COMPANION = 'assets/klin-native-20261016-0907/adult.png';
 const BRAND_LOGO = 'assets/brand-20261016/knoknok-logo-latest.png';
 export const DEFAULT_CARD_AVATAR = 'assets/brand-20261016/default-cloud-avatar.svg';
 const LIMITS = Object.freeze({ name: 40, bio: 180, language: 24, region: 60, encoded: 32768, jsonBytes: 24576 });
-const STICKER_COLORS = ['#ffbd99', '#b9b3ff', '#83cef0', '#ffd567', '#f49cbc', '#9ec5ff', '#e4b3f1'];
-const STICKER_ANGLES = [-2, 2, -1, 2, -2, 1, -1];
+const TAG_FILLS = ['#f4d3b8', '#ddd3f1', '#cddfe8', '#eee1a9', '#eacbd0', '#d4deef', '#e6d1e9'];
+const TAG_EDGES = ['#ddcbbc', '#d1c9e2', '#c6d6e0', '#dfd2aa', '#dfc4ce', '#c8d3e3', '#d9c7dd'];
+const TAG_ANGLES = [-1.5, 1.5, -1, 1, -1.5, 1, -1];
+// A few almost transparent edge pixels begin at 218; the visible letter ink
+// starts at 312. Align the actual printed strokes with the content column.
+const BRAND_INK_INSET = 312 / 2172;
 const own = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const plain = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const length = value => Array.from(value).length;
@@ -80,7 +84,7 @@ function companionPath(value) {
   return typeof value === 'string' && /^(?:\.\/)?assets\/[A-Za-z0-9_./-]+\.(?:png|webp|jpe?g)$/i.test(value) && !value.split('/').includes('..') ? value : DEFAULT_COMPANION;
 }
 
-export function cardMarkup(value, { companionSrc = DEFAULT_COMPANION, compact = false, showAllTags = false } = {}) {
+export function cardMarkup(value, { companionSrc = DEFAULT_COMPANION, compact = false, showAllTags = false, editable = false } = {}) {
   const data = validatedData(value);
   if (!data) return '';
   const image = escape(companionPath(companionSrc));
@@ -90,9 +94,12 @@ export function cardMarkup(value, { companionSrc = DEFAULT_COMPANION, compact = 
   // standalone shared snapshots remain complete without an unhandled control.
   const interactiveTags = showAllTags === true && !compact && data.tags.length > 0;
   const previewTags = interactiveTags ? data.tags.slice(0, 3) : data.tags;
-  const stickers = previewTags.map((tag, index) => `<span class="personality-sticker sticker-${index + 1}" title="${escape(tag)}" style="--sticker-color:${STICKER_COLORS[index]};--sticker-angle:${STICKER_ANGLES[index]}deg">${escape(tag)}</span>`).join('');
+  const stickers = previewTags.map((tag, index) => `<span class="personality-sticker sticker-${index + 1}" title="${escape(tag)}" style="--tag-fill:${TAG_FILLS[index]};--tag-edge:${TAG_EDGES[index]};--tag-angle:${TAG_ANGLES[index]}deg">${escape(tag)}</span>`).join('');
   const tagsLink = interactiveTags ? `<button class="share-card-tags-link" type="button" data-action="view-card-tags" aria-label="查看所有 ${data.tags.length} 個標籤">所有標籤<span aria-hidden="true"> · ${data.tags.length} ↗</span></button>` : '';
-  return `<article class="share-card${compact ? ' is-compact' : ''}" aria-label="${escape(data.name)}的分享名片"><div class="paper-card-postage" aria-hidden="true"><div class="paper-card-stamp"><img class="paper-card-landscape" src="assets/cloud-realm-20261019/arrival.webp" alt=""><img class="paper-card-spirit" src="${image}" alt="" draggable="false"></div><span class="paper-card-postage-label">彼之境 · 來客</span></div><header class="share-card-brand"><span class="share-card-brand-mark"><img class="share-card-brand-logo" src="${BRAND_LOGO}" width="2172" height="724" alt="Knoknok"></span><span class="share-card-brand-label">一張名片，一次相遇。</span></header><div class="share-card-identity"><div class="share-card-avatar">${avatar}</div><div class="share-card-name-block"><h2 class="share-card-name" title="${escape(data.name)}">${escape(data.name)}</h2></div></div><div class="share-card-about">${data.bio ? `<p class="share-card-bio" title="${escape(data.bio)}">${escape(data.bio)}</p>` : ''}${meta ? `<div class="share-card-meta">${meta}</div>` : ''}</div><section class="personality-stickers${data.tags.length ? '' : ' is-empty'}" aria-label="我的標籤${data.tags.length ? ` · ${data.tags.length}` : ''}"><div class="personality-sticker-box${data.tags.length ? '' : ' is-empty'}">${stickers}</div>${tagsLink}</section></article>`;
+  // Editing belongs only to an explicitly editable, full personal card. It is
+  // absent from standalone/compact share snapshots and the exported artwork.
+  const edit = editable === true && !compact ? '<button class="share-card-edit" type="button" data-action="edit-card" aria-label="編輯名片" title="編輯名片"><img src="assets/ui/pencil-square.svg" width="19" height="19" alt="" aria-hidden="true"></button>' : '';
+  return `<article class="share-card${compact ? ' is-compact' : ''}" data-print-card${edit ? ' data-card-editable' : ''} aria-label="${escape(data.name)}的分享名片"><div class="paper-card-postage" aria-hidden="true"><div class="paper-card-stamp"><img class="paper-card-landscape" src="assets/cloud-realm-20261019/arrival.webp" alt=""><img class="paper-card-spirit" src="${image}" alt="" draggable="false"></div><span class="paper-card-postage-label">彼之境 · 來客</span></div><header class="share-card-brand"><div class="share-card-brand-top"><span class="share-card-brand-mark"><img class="share-card-brand-logo" src="${BRAND_LOGO}" width="2172" height="724" alt="Knoknok"></span></div><span class="share-card-brand-label">一張名片，一次相遇。</span></header><div class="share-card-identity"><div class="share-card-avatar">${avatar}</div><div class="share-card-name-block"><h2 class="share-card-name${length(data.name) > 12 ? ' is-long-name' : ''}" title="${escape(data.name)}">${escape(data.name)}</h2></div></div><div class="share-card-about">${data.bio ? `<p class="share-card-bio" title="${escape(data.bio)}">${escape(data.bio)}</p>` : ''}${meta ? `<div class="share-card-meta">${meta}</div>` : ''}</div><section class="personality-stickers${data.tags.length ? '' : ' is-empty'}" aria-label="我的標籤${data.tags.length ? ` · ${data.tags.length}` : ''}"><div class="personality-sticker-box${data.tags.length ? '' : ' is-empty'}">${stickers}</div>${tagsLink}</section>${edit}</article>`;
 }
 
 export function cardShareURL(value, baseURL) {
@@ -139,7 +146,8 @@ export async function downloadCard(value) {
   const canvas = document.createElement('canvas'); canvas.width = 1080; canvas.height = 2200;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('瀏覽器暫時無法繪製名片。');
-  const family = '-apple-system,BlinkMacSystemFont,"PingFang TC","PingFang SC",system-ui,sans-serif';
+  try { await document.fonts?.load?.('600 50px "Klin Paper Serif"'); } catch { /* Keep the installed serif fallback if the local font cannot load. */ }
+  const family = '"Klin Paper Serif","Songti TC","Songti SC","Noto Serif CJK TC","Noto Serif CJK SC","PMingLiU",serif';
   const [logo, companion, avatar, landscape] = await Promise.all([
     cardImage(BRAND_LOGO), cardImage(DEFAULT_COMPANION), cardImage(data.avatar || DEFAULT_CARD_AVATAR),
     cardImage('assets/cloud-realm-20261019/arrival.webp'),
@@ -156,24 +164,24 @@ export async function downloadCard(value) {
   while (nameLines.length > 2 && nameSize > 29) { nameSize -= 4; ctx.font = '600 ' + nameSize + 'px ' + family; nameLines = wrapLines(ctx, data.name, 510); }
   const identityY = 246, identityHeight = Math.max(132, nameLines.length * (nameSize + 8) + 18);
   let flowY = identityY + identityHeight + 50;
-  ctx.font = '34px ' + family;
+  ctx.font = '50px ' + family;
   const bioLines = data.bio ? wrapLines(ctx, data.bio, right - left).slice(0, 2) : [];
   const allBioLines = data.bio ? wrapLines(ctx, data.bio, right - left) : [];
-  const bioY = flowY; flowY += bioLines.length * 59;
+  const bioY = flowY; flowY += bioLines.length * 77;
   const meta = [data.language, data.region].filter(Boolean).join(' · ');
   const metaY = flowY + (bioLines.length ? 16 : 0);
-  if (meta) flowY = metaY + 40;
+  if (meta) flowY = metaY + 56;
   flowY += 38;
-  const tags = []; let x = left, row = 0; ctx.font = '500 31px ' + family;
+  const tags = []; let x = left, row = 0; ctx.font = '600 43px ' + family;
   for (const [index, text] of data.tags.entries()) {
     const width = Math.min(450, ctx.measureText(text).width + 54);
     if (x + width > right && x > left) { row++; x = left; }
     let display = text;
     while (ctx.measureText(display).width > width - 54) display = Array.from(display).slice(0, -1).join('');
     if (display !== text) display = Array.from(display).slice(0, -1).join('') + '…';
-    tags.push({ index, display, x, y: flowY + row * 78, width }); x += width + 22;
+    tags.push({ index, display, x, y: flowY + row * 94, width }); x += width + 22;
   }
-  const height = Math.max(680, flowY + (tags.length ? row * 78 + 61 : 0) + 70);
+  const height = Math.max(680, flowY + (tags.length ? row * 94 + 77 : 0) + 70);
   // The same warm cotton stock and quiet fibres used by the DOM card.
   ctx.fillStyle = '#fffdf8'; ctx.fillRect(0, 0, 1080, height);
   const paper = ctx.createLinearGradient(0, 0, 1080, height);
@@ -186,9 +194,9 @@ export async function downloadCard(value) {
   if (logo) {
     const tint = document.createElement('canvas'); tint.width = 260; tint.height = 87;
     const print = tint.getContext('2d'); print.drawImage(logo, 0, 0, 260, 87); print.globalCompositeOperation = 'source-in'; print.fillStyle = ink; print.fillRect(0, 0, 260, 87);
-    ctx.globalAlpha = .84; ctx.drawImage(tint, left, 62, 260, 87); ctx.globalAlpha = 1;
+    ctx.globalAlpha = .84; ctx.drawImage(tint, left - 260 * BRAND_INK_INSET, 62, 260, 87); ctx.globalAlpha = 1;
   }
-  ctx.fillStyle = '#9a8f83'; ctx.font = '24px ' + family; ctx.fillText('一張名片，一次相遇。', left, 163);
+  ctx.fillStyle = '#7a6e62'; ctx.font = '36px ' + family; ctx.fillText('一張名片，一次相遇。', left, 163);
   // A small printed souvenir stamp replaces the previous full-width image box.
   ctx.save(); ctx.translate(910, 182); ctx.rotate(6 * Math.PI / 180);
   ctx.fillStyle = '#fffefb'; ctx.fillRect(-100, -115, 200, 230);
@@ -196,7 +204,7 @@ export async function downloadCard(value) {
   ctx.save(); ctx.beginPath(); ctx.rect(-88, -103, 176, 206); ctx.clip();
   if (landscape) { ctx.globalAlpha = .90; cover(landscape, -88, -103, 176, 206, .35); ctx.globalAlpha = 1; }
   if (companion) { ctx.globalAlpha = .92; ctx.drawImage(companion, -59, -6, 118, 118); ctx.globalAlpha = 1; }
-  ctx.restore(); ctx.fillStyle = '#9c8b7c'; ctx.font = '19px ' + family; ctx.textAlign = 'center'; ctx.fillText('彼之境 · 來客', 0, 133); ctx.restore(); ctx.textAlign = 'left';
+  ctx.restore(); ctx.fillStyle = '#7b6a59'; ctx.font = '36px ' + family; ctx.textAlign = 'center'; ctx.fillText('彼之境 · 來客', 0, 133); ctx.restore(); ctx.textAlign = 'left';
   ctx.save(); ctx.beginPath(); ctx.arc(left + 66, identityY + 66, 66, 0, Math.PI * 2); ctx.clip();
   if (avatar) cover(avatar, left, identityY, 132, 132);
   else {
@@ -204,23 +212,25 @@ export async function downloadCard(value) {
     ctx.fillStyle = sky; ctx.fillRect(left, identityY, 132, 132); ctx.fillStyle = '#fffaf3'; ctx.beginPath(); ctx.arc(left + 66, identityY + 50, 20, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(left + 66, identityY + 127, 38, 44, 0, 0, Math.PI * 2); ctx.fill();
   }
   ctx.restore(); ctx.font = '600 ' + nameSize + 'px ' + family;
-  const nameplateWidth = Math.min(550, Math.max(...nameLines.map(line => ctx.measureText(line).width)) + 40);
-  ctx.fillStyle = '#3d4350'; rounded(ctx, 236, identityY - 4, nameplateWidth, nameLines.length * (nameSize + 8) + 18, 6); ctx.fill();
-  ctx.fillStyle = '#fff'; nameLines.forEach((line, i) => ctx.fillText(line, 256, identityY + 8 + i * (nameSize + 8)));
-  ctx.fillStyle = '#655d54'; ctx.font = '34px ' + family;
+  // Names are printed directly on the same stock as the rest of the card.
+  ctx.fillStyle = ink; nameLines.forEach((line, i) => ctx.fillText(line, 236, identityY + 8 + i * (nameSize + 8)));
+  ctx.fillStyle = '#655d54'; ctx.font = '50px ' + family;
   bioLines.forEach((line, i) => {
     let display = line;
     if (i === 1 && allBioLines.length > 2) {
       while (display && ctx.measureText(display + '…').width > right - left) display = Array.from(display).slice(0, -1).join('');
       display += '…';
     }
-    ctx.fillText(display, left, bioY + i * 59);
+    ctx.fillText(display, left, bioY + i * 77);
   });
-  if (meta) { ctx.fillStyle = '#9b8f82'; ctx.font = '28px ' + family; ctx.fillText(meta, left, metaY); }
+  if (meta) { ctx.fillStyle = '#776b5f'; ctx.font = '42px ' + family; ctx.fillText(meta, left, metaY); }
   for (const { index, display, x, y, width } of tags) {
-    ctx.save(); ctx.translate(x + width / 2, y + 30); ctx.rotate(STICKER_ANGLES[index] * Math.PI / 180);
-    ctx.fillStyle = STICKER_COLORS[index]; rounded(ctx, -width / 2, -30, width, 61, 12); ctx.fill();
-    ctx.strokeStyle = '#ffffff66'; ctx.lineWidth = 2; ctx.stroke(); ctx.fillStyle = '#493c43'; ctx.font = '500 31px ' + family; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(display, 0, 2); ctx.restore();
+    ctx.save(); ctx.translate(x + width / 2, y + 38); ctx.rotate(TAG_ANGLES[index] * Math.PI / 180);
+    ctx.fillStyle = TAG_FILLS[index]; rounded(ctx, -width / 2, -38, width, 77, 10); ctx.fill();
+    ctx.strokeStyle = TAG_EDGES[index]; ctx.lineWidth = 2; ctx.stroke();
+    ctx.strokeStyle = '#ffffff60'; ctx.lineWidth = 1;
+    for (let stripe = -width / 2 + 10; stripe < width / 2 - 4; stripe += 11) { ctx.beginPath(); ctx.moveTo(stripe, -32); ctx.lineTo(stripe + 1, 32); ctx.stroke(); }
+    ctx.fillStyle = '#493c43'; ctx.font = '600 43px ' + family; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(display, 0, 2); ctx.restore();
   }
   const portrait = document.createElement('canvas'); portrait.width = 1080; portrait.height = height;
   const portraitContext = portrait.getContext('2d');

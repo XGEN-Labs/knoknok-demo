@@ -1,5 +1,4 @@
 /* Compact complete editor; the sheet itself never needs to scroll. */
-.phone[data-card-handoff]>.klin-world-host{filter:none!important;transition:none!important}
 .phone #sheet.card-editor-sheet{height:auto;max-height:var(--sheet-height);overflow:hidden;background:#fff}
 .phone #sheet.card-editor-sheet #sheet-content{max-height:none;overflow:hidden}
 .phone #sheet.card-editor-sheet .sheet-inner{padding:11px 22px 18px!important;max-height:none!important;overflow:hidden;box-sizing:border-box}
