@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-23T07:46:20.206Z",
+  "createdAt": "2026-10-23T08:43:33.290Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 78002836,
+  "payloadBytes": 77619070,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 103381,
-      "sha256": "01b162dfecc090279a4652be13fc7708269761d3efca5f02d55f2d09096ed428"
+      "bytes": 103421,
+      "sha256": "e4d331c96848914e85b227ba90a8802cb383c60cc3a2aacfc4390c95e40122e7"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -108,6 +108,12 @@
       "sha256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6"
     },
     {
+      "source": "assets/home-scene-20261023-v35/room-film.webp",
+      "path": "assets/home-scene-20261023-v35/room-film.webp",
+      "bytes": 193664,
+      "sha256": "94fdc461651848945ed4d50e6c9cad36330f6bcb01ace96d5bdeb2087b1b92de"
+    },
+    {
       "source": "assets/home-scene-20261023-v35/visit-elements.webp",
       "path": "assets/home-scene-20261023-v35/visit-elements.webp",
       "bytes": 388478,
@@ -154,18 +160,6 @@
       "path": "assets/login-world-20261019/source/original-login-world.png",
       "bytes": 1902641,
       "sha256": "77633e4702a6b254d29406bed33f837d9b492e0821b941486970e859a35724d1"
-    },
-    {
-      "source": "assets/native-room-20261023-37/adult.png",
-      "path": "assets/native-room-20261023-37/adult.png",
-      "bytes": 335104,
-      "sha256": "87387fe1aa253929a34bbf2d9e0318dd7a8fea75077543a18638c9152fa7ef5b"
-    },
-    {
-      "source": "assets/native-room-20261023-37/room.webp",
-      "path": "assets/native-room-20261023-37/room.webp",
-      "bytes": 241382,
-      "sha256": "894d9aa1c40ad57c05efdc4f7d4c3441d7ccd3bed834ddc75c725515ac749d5d"
     },
     {
       "source": "assets/palette-20261021/ivory-blue-room.png",
@@ -1226,8 +1220,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 9190,
-      "sha256": "2885e2a4b442c2103a95bb80d3ab95a506d75ba1dfb8ff8198a09058fa839270"
+      "bytes": 9192,
+      "sha256": "b8c4bf119dcc0dbf4352f586c23c4eca86f1683d5d6b192f259b60e5833cb708"
     },
     {
       "source": "journey-experience.css",
@@ -1244,8 +1238,8 @@
     {
       "source": "klin-companion.mjs",
       "path": "klin-companion.mjs",
-      "bytes": 1757,
-      "sha256": "8cee620c4f6bbbca3805f49c750d894254a3d40ffd31cd57d18b20fcb112c593"
+      "bytes": 1734,
+      "sha256": "f52d8439bb67a79e01184c3d7e3fae24ca352e2bc8aa969ef582f5495f2c0100"
     },
     {
       "source": "klin-experience.css",
@@ -1254,16 +1248,16 @@
       "sha256": "750acc1149baca8f56fd6c5d605b4c46199778c4d77888c0217d195e335fb6a7"
     },
     {
+      "source": "klin-reference-2d.mjs",
+      "path": "klin-reference-2d.mjs",
+      "bytes": 12076,
+      "sha256": "f426d07754ffb804f218ae07ae20b4d92f33d64fc56dd0339594470876c7bbf1"
+    },
+    {
       "source": "klin-world-2d.css",
       "path": "klin-world-2d.css",
       "bytes": 1482,
       "sha256": "2bfd88d5a8768a2b6a2adced2b442e3850e973c3fe8b860c202bc775d047c3f6"
-    },
-    {
-      "source": "klin-world-2d.mjs",
-      "path": "klin-world-2d.mjs",
-      "bytes": 13045,
-      "sha256": "2ca9ca9e9bd56b3f04e931f1a30c3b6538a60bac84b1fa01b2208546ee814ecd"
     },
     {
       "source": "landing-audio-clips.mjs",
@@ -1472,8 +1466,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 415,
-      "sha256": "c1a3584fff2b0bc68b053d23376ed1a3b3874466e5f6915c03f5a2fc286a5782"
+      "bytes": 421,
+      "sha256": "7c5a9954b21e53c53a0eaf14704aa00b43901e1c1bb33f623d304313905b2645"
     },
     {
       "source": "scene-experience.css",
@@ -1936,7 +1930,7 @@
     },
     {
       "from": "app.mjs",
-      "to": "klin-world-2d.mjs",
+      "to": "klin-reference-2d.mjs",
       "kind": "module"
     },
     {
@@ -2035,12 +2029,12 @@
       "kind": "module"
     },
     {
-      "from": "klin-world-2d.mjs",
+      "from": "klin-reference-2d.mjs",
       "to": "klin-companion.mjs",
       "kind": "module"
     },
     {
-      "from": "klin-world-2d.mjs",
+      "from": "klin-reference-2d.mjs",
       "to": "scene-assets.mjs",
       "kind": "module"
     },

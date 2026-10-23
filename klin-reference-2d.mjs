@@ -1,8 +1,8 @@
-import { klinAssets } from './klin-companion.mjs?v=20261023-native-room-37';
-import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-native-room-37';
+import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
+import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-original-room-character-39';
 
-// A lightweight, persistent illustrated scene. The authored room plate keeps
-// its champagne metal details; no mesh, hair, WebGL or growth effect is loaded.
+// Restore the selected original PNG and the previous illustrated room directly.
+// Native modeling and action drafts remain archived outside this renderer.
 const SCENES = Object.freeze({
   home: HOME_SCENE_ASSET,
   porch: VISIT_SCENE_ASSET,
@@ -18,16 +18,7 @@ export function getIllustratedLayout(page) {
   if (['relations', 'search', 'invite'].includes(page)) return {x: .5, footY: .62, height: .18, world: 'porch', character: false};
   if (['chat', 'connected'].includes(page)) return {x: .30, footY: .55, height: .16, world: 'shared', shared: true};
   if (isCard(page)) return {x: .5, footY: .68, height: .31, world: 'home', character: false};
-  return {x: .5035128805620609, footY: .64642779587405, height: .2953311617806732, world: 'home', referenceFrame: true};
-}
-
-// Match the selected camera when cover crops the room on short screens.
-export function fitIllustratedLayout(layout, width, height) {
-  if (!layout.referenceFrame) return layout;
-  const scale = Math.max(width / 854, height / 1842);
-  return {...layout, x: (layout.x * 854 * scale - (854 * scale - width) / 2) / width,
-    footY: (layout.footY * 1842 * scale - (1842 * scale - height) / 2) / height,
-    height: layout.height * 1842 * scale / height, referenceFrame: false};
+  return {x: .5, footY: .68, height: .31, world: 'home'};
 }
 
 // Keep the same DOM card anchored to the illustration's raised paw before it
@@ -63,7 +54,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   };
   host.append(room);
   const primary = makeActor('is-primary'), secondary = makeActor('is-secondary');
-  host.classList.add('klin-illustrated-world'); host.dataset.world = 'loading'; host.dataset.rendering = 'illustrated-2d'; host.dataset.model = 'native-room-render-r4';
+  host.classList.add('klin-illustrated-world'); host.dataset.world = 'loading'; host.dataset.rendering = 'illustrated-2d'; host.dataset.model = 'original-adult-illustration';
   host.parentElement?.setAttribute('data-character-renderer', 'illustrated-2d');
   const state = {page: 'home', stage: 'adult', layout: getIllustratedLayout('home'), reduced: !!reducedMotion, active: true, disposed: false, action: null, frame: 0, conversation: false, participants: [], lounge: {}, realm: {}, portal: 'idle'};
   const dimensions = () => ({width: host.clientWidth || host.getBoundingClientRect().width || 402, height: host.clientHeight || host.getBoundingClientRect().height || 874});
@@ -71,8 +62,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
 
   function draw(layout = state.layout) {
     if (state.disposed) return;
-    const {width, height} = dimensions(); layout = fitIllustratedLayout(layout, width, height);
-    const size = Math.min(height * layout.height, width * .78);
+    const {width, height} = dimensions(), size = Math.min(height * layout.height, width * .78);
     for (const [key, image] of Object.entries(plates)) image.hidden = key !== layout.world;
     host.dataset.scene = layout.world;
     primary.anchor.hidden = layout.character === false;
@@ -92,9 +82,9 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     if (state.disposed) return;
     if (page === state.page && !immediate && state.action) return;
     stop(); state.page = page; state.conversation = false; setStage(stage);
-    state.layout = {...getIllustratedLayout(page), ...(layout || {}), ...(layout ? {referenceFrame: false} : {})}; draw();
+    state.layout = {...getIllustratedLayout(page), ...(layout || {})}; draw();
   }
-  function setLayout(layout = {}) { if (state.action?.kind === 'transition') return; state.layout = {...state.layout, ...layout, referenceFrame: layout.referenceFrame ?? false}; draw(); }
+  function setLayout(layout = {}) { if (state.action?.kind === 'transition') return; state.layout = {...state.layout, ...layout}; draw(); }
   function runAction(kind, duration, update, complete) {
     stop(); const action = {kind, started: now(), duration: state.reduced ? 1 : duration, update, complete}; state.action = action;
     update(0);
@@ -112,19 +102,18 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   }
   function transition(from, to, {onComplete, onCardFrame, stage = state.stage, layout: override, preserveScene = false} = {}) {
     const offering = from === 'home' && isCard(to), source = {...state.layout};
-    const destination = offering && preserveScene ? source : {...getIllustratedLayout(to), ...(override || {}), ...(override ? {referenceFrame: false} : {})};
-    const dims = dimensions(), startFrame = fitIllustratedLayout(source, dims.width, dims.height), endFrame = fitIllustratedLayout(destination, dims.width, dims.height);
+    const destination = offering && preserveScene ? source : {...getIllustratedLayout(to), ...(override || {})};
     state.page = to; state.conversation = false; setStage(stage);
     return runAction('transition', offering ? 1850 : 650, progress => {
       const eased = smooth(progress);
       if (offering) {
         draw(source); const gesture = Math.sin(progress * Math.PI);
         primary.artwork.style.transform = `translateY(${12 - gesture * 2}%) rotate(${-gesture * 3}deg) scale(${1 + gesture * .035})`;
-        const {width, height} = dimensions(), card = illustratedCardFrame(progress, fitIllustratedLayout(source, width, height), width, height);
+        const {width, height} = dimensions(), card = illustratedCardFrame(progress, source, width, height);
         host.dataset.transitionPhase = card.phase; onCardFrame?.(card);
       } else {
         host.dataset.transitionPhase = progress < .5 ? 'glide' : 'settle';
-        draw({...endFrame, x: lerp(startFrame.x, endFrame.x, eased), footY: lerp(startFrame.footY, endFrame.footY, eased) - Math.sin(progress * Math.PI) * .012, height: lerp(startFrame.height, endFrame.height, eased), referenceFrame: false});
+        draw({...destination, x: lerp(source.x, destination.x, eased), footY: lerp(source.footY, destination.footY, eased) - Math.sin(progress * Math.PI) * .012, height: lerp(source.height, destination.height, eased)});
       }
     }, () => { state.layout = destination; draw(); onComplete?.(); });
   }
@@ -139,7 +128,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     const enabled = !!value && state.page === 'home';
     if (state.conversation === enabled) return;
     state.conversation = enabled;
-    if (state.action?.kind !== 'transition') setLayout(enabled ? {x: .5, footY: .37, height: .17, referenceFrame: false} : getIllustratedLayout('home'));
+    if (state.action?.kind !== 'transition') setLayout(enabled ? {x: .5, footY: .37, height: .17} : getIllustratedLayout('home'));
   }
   function pause() {
     if (state.action && state.action.pausedAt == null) state.action.pausedAt = now();
