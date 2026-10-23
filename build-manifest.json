@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-23T07:18:14.689Z",
+  "createdAt": "2026-10-23T07:46:20.206Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 77618989,
+  "payloadBytes": 78002836,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 103371,
-      "sha256": "02f4a6f719ecad1ae4ebee328d75e0b6fdd07b5ab024835c5ec0517dfefe6c7b"
+      "bytes": 103381,
+      "sha256": "01b162dfecc090279a4652be13fc7708269761d3efca5f02d55f2d09096ed428"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -108,12 +108,6 @@
       "sha256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6"
     },
     {
-      "source": "assets/home-scene-20261023-v35/room-film.webp",
-      "path": "assets/home-scene-20261023-v35/room-film.webp",
-      "bytes": 193664,
-      "sha256": "94fdc461651848945ed4d50e6c9cad36330f6bcb01ace96d5bdeb2087b1b92de"
-    },
-    {
       "source": "assets/home-scene-20261023-v35/visit-elements.webp",
       "path": "assets/home-scene-20261023-v35/visit-elements.webp",
       "bytes": 388478,
@@ -160,6 +154,18 @@
       "path": "assets/login-world-20261019/source/original-login-world.png",
       "bytes": 1902641,
       "sha256": "77633e4702a6b254d29406bed33f837d9b492e0821b941486970e859a35724d1"
+    },
+    {
+      "source": "assets/native-room-20261023-37/adult.png",
+      "path": "assets/native-room-20261023-37/adult.png",
+      "bytes": 335104,
+      "sha256": "87387fe1aa253929a34bbf2d9e0318dd7a8fea75077543a18638c9152fa7ef5b"
+    },
+    {
+      "source": "assets/native-room-20261023-37/room.webp",
+      "path": "assets/native-room-20261023-37/room.webp",
+      "bytes": 241382,
+      "sha256": "894d9aa1c40ad57c05efdc4f7d4c3441d7ccd3bed834ddc75c725515ac749d5d"
     },
     {
       "source": "assets/palette-20261021/ivory-blue-room.png",
@@ -1220,8 +1226,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 9175,
-      "sha256": "8c61d7183e5d6c85fd3025f4100712fae923bf7487ba2e9dc29de8375571fb0e"
+      "bytes": 9190,
+      "sha256": "2885e2a4b442c2103a95bb80d3ab95a506d75ba1dfb8ff8198a09058fa839270"
     },
     {
       "source": "journey-experience.css",
@@ -1238,8 +1244,8 @@
     {
       "source": "klin-companion.mjs",
       "path": "klin-companion.mjs",
-      "bytes": 1747,
-      "sha256": "9c45e5c8e2a6c028324d50c19ff117ed48257462766855d660c4ee5b7f7dba54"
+      "bytes": 1757,
+      "sha256": "8cee620c4f6bbbca3805f49c750d894254a3d40ffd31cd57d18b20fcb112c593"
     },
     {
       "source": "klin-experience.css",
@@ -1256,8 +1262,8 @@
     {
       "source": "klin-world-2d.mjs",
       "path": "klin-world-2d.mjs",
-      "bytes": 12049,
-      "sha256": "49a8f658673f5c3340d5d57077a752acbb3723e5a1ddf1d91b52550a9b3e0c98"
+      "bytes": 13045,
+      "sha256": "2ca9ca9e9bd56b3f04e931f1a30c3b6538a60bac84b1fa01b2208546ee814ecd"
     },
     {
       "source": "landing-audio-clips.mjs",
@@ -1466,8 +1472,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 421,
-      "sha256": "7c5a9954b21e53c53a0eaf14704aa00b43901e1c1bb33f623d304313905b2645"
+      "bytes": 415,
+      "sha256": "c1a3584fff2b0bc68b053d23376ed1a3b3874466e5f6915c03f5a2fc286a5782"
     },
     {
       "source": "scene-experience.css",

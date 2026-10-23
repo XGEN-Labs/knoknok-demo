@@ -14,10 +14,10 @@ import { landingComplete, onboardingDestination } from './landing.mjs?v=20261023
 import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261023-experience-34d';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261023-experience-34d';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-world-2d.mjs?v=20261023-scene-35d';
+import { createKlinWorld } from './klin-world-2d.mjs?v=20261023-native-room-37';
 import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261023-scene-35d';
-import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-scene-35d';
-import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-experience-34d';
+import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-native-room-37';
+import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-native-room-37';
 import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261023-experience-34d';
 import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261023-experience-34d';
