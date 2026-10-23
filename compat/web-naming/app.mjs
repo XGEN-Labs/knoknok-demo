@@ -730,12 +730,13 @@ async function sendCompanion(text, retryId) {
   sceneSound.stopSpeech();
   const epoch=sessionEpoch, owner=serverUser.id;
   companionTyping=true;
-  if(!await handoffLanding()){if(epoch===sessionEpoch)companionTyping=false;return;}
+  const delivery=handoffLanding();render(false);
+  if(!await delivery){if(epoch===sessionEpoch){companionTyping=false;render(false);}return;}
   if(epoch!==sessionEpoch)return;
   const messages=chatHistory(privateSpace().companionMessages,text);
   const id=retryId||crypto.randomUUID();
   chatAbort=new AbortController(); companionTyping=true;
-  ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:''}; delete ui.boopReply;
+  if(String(ui.companionDrafts?.[actor()]||'').trim()===text)ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:''}; delete ui.boopReply;
   dispatch({type:'COMPANION_REQUEST',id,text},false);
   sceneSound.cue('send');klinWorld?.interact('look');render(false);setHomeConversation(true);
   try {
