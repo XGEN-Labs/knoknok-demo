@@ -6,6 +6,7 @@
    decoder texture out of the glass pass prevents partial-surface repaints. */
 .landing-video-still{position:absolute;inset:0;visibility:hidden}
 .landing-video-scene.has-held-frame>video{visibility:hidden}
+.landing-video-scene.has-held-frame.is-resuming>video{visibility:visible}
 .landing-video-scene.has-held-frame>.landing-video-still{visibility:visible}
 .phone.landing-video-active>#app{z-index:2}
 .phone.landing-video-active>.klin-world-host,

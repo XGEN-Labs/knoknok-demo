@@ -218,9 +218,9 @@ export function createAudioMeter({window:host=globalThis.window,canvas,onAvailab
   return {start,stop,dispose(){stop();disposed=true;}};
 }
 
-export function bindVoiceComposer({root,window:host=globalThis.window,getDraft=()=>root?.querySelector('#private-message')?.value||'',onDraft=()=>{},onConversationStart=()=>{},onStatus=()=>{},lang,startTimeout,inactivityTimeout,finishTimeout}={}){
+export function bindVoiceComposer({root,inputSelector='#private-message',window:host=globalThis.window,getDraft=()=>root?.querySelector('#private-message')?.value||'',onDraft=()=>{},onConversationStart=()=>{},onStatus=()=>{},lang,startTimeout,inactivityTimeout,finishTimeout}={}){
   if(!root)return {dispose(){},stop(){},getMode:()=> 'text',setMode(){}};
-  const textarea=root.querySelector('#private-message'),capture=root.querySelector('[data-voice-capture]'),caption=root.querySelector('[data-voice-caption]'),status=root.querySelector('[data-voice-status]');
+  const textarea=root.querySelector(inputSelector),capture=root.querySelector('[data-voice-capture]'),caption=root.querySelector('[data-voice-caption]'),status=root.querySelector('[data-voice-status]');
   const openButton=root.querySelector('[data-voice-open]'),stopButton=root.querySelector('[data-voice-stop]'),finishButton=root.querySelector('[data-voice-finish]');
   let disposed=false,baseDraft='';
   const syncDraft=()=>{root.dataset.hasDraft=String(Boolean(textarea?.value?.trim()));};

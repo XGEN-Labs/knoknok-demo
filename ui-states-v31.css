@@ -32,19 +32,20 @@
 }
 /* Editable fields use their own rounded surface. The generic selector above
    contains two attribute selectors in :is(); these scoped rules deliberately
-   outrank it so a textarea never receives a second rectangular focus ring. */
+   outrank it so fields have no external outline or colored halo. A subtle
+   inner surface lift and the caret retain input focus feedback. */
 .phone#phone :where(input:not([type="checkbox"]):not([type="radio"]),textarea,select,.klin-select-trigger,.kn-date-trigger):is(:focus,:focus-visible) {
   outline:none!important;
   outline-offset:0!important;
-  border-color:var(--kn-ui-color-input-focus)!important;
-  box-shadow:0 0 0 2px var(--kn-ui-color-input-focus-halo)!important;
+  border-color:var(--kn-ui-glass-edge)!important;
+  box-shadow:var(--kn-ui-shadow-input),inset 0 0 0 1000px var(--kn-ui-color-input-focus-surface)!important;
 }
 .phone#phone :is(.composer-row,.onboarding-input-row,.network-search):focus-within,
 .phone#phone :is(.composer-row,.onboarding-input-row,.network-search):has(:focus-visible) {
   outline:none!important;
   outline-offset:0!important;
-  border-color:var(--kn-ui-color-input-focus)!important;
-  box-shadow:var(--kn-ui-shadow-control),0 0 0 2px var(--kn-ui-color-input-focus-halo)!important;
+  border-color:var(--kn-ui-glass-edge)!important;
+  box-shadow:var(--kn-ui-shadow-control),inset 0 0 0 1000px var(--kn-ui-color-input-focus-surface)!important;
 }
 .phone#phone :is(.composer-row,.onboarding-input-row,.network-search) :is(input,textarea,.kn-date-trigger),
 .phone#phone :is(.composer-row,.onboarding-input-row,.network-search) :is(input,textarea,.kn-date-trigger):is(:focus,:focus-visible) {
@@ -86,6 +87,18 @@
 }
 .phone#phone #sheet #card-share-status[data-feedback="success"] {
   color:var(--kn-ui-color-success)!important;
+}
+/* The primary save action sits on a white editor sheet, so use the same
+   solid action material as account submission and the send/mic controls. */
+.phone#phone #sheet.card-editor-sheet form > .btn[type="submit"]:not(:disabled),
+.phone#phone #sheet.card-editor-sheet form > .btn[type="submit"]:hover:not(:disabled) {
+  background:var(--kn-ui-color-solid)!important;
+  border-color:var(--kn-ui-color-solid)!important;
+  color:#fff!important;
+  -webkit-text-fill-color:#fff;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
 }
 .phone .klin-select-popover .klin-select-option[aria-selected="true"] {font-weight:600}
 .phone .klin-select-popover .klin-select-option[aria-disabled="true"] {

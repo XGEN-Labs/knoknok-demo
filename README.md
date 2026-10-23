@@ -1,27 +1,22 @@
-# Knoknok Demo
+# Knoknok · Klin interactive demo
 
-交互原型版本：`20261022-experience-33`。
+Static deployable demo, revision `20261023-experience-34d` (2026-10-23).
 
-影片引导初次相遇，在对应画面暂停收集信息及签署约定，然后进入带有 3D 伙伴的小屋。支持名片编辑、递名片、保存图片与分享。账号、朋友、聊天和数据仍为本地原型演示。
+- Updated landing video pauses at 5s for all profile responses, 30.5s for the in-world contract, then continues to the room after signing.
+- Cool input text, borderless input focus, autofocus and microphone/send switching; sound starts muted, sound at upper left and film skip at upper right.
+- Small juvenile line character acts during loading: black fullscreen stage, transparent inline variant.
+- Shared iOS safe-area positioning and independently scrollable short-screen contract.
+- Original 2D adult illustration in the metallic room and card handoff; current 3D exploration is not enabled.
+- 22 prerecorded Yunxia neural lines, native pitch and slightly slower delivery. Voice direction remains an iteration, not approved final casting.
 
-本版统一了输入字色和焦点外观，并为视频、图片与 3D 场景提供加载状态。右上角声音开关默认关闭；点击后可听到配乐和配合 UI 的系统合成角色语音。部分动态文案使用设备系统语音，音色随浏览器和系统而变化。
-
-## 本地运行
-
-需要现代浏览器、WebGL 和 Node.js。在此运行包目录执行：
+Run locally from this directory:
 
 ```sh
-npx --yes serve . --listen 8767
+python3 -m http.server 8767 --bind 127.0.0.1
 ```
 
-打开 <http://localhost:8767/>。请通过 HTTP 访问，不要直接双击 `index.html`。视频定位需要静态服务器支持 HTTP Range；部署平台同样需要保留该能力。
+Open http://127.0.0.1:8767/ . This is a frontend prototype with local browser state; the in-world contract is fictional.
 
-## 使用
+322 source tests passed. The runtime manifest lists 260 files / 170 assets with SHA-256 checksums. It includes only reviewed web runtime files, not the private development repository, conversation history, source Blender packages or reference archives. Source and reproducible build instructions remain in the private development project.
 
-- 从欢迎页进入，按画面提示填写资料。
-- 视频播放时可使用右下角跳过，到达当前片段对应的交互节点。
-- 初见的资料填写、签署和进入房间均由真实用户操作推进。
-- 声音默认静音，手动开启后才播放；可随时关闭。
-- 点击房间里的名片入口查看递卡动作，继续编辑、保存或分享名片。
-
-体验资料保存在当前浏览器。此仓库是可部署的静态运行包。
+Published audio is synthetic, not a voice clone. Only fixed public UI sentences were sent for rendering; runtime playback uses local assets. See the included audio NOTICE. Original media and rejected experiments are preserved in the private project.

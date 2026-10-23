@@ -1,4 +1,4 @@
-/* Knoknok UI 1.0 · 2026-10-22
+/* Knoknok UI 1.0 · 2026-10-23
  * Shared tokens for the specification and UI v31 runtime.
  * existing = source baseline; recommended = original proposal; adopted = implemented.
  * Generated from ui-standard/tokens.json: node ui-standard/export-tokens.mjs
@@ -29,7 +29,7 @@
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
   --kn-ui-color-success: #526b59;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
-  --kn-ui-color-focus: #4d665d;
+  --kn-ui-color-focus: #56647f;
   /* adopted | 2026-10-22 user adjustment; glass-material.css / ui-tokens.css */
   --kn-ui-glass-fill: rgba(255,255,255,.70);
   /* existing | glass-material.css */
@@ -110,12 +110,10 @@
   --kn-ui-color-disabled-surface: #eff1eb;
   /* adopted | ui-states-v31.css; UI v1 disabled state */
   --kn-ui-color-disabled-edge: #e2e5dd;
-  /* adopted | ui-foundations-v31.css; unified editable field text */
-  --kn-ui-color-input-text: #3f554b;
-  /* adopted | ui-foundations-v31.css; unified sage-gray placeholders */
-  --kn-ui-color-input-placeholder: #4d6057;
-  /* adopted | ui-states-v31.css; rounded input boundary */
-  --kn-ui-color-input-focus: #7c9488;
-  /* adopted | ui-states-v31.css; soft outer input focus halo */
-  --kn-ui-color-input-focus-halo: rgba(91,120,104,.18);
+  /* adopted | ui-foundations-v31.css; unified cool blue-gray editable text */
+  --kn-ui-color-input-text: #30394c;
+  /* adopted | ui-foundations-v31.css; readable cool blue-gray placeholders */
+  --kn-ui-color-input-placeholder: #3c4558;
+  /* adopted | ui-states-v31.css; inner surface feedback without an outline or halo */
+  --kn-ui-color-input-focus-surface: rgba(255,255,255,.12);
 }

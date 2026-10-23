@@ -1,0 +1,24 @@
+Klin narration candidate r2 — 2026-10-23
+
+These 22 synthetic Mandarin narration clips use the Microsoft
+zh-CN-YunxiaNeural preset, rendered through Microsoft Edge Read Aloud.
+Only fixed, public interface copy was submitted. No user names, birth dates,
+places, account information, private conversations, or user input was sent.
+No real person's voice was cloned. No pitch shift was applied.
+Generation: rate -4%, volume -8%, pitch +0Hz. Original service MP3 renders
+are preserved in the private development repository; AAC files are the
+offline web delivery format. The existing video's background score is unchanged.
+
+This is a provisional implementation of a light, soft and curious character
+direction, not user-approved voice casting or a professional actor recording.
+The provider's voice listing describes Yunxia as Male / Cartoon / Novel / Cute.
+No claim is made that this preset is inherently gender-neutral or a child voice.
+
+Source voice documentation:
+https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=tts
+Client: edge-tts (LGPL-3.0), used as a generation tool; no client code is shipped.
+https://github.com/rany2/edge-tts
+
+Microsoft voice/service terms apply. The LGPL client license is not a license
+to the Microsoft service or voice, and the Apache-2.0 license of the earlier
+Kokoro model does not apply to these r2 recordings. No model weights are shipped.

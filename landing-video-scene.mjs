@@ -1,7 +1,7 @@
-import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261022-mini-v16-32';
-import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261022-mini-v16-32';
-import { createLandingGlass } from './landing-glass.mjs?v=20261022-mini-v16-32';
-import { createLandingDeparture } from './landing-departure.mjs?v=20261022-mini-v16-32';
+import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261023-experience-34d';
+import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261023-experience-34d';
+import { createLandingGlass } from './landing-glass.mjs?v=20261023-experience-34d';
+import { createLandingDeparture } from './landing-departure.mjs?v=20261023-experience-34d';
 
 // All information is entered on the same early meadow frame, before the group
 // approaches. Only the completed profile unlocks the encounter/contract film;
@@ -51,7 +51,9 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
     // matching room plate rather than revealing the form over that wrong frame.
     presentedState=settling?'settling':frameFailed?'fallback':next.state;
     presentedReady=!departing&&next.readyForInput&&!settling;
-    host.classList.toggle('has-held-frame',next.state==='waiting'&&held.captured);
+    const hasHeldFrame=held.captured&&(next.state==='waiting'||held.state==='resuming');
+    host.classList.toggle('has-held-frame',hasHeldFrame);
+    host.classList.toggle('is-resuming',hasHeldFrame&&held.state==='resuming');
     phone.dataset.landingPlayback=presentedState;
     phone.dataset.landingFrame=held.state;
     phone.dataset.landingCue=next.key||'';
@@ -64,12 +66,13 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
       layer.inert=!presentedReady;
       if(presentedReady)layer.removeAttribute('aria-hidden');else layer.setAttribute('aria-hidden','true');
     }
-    onPresentation({state:presentedState,readyForInput:presentedReady});reportMedia();
+    onPresentation({state:presentedState,readyForInput:presentedReady,hasHeldFrame});reportMedia();
   }
   function applyState(next) {
     lastState=next;if(!active||disposed)return;
     departure.observe(next);
     if(next.state==='waiting'&&next.key!=='arrival')heldFrame.hold({key:`frame:${next.targetTime}`,targetTime:next.targetTime});
+    else if(['loading','playing','blocked'].includes(next.state)&&heldFrame.getDiagnostics().captured)heldFrame.resume({startTime:next.startTime,endTime:next.targetTime});
     else heldFrame.release();
     applyPresentation();
   }
@@ -80,7 +83,7 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
     update({active:enabled=false,key='birthDate',reducedMotion:stillness=false,restore=false}={}) {
       if(disposed)return;
       reducedMotion=stillness;
-      active=enabled;host.hidden=!active;if(!active){departure.cancel();resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
+      active=enabled;host.hidden=!active;if(!active){departure.cancel();resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame','is-resuming');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
       if(!active){delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
       player.update({active,key:departure.phase!=='idle'?'arrival':key,reducedMotion,restore});
       if(active)applyState(lastState);else{onPresentation({state:'inactive',readyForInput:false});reportMedia();}

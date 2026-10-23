@@ -1,7 +1,19 @@
-import { LANDING_MUSIC, LANDING_VOICE_CLIPS } from './landing-audio-clips.mjs?v=20261023-audio-33';
+import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261023-experience-34d';
 
 const normalize = value => String(value || '').normalize('NFKC').replace(/\.{2,}/g, '…').replace(/\s+/g, ' ').trim();
 const clips = new Map(LANDING_VOICE_CLIPS.map(clip => [normalize(clip.text), clip.src]));
+function clipFor(job) {
+  if (!/^zh-(?:CN|Hans)/i.test(job.lang)) return null;
+  const text = normalize(job.text), exact = clips.get(text);
+  if (exact) return exact;
+  if (!job.scope.startsWith('landing:')) return null;
+  // Names remain in the visible dialogue. These three recorded sentence bodies
+  // keep the same character voice without splicing in a device-generated name.
+  if (/^.{1,18}你好[。!！]*$/u.test(text)) return LANDING_VOICE_TEMPLATES.namedGreeting.src;
+  if (/^.+,我是.+。刚才那些还没发生的相遇,现在我想陪你一起去看看。$/u.test(text)) return LANDING_VOICE_TEMPLATES.namedComplete.src;
+  if (/^.+,把這次相遇留下來吧。你願意和我簽下這份契約嗎[?？]$/u.test(text)) return LANDING_VOICE_TEMPLATES.contractInvite.src;
+  return null;
+}
 export function audioLanguage(value = 'zh-CN') {
   return ({ '粵語': 'zh-HK', '粤语': 'zh-HK', '普通話': 'zh-CN', '普通话': 'zh-CN', '英語': 'en-US', '英语': 'en-US' })[value] || value;
 }
@@ -130,6 +142,11 @@ export function createLandingAudio({ environment = {} } = {}) {
   }
   function synthesize(job, token) {
     if (token !== voiceEpoch || !audible()) return;
+    if (!job.allowDeviceVoice) {
+      // A missing recording is silent, rather than unexpectedly changing the
+      // character into the artificial system voice rejected in the landing.
+      lastError = lastError || 'narration-recording-unavailable'; finishVoice(token); return;
+    }
     if (!synthesis?.speak || !Utterance) { lastError = 'speech-synthesis-unavailable'; finishVoice(token); return; }
     const speech = new Utterance(job.text); utterance = speech;
     speech.lang = job.lang; speech.rate = .94; speech.pitch = 1.03; speech.volume = .9;
@@ -149,7 +166,7 @@ export function createLandingAudio({ environment = {} } = {}) {
     if (voiceBusy || !audible() || !queue.length) return;
     const job = queue.shift(), token = ++voiceEpoch;
     voiceBusy = true; currentKey = job.key; duck();
-    const src = /^zh-(?:CN|Hans)/i.test(job.lang) ? clips.get(normalize(job.text)) : null;
+    const src = clipFor(job);
     if (!src) { synthesize(job, token); return; }
     bufferFor(src).then(buffer => {
       if (token !== voiceEpoch || !audible()) return;
@@ -175,7 +192,9 @@ export function createLandingAudio({ environment = {} } = {}) {
     for (const message of messages) {
       const text = String(message?.text || '').replace(/\s+/g, ' ').trim(), key = String(message?.key || '');
       if (!text || !key || /^\(.*\)$/.test(normalize(text)) || seen.has(key)) continue;
-      seen.add(key); queue.push({ text, key, lang: audioLanguage(message.lang || options.lang || 'zh-CN') }); accepted = true;
+      seen.add(key); queue.push({ text, key, scope: String(nextScope),
+        allowDeviceVoice: options.allowDeviceVoice ?? !String(nextScope).startsWith('landing:'),
+        lang: audioLanguage(message.lang || options.lang || 'zh-CN') }); accepted = true;
     }
     drainQueue(); return accepted;
   }

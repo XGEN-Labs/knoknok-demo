@@ -6,17 +6,21 @@ export const LOADING_LABELS = Object.freeze({
 
 // May be placed inside #phone before the module graph loads. The runtime adopts
 // this exact node, so the first paint and subsequent resource waits use one layer.
-export const LOADING_BOOT_MARKUP = `<div class="scene-loading" data-loading-state="visible" data-loading-scene="welcome" aria-hidden="false">
+export const LOADING_CHARACTER_MARKUP = `<svg viewBox="0 0 144 144" width="72" height="72" fill="none" focusable="false" aria-hidden="true">
+  <g class="loading-character-body">
+    <path class="loading-character-outline" d="M33 118C19 115 14 104 18 91L10 88Q18 81 17 72L11 64Q25 64 30 53L27 37Q40 42 49 35Q62 29 72 12Q82 31 94 36Q104 42 117 36L115 53Q122 63 133 65L128 75Q126 81 135 89L126 94Q129 112 111 119Q108 126 98 124L88 124Q72 128 56 124L46 124Q36 126 33 118Z"/>
+    <g class="loading-character-foot is-left"><path d="M38 119q8 4 16 1"/></g>
+    <g class="loading-character-foot is-right"><path d="M90 120q8 3 16-1"/></g>
+    <g class="loading-character-gaze"><g class="loading-character-eyes"><ellipse cx="59" cy="82" rx="3.7" ry="8"/><ellipse cx="84" cy="82" rx="3.7" ry="8"/></g></g>
+  </g>
+</svg>`;
+export function loadingIndicatorMarkup(label='正在靠近你…') {
+  const safe=String(label).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  return `<span class="scene-loading-inline" role="status"><span class="scene-loading-symbol">${LOADING_CHARACTER_MARKUP}</span><span class="sr-only">${safe}</span></span>`;
+}
+export const LOADING_BOOT_MARKUP = `<div class="scene-loading" data-loading-variant="fullscreen" data-loading-state="visible" data-loading-scene="welcome" aria-hidden="false">
   <div class="scene-loading-content">
-    <div class="scene-loading-symbol" aria-hidden="true">
-      <span class="scene-loading-glow"></span>
-      <svg viewBox="0 0 96 112" width="96" height="112" fill="none" focusable="false">
-        <path class="scene-loading-door-fill" d="M24 92V42a24 24 0 0 1 48 0v50Z"/>
-        <path class="scene-loading-door" d="M24 92V42a24 24 0 0 1 48 0v50M17 92h62"/>
-        <path class="scene-loading-inner" d="M32 91V43a16 16 0 0 1 32 0v48"/>
-        <circle class="scene-loading-light" cx="61" cy="59" r="2"/>
-      </svg>
-    </div>
+    <div class="scene-loading-symbol" aria-hidden="true">${LOADING_CHARACTER_MARKUP}</div>
     <p class="scene-loading-label" role="status" aria-live="polite" aria-atomic="true">正在靠近你…</p>
   </div>
 </div>`;
@@ -143,7 +147,7 @@ export function createLoadingController({
  * `blockTargets: [app]` also prevents keyboard access beneath the opaque layer.
  * The phone is not marked aria-busy: doing so would silence its live status.
  */
-export function createLoadingState({ host, adoptNode, blockTargets = [], onChange = () => {}, ...options } = {}) {
+export function createLoadingState({ host, adoptNode, variant = 'fullscreen', blockTargets = [], onChange = () => {}, ...options } = {}) {
   if (!host?.append || !host.ownerDocument) throw new TypeError('A loading host is required');
   const document = host.ownerDocument;
   let node = adoptNode || host.querySelector?.(':scope > .scene-loading');
@@ -154,6 +158,7 @@ export function createLoadingState({ host, adoptNode, blockTargets = [], onChang
     node.dataset.loadingState = 'hidden'; node.setAttribute('aria-hidden', 'true');
     host.append(node);
   }
+  node.dataset.loadingVariant = variant === 'local' ? 'local' : 'fullscreen';
   const labelNode = node.querySelector('.scene-loading-label');
   if (!labelNode) throw new TypeError('The loading layer needs a scene-loading-label');
   const previousInert = new Map(), previousBusy = new Map();

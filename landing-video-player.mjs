@@ -108,6 +108,12 @@ export function createLandingVideoPlayer({
   }
 
   function seek(time) {
+    // Adjacent intervals share their boundary frame. Reassigning currentTime at
+    // that same decoded frame needlessly invalidates the decoder surface.
+    if (!video.seeking && video.readyState >= 2 && Math.abs(mediaTime() - time) < 0.000001) {
+      pendingSeek = null;
+      return;
+    }
     pendingSeek = time;
     try {
       video.currentTime = time;

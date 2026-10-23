@@ -1,0 +1,35 @@
+/* Desktop phone previews reserve an iPhone status area and Home indicator.
+   On touch devices the browser supplies actual hardware insets via env(). */
+.phone{--kn-safe-area-top:59px;--kn-safe-area-bottom:34px;--kn-safe-area-left:0px;--kn-safe-area-right:0px;--kn-safe-gap:12px;--app-safe-top:calc(var(--kn-safe-area-top) + var(--kn-safe-gap));--app-safe-bottom:calc(var(--kn-safe-area-bottom) + var(--kn-safe-gap));--kn-safe-left:max(24px,calc(var(--kn-safe-area-left) + 12px));--kn-safe-right:max(24px,calc(var(--kn-safe-area-right) + 12px))}
+.phone#phone #app .page :is(.home-top,.page-top,.auth-header,.onboarding-header,.chat-top){top:var(--app-safe-top);left:var(--kn-safe-left);right:var(--kn-safe-right)}
+.phone#phone #app .page :is(.home-chat-bottom,.profile-footer,.fixed-footer,.lounge-footer,.shared-composer,.chat-composer,.bottom-nav){bottom:var(--app-safe-bottom);left:var(--kn-safe-left);right:var(--kn-safe-right)}
+.phone#phone #app .page.welcome .welcome-actions{bottom:max(8%,var(--app-safe-bottom))}
+.phone#phone.landing-video-active #app .page.conversation-onboarding{padding:calc(var(--app-safe-top) + 60px) var(--kn-safe-right) var(--app-safe-bottom) var(--kn-safe-left);scroll-padding-block:calc(var(--app-safe-top) + 60px) var(--app-safe-bottom)}
+.phone#phone #sheet .sheet-inner{padding-left:var(--kn-safe-left)!important;padding-right:var(--kn-safe-right)!important;padding-bottom:var(--app-safe-bottom)!important}
+.phone#phone .kn-date-picker{padding-bottom:var(--app-safe-bottom)}
+.phone#phone .contract-story{padding-top:calc(var(--app-safe-top) + 56px);padding-bottom:calc(var(--app-safe-bottom) + 80px)}
+.phone#phone[data-keyboard-open="true"]{--app-safe-bottom:12px}
+.phone#phone[data-keyboard-open="true"]>.home-indicator{display:none}
+@media(hover:none) and (pointer:coarse){
+ .phone#phone{--kn-safe-area-top:env(safe-area-inset-top,0px);--kn-safe-area-bottom:env(safe-area-inset-bottom,0px);--kn-safe-area-left:env(safe-area-inset-left,0px);--kn-safe-area-right:env(safe-area-inset-right,0px);--app-safe-top:max(16px,calc(var(--kn-safe-area-top) + 12px));--app-safe-bottom:max(20px,calc(var(--kn-safe-area-bottom) + 12px))}
+ .phone#phone[data-keyboard-open="true"]{--app-safe-bottom:12px}
+}
+
+/* Touch screens also remain edge-to-edge in landscape; hardware side insets
+   reserve the notch, while visualViewport handles the keyboard height. */
+@media(hover:none) and (pointer:coarse){
+ html,body,.share-demo body{width:100%;height:100%;margin:0;padding:0;overflow:hidden;overscroll-behavior:none}
+ .workbench-header,.journey-panel,.review-panel,.device-caption,.prototype-note,.mobile-controls{display:none!important}
+ .workbench,.share-demo .workbench{position:fixed;left:0;right:0;top:var(--app-offset-top,0px);height:var(--app-height,100dvh);width:100%;margin:0;padding:0;overflow:hidden;display:block}
+ .device-stage,.device-viewport{width:100%;height:100%;min-height:0;margin:0;padding:0}
+ .phone#phone,.share-demo .phone#phone{width:100%;height:100%;min-height:0!important;max-height:none;transform:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+ .phone#phone>.status-bar,.phone#phone>.home-indicator{display:none}
+}
+.phone#phone .contract-story{padding-left:var(--kn-safe-left);padding-right:var(--kn-safe-right)}
+.phone#phone .contract-story .contract-actions{left:var(--kn-safe-left);right:var(--kn-safe-right);inset-inline:var(--kn-safe-left) var(--kn-safe-right);bottom:var(--app-safe-bottom)}
+
+/* Only the paper scrolls on short screens. Auto margins keep the original
+   centred composition when it fits and resolve to zero when it overflows.
+   The extra width/padding preserves the paper width and its 6px roll ends. */
+.phone#phone .contract-story .contract-paper-viewport{box-sizing:border-box;flex:1 1 0;min-height:0;width:calc(100% + 20px);display:flex;flex-direction:column;align-items:center;padding:10px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-padding-block:10px}
+.phone#phone .contract-story .contract-paper-viewport>.contract-document{flex:none;margin-block:auto}

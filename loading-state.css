@@ -1,70 +1,42 @@
-/* Resource waiting uses a stable matte scene, not another live glass compositor.
- * Keep explicit skip / volume above --kn-loading-z so they remain available. */
-.phone > .scene-loading {
-  position: absolute;
-  inset: 0;
-  z-index: var(--kn-loading-z, 30);
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  border-radius: inherit;
-  background:
-    radial-gradient(ellipse at 68% 25%, #fbf4e6 0%, transparent 47%),
-    radial-gradient(ellipse at 22% 72%, #cbd6ca 0%, transparent 57%),
-    linear-gradient(160deg, #eee9de 0%, #e5e8de 58%, #e7dfd0 100%);
-  color: var(--kn-ui-color-focus, #4d665d);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 180ms ease;
-  isolation: isolate;
+/* The fullscreen wait is a quiet black stage; inline waits keep their surface. */
+.phone > .scene-loading{position:absolute;inset:0;z-index:var(--kn-loading-z,30);display:grid;place-items:center;overflow:hidden;border-radius:inherit;background:#000;color:#f4f4f7;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 180ms ease;isolation:isolate}
+.phone > .scene-loading[data-loading-state="visible"],.phone > .scene-loading[data-loading-state="leaving"]{visibility:visible;pointer-events:auto}
+.phone > .scene-loading[data-loading-state="visible"]{opacity:1}
+.scene-loading-content{display:grid;justify-items:center;gap:20px;padding:24px;transform:translateY(-12px)}
+.scene-loading-symbol{display:block;width:72px;height:72px;color:inherit}
+.scene-loading-symbol svg{display:block;width:100%;height:100%;overflow:visible;color:inherit}
+.loading-character-body{transform-origin:72px 124px;animation:kn-loading-curious 4800ms ease-in-out infinite}
+.loading-character-outline,.loading-character-foot path{stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.loading-character-gaze{animation:kn-loading-look 4800ms ease-in-out infinite}
+.loading-character-eyes{fill:currentColor;transform-origin:72px 82px;animation:kn-loading-blink 4800ms ease-in-out infinite}
+.loading-character-foot.is-left{transform-origin:46px 122px;animation:kn-loading-left-toe 4800ms ease-in-out infinite}
+.loading-character-foot.is-right{transform-origin:98px 122px;animation:kn-loading-right-toe 4800ms ease-in-out infinite}
+.phone .scene-loading .scene-loading-label{margin:0;font:500 14px/20px var(--kn-ui-font-ui,-apple-system,BlinkMacSystemFont,"PingFang TC",sans-serif);letter-spacing:.03em;color:#c3c6d0;text-align:center}
+.scene-loading-inline{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;color:var(--kn-ui-color-input-ink,#424957);background:transparent!important;box-shadow:none;border:0}
+.scene-loading-inline .scene-loading-symbol{width:28px;height:28px}
+.phone > .scene-loading[data-loading-variant="local"]{background:transparent;color:var(--kn-ui-color-input-ink,#424957)}
+.phone .scene-loading[data-loading-variant="local"] .scene-loading-label{color:inherit}
+/* The entire outline stays drawn. Weight shifts through the feet, then Klin
+   leans forward to peek and blinks; there is no stroke-reveal animation. */
+@keyframes kn-loading-curious{
+  0%,10%,100%{transform:translate(0,0) rotate(0) scale(1)}
+  18%{transform:translate(0,1px) rotate(0) scale(1.025,.975)}
+  30%{transform:translate(-3px,0) rotate(-3deg) scale(.995,1.015)}
+  40%{transform:translate(-1px,0) rotate(-1deg) scale(1)}
+  54%{transform:translate(3px,0) rotate(3deg) scale(.995,1.015)}
+  66%{transform:translate(0,1px) rotate(0) scale(1.02,.98)}
+  78%,85%{transform:translate(0,-1px) rotate(-1deg) scale(1.025,1.025)}
+  94%{transform:translate(0,0) rotate(0) scale(1)}
 }
-.phone > .scene-loading[data-loading-state="visible"],
-.phone > .scene-loading[data-loading-state="leaving"] {
-  visibility: visible;
-  pointer-events: auto;
+@keyframes kn-loading-look{
+  0%,18%,68%,100%{transform:translate(0,0)}
+  28%,36%{transform:translate(-2px,-1px)}
+  50%,58%{transform:translate(2px,-1px)}
+  78%,86%{transform:translate(0,1px)}
 }
-.phone > .scene-loading[data-loading-state="visible"] { opacity: 1; }
-.scene-loading-content {
-  display: grid;
-  justify-items: center;
-  gap: 16px;
-  padding: 24px;
-  transform: translateY(-12px);
-}
-.scene-loading-symbol { position: relative; width: 96px; height: 112px; }
-.scene-loading-symbol svg { display: block; position: relative; width: 96px; height: 112px; overflow: visible; }
-.scene-loading-glow {
-  position: absolute;
-  inset: -38px -43px -16px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, #fffdf7 0%, #f8eed7a3 36%, #f8eed700 70%);
-  opacity: .66;
-  transform: scale(.96);
-  animation: kn-scene-loading-breathe 2600ms ease-in-out infinite alternate;
-}
-.scene-loading-door-fill { fill: #fffdf855; }
-.scene-loading-door { stroke: #7c8e7c; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.scene-loading-inner { stroke: #c0a77e; stroke-width: 1; stroke-linecap: round; opacity: .8; }
-.scene-loading-light { fill: #c4a77a; }
-.phone .scene-loading .scene-loading-label {
-  margin: 0;
-  font-family: var(--kn-ui-font-ui, -apple-system, BlinkMacSystemFont, "PingFang TC", sans-serif);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  letter-spacing: .03em;
-  color: var(--kn-ui-color-focus, #4d665d);
-  text-align: center;
-}
-@keyframes kn-scene-loading-breathe {
-  to { opacity: .9; transform: scale(1.04); }
-}
-.scene-loading[data-reduced-motion="true"],
-body.reduced-motion .scene-loading { transition: none; }
-.scene-loading[data-reduced-motion="true"] .scene-loading-glow,
-body.reduced-motion .scene-loading .scene-loading-glow { animation: none; opacity: .76; transform: none; }
-@media (prefers-reduced-motion: reduce) {
-  .phone > .scene-loading { transition: none; }
-  .scene-loading-glow { animation: none; opacity: .76; transform: none; }
-}
+@keyframes kn-loading-blink{0%,12%,18%,62%,68%,100%{transform:scaleY(1)}15%,65%{transform:scaleY(.1)}}
+@keyframes kn-loading-left-toe{0%,18%,42%,100%{transform:translateY(0) rotate(0)}28%,32%{transform:translateY(-1.5px) rotate(-8deg)}}
+@keyframes kn-loading-right-toe{0%,40%,66%,100%{transform:translateY(0) rotate(0)}52%,56%{transform:translateY(-1.5px) rotate(8deg)}}
+.scene-loading[data-reduced-motion="true"],body.reduced-motion .scene-loading{transition:none}
+.scene-loading[data-reduced-motion="true"] .scene-loading-symbol *,body.reduced-motion .scene-loading-symbol *{animation:none}
+@media(prefers-reduced-motion:reduce){.phone>.scene-loading{transition:none}.scene-loading-symbol *{animation:none!important}}

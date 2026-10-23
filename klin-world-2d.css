@@ -1,0 +1,17 @@
+/* The illustration and its contact shadow move together; the room keeps the
+   existing authored cream, sage and champagne-metal materials. */
+.phone > .klin-illustrated-world { background: #eee6d9; }
+.klin-illustrated-world[data-active="false"] { visibility: hidden; }
+.klin-illustrated-room { position: absolute; inset: 0; overflow: hidden; }
+.klin-illustrated-plate { display: block; width: 100%; height: 100%; object-fit: cover; }
+.klin-illustrated-plate[hidden], .klin-illustrated-actor[hidden] { display: none !important; }
+.klin-illustrated-actor { position: absolute; transform: translate(-50%, -100%); pointer-events: none; }
+.klin-illustrated-art { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; transform: translateY(12%); transform-origin: 50% 100%; }
+.klin-illustrated-shadow { position: absolute; left: 22%; bottom: -1%; width: 56%; height: 6%; border-radius: 50%; background: #8a715b35; filter: blur(8px); }
+.phone[data-card-handoff] > .klin-illustrated-world { filter: none !important; }
+.phone[data-card-handoff] > .klin-illustrated-world .klin-illustrated-room { filter: blur(20px); transform: scale(1.06); }
+/* Prevent the old whole-canvas blur from softening the offering illustration. */
+.phone[data-character-renderer="illustrated-2d"][data-card-handoff] > .klin-world-host { filter: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  .klin-illustrated-art { transition: none; }
+}

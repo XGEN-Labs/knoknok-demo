@@ -14,9 +14,10 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
   let epoch = 0, disposed = false, state = 'idle', key = null, targetTime = null;
   let frameId = null, videoFrameId = null, timeoutId = null, stableFrames = 0;
   let captured = false, reason = '', captures = 0;
+  let resumeStart = null, resumeEnd = null;
   const listeners = [];
 
-  const diagnostics = () => ({ state, key, targetTime, captured, reason, captures });
+  const diagnostics = () => ({ state, key, targetTime, captured, reason, captures, resumeStart });
   const pending = token => !disposed && token === epoch && state === 'settling';
   const decoded = () => !video.seeking && video.paused && Number(video.readyState) >= 2
     && video.videoWidth > 0 && video.videoHeight > 0
@@ -79,10 +80,11 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
   }
   function hold({ key: nextKey, targetTime: nextTime } = {}) {
     if (disposed) return diagnostics();
-    if (nextKey === key && nextTime === targetTime && state !== 'idle') return diagnostics();
+    if (nextKey === key && nextTime === targetTime && state !== 'idle' && state !== 'resuming') return diagnostics();
     epoch += 1;
     cancelPending();
     key = nextKey;
+    resumeStart = resumeEnd = null;
     targetTime = nextTime;
     captured = false;
     reason = '';
@@ -96,11 +98,47 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
     queue(token);
     return diagnostics();
   }
+  // A play() promise or `playing` event does not prove its next frame is on
+  // screen. Keep the still above the running decoder until it presents one.
+  function resume({ startTime, endTime = Infinity } = {}) {
+    if (disposed || !captured || !Number.isFinite(startTime)) return diagnostics();
+    if (state === 'resuming' && resumeStart === startTime && resumeEnd === endTime) return diagnostics();
+    epoch += 1;
+    cancelPending();
+    state = 'resuming'; resumeStart = startTime; resumeEnd = endTime;
+    const token = epoch;
+    const current = () => !disposed && token === epoch && state === 'resuming';
+    const drawable = time => !video.paused && !video.seeking && Number(video.readyState) >= 2
+      && Number.isFinite(time) && time >= startTime && time < endTime;
+    const presented = () => { release(); onSettled(diagnostics()); };
+    function next() {
+      if (!current()) return;
+      if (typeof video.requestVideoFrameCallback === 'function') {
+        videoFrameId = video.requestVideoFrameCallback((_now, metadata) => {
+          if (!current()) return;
+          videoFrameId = null;
+          if (drawable(metadata?.mediaTime)) presented(); else next();
+        });
+      } else {
+        // Older browsers: wait for advancing media time and two render chances.
+        frameId = requestFrame(() => {
+          if (!current()) return;
+          frameId = null;
+          if (drawable(Number(video.currentTime)) && Number(video.currentTime) > startTime + 0.000001) stableFrames += 1;
+          else stableFrames = 0;
+          if (stableFrames >= 2) presented(); else next();
+        });
+      }
+    }
+    next();
+    return diagnostics();
+  }
   function release() {
     epoch += 1;
     cancelPending();
     state = 'idle';
     key = targetTime = null;
+    resumeStart = resumeEnd = null;
     captured = false;
     reason = '';
   }
@@ -114,5 +152,5 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
     disposed = true;
     for (const remove of listeners) remove();
   }
-  return Object.freeze({ hold, release, dispose, getDiagnostics: diagnostics });
+  return Object.freeze({ hold, resume, release, dispose, getDiagnostics: diagnostics });
 }
