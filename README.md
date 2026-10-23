@@ -8,4 +8,4 @@ The opening meadow, landing film and contract timing, existing juvenile, element
 
 Run `python3 -m http.server 8767 --bind 127.0.0.1` and open http://127.0.0.1:8767/ .
 
-90 relevant source tests passed. The runtime manifest records 263 files / 171 assets and SHA-256 checksums. This is a frontend prototype with browser-local demo state. The in-world contract is fictional; narration is synthetic, not a voice clone.
+90 relevant source tests passed. The public package contains 263 files including the manifest, with 171 assets and SHA-256 checksums. This is a frontend prototype with browser-local demo state. The in-world contract is fictional; narration is synthetic, not a voice clone.
