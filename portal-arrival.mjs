@@ -1,5 +1,6 @@
-const WELCOME='assets/landing-video-20261022/room-empty.png';
-const ARRIVAL='assets/landing-video-20261022/room-empty.png';
+import { WELCOME_SCENE_ASSET } from './scene-assets.mjs?v=20261023-scene-35d';
+const WELCOME=WELCOME_SCENE_ASSET;
+const ARRIVAL=WELCOME_SCENE_ASSET;
 const authRoutes=new Set(['login','register','verify']);
 export function createPortalArrival({phone}={}){
   if(!phone)throw new TypeError('The portal arrival requires a phone host.');

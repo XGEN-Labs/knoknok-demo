@@ -1,10 +1,11 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-experience-34d';
+import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-scene-35d';
 
 // A lightweight, persistent illustrated scene. The authored room plate keeps
 // its champagne metal details; no mesh, hair, WebGL or growth effect is loaded.
 const SCENES = Object.freeze({
-  home: 'assets/landing-video-20261022/room-empty.png',
-  porch: 'assets/portal-scenes-20261020/three-avatar-porches.png',
+  home: HOME_SCENE_ASSET,
+  porch: VISIT_SCENE_ASSET,
   shared: 'assets/cloud-realm-20261019/shared.webp',
   welcome: 'assets/cloud-realm-20261019/arrival.webp',
 });

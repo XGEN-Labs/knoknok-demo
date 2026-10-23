@@ -1,10 +1,12 @@
-/* The film's cream room, blue sky and sage hills continue through welcome,
-   sign-in and home. Champagne metal fittings remain part of the scene plate. */
+/* Welcome/sign-in continue the opening meadow; home uses the film-ending room.
+   Both preserve their source lighting beneath a restrained neutral veil. */
 .phone[data-portal-scene]:not([data-portal-scene="inactive"]),
-.phone>.portal-scene-host{background:#e7dfd0}
-.portal-welcome-plate{transform-origin:28% 38%}
-.phone[data-portal-scene="login"] .portal-welcome-plate{transform:translate(10%,12%) scale(2.2);filter:blur(30px)}
-.portal-warm-light{background:radial-gradient(ellipse at 28% 38%,#fff8e8 0,#f0e5cea6 28%,#b7c8bf40 58%,#b7c8bf00 100%)}
+.phone>.portal-scene-host,.phone>.klin-illustrated-world{background:#e4e6ec}
+.portal-welcome-plate{transform-origin:50% 48%}
+.phone[data-portal-scene="login"] .portal-welcome-plate{transform:translate(0,7%) scale(1.7);filter:blur(30px)}
+.portal-warm-light{background:radial-gradient(ellipse at 50% 48%,#fafbff66 0,#e8edf52e 30%,#dee5f214 58%,#dee5f200 100%)}
+.phone[data-portal-scene="login"] .portal-warm-light{opacity:.12}
+.phone[data-portal-scene="landing"] .portal-warm-light{opacity:.06}
 /* Use the original static fluffy portrait; no native-model render or motion. */
 .phone.klin-login-scene-active #app .welcome .klin-welcome{
   display:block;visibility:visible!important;position:absolute;

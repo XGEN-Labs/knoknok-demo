@@ -14,8 +14,9 @@ import { landingComplete, onboardingDestination } from './landing.mjs?v=20261023
 import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261023-experience-34d';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261023-experience-34d';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-world-2d.mjs?v=20261023-experience-34d';
-import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261023-experience-34d';
+import { createKlinWorld } from './klin-world-2d.mjs?v=20261023-scene-35d';
+import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261023-scene-35d';
+import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-scene-35d';
 import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-experience-34d';
 import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261023-experience-34d';
 import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
@@ -383,12 +384,15 @@ function syncAudioControls(){
 }
 function syncExperience(){
  ensureExperience();sceneLoading.setReducedMotion(prefersStillness(ui.motion));syncAudioControls();
+ $('#phone').style.setProperty('--kn-room-scene-image',`url("${HOME_SCENE_ASSET}")`);
+ $('#phone').style.setProperty('--kn-welcome-scene-image',`url("${WELCOME_SCENE_ASSET}")`);
+ $('#phone').style.setProperty('--kn-visit-scene-image',`url("${VISIT_SCENE_ASSET}")`);
  const opening=['welcome','login','register','verify'].includes(ui.route),landing=ui.route==='landing';
  const scene=landing?'landing':opening?'welcome':'room';
- const images=landing?[]:['assets/landing-video-20261022/room-empty.png'];
+ const images=landing?[]:[opening?WELCOME_SCENE_ASSET:ui.route==='relations'?VISIT_SCENE_ASSET:HOME_SCENE_ASSET];
  if(opening)images.push('assets/login-world-20261019/source/character-transparent.png','assets/brand-20261016/knoknok-logo-latest.png');
  else if(!landing)images.push(klinAssets.adult);
- if(ui.route==='relations')images.push('assets/portal-scenes-20261020/three-avatar-porches.png',DEFAULT_CARD_AVATAR);
+ if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
  if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261016/knoknok-logo-latest.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
  if(['chat','connected'].includes(ui.route))images.push('assets/cloud-realm-20261019/shared.webp');
  sceneImages.update({key:ui.route,urls:images,scene});

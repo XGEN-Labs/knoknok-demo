@@ -89,7 +89,7 @@
 .landing-video-resume{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);min-height:52px;padding:0 30px;border-radius:30px;font-family:inherit;font-size:16px;font-weight:600;z-index:5;pointer-events:auto}
 .landing-video-skip{position:absolute;right:6%;bottom:var(--app-safe-bottom,24px);min-height:44px;padding:10px 22px;border-radius:28px;font-family:inherit;font-size:16px;line-height:22px;font-weight:600;z-index:5;pointer-events:auto;cursor:pointer}
 .landing-video-resume[hidden],.landing-video-skip[hidden]{display:none}
-.phone.landing-video-active[data-landing-playback="fallback"]>.landing-video-scene{background:url('assets/landing-video-20261022/room-empty.png') center/cover}
+.phone.landing-video-active[data-landing-playback="fallback"]>.landing-video-scene{background:var(--kn-welcome-scene-image) center/cover}
 .phone.landing-video-active[data-landing-playback="fallback"] .landing-video-plate{visibility:hidden}
 @media(prefers-reduced-motion:reduce){.phone.landing-video-active #app .onboarding-thread,.phone.landing-video-active #app .onboarding-composer{transition:none}}
 body.reduced-motion .phone.landing-video-active #app .onboarding-thread,body.reduced-motion .phone.landing-video-active #app .onboarding-composer{transition:none}
