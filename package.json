@@ -1,0 +1,16 @@
+{
+  "name": "knoknok-web-naming",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "build": "node scripts/build-naming-release.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:browser": "node scripts/verify-landing-browser.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.64.1"
+  }
+}

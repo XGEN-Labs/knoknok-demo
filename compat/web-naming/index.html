@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-Hant" class="share-demo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e7dfd0">
+  <meta name="description" content="認識你的伙伴 Klin，從第一次見面，到一起認識新朋友。可互動 Demo。">
+  <title>Knoknok · 和 Klin 一起開始</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%2343a4ff'/%3E%3Ctext x='9' y='29' font-family='Arial' font-weight='bold' font-size='28'%3Ek%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="motion.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="theme-black.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="variant-pixel.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="logo-brand.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="figma-ui.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="home-scenes.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="soft-companion.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="visit-scene.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="klin-companion.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="klin-experience.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="journey-experience.css?v=20261022-experience-33">
+  <link rel="preload" as="image" href="assets/klin-native-20261016-0907/juvenile.png">
+  <link rel="preload" as="image" href="assets/klin-native-v16-20261022/adult.png">
+  <link rel="stylesheet" href="demo.css?v=20261022-experience-33">
+  <script type="module" src="app.mjs?v=20261023-landing-handoff"></script>
+  <link rel="stylesheet" href="typography.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="form-controls.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="scene-experience.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="universe-experience.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="card-personality.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="energy-experience.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="card-handoff.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="date-picker.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="refinement-v8.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="conversation-experience.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="realm-scene.css?v=20261022-experience-33">
+<link rel="stylesheet" href="social-refinement.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="login-scene.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="glass-contract.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="public-card.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="card-editor-readability.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="auth-hours-polish.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="contract-paper-readability.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="mobile-login-scene.css?v=20261022-experience-33">
+<link rel="stylesheet" href="mobile-app-polish.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="contract-centered-paper.css?v=20261022-experience-33">
+<link rel="stylesheet" href="glass-material.css?v=20261022-experience-33">
+<link rel="stylesheet" href="portal-glass.css?v=20261022-experience-33">
+<link rel="stylesheet" href="home-controls-v24.css?v=20261022-experience-33">
+<link rel="stylesheet" href="portal-social-v24.css?v=20261022-experience-33">
+<link rel="stylesheet" href="refinement-v25.css?v=20261022-experience-33">
+  <link rel="preload" as="font" href="assets/fonts/klin-paper/NotoSerifTC-Core.woff2" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="paper-font.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="refinement-v27.css?v=20261022-experience-33">
+<link rel="stylesheet" href="landing-video.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="refinement-v29.css?v=20261022-experience-33">
+<link rel="stylesheet" href="./card-handoff-v29.css?rev=20261022-experience-33">
+  <link rel="stylesheet" href="landing-glass.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="film-scenes-v30.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="ui-tokens.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="ui-foundations-v31.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="ui-inputs-v31.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="ui-states-v31.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="loading-state.css?v=20261022-experience-33">
+  <link rel="stylesheet" href="experience-v33.css?v=20261022-experience-33">
+</head>
+<body>
+  <header class="workbench-header">
+    <a class="wordmark" href="./"><img class="brand-logo" src="assets/brand-20261016/knoknok-logo-latest.png" alt="Knoknok" width="2172" height="724"><span>Klin · 互動 Demo</span></a>
+    <div class="header-actions"><button type="button" id="motion-toggle" aria-pressed="false">減少動態</button><button type="button" id="reset-button">重新體驗</button></div>
+  </header>
+  <main class="workbench">
+    <aside class="journey-panel"><div class="eyebrow">THE FIRST CONNECTION</div><h1>從一句你好，<br>慢慢靠近。</h1><p class="panel-intro">在對話裡相遇，<br>在陪伴裡熟悉。</p><nav id="journey" aria-label="體驗流程"></nav><div class="design-note">依照你的 Figma 視覺延伸<br><span>Klin 的小世界 · 一起待一會兒</span></div></aside>
+    <section class="device-stage" aria-label="手機互動原型">
+      <div class="device-caption"><span id="screen-label">01 / 歡迎來到 Knoknok</span><span class="live-label">可操作</span></div>
+      <div class="device-viewport"><div class="phone" id="phone">
+        <div class="status-bar" aria-hidden="true"><span>9:41</span><span class="island"></span><img id="status-icons" src="assets/figma-20261009/status.svg" alt="" width="86" height="13"></div>
+        <div class="scene-loading" data-loading-state="visible" data-loading-scene="welcome" aria-hidden="false">
+  <div class="scene-loading-content">
+    <div class="scene-loading-symbol" aria-hidden="true">
+      <span class="scene-loading-glow"></span>
+      <svg viewBox="0 0 96 112" width="96" height="112" fill="none" focusable="false">
+        <path class="scene-loading-door-fill" d="M24 92V42a24 24 0 0 1 48 0v50Z"/>
+        <path class="scene-loading-door" d="M24 92V42a24 24 0 0 1 48 0v50M17 92h62"/>
+        <path class="scene-loading-inner" d="M32 91V43a16 16 0 0 1 32 0v48"/>
+        <circle class="scene-loading-light" cx="61" cy="59" r="2"/>
+      </svg>
+    </div>
+    <p class="scene-loading-label" role="status" aria-live="polite" aria-atomic="true">正在靠近你…</p>
+  </div>
+</div>
+        <div id="app"></div><div class="home-indicator" aria-hidden="true"></div><div id="toast" role="status" aria-live="polite"></div>
+        <dialog id="sheet"><div id="sheet-content"></div></dialog>
+      </div></div>
+      <p class="prototype-note">互動 Demo · 對話與朋友均為示範</p>
+    </section>
+    <aside class="review-panel"><div class="review-heading"><span class="eyebrow">正在體驗</span><span id="stage-count">01 / 04</span></div><h2 id="guide-title"></h2><p id="guide-copy"></p><div id="guide-actions"></div><div class="review-divider"></div><div class="eyebrow">演示控制</div><div id="scenario-controls"></div><p class="review-footnote">所有資料保存在此瀏覽器。<br>私人建議不會自動傳給對方。</p></aside>
+  </main>
+  <button id="mobile-controls" class="mobile-controls" type="button">演示控制</button>
+<script>
+  setTimeout(()=>{const phone=document.getElementById('phone');if(phone?.dataset.bootReady==='true')return;
+    const layer=phone?.querySelector('.scene-loading');if(!layer)return;
+    layer.querySelector('.scene-loading-label').textContent='相遇還在路上，再試一次吧。';
+    const retry=document.createElement('button');retry.type='button';retry.className='scene-loading-retry';retry.textContent='重新載入';retry.onclick=()=>location.reload();layer.querySelector('.scene-loading-content').append(retry);
+  },20000);
+</script>
+</body>
+</html>
