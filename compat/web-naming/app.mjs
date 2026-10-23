@@ -700,10 +700,11 @@ document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!
 function sendOfflineCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
 function cancelChat() { sessionEpoch++; chatAbort?.abort(); chatAbort=null; companionTyping=false; landingHandoff.clear(); landingHandoffBusy=false; }
 function announceSession() { try { localStorage.setItem(SESSION_EVENT, crypto.randomUUID()); } catch {} }
-function activateAccount(user) {
+function activateAccount(user,{restartLanding=false}={}) {
   resetSound(); landingVideoScene?.dispose(); landingVideoScene=null; cancelChat(); serverUser=user; landingHandoff.activate(user?.id);
   STATE_KEY=`${BASE_STATE_KEY}-account-${user?.id ?? 'guest'}`; UI_KEY=`${STATE_KEY}-ui`;
   try { state=hydrateState(localStorage.getItem(STATE_KEY)); } catch { state=initialState(); }
+  if(user&&restartLanding)state.onboarding=initialState().onboarding;
   state.session={authenticated:Boolean(user),activeUserId:'a',provider:'account'};
   for(const message of state.private.a.companionMessages)if(message.status==='pending'){message.status='failed';message.error='上次連線已中斷，請重新發送。';}
   ui={route:user?onboardingDestination(state):'welcome',history:[],motion:false,matchResult:'found',failNext:false};
@@ -760,7 +761,7 @@ document.addEventListener('submit',async e=>{const form=e.target.closest('form[d
   authDraft.account=account;authDraft.password=password;
   if(!offlineDemo){
     if(authBusy)return; authBusy=true; updateAuthControls();
-    try { const user=await api.login(account,password); activateAccount(user); announceSession(); revealOnboarding(); }
+    try { const user=await api.login(account,password); activateAccount(user,{restartLanding:true}); announceSession(); revealOnboarding(); }
     catch(error){const target=$('#auth-error');if(target)target.textContent=error.message;}
     finally {authBusy=false;authDraft.password='';const input=$('#auth-password');if(input)input.value='';updateAuthControls();}
     return;
