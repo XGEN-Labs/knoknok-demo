@@ -11,6 +11,20 @@
 .phone .landing-volume-toggle[hidden]{display:none}
 .phone .landing-volume-toggle .centered-volume-icon{display:block;width:22px;height:22px;color:var(--kn-ui-color-text,#26242c)!important;stroke:currentColor!important;fill:none}
 .phone .landing-volume-toggle:focus-visible{outline:2px solid var(--kn-ui-color-focus,#4d665d);outline-offset:4px}
+/* A sound toggle retains its glass material in every interaction state. The
+   historical scene-icon hover used 15% white, which looks dark over the film. */
+.phone#phone .volume-toggle,
+.phone#phone .volume-toggle:is(:hover,:active,:focus,:focus-visible,[aria-pressed="true"]) {
+  background:var(--kn-glass-fill)!important;
+  border-color:var(--kn-glass-edge)!important;
+  color:var(--kn-glass-ink)!important;
+  filter:none!important;
+  opacity:1;
+}
+.phone#phone .volume-toggle .centered-volume-icon {
+  color:var(--kn-glass-ink)!important;
+  stroke:currentColor!important;
+}
 .phone > :is(.landing-video-skip,.landing-video-resume){z-index:40}
 .phone[data-loading-state="visible"] :is(.klin-loading-light,.klin-loading-status),
 .phone[data-loading-state="leaving"] :is(.klin-loading-light,.klin-loading-status){visibility:hidden}

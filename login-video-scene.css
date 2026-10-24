@@ -1,0 +1,8 @@
+/* Supplied login film owns the complete scene; no second character over it. */
+.phone>.login-video-scene{background:#a2b3ba;filter:none!important;transition:none;opacity:1}
+.login-video-scene>.login-video-poster,.login-video-scene>.login-video-background{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%;pointer-events:none;transform:none;filter:none}
+.login-video-scene>.login-video-background{opacity:0}
+.login-video-scene[data-video-ready="true"]>.login-video-background{opacity:1}
+.phone.login-video-active #app .welcome .klin-welcome{display:none!important;visibility:hidden!important}
+.phone.login-video-active #app .welcome .klin-welcome *{visibility:hidden!important}
+.phone.login-video-active #app>.page{background:transparent!important}

@@ -1,6 +1,19 @@
 /* One navigation row, above the film and within the shared safe area. */
 .phone .landing-volume-toggle{left:var(--kn-safe-left);right:auto;top:var(--app-safe-top)}
 .phone>.landing-video-skip{top:var(--app-safe-top);right:var(--kn-safe-right);bottom:auto;min-height:44px;height:44px;padding:10px 18px;z-index:55}
+/* Skip is a quiet text action; retain a 44px touch target in the safe area. */
+.phone#phone>.landing-video-skip,
+.phone#phone>.landing-video-skip:is(:hover,:active,:focus,:focus-visible){
+  min-width:44px;min-height:44px;height:44px;padding:10px 8px;
+  border:0!important;border-radius:0;background:transparent!important;
+  color:#fff!important;box-shadow:none!important;text-shadow:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  font-size:14px;font-weight:400;line-height:24px;opacity:1;filter:none!important;
+  transform:none!important;
+}
+.phone#phone>.landing-video-skip::before,
+.phone#phone>.landing-video-skip::after{display:none}
+.phone#phone>.landing-video-skip:focus-visible{outline:none;text-decoration:underline;text-underline-offset:4px}
 /* New controls appear with their final texture, with no opacity/position tween. */
 .phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-thread,.onboarding-composer,.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn){animation:none!important;transition:none!important;will-change:auto!important}
 .phone.landing-video-active #app .page.conversation-onboarding :is(.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn):hover{transform:none!important}

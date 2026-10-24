@@ -62,7 +62,18 @@ export function transitionScene({ host, app, previous, current, source, world, s
 
   const complete = () => finish(true);
   const panelsDone = Promise.allSettled(animations.map(a => a.finished));
-  watchdog = setTimeout(complete, cardHandoff ? 3000 : 2300);
+  // Native frame playback pauses in a hidden tab. Its UI watchdog must pause
+  // too, or the paper would arrive while the actor is still mid-gesture.
+  const doc = host.ownerDocument;
+  const watch = () => {
+    clearTimeout(watchdog);
+    if (!finished && !doc?.hidden) watchdog = setTimeout(() => {
+      finish(true);
+      cancelWorld?.();
+    }, cardHandoff ? 6500 : 2300);
+  };
+  doc?.addEventListener('visibilitychange', watch);
+  watch();
   if (world) {
     try { cancelWorld = world.transition(from, to, { direction, stage, layout, preserveScene: !!cardHandoff, onCardFrame: frame => {
       if (!cardHandoff || finished) return;
@@ -75,6 +86,7 @@ export function transitionScene({ host, app, previous, current, source, world, s
     if (finished) return;
     finished = true;
     clearTimeout(watchdog);
+    doc?.removeEventListener('visibilitychange', watch);
     for (const animation of animations) animation.cancel();
     cardHandoff?.finish();
     previous.remove();

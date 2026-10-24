@@ -40,3 +40,8 @@
 .scene-loading[data-reduced-motion="true"],body.reduced-motion .scene-loading{transition:none}
 .scene-loading[data-reduced-motion="true"] .scene-loading-symbol *,body.reduced-motion .scene-loading-symbol *{animation:none}
 @media(prefers-reduced-motion:reduce){.phone>.scene-loading{transition:none}.scene-loading-symbol *{animation:none!important}}
+
+/* Fullscreen waiting: smaller stationary outline, only the eyes blink. */
+.phone>.scene-loading[data-loading-variant="fullscreen"] .scene-loading-symbol{width:48px;height:48px}
+.phone>.scene-loading[data-loading-variant="fullscreen"] :is(.loading-character-body,.loading-character-gaze,.loading-character-foot){animation:none;transform:none}
+.phone>.scene-loading[data-loading-variant="fullscreen"] .loading-character-eyes{animation-duration:3600ms}

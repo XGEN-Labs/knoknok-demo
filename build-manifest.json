@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-23T08:43:33.290Z",
+  "createdAt": "2026-10-23T17:54:29.403Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 77619070,
+  "payloadBytes": 90820872,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 103421,
-      "sha256": "e4d331c96848914e85b227ba90a8802cb383c60cc3a2aacfc4390c95e40122e7"
+      "bytes": 106880,
+      "sha256": "a5e9a0c92c37cb98bd59262eb5ac1ab2f5137f854a0652dbfe68d9be6df1e975"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -22,6 +22,54 @@
       "path": "assets/brand-20261016/knoknok-logo-latest.png",
       "bytes": 357401,
       "sha256": "88a84ed9da304e381399a4b0c6f25ae302baa5a5ac54e42f2026a3a4d4c5b652"
+    },
+    {
+      "source": "assets/business-card-20261023-v2/blue-paw.png",
+      "path": "assets/business-card-20261023-v2/blue-paw.png",
+      "bytes": 1210152,
+      "sha256": "373823325e27527466736776ee798111ddbd23e60971027a89fae181d61dfe36"
+    },
+    {
+      "source": "assets/business-card-20261023-v2/creatures-paper.png",
+      "path": "assets/business-card-20261023-v2/creatures-paper.png",
+      "bytes": 1379436,
+      "sha256": "2595cfc024769512b2508c9a264fb4054afe7a990e43fada157934b0491768b3"
+    },
+    {
+      "source": "assets/business-card-20261023-v2/pet-paper.png",
+      "path": "assets/business-card-20261023-v2/pet-paper.png",
+      "bytes": 1434171,
+      "sha256": "68f2e69bdced36bbe720bf809f097cbd8d93917f5e82e72006ee510d6fc1dd25"
+    },
+    {
+      "source": "assets/business-card-20261023-v2/portrait-paper.png",
+      "path": "assets/business-card-20261023-v2/portrait-paper.png",
+      "bytes": 1376164,
+      "sha256": "9ef61958d060647679ea9396d986ff61fa9a9aa7762d25a6e3c7b481929910a9"
+    },
+    {
+      "source": "assets/business-card-20261023/DynaPuff-Bold.ttf",
+      "path": "assets/business-card-20261023/DynaPuff-Bold.ttf",
+      "bytes": 87860,
+      "sha256": "b89e4f27a89bdd870b1c90118be6c2bbf4eca5eb5a2d28ced95d97434dda422e"
+    },
+    {
+      "source": "assets/business-card-20261023/OFL-DynaPuff.txt",
+      "path": "assets/business-card-20261023/OFL-DynaPuff.txt",
+      "bytes": 4492,
+      "sha256": "ad0bc2ae83f6dbf6f3edde26752324260c2fbaf9cc021748d363a879dd5b749c"
+    },
+    {
+      "source": "assets/business-card-20261023/OFL-OleoScript.txt",
+      "path": "assets/business-card-20261023/OFL-OleoScript.txt",
+      "bytes": 4419,
+      "sha256": "8fbe530adcbe30c658393c3f2b5a4785d6765afcefdfe47f594730131f3a0abd"
+    },
+    {
+      "source": "assets/business-card-20261023/OleoScript-Bold.ttf",
+      "path": "assets/business-card-20261023/OleoScript-Bold.ttf",
+      "bytes": 32132,
+      "sha256": "9d1ed21556e3d260582d42c7cdaeb99192353452b64f42621b1eb61397203da7"
     },
     {
       "source": "assets/cloud-realm-20261019/arrival.webp",
@@ -90,6 +138,30 @@
       "sha256": "5639102e706c66e12726a165f277292cc1395e99e9d5faeb152a10164e695932"
     },
     {
+      "source": "assets/fonts/klin-hand/Caveat-Variable.woff2",
+      "path": "assets/fonts/klin-hand/Caveat-Variable.woff2",
+      "bytes": 173756,
+      "sha256": "0186c992e90e900f843fecda545794950a159a4532d5626e7ce2c8a07065be4d"
+    },
+    {
+      "source": "assets/fonts/klin-hand/LXGWWenKaiTC-Regular.woff2",
+      "path": "assets/fonts/klin-hand/LXGWWenKaiTC-Regular.woff2",
+      "bytes": 5525828,
+      "sha256": "1d958a6589e4caa43f5a80a81118c66aefb1e0fd380cf5b23c17d49961726a92"
+    },
+    {
+      "source": "assets/fonts/klin-hand/OFL-Caveat.txt",
+      "path": "assets/fonts/klin-hand/OFL-Caveat.txt",
+      "bytes": 4385,
+      "sha256": "1f9d81d094273d82f3898a1ee8b598a717d050ecbf5ff7bede105b704880157b"
+    },
+    {
+      "source": "assets/fonts/klin-hand/OFL-LXGWWenKaiTC.txt",
+      "path": "assets/fonts/klin-hand/OFL-LXGWWenKaiTC.txt",
+      "bytes": 4395,
+      "sha256": "1a13783bf4337242834b60309cdcdbeb566ae3f923576fdbba8b78db9d174def"
+    },
+    {
       "source": "assets/fonts/klin-paper/NotoSerifTC-Core.woff2",
       "path": "assets/fonts/klin-paper/NotoSerifTC-Core.woff2",
       "bytes": 317248,
@@ -142,6 +214,18 @@
       "path": "assets/landing-mini-20261022/nok-complete-mini-draft.mp4",
       "bytes": 15736670,
       "sha256": "43c94ef470a0bca3cd55c3bcde4967e960a1716ee06df084834758e79e2ccbd9"
+    },
+    {
+      "source": "assets/login-video-20261023-40/nok-login-v02-juvenile-bright-8s.mp4",
+      "path": "assets/login-video-20261023-40/nok-login-v02-juvenile-bright-8s.mp4",
+      "bytes": 1914511,
+      "sha256": "ef66276cdb9646db5c0f9a08a192d75daf56710921df9c76fc0f6530e86d1472"
+    },
+    {
+      "source": "assets/login-video-20261023-40/poster.jpg",
+      "path": "assets/login-video-20261023-40/poster.jpg",
+      "bytes": 29866,
+      "sha256": "3ef921cdf5d2c6c07a27daf83638b99bcd483e6a26e9c37d5cfc963a02da1f13"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -1050,6 +1134,24 @@
       "sha256": "371b715498ad195270f9589255aa3925a86ab861c921f563d9d02395022bb63d"
     },
     {
+      "source": "business-card.css",
+      "path": "business-card.css",
+      "bytes": 6274,
+      "sha256": "0b81e8767de2477ea1e9f397b77f410660fcf54006590c811e5fee0ea1a222e5"
+    },
+    {
+      "source": "card-artwork.mjs",
+      "path": "card-artwork.mjs",
+      "bytes": 7807,
+      "sha256": "80a75e652709a050718012d88e3385f0201bc681611a822509a29babaeac78bb"
+    },
+    {
+      "source": "card-design.mjs",
+      "path": "card-design.mjs",
+      "bytes": 1525,
+      "sha256": "d3eb3a1d8f3f99a8db0c9c9479ccb06b37195991b65eb8f4b40b157de00bfd9b"
+    },
+    {
       "source": "card-editor-readability.css",
       "path": "card-editor-readability.css",
       "bytes": 4995,
@@ -1154,14 +1256,14 @@
     {
       "source": "experience-v33.css",
       "path": "experience-v33.css",
-      "bytes": 1440,
-      "sha256": "c601ade523e6b3a00455405aa12bcde0dfcc911aa161b7b2277988bebe5fe3e7"
+      "bytes": 2018,
+      "sha256": "c403e6c6f4bdc6ad17985755f381f593ae8dfe4ac2938d88eec32df3e8f4cbad"
     },
     {
       "source": "experience-v34.css",
       "path": "experience-v34.css",
-      "bytes": 2145,
-      "sha256": "f316432be97444c8f2954e7ce16cf1c293fb2cea28fceef2e2b490d9acbd39de"
+      "bytes": 2940,
+      "sha256": "5ee4340606682330e9d3dd84a61a9d8035b3a3b7c10b6073e26653d02af441a6"
     },
     {
       "source": "figma-ui.css",
@@ -1220,8 +1322,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 9192,
-      "sha256": "b8c4bf119dcc0dbf4352f586c23c4eca86f1683d5d6b192f259b60e5833cb708"
+      "bytes": 9316,
+      "sha256": "2809489ec2d6c094c0ab1b51fbbd231a44672e903b3b82bbc1be6819e5c2f888"
     },
     {
       "source": "journey-experience.css",
@@ -1256,8 +1358,8 @@
     {
       "source": "klin-world-2d.css",
       "path": "klin-world-2d.css",
-      "bytes": 1482,
-      "sha256": "2bfd88d5a8768a2b6a2adced2b442e3850e973c3fe8b860c202bc775d047c3f6"
+      "bytes": 1696,
+      "sha256": "bb25d8279535bfb4128230959b6dab889f0ab9764025fe1ff26cd1dc27a6011c"
     },
     {
       "source": "landing-audio-clips.mjs",
@@ -1322,8 +1424,8 @@
     {
       "source": "loading-state.css",
       "path": "loading-state.css",
-      "bytes": 3838,
-      "sha256": "feaf3efa94b90d267b12e445a598aec9e14e884c686d08b786f63cb3bfa9faf8"
+      "bytes": 4290,
+      "sha256": "bb6e6809684552ab9e74a51a30bce4b84ed8f65927185b10de65074f555cd9f7"
     },
     {
       "source": "loading-state.mjs",
@@ -1336,6 +1438,18 @@
       "path": "login-scene.css",
       "bytes": 867,
       "sha256": "d3f43a23bfcecfc6b59ae9aad1d49d4da085deeb3399adaf530b83557ac26a20"
+    },
+    {
+      "source": "login-video-scene.css",
+      "path": "login-video-scene.css",
+      "bytes": 803,
+      "sha256": "38c796e96476e607029876892911aebc3523a31bf08bb31a38cea5b7166fe594"
+    },
+    {
+      "source": "login-video-scene.mjs",
+      "path": "login-video-scene.mjs",
+      "bytes": 4194,
+      "sha256": "bbc422b42938306175dd704359d12f6d7848b9c9661181c9209131e33b748b1a"
     },
     {
       "source": "logo-brand.css",
@@ -1364,8 +1478,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 54193,
-      "sha256": "8f3f6c91a0c5a5fcee7c683d23e1ad3692a9874162064955a758fa12df1d4ddb"
+      "bytes": 54691,
+      "sha256": "9756f7ca31432c3e63c0d711ed9308983b929224134d1deeac0e898a6a71f7eb"
     },
     {
       "source": "motion.css",
@@ -1376,8 +1490,8 @@
     {
       "source": "motion.mjs",
       "path": "motion.mjs",
-      "bytes": 4975,
-      "sha256": "9f67b1e17fe6c4898952db8f9df281af7468b72e0dc95b60e47f79ca0a0880a4"
+      "bytes": 5419,
+      "sha256": "20ec650226e28a3f0a3b981750b1155046e5c4a17e4032f5cd277b5178adb1a5"
     },
     {
       "source": "paper-font.css",
@@ -1390,12 +1504,6 @@
       "path": "pixel-room.mjs",
       "bytes": 1156,
       "sha256": "bf9a620a2d4fa156b27a3ceab568f700a17866e1555554689e7ed3e8d7c8dd85"
-    },
-    {
-      "source": "portal-arrival.mjs",
-      "path": "portal-arrival.mjs",
-      "bytes": 2499,
-      "sha256": "21a62a27e3338ba6e216b0a0f68a20c82828452fb7b48009fd2495a851bb5f22"
     },
     {
       "source": "portal-glass.css",
@@ -1418,8 +1526,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 18147,
-      "sha256": "0401c5249cfcf1c2c542eb63100a6847730f8b63ebec94dcec97ff35d7bf8f51"
+      "bytes": 13714,
+      "sha256": "fffc9286b2ba90b112ffa5d88d7f884d5564bbb90cdaa05b4d63404984b4f77a"
     },
     {
       "source": "realm-scene.css",
@@ -1854,6 +1962,21 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "business-card.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "login-video-scene.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "card-design.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "landing-video-scene.mjs",
       "kind": "module"
@@ -1935,7 +2058,7 @@
     },
     {
       "from": "app.mjs",
-      "to": "portal-arrival.mjs",
+      "to": "login-video-scene.mjs",
       "kind": "module"
     },
     {
@@ -2020,6 +2143,16 @@
     },
     {
       "from": "public-card.mjs",
+      "to": "card-artwork.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "public-card.mjs",
+      "to": "card-design.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "public-card.mjs",
       "to": "card-labels.mjs",
       "kind": "module"
     },
@@ -2039,13 +2172,13 @@
       "kind": "module"
     },
     {
-      "from": "portal-arrival.mjs",
-      "to": "scene-assets.mjs",
+      "from": "motion.mjs",
+      "to": "card-handoff.mjs",
       "kind": "module"
     },
     {
-      "from": "motion.mjs",
-      "to": "card-handoff.mjs",
+      "from": "model.mjs",
+      "to": "card-design.mjs",
       "kind": "module"
     },
     {
@@ -2071,6 +2204,11 @@
     {
       "from": "landing-audio-engine.mjs",
       "to": "landing-audio-clips.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "card-artwork.mjs",
+      "to": "card-design.mjs",
       "kind": "module"
     }
   ],

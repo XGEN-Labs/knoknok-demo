@@ -1,3 +1,4 @@
+import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261023-card-36h';
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, validMetalVoice } from './landing.mjs';
 import { interestTags, suggestedCardTags, NEUTRAL_CARD_TAGS, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs';
@@ -34,9 +35,9 @@ export function hasSignedCompanionContract(state) {
 }
 
 export const DEMO_FRIENDS = Object.freeze([
-  Object.freeze({ id: 'b', name: '阿朗', initial: '朗', interests: Object.freeze(['攝影', '看展']), recent: '剛看完一個攝影展，想交換幾張喜歡的照片。', greeting: '你好，我是阿朗。最近有看到讓你想停下來的畫面嗎？' }),
-  Object.freeze({ id: 'c', name: '小雨', initial: '雨', interests: Object.freeze(['閱讀', '咖啡']), recent: '找到一家安靜的小書店，正在讀一本散文。', greeting: '嗨，我是小雨。今天有什麼小事讓你心情好一點嗎？' }),
-  Object.freeze({ id: 'd', name: '阿哲', initial: '哲', interests: Object.freeze(['散步', '音樂']), recent: '最近喜歡傍晚散步，順便收集新的歌單。', greeting: '你好，我是阿哲。你散步時會聽音樂，還是聽城市的聲音？' }),
+  Object.freeze({ id: 'b', cardDesign: 7, name: '阿朗', initial: '朗', interests: Object.freeze(['攝影', '看展']), recent: '剛看完一個攝影展，想交換幾張喜歡的照片。', greeting: '你好，我是阿朗。最近有看到讓你想停下來的畫面嗎？' }),
+  Object.freeze({ id: 'c', cardDesign: 14, name: '小雨', initial: '雨', interests: Object.freeze(['閱讀', '咖啡']), recent: '找到一家安靜的小書店，正在讀一本散文。', greeting: '嗨，我是小雨。今天有什麼小事讓你心情好一點嗎？' }),
+  Object.freeze({ id: 'd', cardDesign: 21, name: '阿哲', initial: '哲', interests: Object.freeze(['散步', '音樂']), recent: '最近喜歡傍晚散步，順便收集新的歌單。', greeting: '你好，我是阿哲。你散步時會聽音樂，還是聽城市的聲音？' }),
 ]);
 
 export function getDemoFriends(state, userId = active(state)) {
@@ -132,7 +133,7 @@ export function initialState(now = Date.now()) {
     session: { authenticated: false, activeUserId: 'a', provider: null },
     onboarding: newOnboarding(now),
     users: {
-      a: { id: 'a', name: 'Frank', language: '粵語', region: '香港', bio: '喜歡發掘城市裡的小展覽。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: false, cardAvatar: '', shareRegion: false },
+      a: { id: 'a', cardDesign: 0, name: 'Frank', language: '粵語', region: '香港', bio: '喜歡發掘城市裡的小展覽。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: false, cardAvatar: '', shareRegion: false },
       b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       c: { id: 'c', name: '小雨', language: '粵語', region: '香港', bio: '喜歡閱讀、咖啡和安靜的小書店。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['閱讀', '咖啡'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       d: { id: 'd', name: '阿哲', language: '粵語', region: '香港', bio: '喜歡散步、音樂和城市裡的小發現。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['散步', '音樂'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
@@ -411,6 +412,10 @@ export function reduce(previous, action = {}) {
         state.users[actorId].cardTags = migrateCardTags(patch.cardTags ?? state.users[actorId].cardTags, patch.cardLabels);
         state.users[actorId].cardLabels = {};
         state.users[actorId].cardTagsEdited = true;
+      }
+      if (patch.cardDesign !== undefined) {
+        if (normalizeCardDesign(patch.cardDesign) === null) return fail(state, '請選擇有效的名片樣式。');
+        state.users[actorId].cardDesign = patch.cardDesign;
       }
       if (patch.cardAvatar !== undefined) state.users[actorId].cardAvatar = normalizeCardAvatar(patch.cardAvatar);
       if (patch.shareRegion !== undefined) state.users[actorId].shareRegion = patch.shareRegion === true;
@@ -729,6 +734,7 @@ export function hydrateState(serialized, now = Date.now()) {
       state.users[id].cardTagsEdited = savedTagsEdited === true || savedTagsEdited === undefined && savedTags.length > 0;
       state.users[id].cardTags = savedTagsEdited === undefined && savedTags.length === 0 ? [...NEUTRAL_CARD_TAGS] : savedTags;
       state.users[id].cardLabels = {};
+      state.users[id].cardDesign = normalizeCardDesign(state.users[id].cardDesign) ?? generateCardDesign(id);
       state.users[id].cardAvatar = normalizeCardAvatar(state.users[id].cardAvatar);
       state.users[id].shareRegion = state.users[id].shareRegion === true;
       state.private[id].birth = { ...defaultBirth(id), ...(state.private[id].birth || {}) };

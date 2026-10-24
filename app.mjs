@@ -1,3 +1,4 @@
+import { CARD_DESIGN_NAMES, resolveCardDesign } from './card-design.mjs?v=20261023-card-36h';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261023-experience-34d';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
 import { createSceneAssetReadiness } from './scene-asset-readiness.mjs?v=20261023-experience-34d';
@@ -12,25 +13,25 @@ import { initTypography } from './typography.mjs?v=20261023-experience-34d';
 import { createSceneSound } from './scene-sound.mjs?v=20261023-experience-34d';
 import { landingComplete, onboardingDestination } from './landing.mjs?v=20261023-experience-34d';
 import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261023-experience-34d';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261023-experience-34d';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261023-card-36h';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261023-original-room-character-39';
-import { createPortalArrival as createLoginSceneBridge } from './portal-arrival.mjs?v=20261023-scene-35d';
+import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261023-login-video-40';
 import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-original-room-character-39';
 import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-original-room-character-39';
 import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261023-experience-34d';
 import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261023-experience-34d';
 import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261023-experience-34d';
-import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261023-experience-34d';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261023-experience-34d';
+import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261023-actions-38';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261023-card-36h';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
 const sceneSound = createSceneSound();
 let cleanFormControls,cleanSheetControls,cleanDatePickers,cleanSheetDates,cleanCommunication,voiceRefreshPending=false;
 let cardAvatarDraft='';
-let avatarUploadSequence=0;
+let avatarUploadSequence=0,cardAvatarUploading=false;
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const variantParams = new URLSearchParams(location.search);
 const shareDemo = document.documentElement.classList.contains('share-demo');
@@ -62,6 +63,7 @@ let filmAudioState={active:false,playing:false,time:0};
 const expiredLoading=new Set();
 let loginScene=null,landingVideoScene=null,closeContractUI=null;
 let renderSequence=0;
+let pendingCardFontRefresh=false;
 let conversationActive=false,conversationEnterTimer;
 let matchingDemandId=null, matchingPhase=0, matchingTimers=[];
 let timer, initializeTimer, toastTimer, authResendTimer, stopTransition, pendingSceneRefresh=false, adviceRequest=0, busy=false, companionTyping=false;
@@ -314,17 +316,41 @@ function knockVisit(friendId){
  visitTimer=setTimeout(()=>{if(token!==visitAttempt||ui.selectedVisitId!==friendId)return;ui.visitPhase=ui.route==='relations'?'open':'idle';save();if(ui.route==='relations'){render(false);if(ui.visitDialog)visitSheet();}},prefersStillness(ui.motion)?0:1350);
 }
 function myCard(){return publicCardData(me(),{includeRegion:me().shareRegion===true,tags:me().cardTags||[],avatar:me().cardAvatar});}
-function profile(){return shell(top('我的名片','',`<button class="scene-icon" type="button" data-action="account-menu" aria-label="帳號選單">${restoredControlIcon('more')}</button>`)+`<div class="profile-stage">${cardMarkup(myCard(),{showAllTags:true,editable:true})}</div><div class="profile-footer"><div class="card-actions split-buttons">${btn('保存圖片','download-card','white')}${btn('分享名片','share-card')}</div></div>`,'profile-card-page');}
+function refreshVisibleCardArtwork(){
+ if(!pendingCardFontRefresh||stopTransition||$('.card-in-handoff'))return;
+ pendingCardFontRefresh=false;
+ const ownCard=myCard();
+ for(const card of document.querySelectorAll('#app [data-business-card],#sheet[open] [data-business-card]')){
+  const choice=card.closest('.card-design-choice');
+  const data=choice?{...ownCard,design:Number(choice.dataset.design)}:card.closest('.public-card-page')?(sharedCard||ownCard):ownCard;
+  const focusedTag=[...card.querySelectorAll('.bc-tag')].indexOf(document.activeElement);
+  const focusedAvatar=card.querySelector('.bc-avatar')===document.activeElement;
+  const template=document.createElement('template');
+  template.innerHTML=cardMarkup(data,{compact:card.classList.contains('is-compact'),showAllTags:!!card.querySelector('[data-action="view-card-tags"]'),editable:!!card.querySelector('.bc-avatar[data-action="edit-card"]')});
+  // Preserve the article used by the handoff and every form/input around it.
+  card.replaceChildren(...template.content.firstElementChild.childNodes);
+  if(focusedTag>=0)card.querySelectorAll('.bc-tag')[focusedTag]?.focus({preventScroll:true});
+  else if(focusedAvatar)card.querySelector('.bc-avatar')?.focus({preventScroll:true});
+ }
+}
+function cardTools(editable=false){return editable?'<div class="card-tools"><button type="button" data-action="choose-card-design">更換樣式</button><button type="button" data-action="edit-card"><img src="assets/ui/pencil-square.svg" alt="" aria-hidden="true">編輯</button></div>':'';}
+
+function chooseCardDesign(){
+ const data=myCard(),current=resolveCardDesign(data).layout;
+ showSheet('選一張像你的名片',`<div class="card-design-grid">${CARD_DESIGN_NAMES.map((name,index)=>`<button type="button" class="card-design-choice" data-action="select-card-design" data-design="${index*7}" aria-pressed="${current===index}" aria-label="${name}樣式">${cardMarkup({...data,design:index*7},{compact:true})}<span>${name}</span></button>`).join('')}</div>${btn('再生成一張','regenerate-card-design','kn-glass-control')}`);
+}
+function profile(){return shell(top('我的名片','',`<button class="scene-icon" type="button" data-action="account-menu" aria-label="帳號選單">${restoredControlIcon('more')}</button>`)+`<div class="profile-stage">${cardMarkup(myCard(),{showAllTags:true,editable:true})}${cardTools(true)}</div><div class="profile-footer"><div class="card-actions split-buttons">${btn('保存圖片','download-card','white')}${btn('分享名片','share-card')}</div></div>`,'profile-card-page');}
 function publicCardPage(){const data=sharedCard||myCard();return shell(`<header class="page-top"><button type="button" class="icon-button" data-action="leave-card" aria-label="返回">${backIcon}</button><div><h2>${sharedCard?'你好，新朋友':'訪客眼中的你'}</h2></div></header><div class="profile-stage">${cardMarkup(data,{showAllTags:true})}</div><div class="profile-footer">${btn(sharedCard?'認識我的 Klin':'回到我的名片','leave-card')}</div>`,'public-card-page');}
 function editCard(){
- cardAvatarDraft=normalizeCardAvatar(me().cardAvatar);avatarUploadSequence++;
+ cardAvatarDraft=normalizeCardAvatar(me().cardAvatar);avatarUploadSequence++;cardAvatarUploading=false;
  const tags=normalizePersonalityTags(me().cardTags||[]);
- showSheet('編輯名片',`<form data-form="profile"><div class="avatar-editor"><span class="avatar-editor-preview" id="card-avatar-preview">${cardAvatarDraft?`<img src="${esc(cardAvatarDraft)}" alt="你的頭像">`:`<img src="${DEFAULT_CARD_AVATAR}" alt="預設頭像">`}</span><div><button type="button" class="avatar-upload-button" data-action="choose-card-avatar">${cardAvatarDraft?'更換頭像':'上傳頭像'}</button><input id="card-avatar-upload" type="file" accept="image/png,image/jpeg,image/webp" class="sr-only"><button type="button" class="text-button" data-action="remove-card-avatar" ${cardAvatarDraft?'':'hidden'}>移除</button><p class="small-note" id="avatar-upload-status">頭像會出現在分享名片上</p></div></div>${field('你的名字','profile-name',me().name,'maxlength="18"')}<div class="field"><label for="bio">一句話介紹自己</label><textarea id="bio" name="bio" maxlength="160" placeholder="喜歡什麼？最近想一起做什麼？">${esc(me().bio)}</textarea></div><div class="field"><label for="card-personality-tags">我的個性標籤 · 最多 7 個</label><input class="input" id="card-personality-tags" name="cardTags" value="${esc(tags.join('，'))}" maxlength="160" placeholder="例如：AI、夜貓子、攝影控"><div class="personality-tag-suggestions">${['AI','ENFP','夜貓子','電影迷','攝影控','慢熱','咖啡腦袋'].map(t=>`<button class="tiny-btn" type="button" data-action="add-card-tag" data-tag="${t}" aria-pressed="${tags.includes(t)}">${t}</button>`).join('')}</div></div><label class="check"><input type="checkbox" name="shareRegion" ${me().shareRegion?'checked':''}>顯示我的城市：${esc(me().region)}</label><button type="submit" class="btn" style="margin-top:20px">儲存名片</button></form>`);
+ showSheet('編輯名片',`<form data-form="profile"><div class="avatar-editor"><span class="avatar-editor-preview" id="card-avatar-preview">${cardAvatarDraft?`<img src="${esc(cardAvatarDraft)}" alt="你的頭像">`:`<img src="${DEFAULT_CARD_AVATAR}" alt="預設頭像">`}</span><div><button type="button" class="avatar-upload-button" data-action="choose-card-avatar">${cardAvatarDraft?'更換頭像':'上傳頭像'}</button><input id="card-avatar-upload" type="file" accept="image/png,image/jpeg,image/webp" class="sr-only"><button type="button" class="text-button" data-action="remove-card-avatar" ${cardAvatarDraft?'':'hidden'}>移除</button><p class="small-note" id="avatar-upload-status">頭像會顯示在名片、分享連結和保存圖片中</p></div></div>${field('你的名字','profile-name',me().name,'maxlength="18"')}<div class="field"><label for="bio">一句話介紹自己</label><textarea id="bio" name="bio" maxlength="160" placeholder="喜歡什麼？最近想一起做什麼？">${esc(me().bio)}</textarea></div><div class="field"><label for="card-personality-tags">我的個性標籤 · 最多 7 個</label><input class="input" id="card-personality-tags" name="cardTags" value="${esc(tags.join('，'))}" maxlength="160" placeholder="例如：AI、夜貓子、攝影控"><div class="personality-tag-suggestions">${['AI','ENFP','夜貓子','電影迷','攝影控','慢熱','咖啡腦袋'].map(t=>`<button class="tiny-btn" type="button" data-action="add-card-tag" data-tag="${t}" aria-pressed="${tags.includes(t)}">${t}</button>`).join('')}</div></div><label class="check"><input type="checkbox" name="shareRegion" ${me().shareRegion?'checked':''}>顯示我的城市：${esc(me().region)}</label><button type="submit" class="btn" style="margin-top:20px">儲存名片</button></form>`);
 }
 async function uploadCardAvatar(file){
- if(!file)return;const sequence=++avatarUploadSequence;const status=$('#avatar-upload-status');if(status)status.textContent='正在準備頭像…';
+ if(!file)return;const sequence=++avatarUploadSequence;cardAvatarUploading=true;const submit=$('[data-form="profile"] button[type="submit"]');if(submit)submit.disabled=true;const status=$('#avatar-upload-status');if(status)status.textContent='正在準備頭像…';
  try{const avatar=await prepareAvatar(file);if(sequence!==avatarUploadSequence||!$('#sheet').open)return;cardAvatarDraft=avatar;$('#card-avatar-preview').innerHTML=`<img src="${esc(avatar)}" alt="你的頭像">`;$('[data-action="remove-card-avatar"]').hidden=false;$('#avatar-upload-status').textContent='儲存名片後生效';}
  catch(error){if(sequence===avatarUploadSequence&&$('#avatar-upload-status'))$('#avatar-upload-status').textContent=error.message;}
+ finally{if(sequence===avatarUploadSequence){cardAvatarUploading=false;const submit=$('[data-form="profile"] button[type="submit"]');if(submit)submit.disabled=false;}}
 }
 
 function shareCardSheet(){const native=typeof navigator.share==='function';showSheet('分享名片',`<div class="card-share-sheet"><div class="card-share-preview">${cardMarkup(myCard(),{compact:true})}</div><div class="card-share-actions">${native?btn('分享給朋友','native-share-card','kn-glass-control card-share-primary'):''}${btn('複製連結','copy-card-link','kn-glass-control')}${btn('儲存圖片','download-card','kn-glass-control')}</div><div id="card-share-status" class="card-share-status" role="status" aria-live="polite"></div></div>`);}
@@ -389,8 +415,8 @@ function syncExperience(){
  $('#phone').style.setProperty('--kn-visit-scene-image',`url("${VISIT_SCENE_ASSET}")`);
  const opening=['welcome','login','register','verify'].includes(ui.route),landing=ui.route==='landing';
  const scene=landing?'landing':opening?'welcome':'room';
- const images=landing?[]:[opening?WELCOME_SCENE_ASSET:ui.route==='relations'?VISIT_SCENE_ASSET:HOME_SCENE_ASSET];
- if(opening)images.push('assets/login-world-20261019/source/character-transparent.png','assets/brand-20261016/knoknok-logo-latest.png');
+ const images=landing?[]:[opening?LOGIN_VIDEO_POSTER:ui.route==='relations'?VISIT_SCENE_ASSET:HOME_SCENE_ASSET];
+ if(opening)images.push('assets/brand-20261016/knoknok-logo-latest.png');
  else if(!landing)images.push(klinAssets.adult);
  if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
  if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261016/knoknok-logo-latest.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
@@ -417,7 +443,8 @@ function syncNarration(){
 }
 function resetSound(){audioToggleSequence++;ui.soundOn=false;sceneSound.setEnabled(false);sceneSound.resetSession();filmAudioState={active:false,playing:false,time:0};syncAudioControls();}
 function syncLoginScene(){
-  if(!loginScene)loginScene=createLoginSceneBridge({phone:$('#phone')});
+  ensureExperience();
+  if(!loginScene)loginScene=createLoginSceneBridge({phone:$('#phone'),onPending:pending=>setScenePending('login-video',pending,'welcome')});
   const active=['welcome','login','register','verify'].includes(ui.route);
   loginScene.update({route:ui.route,active,reducedMotion:prefersStillness(ui.motion)});
   klinWorld?.setActive?.(!active&&ui.route!=='landing');
@@ -519,13 +546,14 @@ function render(animate=false,motion={}){
     if(sequence!==renderSequence)return;
     stopTransition=null;syncWorldAnchor();
     if(ui.route==='home')setHomeEntryControlsHidden(false);
+    refreshVisibleCardArtwork();
     if(pendingSceneRefresh){pendingSceneRefresh=false;queueMicrotask(()=>render(false));}
   };
   if(animate){
     $('.page h2')?.setAttribute('tabindex','-1');
     if(previous)stopTransition=transitionScene({host:$('#phone'),app,previous,current:app.querySelector('.page'),source,world:worldReady?klinWorld:null,stage:currentCompanionStage(),layout:currentWorldLayout(),scrollPositions,direction:motion.direction,onFinish:arrived});
     else {$('.page h2')?.focus({preventScroll:true});arrived();}
-  }else if(ui.route==='home')setHomeEntryControlsHidden(false);
+  }else{if(ui.route==='home')setHomeEntryControlsHidden(false);refreshVisibleCardArtwork();}
 }
 
 function flushVoiceRefresh(state){
@@ -598,6 +626,9 @@ async function runAction(action,element){
       closeContractUI=showCompanionContract({phone:$('#phone'),getWorld:()=>null,userName:name,companionName:partner,reduced:prefersStillness(ui.motion),onClose:()=>{closeContractUI=null;if(soundControl)$('#phone').append(soundControl);},onCommit:()=>{if(ui.route!=='landing'||actor()!==who||me().name!==name||companionName()!==partner)return;if(dispatch({type:'SIGN_COMPANION_CONTRACT'},false))departToHome();else render(false);}});if(soundControl)$('.contract-story')?.append(soundControl);return;
     }
     case 'finish-conversation':return departToHome();
+    case 'choose-card-design':return chooseCardDesign();
+    case 'select-card-design':{if(dispatch({type:'UPDATE_PROFILE',patch:{cardDesign:Number(element.dataset.design)}},false)){closeSheet();render(false);}return;}
+    case 'regenerate-card-design':{const old=resolveCardDesign(myCard()).seed;let seed;do{seed=crypto.getRandomValues(new Uint32Array(1))[0];}while(seed%6===old%6);if(dispatch({type:'UPDATE_PROFILE',patch:{cardDesign:seed}},false)){closeSheet();render(false);}return;}
     case 'view-card-tags':{const data=ui.route==='public-card'&&sharedCard?sharedCard:myCard();return showSheet('所有標籤',`<div class="all-card-tags">${data.tags.length?data.tags.map(tag=>`<span>${esc(tag)}</span>`).join(''):'<p>還沒有留下標籤。</p>'}</div>`);}
     case 'open-demo-friend':return requestVisit(element.dataset.id);
     case 'talk-friends':go('home');setHomeConversation(true);$('#private-message')?.focus({preventScroll:true});return;
@@ -605,7 +636,7 @@ async function runAction(action,element){
     case 'edit-card':return editCard();
     case 'choose-card-avatar':$('#card-avatar-upload')?.click();return;
     case 'add-card-tag':{const input=$('#card-personality-tags');const current=normalizePersonalityTags(input.value.split(/[,，、]/));const tag=element.dataset.tag;if(current.includes(tag)){input.value=current.filter(t=>t!==tag).join('，');element.setAttribute('aria-pressed','false');return;}if(current.length>=7)return toast('最多選擇 7 個標籤。');input.value=[...current,tag].join('，');element.setAttribute('aria-pressed','true');return;}
-    case 'remove-card-avatar':avatarUploadSequence++;cardAvatarDraft='';$('#card-avatar-upload').value='';$('#card-avatar-preview').innerHTML=`<img src="${DEFAULT_CARD_AVATAR}" alt="預設頭像">`;element.hidden=true;$('#avatar-upload-status').textContent='儲存名片後移除頭像';return;
+    case 'remove-card-avatar':avatarUploadSequence++;cardAvatarUploading=false;$('[data-form="profile"] button[type="submit"]').disabled=false;cardAvatarDraft='';$('#card-avatar-upload').value='';$('#card-avatar-preview').innerHTML=`<img src="${DEFAULT_CARD_AVATAR}" alt="預設頭像">`;element.hidden=true;$('#avatar-upload-status').textContent='儲存名片後恢復預設頭像';return;
     case 'preview-card':sharedCard=null;return go('public-card');
     case 'leave-card':{
       const fromLink=Boolean(sharedCard);sharedCard=null;
@@ -693,7 +724,7 @@ case 'setup-birth':{const patch=birthFormPatch(),errors=validateBirth(patch,stat
 case 'onboarding':return answerOnboarding(String(data.get('answer')||''));
 case 'companion':return sendCompanion(String(data.get('message')||''));
 case 'demand':{dispatch({type:'UPDATE_DRAFT',patch:formPatch()},false);const errors=validateDemand(state.draft,state.now);delete errors.intro;if(Object.keys(errors).length){if(errors.time||errors.area||errors.expiresAt){const options=$('.request-options');if(options)options.open=true;}$('#demand-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#demand-error').scrollIntoView({block:'nearest'});return;}return go('preview');}
-case 'profile':{const tags=String(data.get('cardTags')||'').split(/[,，、]/).map(t=>t.trim()).filter(Boolean);if(tags.length>7)return toast('最多選擇 7 個標籤。');if(dispatch({type:'UPDATE_PROFILE',patch:{name:data.get('profile-name'),bio:data.get('bio'),cardTags:normalizePersonalityTags(tags),cardAvatar:cardAvatarDraft,shareRegion:data.has('shareRegion')}},false)){closeSheet();render(false);toast('名片已保存。');}return;}
+case 'profile':{if(cardAvatarUploading)return toast('頭像正在準備，請稍等。');const tags=String(data.get('cardTags')||'').split(/[,，、]/).map(t=>t.trim()).filter(Boolean);if(tags.length>7)return toast('最多選擇 7 個標籤。');if(dispatch({type:'UPDATE_PROFILE',patch:{name:data.get('profile-name'),bio:data.get('bio'),cardTags:normalizePersonalityTags(tags),cardAvatar:cardAvatarDraft,shareRegion:data.has('shareRegion')}},false)){closeSheet();render(false);toast('名片已保存。');}return;}
 case 'memory':if(dispatch({type:'MEMORY_EDIT',memoryId:form.dataset.id,text:data.get('text')})){closeSheet();toast('已修正，我會按新的理解陪伴你。');}return;
 case 'report':dispatch({type:'REPORT_RELATIONSHIP',relationshipId:latestRelationship()?.id,reason:data.get('reason')},false);closeSheet();return toast('已記錄模擬回報，尚未送交真人審核。');
 case 'public-message':{const rel=latestRelationship();if(!rel)return;const text=String(data.get('message')||'');if(dispatch({type:'SEND_MESSAGE',relationshipId:rel.id,text,fail:consumeFailure()},false))render(false);return;}
@@ -768,6 +799,7 @@ if(comparisonMode) {
 }
 if(!pixelVariant&&ui.route==='home'&&state.session.authenticated)state=reduce(state,{type:'ENTER_COMPANION_HOME'});
 resize();render(true);
+prepareCardFonts().then(()=>{pendingCardFontRefresh=true;refreshVisibleCardArtwork();});
 if(pixelVariant)initCompanionAnimation();
 if(ui.route==='initializing')startInitialization();
 
