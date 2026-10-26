@@ -1,4 +1,5 @@
-import { renderFriendNetwork } from './friend-network.mjs?v=20261026-experience-41c';
+import { renderFriendNetwork } from './friend-network.mjs?v=20261026-experience-41d';
+import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-41d';
 import { CARD_DESIGN_NAMES, resolveCardDesign } from './card-design.mjs?v=20261023-card-36h';
 import { submitDemoRegistration } from './auth-registration.mjs?v=20261026-registration-41';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261026-experience-41c';
@@ -17,9 +18,9 @@ import { landingComplete, onboardingDestination } from './landing.mjs?v=20261023
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261026-experience-41c';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261026-experience-41c';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-reference-2d.mjs?v=20261026-experience-41c';
+import { createKlinWorld } from './klin-reference-2d.mjs?v=20261026-experience-41d';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261023-login-video-40';
-import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-41c';
+import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-41d';
 import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-original-room-character-39';
 import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261023-experience-34d';
 import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
@@ -66,7 +67,7 @@ const expiredLoading=new Set();
 let loginScene=null,landingVideoScene=null,closeContractUI=null;
 let renderSequence=0;
 let pendingCardFontRefresh=false;
-let conversationActive=false,conversationEnterTimer;
+let conversationActive=false,conversationAvatarMotion=null;
 let matchingDemandId=null, matchingPhase=0, matchingTimers=[];
 let timer, initializeTimer, toastTimer, authResendTimer, stopTransition, pendingSceneRefresh=false, adviceRequest=0, busy=false, companionTyping=false;
 // Phone verification is a local prototype interaction, so credentials stay in memory.
@@ -272,21 +273,23 @@ function conversationMarkup(messages){
   return messages.map((m,i)=>`<div class="conversation-message ${m.role==='user'?'own':''}" ${companionTyping&&m.role!=='user'&&i===messages.length-1?'hidden':''}><p>${esc(m.text)}</p></div>`).join('')+(companionTyping?`<div class="conversation-message">${loadingIndicatorMarkup(`${companionName()} 正在回覆…`)}</div>`:'');
 }
 function setHomeConversation(active){
-  const entering=Boolean(active)&&!conversationActive;
-  conversationActive=Boolean(active)&&ui.route==='home';
-  const phone=$('#phone');phone.dataset.conversation=String(conversationActive);
-  if(!conversationActive){clearTimeout(conversationEnterTimer);delete phone.dataset.conversationEntering;}
-  else if(entering&&!prefersStillness(ui.motion)){phone.dataset.conversationEntering='true';clearTimeout(conversationEnterTimer);conversationEnterTimer=setTimeout(()=>{delete phone.dataset.conversationEntering;const log=$('#conversation-log');if(conversationActive&&log)log.scrollTop=log.scrollHeight;},450);}
-  klinWorld?.setConversationMode?.(conversationActive);
-  // In chat, the identity belongs to the header; keep the room itself in place.
-  klinWorld?.setLayout?.({character:!conversationActive});
-  const identity=$('.home-chat-identity');if(identity)identity.hidden=!conversationActive;
-  const companion=$('.home-companion');if(companion)companion.hidden=conversationActive;
-  const log=$('#conversation-log');
-  if(log){log.hidden=!conversationActive;if(conversationActive)log.scrollTop=log.scrollHeight;}
-
-  const replies=$('.conversation-replies');if(replies)replies.hidden=!conversationActive;
-  const dialogue=$('.room-dialogue');if(dialogue)dialogue.setAttribute('aria-hidden',String(conversationActive));
+  const next=Boolean(active)&&ui.route==='home';
+  if(next===conversationActive)return;
+  const phone=$('#phone'),reducedMotion=prefersStillness(ui.motion);
+  conversationAvatarMotion ||= createConversationAvatarMotion(phone);
+  conversationAvatarMotion.move(next,{reducedMotion,mutate(){
+    conversationActive=next;phone.dataset.conversation=String(next);
+    if(next&&!reducedMotion)phone.dataset.conversationEntering='true';else delete phone.dataset.conversationEntering;
+    klinWorld?.setConversationMode?.(next);
+    const identity=$('.home-chat-identity');if(identity)identity.hidden=!next;
+    const companion=$('.home-companion');if(companion)companion.hidden=next;
+    const log=$('#conversation-log');if(log){log.hidden=!next;if(next)log.scrollTop=log.scrollHeight;}
+    const replies=$('.conversation-replies');if(replies)replies.hidden=!next;
+    const dialogue=$('.room-dialogue');if(dialogue)dialogue.setAttribute('aria-hidden',String(next));
+  },onComplete(){
+    delete phone.dataset.conversationEntering;
+    const log=$('#conversation-log');if(conversationActive&&log)log.scrollTop=log.scrollHeight;
+  }});
 }
 function home(){
  const space=privateSpace(),messages=space.companionMessages,reply=messages.filter(m=>m.role!=='user').at(-1),turn=getCompanionTurn(state);
@@ -303,7 +306,7 @@ function friendsSheet(){
 function relations(){
  const friends=getDemoFriends(state),query=String(ui.networkQuery||'').trim().toLocaleLowerCase();
  const matches=friend=>!query||`${friend.name} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase().includes(query),visibleCount=friends.filter(matches).length;
- return shell(top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:state.users,query,ownName:me().name,ownAvatar:me().cardAvatar})}`,'friends-lounge');
+ return shell(top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,query})}`,'friends-lounge');
 }
 function filterNetwork(value){
  ui.networkQuery=value;save();const query=value.trim().toLocaleLowerCase();let count=0;
@@ -450,7 +453,7 @@ function syncExperience(){
  const images=landing?[]:[opening?LOGIN_VIDEO_POSTER:ui.route==='relations'?VISIT_SCENE_ASSET:HOME_SCENE_ASSET];
  if(opening)images.push('assets/brand-20261026/knoknok-handwritten-white.png');
  else if(!landing)images.push(klinAssets.adult);
- if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR,...['wood','water','earth'].map(kind=>`assets/scenes-20261026-41/house-${kind}.webp`));
+ if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
  if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261026/knoknok-handwritten-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
  if(['chat','connected'].includes(ui.route))images.push(SHARED_SCENE_ASSET);
  sceneImages.update({key:ui.route,urls:images,scene});
@@ -534,6 +537,7 @@ function render(animate=false,motion={}){
   const selection=restoreComposerFocus?[$(focusedComposer).selectionStart,$(focusedComposer).selectionEnd]:null;
   const app=$('#app'),oldPage=app.querySelector('.page'),oldScroll=$('#message-scroll')?.scrollTop;
   const routeChanged=oldPage?.dataset.screen!==ui.route;
+  if(routeChanged)conversationAvatarMotion?.cancel();
   const sceneOverlay=isRoomOverlayRoute(ui.route),wasOverlay=isRoomOverlayRoute(oldPage?.dataset.screen);
   const cardEntry=['profile','public-card'].includes(ui.route)&&oldPage?.dataset.screen==='home'&&worldReady;
   const useTransition=animate&&oldPage&&routeChanged&&!['welcome','login','register','verify','landing'].includes(ui.route)&&oldPage.dataset.screen!=='welcome'&&((!sceneOverlay&&!wasOverlay)||cardEntry)&&!prefersStillness(ui.motion);
@@ -558,6 +562,7 @@ function render(animate=false,motion={}){
   klinWorld?.setRealmState?.({recognition:ui.route==='landing'?Math.min(1,(getOnboardingTurn(state).progress.index-1)/6):1,conversationPhase:ui.route==='landing'?getOnboardingTurn(state).key:null,thinking:ui.route==='landing'&&landingReveal?.count<getOnboardingMessages(state).length,resting:ui.realmResting===true,keepsake:state.relationships.some(rel=>rel.members.includes(actor())&&rel.sharedMoment?.completedAt)});
   if(!useTransition&&!['welcome','login','register','verify','landing'].includes(ui.route)&&(!sceneOverlay||!oldPage))klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:!oldPage||routeChanged});
   if(ui.route==='home'&&!useTransition)klinWorld?.setConversationMode?.(conversationActive);
+  conversationAvatarMotion?.refresh({reducedMotion:prefersStillness(ui.motion)});
   if(conversationActive&&ui.route==='home'){const log=$('#conversation-log');if(log)log.scrollTop=log.scrollHeight;}
   if(restoreComposerFocus){const composer=$(focusedComposer);composer?.focus({preventScroll:true});composer?.setSelectionRange(...selection);}
   
@@ -836,6 +841,6 @@ if(pixelVariant)initCompanionAnimation();
 if(ui.route==='initializing')startInitialization();
 
 
-matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);conversationAvatarMotion?.refresh({reducedMotion:event.matches||ui.motion});if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
 
 window.addEventListener('hashchange',()=>{const card=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');if(card){sharedCard=card;go('public-card');}else if(sharedCard){sharedCard=null;go(state.session.authenticated?setupRoute():'welcome',{replace:true});}});

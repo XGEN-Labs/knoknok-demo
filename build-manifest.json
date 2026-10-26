@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-26T03:43:45.562Z",
+  "createdAt": "2026-10-26T04:13:03.132Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 91131483,
+  "payloadBytes": 90079833,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 109989,
-      "sha256": "12e7b0cc4f09fb592ff193b2aae78052d0855c19c81afeb54f1e8423e0fa380e"
+      "bytes": 109973,
+      "sha256": "ef614278e5ac113e47bfcd60b69f9514cf0647e6d0bbe78fafd19abc1290f8d4"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -420,28 +420,10 @@
       "sha256": "f2df35f9a37aac59050213b4a70bfa05ce8a7adfd59e806dfdd8c37750be541d"
     },
     {
-      "source": "assets/scenes-20261026-41/house-earth.webp",
-      "path": "assets/scenes-20261026-41/house-earth.webp",
-      "bytes": 150122,
-      "sha256": "50056857da5792a484f383f5253441e72f425f5cd04a580ac1f7a6de2067cd64"
-    },
-    {
-      "source": "assets/scenes-20261026-41/house-water.webp",
-      "path": "assets/scenes-20261026-41/house-water.webp",
-      "bytes": 136494,
-      "sha256": "c0c7fd380efaa6c7dbbdb2271337c18812881f0caa5915c28db9510cd5d06f24"
-    },
-    {
-      "source": "assets/scenes-20261026-41/house-wood.webp",
-      "path": "assets/scenes-20261026-41/house-wood.webp",
-      "bytes": 153920,
-      "sha256": "f2fe613520640d434eecf2e087c93577babccd06568265302dc779474769bed6"
-    },
-    {
-      "source": "assets/scenes-20261026-41/network-meadow.webp",
-      "path": "assets/scenes-20261026-41/network-meadow.webp",
-      "bytes": 616034,
-      "sha256": "f57ecb685140ead038c6dfb97d5c8a5079f8d01fbf182298bfd16cea54b186e9"
+      "source": "assets/scenes-20261026-41/network-calm.svg",
+      "path": "assets/scenes-20261026-41/network-calm.svg",
+      "bytes": 629,
+      "sha256": "46d80cad9c7fde7140aabe35bc6bf9638be934a256f117063576659f525c8158"
     },
     {
       "source": "assets/scenes-20261026-41/shared.webp",
@@ -1172,8 +1154,8 @@
     {
       "source": "brand-v41.css",
       "path": "brand-v41.css",
-      "bytes": 1042,
-      "sha256": "8a5610c4f1e4759e2e5c8bbd15653f9817f5e928336cb8158aaf1025a1596396"
+      "bytes": 1498,
+      "sha256": "27bbb7b9356a298421f561602bcb69f0a4adbcb0dd0b9be7fb535aecbfea2e6a"
     },
     {
       "source": "business-card.css",
@@ -1232,8 +1214,8 @@
     {
       "source": "chat-header-v41.css",
       "path": "chat-header-v41.css",
-      "bytes": 5039,
-      "sha256": "e145b7aa72c8adada7a4f096bf33b9dee858162c99cb2b0b271b5d840bf4449c"
+      "bytes": 5753,
+      "sha256": "ce5374f6691efbb63b796a6bacffae21b0db6c5a08c5223351851408fb06d755"
     },
     {
       "source": "communication-mode.mjs",
@@ -1264,6 +1246,12 @@
       "path": "contract-story.mjs",
       "bytes": 11424,
       "sha256": "c8365fc28383ec3e82375638bbd6acabb167a41af02714e192ba3c47efa3aa2d"
+    },
+    {
+      "source": "conversation-avatar-motion.mjs",
+      "path": "conversation-avatar-motion.mjs",
+      "bytes": 4590,
+      "sha256": "289a9f217c29d49408bbfb8ac7d525f56d31f82a713551a65485cf61c6cd0aa8"
     },
     {
       "source": "conversation-experience.css",
@@ -1340,14 +1328,14 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 7950,
-      "sha256": "cbbcdd9ae537527d807b61149ac1ffa4f0cf11c7e72cba0b8a914ecb29ba023f"
+      "bytes": 6677,
+      "sha256": "cb12fce49ce6ee1bb8979f69536c282a0019a04b9eb9ec68f903e989c5dc6e9e"
     },
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 3335,
-      "sha256": "8fd061ca203c888b9e75c94123b56a490c94c5d4c4eca1289c7857a333d5bc23"
+      "bytes": 2593,
+      "sha256": "3bc48d26f0b451a296eb879ff00bcd6b600deda94f41c18bd1d13e1d8ed6d19f"
     },
     {
       "source": "glass-contract.css",
@@ -1383,7 +1371,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 9795,
-      "sha256": "f494f8e2dd5e3e73fd547b40c1fa7bfa85c53f5c0cd18cedcd77b988b95ac6e8"
+      "sha256": "2e989aad95550c88d2aa1c55fc730ecc8d8f04b9acc2cb06534b9fbb5e60547f"
     },
     {
       "source": "journey-experience.css",
@@ -1412,8 +1400,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 12079,
-      "sha256": "9cf800aec7aa75590eb02a88ee2eec1d510e4502d3da57b8665da07d170a5ace"
+      "bytes": 12419,
+      "sha256": "5b045ea00e9644d8ec09d2720784eaac0c274c0bfc60fd5cdec76c7f418f61f2"
     },
     {
       "source": "klin-world-2d.css",
@@ -1502,8 +1490,8 @@
     {
       "source": "login-video-scene.css",
       "path": "login-video-scene.css",
-      "bytes": 803,
-      "sha256": "38c796e96476e607029876892911aebc3523a31bf08bb31a38cea5b7166fe594"
+      "bytes": 1028,
+      "sha256": "453b698eff4876314b030bc45d2e09142f2778d1efbdc78c65cbab2841105593"
     },
     {
       "source": "login-video-scene.mjs",
@@ -1640,8 +1628,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 398,
-      "sha256": "d2ce6036cab00e1caf5e96e6058fb3d160e547de8afdd94f5c5c898f1a8d8f2b"
+      "bytes": 395,
+      "sha256": "043b64f3d58ed8686355583f00ea1794a1456ddcbbb3433ac265dd743ac49a10"
     },
     {
       "source": "scene-experience.css",
@@ -2086,6 +2074,11 @@
     },
     {
       "from": "app.mjs",
+      "to": "conversation-avatar-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "card-design.mjs",
       "kind": "module"
     },
@@ -2225,11 +2218,6 @@
       "kind": "resource"
     },
     {
-      "from": "friend-network.mjs",
-      "to": "card-labels.mjs",
-      "kind": "module"
-    },
-    {
       "from": "auth-registration.mjs",
       "to": "model.mjs",
       "kind": "module"
@@ -2352,11 +2340,6 @@
   ],
   "thirdPartyNotices": [],
   "dynamicAssets": {
-    "assets/scenes-20261026-41/house-": [
-      "assets/scenes-20261026-41/house-wood.webp",
-      "assets/scenes-20261026-41/house-water.webp",
-      "assets/scenes-20261026-41/house-earth.webp"
-    ],
     "assets/signature-strokes-20261020/": [
       "assets/signature-strokes-20261020/u2e.json",
       "assets/signature-strokes-20261020/u34.json",

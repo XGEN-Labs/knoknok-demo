@@ -1,28 +1,19 @@
-/* The relation map lives in screen space, not in the old portrait artwork.
-   A larger nearby house and seven smaller homes sit on the shared meadow. */
+/* Quiet neighbourhood: colour and distance carry identity; no photo scenery,
+   viewer node, relationship lines, or decorative room props. */
+.phone#phone {--kn-neighbourhood-space:radial-gradient(ellipse at 50% 6%,#faf7ed 0%,#f0f1e8 48%,#e0e7df 100%);}
+.phone#phone #app .page.friends-lounge,
+.phone#phone[data-world-page="relations"] > :is(.home-scene,.klin-illustrated-world) {background:var(--kn-neighbourhood-space)!important;}
+.phone#phone[data-world-page="relations"] > .klin-illustrated-world .klin-illustrated-room {background:var(--kn-neighbourhood-space);}
+.phone#phone[data-world-page="relations"] > .klin-illustrated-world .klin-illustrated-plate {visibility:hidden;}
+.phone#phone #app .page.friends-lounge :is(.page-top h2,.page-top .icon-button,.network-search,.network-search input,.network-search-status) {color:#424957!important;text-shadow:none;}
+.phone#phone #app .page.friends-lounge .page-top .icon-button:hover {color:#424957!important;}
+.phone#phone #app .page.friends-lounge .network-search input::placeholder {color:#697383;opacity:1;}
+.phone#phone #app .page.friends-lounge .network-search svg {color:#596372;stroke-width:1.9;}
 .phone#phone #app .page.friends-lounge .relationship-network.friend-house-network {
   position:absolute;
   inset:calc(var(--app-safe-top) + 60px) 16px calc(var(--app-safe-bottom) + 78px);
-  width:auto;
-  height:auto;
-  display:block;
-  transform:none;
-  overflow:visible;
-  pointer-events:none;
-  isolation:isolate;
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-connections {
-  position:absolute;inset:0;width:100%;height:100%;z-index:0;
-  display:block;overflow:visible;pointer-events:none;
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-connections path {
-  fill:none;stroke:rgba(255,251,230,.72);stroke-width:1.5px;
-  stroke-linecap:round;stroke-dasharray:none;vector-effect:non-scaling-stroke;
-  filter:drop-shadow(0 0 2px rgba(255,243,207,.7));
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-connections path.is-primary {
-  stroke:#fffbed;stroke-width:3px;
-  filter:drop-shadow(0 0 3px rgba(255,245,204,.8));
+  width:auto;height:auto;display:block;transform:none;overflow:visible;
+  pointer-events:none;isolation:isolate;
 }
 .phone#phone #app .friends-lounge .friend-house-network .network-friend {
   --house-size:clamp(76px,21.5cqw,88px);
@@ -31,96 +22,66 @@
   display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
   width:var(--house-size);min-width:0;max-width:none;height:auto;min-height:0;
   padding:0;gap:0;border:0!important;border-radius:0;background:transparent!important;
-  color:var(--kn-ui-color-text);box-shadow:none!important;
+  color:#424957;box-shadow:none!important;
   backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  opacity:1;filter:none;pointer-events:auto;z-index:1;
-  transition:none;animation:none;
+  opacity:1;filter:none;pointer-events:auto;z-index:1;transition:none;animation:none;
 }
-.phone#phone #app .friends-lounge .friend-house-network .network-friend.is-primary {
-  --house-size:clamp(136px,37cqw,148px);z-index:2;
-}
+.phone#phone #app .friends-lounge .friend-house-network .network-friend.is-primary {--house-size:clamp(136px,37cqw,148px);z-index:2;}
 .phone#phone #app .friends-lounge .friend-house-network .network-house {
-  display:block;position:relative;width:var(--house-size);height:var(--house-size);
-  flex:none;filter:drop-shadow(0 5px 5px rgba(67,70,37,.18));pointer-events:none;
+  display:block;position:relative;width:var(--house-size);height:var(--house-size);flex:none;pointer-events:none;
 }
-.phone#phone #app .friends-lounge .friend-house-network .network-house > img {
-  display:block;width:100%;height:100%;object-fit:contain;margin:0;transform:none;
+.phone#phone #app .friends-lounge .friend-house-network .network-door {
+  display:block;width:100%;height:100%;overflow:visible;
+  --door-frame:#dbe3d5;--door-fill:#f0f3e9;--door-ink:#778574;
 }
+.phone#phone #app .friends-lounge .friend-house-network .network-door.is-water {--door-frame:#dce4ec;--door-fill:#f0f3f6;--door-ink:#788796;}
+.phone#phone #app .friends-lounge .friend-house-network .network-door.is-earth {--door-frame:#e9e0d2;--door-fill:#f7f2e9;--door-ink:#948675;}
+.phone#phone #app .friends-lounge .friend-house-network .network-door path {
+  stroke:var(--door-ink);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;
+}
+.phone#phone #app .friends-lounge .friend-house-network .door-surround {fill:var(--door-frame);}
+.phone#phone #app .friends-lounge .friend-house-network .door-opening {fill:var(--door-fill);}
+.phone#phone #app .friends-lounge .friend-house-network .door-sill {fill:none;}
+.phone#phone #app .friends-lounge .friend-house-network .door-knob {fill:var(--door-ink);stroke:none;}
 .phone#phone #app .friends-lounge .friend-house-network .network-house-label {
-  display:flex;align-items:center;justify-content:center;gap:4px;
+  display:flex;align-items:center;justify-content:center;
   min-height:26px;max-width:calc(var(--house-size) + 8px);
-  box-sizing:border-box;margin-top:-3px;padding:2px 7px 2px 3px;
-  border:1px solid var(--kn-glass-edge);border-radius:999px;
-  background:var(--kn-glass-fill);box-shadow:0 2px 8px #373e3010;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-avatar {
-  position:relative;display:grid;place-items:center;flex:0 0 20px;
-  width:20px;height:20px;min-width:20px;overflow:hidden;
-  margin:0;border:0;border-radius:50%;background:#eef0ed;
-  box-shadow:none!important;backdrop-filter:none;-webkit-backdrop-filter:none;
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-avatar img {
-  display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-initial {
-  font:500 12px/1 var(--kn-ui-font-ui);color:#536071;text-shadow:none;
+  box-sizing:border-box;margin:0;padding:0;
+  border:0;border-radius:0;background:none;box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .phone#phone #app .friends-lounge .friend-house-network .network-friend strong {
-  margin:0;padding:0;max-width:calc(var(--house-size) - 28px);
+  margin:0;padding:0;max-width:var(--house-size);
   border:0;border-radius:0;background:none!important;box-shadow:none!important;
-  font:600 12px/18px var(--kn-ui-font-ui);color:var(--kn-ui-color-text)!important;
+  font:500 13px/20px var(--kn-ui-font-ui);color:#424957!important;
   text-shadow:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   backdrop-filter:none;-webkit-backdrop-filter:none;
 }
-.phone#phone #app .friends-lounge .friend-house-network .is-primary .network-house-label {min-height:30px;padding:3px 10px 3px 4px;gap:5px;}
-.phone#phone #app .friends-lounge .friend-house-network .is-primary .network-avatar {width:24px;height:24px;min-width:24px;flex-basis:24px;}
-.phone#phone #app .friends-lounge .friend-house-network .is-primary strong {font-size:14px;line-height:20px;}
-.phone#phone #app .friends-lounge .friend-house-network .network-visit-status {display:none;}
-.phone#phone #app .friends-lounge .friend-house-network .network-self {
-  position:absolute;left:50%;top:94%;transform:translate(-50%,-50%);
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  padding:4px 9px 4px 4px;margin:0;min-height:30px;box-sizing:border-box;
-  border:1px solid #ffffffbc;border-radius:999px;
-  background:rgba(255,255,255,.7);color:var(--kn-ui-color-text);
-  font:500 12px/18px var(--kn-ui-font-ui);text-shadow:none;z-index:3;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-}
+.phone#phone #app .friends-lounge .friend-house-network .is-primary strong {font-size:16px;line-height:24px;font-weight:600;}
 .phone#phone #app .friends-lounge .friend-house-network .network-empty {
   position:absolute;top:42%;left:7%;right:7%;padding:18px 12px;margin:0;
-  border:1px solid var(--kn-glass-edge);border-radius:20px;
-  background:var(--kn-glass-fill);color:var(--kn-ui-color-text);
-  font-size:14px;line-height:22px;text-shadow:none;z-index:4;
+  border:0;border-radius:20px;background:rgba(255,255,255,.62);color:#596372;
+  font-size:14px;line-height:22px;text-shadow:none;text-align:center;z-index:4;
 }
-.phone#phone #app .friends-lounge .friend-house-network :is(.network-friend,.network-empty,.network-connections path)[hidden] {display:none!important;}
+.phone#phone #app .friends-lounge .friend-house-network :is(.network-friend,.network-empty)[hidden] {display:none!important;}
 .phone#phone #app .friends-lounge .friend-house-network .network-friend:active {transform:translate(-50%,-50%)!important;}
 .phone#phone #app .friends-lounge .friend-house-network .network-friend:focus-visible {outline:none!important;}
-.phone#phone #app .friends-lounge .friend-house-network .network-friend:focus-visible .network-house-label {outline:2px solid var(--kn-ui-color-focus);outline-offset:3px;}
+.phone#phone #app .friends-lounge .friend-house-network .network-friend:focus-visible .network-house-label {outline:2px solid var(--kn-ui-color-focus);outline-offset:3px;border-radius:4px;}
 @media(hover:hover){
-  .phone#phone #app .friends-lounge .friend-house-network .network-friend:hover .network-house-label {background:rgba(255,255,255,.84);}
+ .phone#phone #app .friends-lounge .friend-house-network .network-friend:hover .door-opening {fill:#fffdf8;}
 }
-/* The keyboard leaves a short viewport. Reflow into genuine scrollable rows,
-   with every person still accessible and the search field fixed above Home. */
+/* Short keyboard viewports retain eight reachable rows and the fixed search. */
 .phone#phone[data-keyboard-open="true"] #app .page.friends-lounge .relationship-network.friend-house-network {
   inset:calc(var(--app-safe-top) + 58px) var(--kn-safe-left) calc(var(--app-safe-bottom) + 78px) var(--kn-safe-right);
   display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden;
   padding:4px 0 12px;pointer-events:auto;overscroll-behavior:contain;
 }
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network :is(.network-connections,.network-self) {display:none;}
 .phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-friend {
   --house-size:62px;position:relative;left:auto;top:auto;transform:none!important;
-  flex:none;flex-direction:row;justify-content:flex-start;gap:9px;
+  flex:none;flex-direction:row;justify-content:flex-start;gap:12px;
   width:100%;height:66px;padding:0 10px 0 2px;box-sizing:border-box;
-  border-radius:18px;background:rgba(255,255,255,.64)!important;
+  border-radius:18px;background:rgba(255,255,255,.45)!important;
 }
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-house-label {
-  margin:0;padding:0;border:0;background:none;box-shadow:none;max-width:none;
-  backdrop-filter:none;-webkit-backdrop-filter:none;
-}
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-friend strong {max-width:120px;font-size:14px;line-height:20px;}
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-visit-status {
-  display:block;margin-left:auto;padding:0;border:0;background:none;
-  color:var(--kn-ui-color-text-secondary);font:400 12px/18px var(--kn-ui-font-ui);
-  backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;text-shadow:none;
-}
+.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-house-label {margin:0;max-width:none;}
+.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-friend strong {max-width:200px;font-size:14px;line-height:20px;}
 .phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-empty {position:relative;inset:auto;width:100%;box-sizing:border-box;}

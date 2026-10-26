@@ -1,5 +1,5 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-41c';
+import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-41d';
 
 // Restore the selected original PNG and the previous illustrated room directly.
 // Native modeling and action drafts remain archived outside this renderer.
@@ -125,10 +125,15 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     });
   }
   function setConversationMode(value = false) {
-    const enabled = !!value && state.page === 'home';
-    if (state.conversation === enabled) return;
+    if (state.page !== 'home') return;
+    const enabled = !!value;
+    // A reduced-motion page reset can retain a hidden layout while resetting
+    // the mode flag. Reconcile both, so the next exit always restores the room.
+    if (state.conversation === enabled && state.layout.character === !enabled) return;
     state.conversation = enabled;
-    if (state.action?.kind !== 'transition') setLayout(enabled ? {x: .5, footY: .37, height: .17} : getIllustratedLayout('home'));
+    // The DOM avatar bridge owns the trip to the header. Keep the room pose
+    // unchanged so exiting can return to the same grounded position.
+    if (state.action?.kind !== 'transition') setLayout({...getIllustratedLayout('home'), character: !enabled});
   }
   function pause() {
     if (state.action && state.action.pausedAt == null) state.action.pausedAt = now();

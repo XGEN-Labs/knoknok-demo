@@ -18,5 +18,13 @@
   object-fit: contain; object-position: center; transform: none;
   filter: brightness(0) invert(1) !important;
 }
+/* Balance the header clearance above and below the card so its centre follows
+   the usable safe area. Auto margins collapse when a short/keyboard viewport
+   needs to scroll, keeping the first field and submit action reachable. */
+.phone#phone #app .page.auth-page {
+  padding-top: calc(var(--app-safe-top) + 60px);
+  padding-bottom: calc(var(--app-safe-bottom) + 60px);
+  scroll-padding-block: calc(var(--app-safe-top) + 60px) var(--app-safe-bottom);
+}
 .phone#phone #app .auth-page > .auth-panel { margin-block: auto; }
 .phone#phone[data-keyboard-open="true"] #app .auth-page > .auth-header { visibility: visible; }
