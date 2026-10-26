@@ -3,6 +3,7 @@ let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
 import { renderFriendNetwork } from './friend-network.mjs?v=20261026-experience-42';
 import { sharedAgentsMarkup } from './shared-agents.mjs';
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
+import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-motion-44';
 import { submitDemoRegistration } from './auth-registration.mjs?v=20261026-registration-41';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261026-experience-41c';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
@@ -57,6 +58,11 @@ if (!state.session.authenticated) ui.route='welcome';
 if(ui.route==='profile-edit')ui.route='profile';
 if(ui.route==='invite')ui.route='relations';
 if (['memory','companion','demand','preview','search','candidate','onboard','initializing'].includes(ui.route)) ui.route=state.session.authenticated?onboardingDestination(state):'welcome';
+// A completed first encounter is durable; the last open page is only temporary
+// navigation. Reopening the app starts in the room without replaying the film.
+if(state.session.authenticated&&landingComplete(state)){
+  ui.route='home';ui.history=[];ui.sceneRoute='home';ui.sceneConversation=false;
+}
 ui.soundOn=false;
 let sharedCard=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');
 if(sharedCard)ui.route='public-card';
@@ -70,6 +76,7 @@ let loginScene=null,landingVideoScene=null,closeContractUI=null;
 let renderSequence=0;
 let pendingCardFontRefresh=false;
 let conversationActive=false,conversationAvatarMotion=null;
+let welcomeLogoMotion=null;
 let matchingDemandId=null, matchingPhase=0, matchingTimers=[];
 let timer, initializeTimer, toastTimer, authResendTimer, stopTransition, pendingSceneRefresh=false, adviceRequest=0, busy=false, companionTyping=false;
 // Phone verification is a local prototype interaction, so credentials stay in memory.
@@ -569,6 +576,8 @@ function render(animate=false,motion={}){
   syncAuthCountdown();
   const status=$('#status-icons');if(status)status.src='assets/figma-20261009/status.svg';
   document.body.classList.toggle('reduced-motion',ui.motion);
+  if(!welcomeLogoMotion)welcomeLogoMotion=createWelcomeLogoMotion($('#phone'));
+  welcomeLogoMotion.sync({route:ui.route,animate,reducedMotion:prefersStillness(ui.motion)});
   if(pixelVariant)syncCompanionAnimation();
   $('#motion-toggle').setAttribute('aria-pressed',String(ui.motion));
   const stage=Math.max(0,stages.findIndex(x=>x[2].includes(ui.route)));
@@ -837,6 +846,6 @@ if(pixelVariant)initCompanionAnimation();
 if(ui.route==='initializing')startInitialization();
 
 
-matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);conversationAvatarMotion?.refresh({reducedMotion:event.matches||ui.motion});if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);conversationAvatarMotion?.refresh({reducedMotion:event.matches||ui.motion});welcomeLogoMotion?.sync({route:ui.route,reducedMotion:event.matches||ui.motion});if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
 
 window.addEventListener('hashchange',()=>{const card=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');if(card){sharedCard=card;go('public-card');}else if(sharedCard){sharedCard=null;go(state.session.authenticated?setupRoute():'welcome',{replace:true});}});

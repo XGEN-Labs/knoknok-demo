@@ -44,4 +44,14 @@
 /* Fullscreen waiting: smaller stationary outline, only the eyes blink. */
 .phone>.scene-loading[data-loading-variant="fullscreen"] .scene-loading-symbol{width:48px;height:48px}
 .phone>.scene-loading[data-loading-variant="fullscreen"] :is(.loading-character-body,.loading-character-gaze,.loading-character-foot){animation:none;transform:none}
-.phone>.scene-loading[data-loading-variant="fullscreen"] .loading-character-eyes{animation-duration:3600ms}
+.phone>.scene-loading[data-loading-variant="fullscreen"] :is(.loading-character-outline,.loading-character-foot path){stroke-width:2.1}
+.phone>.scene-loading[data-loading-variant="fullscreen"] .loading-character-eyes{animation:none;transform:scale(1.25,1.15)}
+.phone>.scene-loading[data-loading-variant="fullscreen"]:is([data-loading-state="visible"],[data-loading-state="leaving"]) .loading-character-eyes{animation:kn-loading-fullscreen-blink 1800ms ease-in-out infinite}
+/* The first blink closes at 270ms, then holds briefly before a second blink.
+   Wider open eyes and a visible closed hold make short waits readable at 48px. */
+@keyframes kn-loading-fullscreen-blink{
+  0%,5%,28%,37%,58%,100%{transform:scale(1.25,1.15)}
+  15%,21%,46%,51%{transform:scale(1.45,.12)}
+}
+.scene-loading[data-reduced-motion="true"][data-loading-variant="fullscreen"] .loading-character-eyes,
+body.reduced-motion .scene-loading[data-loading-variant="fullscreen"] .loading-character-eyes{animation:none!important;transform:scale(1.25,1.15)}

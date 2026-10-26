@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-26T07:19:26.343Z",
+  "createdAt": "2026-10-26T07:55:37.900Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 92668906,
+  "payloadBytes": 92674779,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 109025,
-      "sha256": "ede62001ffb73d30803572e5c2e4adb57373a37ca1f5e455c562cfbbc3351305"
+      "bytes": 109698,
+      "sha256": "68334d255c7652ae24c2ead083d68aa600c2b4273e8d0e44c3637948b95d211a"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1178,8 +1178,8 @@
     {
       "source": "brand-v41.css",
       "path": "brand-v41.css",
-      "bytes": 1498,
-      "sha256": "27bbb7b9356a298421f561602bcb69f0a4adbcb0dd0b9be7fb535aecbfea2e6a"
+      "bytes": 2227,
+      "sha256": "afe3d78a222296e5b9159ab188dc5ff31c29a61147e70a7b24078ef3c5e0bbf9"
     },
     {
       "source": "business-card.css",
@@ -1406,8 +1406,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 9776,
-      "sha256": "98bbb69a9bf829a3b56e7caa392496c73e6d1fe4a62256f52d57c63a98abdf33"
+      "bytes": 9769,
+      "sha256": "89796c4aecf5982b00407cefab0d65428c251d4c5ab361f78d8e9527bfdf2fce"
     },
     {
       "source": "journey-experience.css",
@@ -1508,8 +1508,8 @@
     {
       "source": "loading-state.css",
       "path": "loading-state.css",
-      "bytes": 4290,
-      "sha256": "bb6e6809684552ab9e74a51a30bce4b84ed8f65927185b10de65074f555cd9f7"
+      "bytes": 5207,
+      "sha256": "005c817949ebc7853f5fbfc86c756aae7a4fb7cc6f40bd897c439d615681c882"
     },
     {
       "source": "loading-state.mjs",
@@ -1804,6 +1804,12 @@
       "path": "visit-scene.css",
       "bytes": 5045,
       "sha256": "002d5a9b52d2950b88d7c1eaba79b136ccdc61143990242e4b2688b0d74fad2d"
+    },
+    {
+      "source": "welcome-logo-motion.mjs",
+      "path": "welcome-logo-motion.mjs",
+      "bytes": 3561,
+      "sha256": "edc9da4cc1ca61253c1e81224977232cd2eb104233b739dc3bad65bcdd5761ee"
     }
   ],
   "runtimeDependencies": [
@@ -2145,6 +2151,11 @@
     {
       "from": "app.mjs",
       "to": "conversation-avatar-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "welcome-logo-motion.mjs",
       "kind": "module"
     },
     {
