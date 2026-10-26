@@ -1,4 +1,5 @@
-// Reviewed 11-complete-soft-eyelids-review.mp4: 1646 frames at 24 fps.
+// Reviewed 21-complete-native-mouth-clean.mp4: 1646 frames at 24 fps.
+// Verified identical PTS, dialogue and UI gates to landing-46; timing retained.
 // These are manual UI gates, not the individual speech/edit segments. A user
 // answer advances the next interval; pausing never consumes response time.
 const frame = number => number / 24;

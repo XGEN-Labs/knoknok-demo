@@ -1,4 +1,4 @@
-// Deterministic, local conversation parsing. No remote AI or birth-based traits.
+// Deterministic local conversation parsing; no remote AI.
 import { dayMasterFromDate, zodiacFromDate } from './social-tags.mjs?v=20261026-social-tags-45';
 export const CONVERSATION_VERSION = 3;
 const clean = value => typeof value === 'string' ? value.normalize('NFKC').replace(/[\u0000-\u001f\u007f]/g, ' ').trim() : '';
@@ -9,13 +9,14 @@ export const NEUTRAL_CARD_TAGS = Object.freeze([]);
 // The canonical clock value is the midpoint of the selected two-hour period.
 // Keep these values local; they describe a choice, not a calculated birth trait.
 export const BIRTH_TIME_OPTIONS = Object.freeze([
-  ['子', '23:00–01:00', '00:00'], ['丑', '01:00–03:00', '02:00'],
-  ['寅', '03:00–05:00', '04:00'], ['卯', '05:00–07:00', '06:00'],
-  ['辰', '07:00–09:00', '08:00'], ['巳', '09:00–11:00', '10:00'],
-  ['午', '11:00–13:00', '12:00'], ['未', '13:00–15:00', '14:00'],
-  ['申', '15:00–17:00', '16:00'], ['酉', '17:00–19:00', '18:00'],
-  ['戌', '19:00–21:00', '20:00'], ['亥', '21:00–23:00', '22:00'],
-].map(([branch, range, value]) => Object.freeze({ label: `${branch}时`, range, text: `${branch}时`, value })));
+  ['早子', '00:00–00:59', '00:00'], ['丑', '01:00–02:59', '02:00'],
+  ['寅', '03:00–04:59', '04:00'], ['卯', '05:00–06:59', '06:00'],
+  ['辰', '07:00–08:59', '08:00'], ['巳', '09:00–10:59', '10:00'],
+  ['午', '11:00–12:59', '12:00'], ['未', '13:00–14:59', '14:00'],
+  ['申', '15:00–16:59', '16:00'], ['酉', '17:00–18:59', '18:00'],
+  ['戌', '19:00–20:59', '20:00'], ['亥', '21:00–22:59', '22:00'],
+  ['晚子', '23:00–23:59', '23:00'],
+].map(([branch, range, value]) => Object.freeze({ label: `${branch}時`, range, text: `${branch}時`, value })));
 
 export function parseBirthdayReply(text, now = Date.now()) {
   const raw = clean(text);
@@ -44,8 +45,8 @@ function clockNumber(value) {
 export function parseBirthTimeReply(text) {
   const raw = clean(text);
   if (/^(?:不清楚|不知道|不記得|不记得|忘了|未知|跳過|跳过|略過|略过|不知道耶|不太清楚|[记記]不清了(?:[，,、\s]*跳[过過])?)[。.!！\s]*$/.test(raw)) return { value: null };
-  const period = raw.match(/^([子丑寅卯辰巳午未申酉戌亥])[时時](?:\s*\(?\s*\d{1,2}:\d{2}\s*[-–—~至]\s*\d{1,2}:\d{2}\s*\)?)?$/);
-  if (period) return { value: BIRTH_TIME_OPTIONS.find(option => option.label.startsWith(period[1])).value };
+  const period = raw.match(/^(早子|晚子|[子丑寅卯辰巳午未申酉戌亥])[时時](?:\s*\(?\s*\d{1,2}:\d{2}\s*[-–—~至]\s*\d{1,2}:\d{2}\s*\)?)?$/);
+  if (period) return { value: period[1] === '子' ? '00:00' : BIRTH_TIME_OPTIONS.find(option => option.label.startsWith(period[1])).value };
   const match = raw.match(/(?:^|[^\d])(?:凌晨|早上|上午|中午|下午|晚上|夜晚)?\s*(\d{1,2}|[零〇一二兩两三四五六七八九十]{1,3})\s*(?::|點|点|時|时)\s*(半|一刻|三刻|\d{1,2}|[零〇一二兩两三四五六七八九十]{1,3})?(?![\d零〇一二兩两三四五六七八九十])\s*(?:分)?\s*(AM|PM)?/i);
   if (!match) return { error: '选一个大概的时辰就好，记不清也可以跳过。' };
   let hour = clockNumber(match[1]);
@@ -78,7 +79,7 @@ const STEPS = Object.freeze([
   { key: 'where', prompt: 'NokNok 敲敲……你终于醒了', replies: ['我在哪兒'], interaction: true, inputMode: 'none' },
   { key: 'birthDate', prompt: '你可以告诉我你的生日吗', placeholder: '像 1998 年 6 月 18 日', inputMode: 'text' },
   { key: 'birthTime', prompt: '时辰，不记得也没关系', placeholder: '选择一个大概的时辰', options: BIRTH_TIME_OPTIONS, skipLabel: '记不清了，跳过', canSkip: true },
-  { key: 'gender', prompt: '你是…？', placeholder: '性别也可以先不说', replies: ['女生', '男生', '非二元', '暂不说'], canSkip: true },
+  { key: 'gender', prompt: '性別（用來排大運）', placeholder: '', replies: ['男生', '女生'], canSkip: true },
   { key: 'birthPlace', prompt: '或许还记得你的出生地吗？', placeholder: '城市名称就可以', canSkip: true },
   { key: 'response', prompt: '有些地方开始连起来了。', placeholder: '想到什么，就说给我听', replies: ['……你怎么知道', '想慢慢認識你'], canSkip: false },
   { key: 'contractLight', prompt: '这个是我们的契约', replies: ['打開我們的契約'], interaction: true, inputMode: 'none' },
@@ -158,10 +159,17 @@ export function normalizeOnboardingConversation(saved, now = Date.now(), { legac
     if (parsed.error) break;
     answers[step.key] = parsed.value;
   }
+  const drafts = {};
+  for (const item of STEPS) {
+    if (!plain(saved.drafts) || !own(saved.drafts, item.key)) continue;
+    const raw = saved.drafts[item.key];
+    if (raw === null && item.canSkip) drafts[item.key] = null;
+    else if (typeof raw === 'string') drafts[item.key] = clean(raw).slice(0, 240);
+  }
   const step = keys.find(key => !own(answers, key)) || 'complete';
   const previous = Array.isArray(saved.messages) ? saved.messages.filter(message => plain(message) && ['user', 'assistant'].includes(message.role) && typeof message.text === 'string').map(message => ({ ...message, text: clean(message.text).slice(0, 240) })) : [];
   const retainedImplicit = implicitInteractions.filter(key => own(answers, key) && !previous.some(message => message.role === 'user' && message.key === key));
-  return { version: CONVERSATION_VERSION, step, answers, messages: messagesFor(answers, previous, now, retainedImplicit), complete: step === 'complete' && saved.complete === true,
+  return { version: CONVERSATION_VERSION, step, answers, ...(Object.keys(drafts).length ? { drafts } : {}), messages: messagesFor(answers, previous, now, retainedImplicit), complete: step === 'complete' && saved.complete === true,
     ...(retainedImplicit.length ? { migration: { fromVersion: 2, implicitInteractions: retainedImplicit } } : {}) };
 }
 
@@ -169,7 +177,8 @@ export function getOnboardingTurn(state) {
   const conversation = state.onboarding?.conversation || createOnboardingConversation(state.now);
   const index = keys.indexOf(conversation.step), step = STEPS[index];
   if (!step) return { key: 'complete', prompt: conversation.messages.at(-1)?.text || '很高興認識你，我們一起回家吧。', placeholder: '', replies: [], canSkip: false, canBack: conversation.complete !== true, inputMode: 'text', progress: { index: STEPS.length, total: STEPS.length }, value: '', complete: conversation.complete === true, canFinish: true };
-  return { ...step, prompt: promptFor(step, conversation.answers), replies: (step.replies || []).map(text => ({ label: text, text })), canSkip: step.canSkip === true, canBack: index > 0, inputMode: step.inputMode || 'text', progress: { index: index + 1, total: STEPS.length }, value: answerText(step.key, conversation.answers[step.key] ?? ''), complete: false, canFinish: false };
+  const value = own(conversation.answers, step.key) ? conversation.answers[step.key] : conversation.drafts?.[step.key];
+  return { ...step, prompt: promptFor(step, conversation.answers), replies: (step.replies || []).map(text => ({ label: text, text })), canSkip: step.canSkip === true, canBack: index > 0, inputMode: step.inputMode || 'text', progress: { index: index + 1, total: STEPS.length }, value: value ?? '', unknownValue: value === null, complete: false, canFinish: false };
 }
 
 export function getOnboardingMessages(state) { return (state.onboarding?.conversation?.messages || []).map(message => ({ ...message })); }
@@ -184,7 +193,16 @@ export function advanceOnboardingConversation(previous, action, now = Date.now()
   if (action.type === 'ONBOARDING_BACK') {
     const backIndex = index < 0 ? keys.length - 1 : index - 1;
     if (backIndex < 0) return { conversation };
-    for (const key of keys.slice(backIndex)) delete conversation.answers[key];
+    conversation.drafts = { ...(conversation.drafts || {}) };
+    for (const key of keys.slice(backIndex)) {
+      if (own(conversation.answers, key)) conversation.drafts[key] = conversation.answers[key];
+      delete conversation.answers[key];
+    }
+    if (index >= 0 && action.draft === null && STEPS[index].canSkip) conversation.drafts[keys[index]] = null;
+    else if (index >= 0 && typeof action.draft === 'string') conversation.drafts[keys[index]] = clean(action.draft).slice(0, STEPS[index].maxLength || 240);
+    if (plain(action.drafts)) for (const key of ['name', 'companionName']) {
+      if (typeof action.drafts[key] === 'string') conversation.drafts[key] = clean(action.drafts[key]).slice(0, 240);
+    }
     const retainedImplicit = (conversation.migration?.implicitInteractions || []).filter(key => own(conversation.answers, key));
     if (retainedImplicit.length) conversation.migration = { fromVersion: 2, implicitInteractions: retainedImplicit }; else delete conversation.migration;
     conversation.step = keys[backIndex]; conversation.messages = messagesFor(conversation.answers, conversation.messages, now, retainedImplicit);
@@ -196,6 +214,7 @@ export function advanceOnboardingConversation(previous, action, now = Date.now()
   const parsed = action.type === 'ONBOARDING_SKIP' ? { value: skipped(step.key) } : parseAnswer(step.key, action.text, now);
   if (parsed.error) return { conversation, error: parsed.error };
   conversation.answers[step.key] = parsed.value;
+  if (conversation.drafts) delete conversation.drafts[step.key];
   conversation.messages.push({ id: `onboarding-${step.key}-answer`, role: 'user', key: step.key, text: action.type === 'ONBOARDING_SKIP' ? answerText(step.key, parsed.value) : clean(action.text), createdAt: now });
   conversation.step = keys[index + 1] || 'complete';
   conversation.messages = messagesFor(conversation.answers, conversation.messages, now, conversation.migration?.implicitInteractions);

@@ -9,3 +9,91 @@
 .tag-chat-tools{display:flex;gap:6px;justify-content:flex-end;margin:15px 0 8px}.tag-chat-tools button{font-size:12px;padding:7px 10px;background:rgba(255,255,255,.84)}.conversation-log .tag-chat-card p{font-size:14px}.conversation-log .tag-chat-card{max-width:100%}
 .tag-month-label{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#7d8776;gap:15px}.tag-month-label select{width:auto;min-height:36px;border:0;background:transparent;color:#566153;font-size:14px}.tag-diary-calendar{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0}.tag-diary-calendar button{border-radius:50%;width:38px;padding:0;background:#e7edda}.tag-diary-list{display:grid;gap:12px;margin:15px 0}.tag-diary-list>button{border:1px solid #e0e2d8;background:#fbfaf3;border-radius:22px;padding:18px;text-align:left;cursor:pointer;color:#434c40}.tag-diary-list time{font-size:12px;color:#8a937e}.tag-diary-list p{font-size:15px;line-height:1.65;margin:9px 0}.tag-diary-list span{font-size:12px;color:#7f8a70}.tag-diary-tabs{display:flex;gap:8px;margin-bottom:18px}.tag-diary-tabs [aria-pressed=true]{background:#e5ecd8;border-color:#aab99b}.tag-diary-body{white-space:pre-wrap;line-height:1.9;font-size:16px;margin:20px 0}.social-tags-panel blockquote{border-left:3px solid #bcc9a5;padding:7px 14px;margin:20px 0;background:#f2f3e9;font-size:13px;color:#79836f}.tag-associated{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.tag-original-chat{display:grid;gap:10px;margin:20px 0}.tag-original-chat>div{padding:14px;border-radius:18px;background:#f1f1e9}.tag-original-chat .own{background:#e8eedf}.tag-original-chat small{font-size:11px;color:#89937d}.tag-original-chat p{font-size:14px;line-height:1.65;margin:6px 0 0}.tag-source-hero{display:flex;justify-content:center;padding:15px}.tag-source-history{font-size:13px;color:#838b7b}.tag-source-history li{margin:8px 0}.card-tools{gap:10px;flex-wrap:wrap}
 @media(max-width:360px){.tag-row-actions button{padding:5px 6px}.tag-management-row .social-tag-sticker{font-size:12px}.tag-chat-card{padding:14px}}
+
+/* Chat proposals and wording edits sit in the room's approved glass material.
+   The tag artwork remains coloured, and paper business cards stay untouched. */
+.phone#phone #app :is(.tag-chat-card,.tag-chat-tools),
+.phone#phone #sheet .tag-history-picker{
+  --kn-ui-color-disabled-text:#85818a;
+  --kn-ui-color-disabled-surface:var(--kn-glass-panel-fill);
+  --kn-ui-color-disabled-edge:rgba(255,255,255,.4);
+}
+.phone#phone #app .tag-chat-card{
+  background:var(--kn-glass-panel-fill);
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);
+  box-shadow:var(--kn-glass-panel-shadow);
+  backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+  color:var(--kn-glass-ink);
+}
+.phone#phone #app .tag-chat-card :is(.tag-chat-eyebrow,label,summary,.small-note){color:var(--kn-glass-ink)}
+.phone#phone #app .tag-chat-card :is(input:not([type="checkbox"]):not([type="radio"]),select:not(.klin-native-select),.klin-select-trigger){
+  min-height:42px;padding:10px 14px;border-radius:999px;
+  background:var(--kn-glass-input-fill);
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-input-edge);
+  box-shadow:var(--kn-glass-input-shadow);
+  backdrop-filter:blur(var(--kn-glass-input-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-input-blur)) saturate(var(--kn-glass-saturation));
+  color:var(--kn-glass-ink);font-size:14px;line-height:22px;
+}
+.phone#phone #app .tag-chat-card :is(input,select,.klin-select-trigger):focus-visible{outline:2px solid #66636e;outline-offset:2px}
+.phone#phone #app .tag-chat-card .tag-ui-button,
+.phone#phone #app .tag-chat-tools .tag-ui-button{
+  background:var(--kn-glass-fill);
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);
+  box-shadow:var(--kn-glass-control-shadow);
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  color:var(--kn-glass-ink);
+}
+.phone#phone #app .tag-chat-card .tag-confirm{
+  background:#222;color:#fff;border-color:#222;box-shadow:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;
+}
+.phone#phone #app :is(.tag-chat-card,.tag-chat-tools) :is(.tag-ui-button,.tag-sticker-open):focus-visible{outline-color:#66636e}
+/* Keep the wording, tag and both actions together on a compact phone. Only
+   this in-chat edit form condenses; the long conversation remains scrollable. */
+@container(max-height:740px){
+  .phone#phone #app .tag-chat-card:has(>form[data-form="social-tag-edit"]){padding:12px;margin:8px 0}
+  .phone#phone #app .tag-chat-card:has(>form[data-form="social-tag-edit"])>.tag-chat-eyebrow{line-height:18px;margin-bottom:6px!important}
+  .phone#phone #app .tag-chat-card:has(>form[data-form="social-tag-edit"])>.social-tag-sticker{min-height:44px;padding-block:10px}
+  .phone#phone #app .tag-chat-card form[data-form="social-tag-edit"]{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:8px}
+  .phone#phone #app .tag-chat-card form[data-form="social-tag-edit"]>:not(button){grid-column:1/-1}
+  .phone#phone #app .tag-chat-card form[data-form="social-tag-edit"]>label{line-height:18px}
+  .phone#phone #app .tag-chat-card form[data-form="social-tag-edit"]>.small-note{margin:4px 0;font-size:11px;line-height:1.45}
+  .phone#phone #app .conversation-log:has(form[data-form="social-tag-edit"])>.tag-chat-tools{margin:8px 0 0}
+  .phone#phone #app .conversation-log:has(form[data-form="social-tag-edit"])>.tag-chat-tools .tag-ui-button{min-height:36px;padding:6px 10px;font-size:11px;line-height:20px}
+}
+/* A memory entry groups its story with the tags it can restore. Its story is
+   a full-width reading surface, not the browser's default square button. */
+.phone#phone #sheet .tag-history-entry{
+  display:grid;gap:10px;min-width:0;padding:12px;
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);border-radius:24px;
+  background:var(--kn-glass-panel-fill);box-shadow:var(--kn-glass-control-shadow);
+  backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone#phone #sheet .tag-history-story{
+  appearance:none;-webkit-appearance:none;display:block;box-sizing:border-box;
+  width:100%;min-width:0;min-height:44px;margin:0;padding:14px;text-align:left;
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);border-radius:18px;
+  background:var(--kn-glass-fill);color:var(--kn-glass-ink);font:inherit;line-height:1.6;
+  box-shadow:var(--kn-glass-input-shadow);cursor:pointer;overflow-wrap:anywhere;
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone#phone #sheet .tag-history-story time{display:block;color:#73717c;font-size:12px;line-height:18px}
+.phone#phone #sheet .tag-history-story p{margin:8px 0;font-size:14px;line-height:1.7;color:var(--kn-glass-ink)}
+.phone#phone #sheet .tag-history-story>span{display:block;color:#65616d;font-size:12px;line-height:18px}
+.phone#phone #sheet .tag-history-story:focus-visible{outline:2px solid #66636e;outline-offset:3px}
+.phone#phone #sheet .tag-history-options{display:grid;gap:8px;min-width:0}
+.phone#phone #sheet .tag-history-options>.tag-management-row{gap:8px;min-width:0;flex-wrap:wrap;padding-top:8px;border-top:1px solid #ffffff65}
+.phone#phone #sheet .tag-history-options .tag-sticker-open{flex:1 1 140px;max-width:100%;padding:3px 0}
+.phone#phone #sheet .tag-history-options .tag-ui-button{
+  flex:0 0 auto;background:var(--kn-glass-fill);color:var(--kn-glass-ink);
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);border-radius:999px;
+  box-shadow:var(--kn-glass-control-shadow);
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+@container(max-height:740px){.phone#phone #sheet .tag-history-entry{padding:10px}.phone#phone #sheet .tag-history-story{padding:12px}}

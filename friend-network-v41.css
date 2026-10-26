@@ -67,3 +67,9 @@ body.reduced-motion .spirit-world .world-loading .loading-character-eyes {animat
 .phone#phone #app .spirit-world[data-world-filtered="true"] .network-house-label,
 .phone#phone[data-keyboard-open="true"] #app .spirit-world .network-house-label {margin:0;background:none;border:0;box-shadow:none;}
 @media(hover:hover){.spirit-world .network-friend:hover .world-contact-avatar {box-shadow:0 0 0 3px #ffffff6b,0 4px 12px #485c3d26;}}
+
+/* The scene title is centred on the screen; navigation keeps its own lane. */
+.phone#phone #app .page.friends-lounge .page-top{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:12px;align-items:center;padding:0;margin:0;width:auto;min-width:0;max-width:none;box-sizing:border-box;justify-content:normal}
+.phone#phone #app .page.friends-lounge .page-top>div:not(.top-right){grid-column:2;grid-row:1;text-align:center;min-width:0;width:auto;margin:0;padding:0;justify-self:stretch}
+.phone#phone #app .page.friends-lounge .page-top>.icon-button{grid-column:1;grid-row:1;justify-self:start}
+.phone#phone #app .page.friends-lounge .page-top h2{margin:0;text-align:center}

@@ -1,10 +1,13 @@
-import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261026-landing-46';
+import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261026-landing-47';
+import { ROOM_VOICE_CLIPS } from './room-voice-clips.mjs?v=20261026-room-voice-47';
+import { ROOM_VOICE_PROFILE, isRoomNarration, isMandarin, findLocalLandingVoice } from './room-voice-profile.mjs?v=20261026-room-voice-47';
 
 const normalize = value => String(value || '').normalize('NFKC').replace(/\.{2,}/g, '…').replace(/\s+/g, ' ').trim();
 const clips = new Map(LANDING_VOICE_CLIPS.map(clip => [normalize(clip.text), clip.src]));
+const roomClips = new Map(ROOM_VOICE_CLIPS.map(clip => [normalize(clip.text), clip.src]));
 function clipFor(job) {
-  if (!/^zh-(?:CN|Hans)/i.test(job.lang)) return null;
-  const text = normalize(job.text), exact = clips.get(text);
+  if (!isMandarin(job.lang)) return null;
+  const text = normalize(job.text), exact = (isRoomNarration(job.scope) ? roomClips.get(text) : null) || clips.get(text);
   if (exact) return exact;
   if (!job.scope.startsWith('landing:')) return null;
   // Names remain in the visible dialogue. These three recorded sentence bodies
@@ -37,6 +40,7 @@ export function createLandingAudio({ environment = {} } = {}) {
   let musicSource = null, musicAnchor = null, musicPending = false, musicEpoch = 0;
   let voiceSource = null, utterance = null, voiceEpoch = 0, voiceTimer = null;
   let voiceBusy = false, currentKey = null, scope = null, lastError = '';
+  let lastNarration = null;
   let queue = [];
   const seen = new Set(), buffers = new Map(), effects = new Map();
   const hidden = () => doc?.hidden === true || doc?.visibilityState === 'hidden';
@@ -152,9 +156,21 @@ export function createLandingAudio({ environment = {} } = {}) {
     const speech = new Utterance(job.text); utterance = speech;
     speech.lang = job.lang; speech.rate = .94; speech.pitch = 1.03; speech.volume = .9;
     const voices = synthesis.getVoices?.() || [];
-    const chosen = voices.find(v => v.lang.replace('_', '-').toLowerCase() === job.lang.toLowerCase())
+    const room = isRoomNarration(job.scope);
+    const matched = room ? findLocalLandingVoice(voices, job.lang) : null;
+    const localFallback = room && voices.find(v => v.localService === true && v.lang.replace('_', '-').toLowerCase() === job.lang.toLowerCase());
+    const chosen = matched || localFallback || voices.find(v => v.lang.replace('_', '-').toLowerCase() === job.lang.toLowerCase())
       || voices.find(v => v.lang.split(/[-_]/)[0] === job.lang.split('-')[0]);
     if (chosen) speech.voice = chosen;
+    if (room) {
+      speech.rate = ROOM_VOICE_PROFILE.browserRate;
+      speech.pitch = ROOM_VOICE_PROFILE.browserPitch;
+      speech.volume = ROOM_VOICE_PROFILE.browserVolume;
+    }
+    lastNarration = { source: matched ? 'device-matched' : 'device-fallback',
+      requestedVoiceId: ROOM_VOICE_PROFILE.model,
+      voiceId: matched ? ROOM_VOICE_PROFILE.model : chosen?.voiceURI || chosen?.name || null,
+      matchesLandingVoice: Boolean(matched), exactProviderProsody: false };
     speech.onend = () => finishVoice(token);
     speech.onerror = () => { if (token === voiceEpoch) lastError = 'speech-synthesis-error'; finishVoice(token); };
     voiceTimer = later(() => {
@@ -173,6 +189,8 @@ export function createLandingAudio({ environment = {} } = {}) {
       if (token !== voiceEpoch || !audible()) return;
       const source = context.createBufferSource(); source.buffer = buffer;
       source.connect(voiceGain); voiceSource = source;
+      lastNarration = { source: 'local-clip', src, requestedVoiceId: ROOM_VOICE_PROFILE.model,
+        voiceId: ROOM_VOICE_PROFILE.model, matchesLandingVoice: true, exactProviderProsody: true };
       source.onended = () => finishVoice(token);
       voiceTimer = later(() => {
         if (token !== voiceEpoch) return;
@@ -258,7 +276,8 @@ export function createLandingAudio({ environment = {} } = {}) {
     get enabled() { return enabled; },
     getDiagnostics: () => ({ enabled, disposed, hidden: hidden(), contextState: context?.state || 'uninitialized',
       musicPlaying: Boolean(musicSource), musicPending, musicTime: musicAnchor ? musicAnchor.time + (context.currentTime - musicAnchor.started) * musicAnchor.rate : null,
-      voicePlaying: voiceBusy, currentKey, queued: queue.length, seenKeys: seen.size, scope, film: { ...film }, lastError }),
+      voicePlaying: voiceBusy, currentKey, queued: queue.length, seenKeys: seen.size, scope, film: { ...film }, lastError,
+      lastNarration: lastNarration ? { ...lastNarration } : null }),
     dispose() {
       if (disposed) return;
       enabled = false; enableEpoch++; stopAll(); disposed = true;

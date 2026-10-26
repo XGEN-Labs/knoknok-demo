@@ -1,27 +1,21 @@
 # Knoknok · Klin interactive demo
 
-Revision `20261026-landing-46`.
+Revision `20261026-answers-47d`.
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-landing-46)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-answers-47d)
 
-Visit a tiny plush world: drag, scroll, or use arrow keys to turn the globe. Eight rooms show contact avatars; the closest friend is largest. Tap an avatar to knock. Search also exposes a simple contact list. No self node is shown.
+The 68.583-second first-encounter film pauses at each answer. Birth time uses a scroll wheel, gender has two choices, and each input offers a previous-answer control that preserves drafts. The two names and signature remain on the same fictional paper contract. Returning signed-in users enter their room directly after completing the encounter.
 
-Both participants bring their saved Klin companions to the shared room. Welcome video colors retain natural saturation and use broad feathered color selections for a soft meadow/sky transition; sign-in and registration blur only the background, leaving controls and the white logo sharp. Hint text uses the shared cool-gray standard.
+The handwritten welcome logo moves into the account form while turning black, with its visible ink aligned to the field labels. Login and registration share the account-first entry and matching pill-shaped input fields.
 
-Business cards use one cream portrait design, with editing, all seven tags, sharing and PNG export. Existing card links render in the same portrait design.
+Chat shows the companion avatar and name in the upper-left corner. Message bubbles, tag proposals and editing controls use the shared glass material. Loading includes a small body hop and double blink; reduced motion remains static. The room includes 37 fixed demo lines recorded with the same Yunxia voice and prosody as the landing film. Arbitrary custom text uses the device voice fallback; there is no dynamic remote speech service.
 
-Registration is a frontend prototype: it creates no remote account and stores no account credentials. Other sample state stays in this browser. The in-world contract is fictional.
+Cards show an avatar, name, one-line introduction and up to seven distinct social-tag stickers. Editing includes tag order, hiding and restoring confirmed historical tags from private journals. Tags lead to their source journal and original conversation. Sharing renders only the public card fields and supports link sharing and PNG export.
+
+Visit a tiny plush world: drag, scroll, or use arrow keys to turn the globe. Eight rooms show example portrait photos; the closest friend is largest. Tap an avatar to knock. The page title stays centered, and the world shows character loading while its assets become ready. Both participants bring their companions to the shared room.
+
+Registration is a frontend prototype: it creates no remote account and stores no account credentials. Other sample state stays in this browser. The in-world contract is fictional. Existing demo account: `knoknok.demo` / `Knoknok2026`. The same-origin auth adapter remains available for backend integration.
 
 The root static Pages demo is separate from the formal Web compatibility build. Existing `compat/web-naming`, `scripts`, `test`, package configuration and `docs/LANDING-HANDOFF.md` are preserved.
 
-Local hosting must support HTTP byte ranges for film cue seeking. Private sources, original design explorations and modeling files are excluded from this public runtime.
-
-The welcome wordmark moves continuously into the sign-in header and back. Fullscreen loading keeps the small character stationary with a clearer, earlier double blink. Reduced motion remains static.
-
-After completing the first encounter, signed-in users reopen directly in their room. Incomplete encounters resume onboarding; logging out still requires sign-in. Shared-card links retain priority, and explicit reset starts a new first encounter. This prototype stores progress in the current browser.
-
-
-The v45 update adds confirmed social tags with private journal sources, compact portrait cards with distinct semantic stickers, locally bundled example portrait photos and resource-driven globe loading. Login and registration share a username-first entry. The static Pages site uses an isolated local demo auth adapter, not a production account service; the same-origin API adapter is ready for backend integration. Existing demo account: knoknok.demo / Knoknok2026.
-
-
-The v46 update follows the 68.583-second landing film with input gates, timed subtitles and Noking, a clickable contract light, two names on one paper contract, and a signed journey into the room. The welcome wordmark continuously moves into the account form while turning black. Returning users keep their saved encounter and names.
+Local hosting must support HTTP byte ranges for film cue seeking. Private sources, original design explorations, tests, journal data and modeling files are excluded from this public runtime.

@@ -41,12 +41,21 @@
 .scene-loading[data-reduced-motion="true"] .scene-loading-symbol *,body.reduced-motion .scene-loading-symbol *{animation:none}
 @media(prefers-reduced-motion:reduce){.phone>.scene-loading{transition:none}.scene-loading-symbol *{animation:none!important}}
 
-/* Fullscreen waiting: smaller stationary outline, only the eyes blink. */
+/* At 48px the body hops and settles, while the eyes keep their double blink. */
 .phone>.scene-loading[data-loading-variant="fullscreen"] .scene-loading-symbol{width:48px;height:48px}
 .phone>.scene-loading[data-loading-variant="fullscreen"] :is(.loading-character-body,.loading-character-gaze,.loading-character-foot){animation:none;transform:none}
 .phone>.scene-loading[data-loading-variant="fullscreen"] :is(.loading-character-outline,.loading-character-foot path){stroke-width:2.1}
 .phone>.scene-loading[data-loading-variant="fullscreen"] .loading-character-eyes{animation:none;transform:scale(1.25,1.15)}
 .phone>.scene-loading[data-loading-variant="fullscreen"]:is([data-loading-state="visible"],[data-loading-state="leaving"]) .loading-character-eyes{animation:kn-loading-fullscreen-blink 1800ms ease-in-out infinite}
+.phone>.scene-loading[data-loading-variant="fullscreen"]:is([data-loading-state="visible"],[data-loading-state="leaving"]) .loading-character-body{animation:kn-loading-fullscreen-hop 1500ms cubic-bezier(.4,0,.2,1) infinite}
+@keyframes kn-loading-fullscreen-hop{
+  0%,100%{transform:translateY(0) rotate(0) scale(1)}
+  14%{transform:translateY(3px) rotate(-2deg) scale(1.10,.9)}
+  39%{transform:translateY(-18px) rotate(3deg) scale(.97,1.04)}
+  58%{transform:translateY(0) rotate(0) scale(1.09,.91)}
+  73%{transform:translateY(-6px) rotate(-2deg) scale(.99,1.02)}
+  88%{transform:translateY(0) rotate(0) scale(1)}
+}
 /* The first blink closes at 270ms, then holds briefly before a second blink.
    Wider open eyes and a visible closed hold make short waits readable at 48px. */
 @keyframes kn-loading-fullscreen-blink{
@@ -55,3 +64,5 @@
 }
 .scene-loading[data-reduced-motion="true"][data-loading-variant="fullscreen"] .loading-character-eyes,
 body.reduced-motion .scene-loading[data-loading-variant="fullscreen"] .loading-character-eyes{animation:none!important;transform:scale(1.25,1.15)}
+.scene-loading[data-reduced-motion="true"][data-loading-variant="fullscreen"] .loading-character-body,
+body.reduced-motion .scene-loading[data-loading-variant="fullscreen"] .loading-character-body{animation:none!important;transform:none}

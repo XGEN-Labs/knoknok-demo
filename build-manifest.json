@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-26T10:56:21.300Z",
+  "createdAt": "2026-10-26T13:11:06.184Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 97636738,
+  "payloadBytes": 99087217,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 113658,
-      "sha256": "7d441470e8d2a3e399cbdc1ac5c125194a10fc1da09555023ed78227050cce5b"
+      "bytes": 117074,
+      "sha256": "4264dda47b8ac79b62864de28a5979d9a6ed2b4af5ee4997beeed4fbfacd868c"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -258,14 +258,14 @@
       "sha256": "e2ef10304170cd452c0a686abffd9c479ea16e17c78a69489ddad53a6d9ba9e7"
     },
     {
-      "source": "assets/landing-20261026-46/11-complete-soft-eyelids-review.mp4",
-      "path": "assets/landing-20261026-46/11-complete-soft-eyelids-review.mp4",
-      "bytes": 18129728,
-      "sha256": "324b01d8330aafa1d7660541ef9c291637a8009a326db5a1d9b4dfdc9c64694e"
+      "source": "assets/landing-20261026-47/21-complete-native-mouth-clean.mp4",
+      "path": "assets/landing-20261026-47/21-complete-native-mouth-clean.mp4",
+      "bytes": 17660190,
+      "sha256": "183ae2d9643faba3a3f5b0985a220f73a575b270714feaf723cc36602dba5476"
     },
     {
-      "source": "assets/landing-20261026-46/film-original-audio.m4a",
-      "path": "assets/landing-20261026-46/film-original-audio.m4a",
+      "source": "assets/landing-20261026-47/film-original-audio.m4a",
+      "path": "assets/landing-20261026-47/film-original-audio.m4a",
       "bytes": 1672663,
       "sha256": "1b4e6e7a3b1b9f8274351a385bd4b3340be60fbe4601e3c3a2c0f8500e56e42c"
     },
@@ -316,6 +316,228 @@
       "path": "assets/portal-scenes-20261021/onboarding-empty.png",
       "bytes": 1527227,
       "sha256": "89f9e92a23cc7f46b12992b00ab86c0d4a966a9edf7d03dffcf583f99f37b4af"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/boop-here.m4a",
+      "path": "assets/room-voice-20261026-47/boop-here.m4a",
+      "bytes": 24774,
+      "sha256": "90dd835186fd9c7010f540b9d6acf5b0d84e39aac332746efea58b64d3a7da89"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/boop-visit.m4a",
+      "path": "assets/room-voice-20261026-47/boop-visit.m4a",
+      "bytes": 22324,
+      "sha256": "d2d5a4cfaefe711b35618d8106c3bf1614c164b8f465ccb33b53ee5863eed488"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/boop-waiting.m4a",
+      "path": "assets/room-voice-20261026-47/boop-waiting.m4a",
+      "bytes": 26661,
+      "sha256": "5785c53c0b48ced3fb3547b3113f0883c1e14224cb828b63983f5a7b1fd0df02"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/first-noking-klin.m4a",
+      "path": "assets/room-voice-20261026-47/first-noking-klin.m4a",
+      "bytes": 57524,
+      "sha256": "26b2fe71894380ab1d68eab2a9937c8f0600ea5da94c72b3ece9b13028f9075f"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/memory-demo.m4a",
+      "path": "assets/room-voice-20261026-47/memory-demo.m4a",
+      "bytes": 47598,
+      "sha256": "318831f261b6d5f3ab34f9146e5e6ef3131843a21b6e9b3e6aff55a503043785"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/memory-generic.m4a",
+      "path": "assets/room-voice-20261026-47/memory-generic.m4a",
+      "bytes": 52724,
+      "sha256": "57c52a18efc5bd6915656d2cca2bff6f30e408a928970332d13eb08b0bce73a2"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/memory-geng.m4a",
+      "path": "assets/room-voice-20261026-47/memory-geng.m4a",
+      "bytes": 77608,
+      "sha256": "6da5b29b9a684b19ac2a8d075a1ec27b5d5aec47b75c731e7b94ba322427f883"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/memory-open.m4a",
+      "path": "assets/room-voice-20261026-47/memory-open.m4a",
+      "bytes": 76037,
+      "sha256": "10080f91b8d55faea81f7f6bdbd8f23eee9161bc0a48b61f054d8f277e6e557b"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/memory-xin.m4a",
+      "path": "assets/room-voice-20261026-47/memory-xin.m4a",
+      "bytes": 80741,
+      "sha256": "60f9fdc69eb7b7b6c7a6fc6c71b613ce29d8fe2bcac861e586ec9496a9ebe721"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/room-empty.m4a",
+      "path": "assets/room-voice-20261026-47/room-empty.m4a",
+      "bytes": 17485,
+      "sha256": "19d1614dd1972105cac595fbab0cc1ae3eaaea70501724571dec5153cc69bb42"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/room-welcome.m4a",
+      "path": "assets/room-voice-20261026-47/room-welcome.m4a",
+      "bytes": 14774,
+      "sha256": "8006b07543e377a3a607298f7383069b4f379964b6524a3cf1283be383ac1402"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-cancel.m4a",
+      "path": "assets/room-voice-20261026-47/social-cancel.m4a",
+      "bytes": 37671,
+      "sha256": "1ba68978e39c5ffa66aa1a6a951be6b9098ad1feb8d690a3a2e504e4f0821716"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-complete.m4a",
+      "path": "assets/room-voice-20261026-47/social-complete.m4a",
+      "bytes": 50146,
+      "sha256": "ae9887e4b7c9dc86c5591288b4d297c3cdd2ce52186fefa68b762df4e3bcfb48"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-1-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-1-1.m4a",
+      "bytes": 55122,
+      "sha256": "7ea2817d4527180346d337592e2cbfbf7a06556d879f1faf2ae03b96569116bc"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-1-2.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-1-2.m4a",
+      "bytes": 53715,
+      "sha256": "d4b95b49dc5c0429a3e141299f8eaf31ff38d1b1b329f2229b66598462d6a8ed"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-1-3.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-1-3.m4a",
+      "bytes": 57227,
+      "sha256": "04e816750f20a2a1fc8666f3ae54af96d8b2d7721ac5233531e23e4b5b4adf05"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-2-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-2-1.m4a",
+      "bytes": 53770,
+      "sha256": "45a7418ee707f05394a0279eeb0552b7c09f313ae5d681761ab19847c4a0d30d"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-2-2.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-2-2.m4a",
+      "bytes": 52992,
+      "sha256": "09bd86787cafc66e52277e157649431a88f4df73d76b7ce3ebcd2d307608ae2c"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-2-3.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-2-3.m4a",
+      "bytes": 56827,
+      "sha256": "f7c0e89460f86a5f2e4bd744ff8aa0ae79dde6d7557fba074f6add364a465c17"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-3-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-3-1.m4a",
+      "bytes": 62433,
+      "sha256": "d00805a96e43ec61cd27d5a6f76d9d21bb676241d6442d2f9cc031137ccec811"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-3-2.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-3-2.m4a",
+      "bytes": 61004,
+      "sha256": "7d3fad04adad3b3f958d3804c6fae90a0ba1233ccde96f4dd72354c1a008c92e"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-confirm-3-3.m4a",
+      "path": "assets/room-voice-20261026-47/social-confirm-3-3.m4a",
+      "bytes": 64215,
+      "sha256": "aced7a74b5eea4a4d9adfdaa46d33e2beb1434f02a5611c5d5480c7591dc0449"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-direct-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-direct-1.m4a",
+      "bytes": 57871,
+      "sha256": "b47f4d8ca0980630a391ec68f8c00e03704f5e6ab893caa75ac8ab672e3b99a8"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-direct-2.m4a",
+      "path": "assets/room-voice-20261026-47/social-direct-2.m4a",
+      "bytes": 58590,
+      "sha256": "3e8a5ffd8275e1d6a670c70736921d1a7afc1ea3a4583bc144cc711f96d8c17f"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-pace-long.m4a",
+      "path": "assets/room-voice-20261026-47/social-pace-long.m4a",
+      "bytes": 46086,
+      "sha256": "c8343b4848ed8828d927ed140a205675a35c6003fef16b94b9ef40904d556b2e"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-revised-1-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-revised-1-1.m4a",
+      "bytes": 50401,
+      "sha256": "03f2241846f6ddd2ace537b2bf521493ddb3b500a1b6a185a6018b75fa2ac278"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-revised-1-2.m4a",
+      "path": "assets/room-voice-20261026-47/social-revised-1-2.m4a",
+      "bytes": 47688,
+      "sha256": "acd081b9f680e4294c7de825958207cc5c560a58bb375cbd79705ef662bbb752"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-revised-1-3.m4a",
+      "path": "assets/room-voice-20261026-47/social-revised-1-3.m4a",
+      "bytes": 52335,
+      "sha256": "be8cfeaa97c7d08710901b0e5acbbc77eb40def248df61333d4a91a38dab6baa"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-revised-2-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-revised-2-1.m4a",
+      "bytes": 49996,
+      "sha256": "c4fae65127618f8f6615e8489d20b214924f98f592af2219b1aadd823b51bb72"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-revised-2-2.m4a",
+      "path": "assets/room-voice-20261026-47/social-revised-2-2.m4a",
+      "bytes": 47504,
+      "sha256": "d02f3911595d52f210fe5a6d102bafdfc51303c05de5b89463106ce40af10385"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-revised-2-3.m4a",
+      "path": "assets/room-voice-20261026-47/social-revised-2-3.m4a",
+      "bytes": 52445,
+      "sha256": "865bcbf05e7b6c2771b41913a71772b8c2f7d07e50f42edb56cc9fb664d52de8"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-revised-3-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-revised-3-1.m4a",
+      "bytes": 60209,
+      "sha256": "cc7ea1e5f911a604e150a5f118395c475b51527b1e7c38f8f1c56c7cfb05aa9a"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-start.m4a",
+      "path": "assets/room-voice-20261026-47/social-start.m4a",
+      "bytes": 33494,
+      "sha256": "380c16ee9d559d79c7d78567cec9dfb99ff0c8406b645e8a8f8304b588aa5a7b"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-topic-1.m4a",
+      "path": "assets/room-voice-20261026-47/social-topic-1.m4a",
+      "bytes": 53232,
+      "sha256": "6783a3dc10988ea0984fa6264f9bbe9910be54afadab2bd28d5294b048877ffe"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-topic-2.m4a",
+      "path": "assets/room-voice-20261026-47/social-topic-2.m4a",
+      "bytes": 52888,
+      "sha256": "d89eff1066dd69ae8e87f2987c3755f1d37707b6d32f6f398cf39414c2702911"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-topic-3.m4a",
+      "path": "assets/room-voice-20261026-47/social-topic-3.m4a",
+      "bytes": 62226,
+      "sha256": "871a35187fc0ba47e4a642d38955d71dc5ab67d9501554235d3d7f399c51872f"
+    },
+    {
+      "source": "assets/room-voice-20261026-47/social-topic-long.m4a",
+      "path": "assets/room-voice-20261026-47/social-topic-long.m4a",
+      "bytes": 40240,
+      "sha256": "874a2c05fdfa8c439ac4b11a4a2b80e7a2c1d9011f6478bda828025b4f1607aa"
     },
     {
       "source": "assets/scene-audio-20261022/meadow-original-score.m4a",
@@ -1226,8 +1448,8 @@
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 3561,
-      "sha256": "ca7e414e5d9741682af17cd07db41bb2097802441a681e792821ecb50f0b2287"
+      "bytes": 3860,
+      "sha256": "2fbee10a78f770555a327f135599934cf895c9c4a4fc98ee4bf5745420793a5d"
     },
     {
       "source": "auth-entry.mjs",
@@ -1246,6 +1468,18 @@
       "path": "avatar-upload.mjs",
       "bytes": 1225,
       "sha256": "371b715498ad195270f9589255aa3925a86ab861c921f563d9d02395022bb63d"
+    },
+    {
+      "source": "birth-time-picker.css",
+      "path": "birth-time-picker.css",
+      "bytes": 3353,
+      "sha256": "38afee892a291656a0e800a9022e5dbf5c4d43b1640b1faf38db57189e155151"
+    },
+    {
+      "source": "birth-time-picker.mjs",
+      "path": "birth-time-picker.mjs",
+      "bytes": 10027,
+      "sha256": "371d6312d3010a8ce1586147f18b2fa9918034c7dccb3ad31f2679d0f3a0e502"
     },
     {
       "source": "brand-v41.css",
@@ -1310,8 +1544,8 @@
     {
       "source": "chat-header-v41.css",
       "path": "chat-header-v41.css",
-      "bytes": 8595,
-      "sha256": "530f192fdbf3be462338883f82ca6f2aafbcfc494475a7fd2eb121c49393cb1e"
+      "bytes": 8675,
+      "sha256": "5fff26044f23bc279ea563e0d460e968c30a5f6920d279778759903568a80865"
     },
     {
       "source": "communication-mode.mjs",
@@ -1340,14 +1574,14 @@
     {
       "source": "contract-story.css",
       "path": "contract-story.css",
-      "bytes": 2108,
-      "sha256": "9fa6ffbb15474bd0d228c485ab0b497b5e78d8ab7e1f1764b0250dfe60843d71"
+      "bytes": 2868,
+      "sha256": "36093caa1753f33a609ce2f0442e54b7d5f747b77ed620054e393079acf46e50"
     },
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 16208,
-      "sha256": "fab75a03261547fef3a836fc0423219c0dea829a06d4b78e568536cfcc4e8c98"
+      "bytes": 16878,
+      "sha256": "44aac7460274ba4e960d3a3ac3cfa7b80fd21aaccf716fd3edf171653a9eb984"
     },
     {
       "source": "conversation-avatar-motion.mjs",
@@ -1364,8 +1598,8 @@
     {
       "source": "conversation-onboarding.mjs",
       "path": "conversation-onboarding.mjs",
-      "bytes": 17117,
-      "sha256": "b304123638bfcdc668964485c0228c4ecb4c7d38b274517ceea152989ec11557"
+      "bytes": 18320,
+      "sha256": "e9953cdc77c98de32d5ca8431639e8527ca01a3a0287f01a3e81479b8bc7586d"
     },
     {
       "source": "date-picker.css",
@@ -1442,8 +1676,8 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 9455,
-      "sha256": "aaaf5656772f5548b75061f357e25e8e67789ea64db7ae3c9bc58402c87a6673"
+      "bytes": 10137,
+      "sha256": "76e2107bb8d75cb647376b4a9714c241f11e6f37911ccfaaa0f125e4c876beb1"
     },
     {
       "source": "friend-network.mjs",
@@ -1502,8 +1736,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10065,
-      "sha256": "5f96cbb10245a59accda1470ba2bcd30a293b763ef8010dcbbb5877ddbe8498b"
+      "bytes": 10138,
+      "sha256": "c8cb379e2ffb46802752651dde64e2c85ac4fcabb0312512b2e9c2179306ddbc"
     },
     {
       "source": "journey-experience.css",
@@ -1545,13 +1779,19 @@
       "source": "landing-audio-clips.mjs",
       "path": "landing-audio-clips.mjs",
       "bytes": 3194,
-      "sha256": "a2dc8d35b4c19aa926a55566518c9115b133f1ecf0536fba795165e9f80931dd"
+      "sha256": "ca3933d49eec9b62662e0fbad28b0154eec904eb1dcf2798ac5116c9c03acae3"
     },
     {
       "source": "landing-audio-engine.mjs",
       "path": "landing-audio-engine.mjs",
-      "bytes": 14414,
-      "sha256": "d43ce928145da61824752a6c51fb588fe8dc04b0ce9d68c37b9669b00570c4f4"
+      "bytes": 15842,
+      "sha256": "088127dc939845ce8cce075810550f373ae6815879d4fc3cdc1658bff52430b6"
+    },
+    {
+      "source": "landing-day-master-reading.mjs",
+      "path": "landing-day-master-reading.mjs",
+      "bytes": 5632,
+      "sha256": "07d9319e7bf2f9bfce1f9265fa94adf70a06635b09d7f3bb1dba95ed7c7a66b0"
     },
     {
       "source": "landing-departure.mjs",
@@ -1562,8 +1802,8 @@
     {
       "source": "landing-flow.css",
       "path": "landing-flow.css",
-      "bytes": 1572,
-      "sha256": "cd1bcfadcfc7dd0a0ae6a343f00e07270b797b34bd2d7c354ae17c3a6dbafbcc"
+      "bytes": 4276,
+      "sha256": "f2f00124c2364d41501a927492fc0c10833ed4a9b5656649c3a8346f584159ce"
     },
     {
       "source": "landing-glass.css",
@@ -1586,8 +1826,8 @@
     {
       "source": "landing-video-cues.mjs",
       "path": "landing-video-cues.mjs",
-      "bytes": 2972,
-      "sha256": "59d1611f89b0bf508efb103e25097dc1b4fbc3bb52eb41e441e75228192e69ba"
+      "bytes": 3052,
+      "sha256": "9ed417fb3389c2f5326795372873cbbf82db60dc6d5254549b0f2d05816321ae"
     },
     {
       "source": "landing-video-player.mjs",
@@ -1598,8 +1838,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 9762,
-      "sha256": "8ff37d62fce9c51382487e57a031ad991ecbc7a64ffd79acada0a90ae9e4334c"
+      "bytes": 9761,
+      "sha256": "e97bbe11169d50ab38def18b85c693987e79e0a240ee503e4fa543f090b88d48"
     },
     {
       "source": "landing-video.css",
@@ -1616,8 +1856,8 @@
     {
       "source": "loading-state.css",
       "path": "loading-state.css",
-      "bytes": 5207,
-      "sha256": "005c817949ebc7853f5fbfc86c756aae7a4fb7cc6f40bd897c439d615681c882"
+      "bytes": 6066,
+      "sha256": "f3504a7c3a62a68ac573729986639deb7cb2edb9fa5ba739503181ec9cbbafb2"
     },
     {
       "source": "loading-state.mjs",
@@ -1670,8 +1910,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 60813,
-      "sha256": "93e96e8a2fb70b282e8dedc9c227e8bfcf73e199b2d65daa9e3081fd359542ff"
+      "bytes": 60815,
+      "sha256": "59eecb478672f82f409b1be3f023f2c8424e3413a2f84fd3d013d101ee5d380b"
     },
     {
       "source": "motion.css",
@@ -1700,8 +1940,8 @@
     {
       "source": "portal-glass.css",
       "path": "portal-glass.css",
-      "bytes": 8789,
-      "sha256": "ffcfe387ed12dfa5c5dd6f4bb66a7dc8de381ce987671d70c49c1eddf41dcd1e"
+      "bytes": 11515,
+      "sha256": "6a1e354a15a5d29b871bfe6c19665043ec164110683921be863a490daa77c2b3"
     },
     {
       "source": "portal-social-v24.css",
@@ -1758,6 +1998,18 @@
       "sha256": "2ab6e5ceb6fc0df091a6d3b024a48e394bcbe9f37bdc29a82f5474bb8ad32576"
     },
     {
+      "source": "room-voice-clips.mjs",
+      "path": "room-voice-clips.mjs",
+      "bytes": 7635,
+      "sha256": "5f3a9f00d2651b0e524235bb63bf3eae214c0d92d20098ee79be6733bb4e4868"
+    },
+    {
+      "source": "room-voice-profile.mjs",
+      "path": "room-voice-profile.mjs",
+      "bytes": 1364,
+      "sha256": "26acec9599409f7397ef7eac1036eddec814c060d8de4c80dd48f265eabe6aa3"
+    },
+    {
       "source": "safe-area-v34.css",
       "path": "safe-area-v34.css",
       "bytes": 4149,
@@ -1784,8 +2036,8 @@
     {
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
-      "bytes": 253,
-      "sha256": "fdd4d89717e5f861a6623305fa07c0d32dfaaf94e6c9513967fe5c7421d24831"
+      "bytes": 256,
+      "sha256": "3d2a88ab8c7815a5bd1cad2071758dd93fdfa7a958eee7151e382cd2be62ca09"
     },
     {
       "source": "scenes-v41.css",
@@ -1814,14 +2066,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 7595,
-      "sha256": "b8be3785735821ae85413b24537fc5eefbd09fe0483d0283cc61913642848845"
+      "bytes": 9797,
+      "sha256": "c717f18e37ea4608625546d2dfe9f7d353586e9d780fb188cf714b0ce26193d6"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
-      "bytes": 4071,
-      "sha256": "55bc617329c25799dda7f245b4252b52dabe8c143e571fbc3b955939daaa769d"
+      "bytes": 10314,
+      "sha256": "e11fae8aa2167e0e9e6dc9d49f594b169e11cb3bb5419e4d2f05e9a98b8cedd6"
     },
     {
       "source": "social-tags.mjs",
@@ -2286,6 +2538,11 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "birth-time-picker.css",
+      "kind": "resource"
+    },
+    {
       "from": "app.mjs",
       "to": "auth-entry.mjs",
       "kind": "module"
@@ -2383,6 +2640,16 @@
     {
       "from": "app.mjs",
       "to": "form-controls.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "birth-time-picker.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "landing-day-master-reading.mjs",
       "kind": "module"
     },
     {
@@ -2556,6 +2823,16 @@
       "kind": "module"
     },
     {
+      "from": "birth-time-picker.mjs",
+      "to": "conversation-onboarding.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-day-master-reading.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
       "from": "date-picker.mjs",
       "to": "ui-icons.mjs",
       "kind": "module"
@@ -2663,6 +2940,16 @@
     {
       "from": "landing-audio-engine.mjs",
       "to": "landing-audio-clips.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-audio-engine.mjs",
+      "to": "room-voice-clips.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-audio-engine.mjs",
+      "to": "room-voice-profile.mjs",
       "kind": "module"
     },
     {

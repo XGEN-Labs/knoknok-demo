@@ -12,3 +12,21 @@
 @keyframes contract-light-breathe{0%,100%{opacity:.4;transform:scale(.92)}50%{opacity:1;transform:scale(1.08)}}
 @media(prefers-reduced-motion:reduce){.contract-light-hotspot span{animation:none}}
 body.reduced-motion .contract-light-hotspot span{animation:none}
+
+/* A quiet, reachable way to correct the previous answer on every input gate. */
+.phone.landing-video-active #app .onboarding-composer .onboarding-answer-back{display:flex;align-items:center;justify-content:center;gap:5px;width:max-content;min-height:44px;margin:12px auto 0;padding:8px 17px;border:0;border-radius:0;background:transparent;color:rgba(255,255,255,.68);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;font:inherit;font-size:13px;font-weight:500;white-space:nowrap;text-shadow:0 1px 4px #0003;cursor:pointer}
+.phone.landing-video-active #app .onboarding-answer-back::before,.phone.landing-video-active #app .onboarding-answer-back::after{content:none}
+.phone.landing-video-active #app .onboarding-answer-back:focus-visible{outline:1px solid #ffffffa6;outline-offset:2px}
+.phone.landing-video-active #app .onboarding-answer-back .back-chevron{color:inherit;filter:none;opacity:1}
+.phone.landing-video-active #app .onboarding-answer-back :is(svg,.back-chevron){width:18px;height:18px;flex:none}
+.phone.landing-video-active #app .gender-replies{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+.phone.landing-video-active #app .gender-replies .onboarding-gender-option{display:flex;align-items:center;justify-content:center;gap:10px;min-height:60px;margin:0;padding:10px 16px;font-size:17px}
+.phone.landing-video-active #app .gender-replies .onboarding-gender-option[aria-pressed="true"]{box-shadow:inset 0 0 0 2px #8caa9b,0 3px 12px #536a5d14}
+.gender-symbol{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font:500 23px/1 system-ui;color:#465c62}
+.gender-symbol-male{background:#c7e0ee}.gender-symbol-female{background:#efd5dd;color:#775660}
+.phone.landing-video-active #app .onboarding-thread>.kn-birth-time-picker{flex:none;width:100%;box-sizing:border-box;margin-top:14px}
+.phone.landing-video-active #app .is-birth-time .onboarding-composer>.quick-replies:empty{display:none}
+.phone.landing-video-active #app .onboarding-reading{max-height:min(54dvh,440px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#a1ada455 transparent;text-align:left}
+.phone.landing-video-active #app .onboarding-reading h3:first-of-type{margin-top:12px}.phone.landing-video-active #app .onboarding-reading h3+p{margin-bottom:12px}
+.phone.landing-video-active #app .onboarding-reading small{color:var(--kn-text-hint,#87918c)}
+@media(max-height:700px){.phone.landing-video-active #app .onboarding-reading{max-height:42dvh;padding:18px 20px}.phone.landing-video-active #app .onboarding-reading p{font-size:14px;line-height:1.65}.phone.landing-video-active #app .onboarding-composer .onboarding-answer-back{margin-top:8px}}
