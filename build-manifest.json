@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-26T06:55:59.797Z",
+  "createdAt": "2026-10-26T07:19:26.343Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 92855607,
+  "payloadBytes": 92668906,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 109031,
-      "sha256": "406487104f5ad98f91f413c6de3e32dac2aa1cc8dff0a30d21a71dbbf446b6a3"
+      "bytes": 109025,
+      "sha256": "ede62001ffb73d30803572e5c2e4adb57373a37ca1f5e455c562cfbbc3351305"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -210,16 +210,16 @@
       "sha256": "2bcab45e9537bea37e49975f6a18620cdf783a3745ac742f2adea086eb2f9bb7"
     },
     {
-      "source": "assets/login-video-20261026-42/poster.jpg",
-      "path": "assets/login-video-20261026-42/poster.jpg",
-      "bytes": 51307,
-      "sha256": "053eede11acf645b87ec67958dffc1e363fb8441ae4cfcbb2655cecd88603853"
+      "source": "assets/login-video-20261026-43/poster.jpg",
+      "path": "assets/login-video-20261026-43/poster.jpg",
+      "bytes": 49210,
+      "sha256": "ee916ad82b0b82545a5ad612097db4830a4a83cc83f9588b0c062df59bc1a360"
     },
     {
-      "source": "assets/login-video-20261026-42/welcome-meadow-match.mp4",
-      "path": "assets/login-video-20261026-42/welcome-meadow-match.mp4",
-      "bytes": 1703089,
-      "sha256": "3da8379f496d3345ec4baef1adf7310719d252d5b510db1856dfabf6ec09f248"
+      "source": "assets/login-video-20261026-43/welcome-meadow-match.mp4",
+      "path": "assets/login-video-20261026-43/welcome-meadow-match.mp4",
+      "bytes": 1518497,
+      "sha256": "c043a74c1ebb5c0f31782080e5c1871dde82a737d6a7fa2a64eb98f51570a5fe"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -1406,8 +1406,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 9782,
-      "sha256": "cd7d5c892b3b7d37d0bbce89ceda6b5f084b76787dd1e9790081502d5dde6623"
+      "bytes": 9776,
+      "sha256": "98bbb69a9bf829a3b56e7caa392496c73e6d1fe4a62256f52d57c63a98abdf33"
     },
     {
       "source": "journey-experience.css",
@@ -1533,7 +1533,7 @@
       "source": "login-video-scene.mjs",
       "path": "login-video-scene.mjs",
       "bytes": 4182,
-      "sha256": "6e2295134af6871a50280c1d4c1f8494064d38c6ea00daa083609deb3fb112a8"
+      "sha256": "ba2511cfbf5a4174e79feea1398c72d066262fbc1e4951ec880ea5a16b50f3f5"
     },
     {
       "source": "logo-brand.css",
