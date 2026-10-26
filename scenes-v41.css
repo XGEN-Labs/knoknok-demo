@@ -1,0 +1,9 @@
+/* The neighborhood hit areas follow the new 941 × 1672 film-style plate. */
+.phone:not([data-keyboard-open="true"]) #app .friends-lounge .relationship-network {
+  width: max(100cqw, 56.279904cqh);
+  height: max(100cqh, 177.683315cqw);
+}
+.phone:not(.klin-world-ready):is([data-world-page="chat"], [data-world-page="connected"]) > .home-scene {
+  background-image: var(--kn-shared-scene-image);
+}
+.phone[data-world-page="relations"] #app .page-top h2 { color: #262936; text-shadow: 0 1px 8px #ffffff55; }

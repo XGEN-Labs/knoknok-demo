@@ -1,0 +1,83 @@
+/* Shared pen strokes stay equally legible at 18, 22 and 26px display sizes.
+   Original image assets remain archived; runtime controls use inline SVG. */
+.phone { --kn-ui-icon-stroke:1.9px; }
+.phone svg.kn-ui-icon {
+  display:block;
+  flex:none;
+  overflow:visible;
+  fill:none;
+  stroke:currentColor;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+.phone svg.kn-ui-icon > path {
+  vector-effect:non-scaling-stroke;
+  stroke-width:var(--kn-ui-icon-stroke);
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.phone#phone #app .voice-icon-control .kn-ui-icon {
+  width:22px;
+  height:22px;
+  margin:0;
+  color:inherit;
+}
+.phone#phone #app :is(.voice-open-button,.voice-finish-button) .kn-ui-icon {
+  color:#fff;
+  filter:none;
+}
+/* The button keeps its existing target and glass; only the visual gap shrinks. */
+.phone#phone #app .home-chat-actions > .visit-entry {
+  gap:3px;
+}
+.phone#phone #app .home-chat-actions > .visit-entry .restored-control-icon {
+  width:24px!important;
+  height:24px!important;
+  min-width:24px;
+}
+
+/* Three visible birthday rows replace five, while each row remains 44px.
+   Wheel hit testing reads this same row count, so drag and click stay aligned. */
+.phone#phone dialog.kn-date-picker[data-date-purpose="birthday"] {
+  --kn-wheel-row:44px;
+  --kn-wheel-visible:3;
+  padding:10px 20px var(--app-safe-bottom);
+  border-radius:24px;
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] .kn-date-handle {
+  margin-bottom:12px;
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] header {
+  margin-bottom:10px;
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] header h2 {
+  font-size:17px;
+  line-height:24px;
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] .kn-date-wheel {
+  height:calc(var(--kn-wheel-row) * var(--kn-wheel-visible));
+  padding:calc(var(--kn-wheel-row) * (var(--kn-wheel-visible) - 1) / 2) 0;
+  mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);
+  -webkit-mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] .kn-date-wheel-row {
+  font-size:18px;
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] .kn-date-column {
+  font-size:11px;
+  line-height:16px;
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] .kn-date-selection {
+  margin:8px 0 12px;
+  font-size:11px;
+  line-height:16px;
+}
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] .kn-date-confirm {
+  min-height:44px;
+  height:44px;
+  padding:10px 16px;
+  font-size:15px;
+  line-height:24px;
+  border-radius:22px;
+}

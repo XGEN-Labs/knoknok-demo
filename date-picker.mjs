@@ -1,10 +1,11 @@
+import { uiIcon } from './ui-icons.mjs?v=20261026-experience-41c';
 import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261021-refine-27c';
 /** Touch-first local calendar wheels. Named native inputs remain the form authority. */
 const pad=n=>String(n).padStart(2,'0');
 const daysIn=(year,month)=>new Date(year,month,0).getDate();
 const dateValue=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const calendarIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="4"/><path d="M8 3v4m8-4v4M4 10h16"/></svg>';
-const timeIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+const calendarIcon=uiIcon('calendar');
+const timeIcon=uiIcon('time');
 export function formatPickerValue(value,type){
  if(!value)return type==='time'?'選擇時間':'選擇日期';
  if(type==='time')return value.slice(0,5);
@@ -34,7 +35,8 @@ const numbers=(first,last)=>Array.from({length:Math.max(0,last-first+1)},(_,i)=>
 function createWheel(element,{values,value,label,onChange}){
  const win=element.ownerDocument.defaultView;
  let items=[],current=0,settleTimer=0,scrollFrame=0,positionFrame=0,drag=null,disposed=false;
- const rowHeight=()=>element.clientHeight/5||44;
+ const visibleRows=()=>Number.parseFloat(win.getComputedStyle(element).getPropertyValue('--kn-wheel-visible'))||5;
+ const rowHeight=()=>element.clientHeight/visibleRows()||44;
  const setCurrent=(index,notify=false)=>{
   const next=Math.max(0,Math.min(items.length-1,index));if(!items.length)return;
   const changed=current!==next;current=next;
@@ -63,7 +65,7 @@ function createWheel(element,{values,value,label,onChange}){
  const onPointerEnd=e=>{
   if(!drag||drag.id!==e.pointerId)return;
   const ended=drag;drag=null;if(element.hasPointerCapture(e.pointerId))element.releasePointerCapture(e.pointerId);
-  const index=ended.moved?Math.round(element.scrollTop/rowHeight()):Math.floor((element.scrollTop+e.clientY-element.getBoundingClientRect().top-2*rowHeight())/rowHeight());
+  const index=ended.moved?Math.round(element.scrollTop/rowHeight()):Math.floor((element.scrollTop+e.clientY-element.getBoundingClientRect().top-(visibleRows()-1)/2*rowHeight())/rowHeight());
   align(index,true);
  };
  const onPointerCancel=()=>{if(!drag)return;drag=null;settle();};
@@ -109,7 +111,7 @@ export function initDatePickers(root=document){
    const max=maximum?parseLocalPickerValue(maximum,type,fallback,now):null;
    const minYear=min?.getFullYear()??(birthday?Math.min(1900,y):Math.min(now.getFullYear(),y));
    const maxYear=max?.getFullYear()??(birthday?Math.max(now.getFullYear(),y):Math.max(now.getFullYear()+5,y));
-   const dialog=doc.createElement('dialog');dialog.className='kn-date-picker';dialog.dataset.pickerType=type;
+   const dialog=doc.createElement('dialog');dialog.className='kn-date-picker';dialog.dataset.pickerType=type;dialog.dataset.datePurpose=birthday?'birthday':'general';
    const scrim=doc.createElement('div');scrim.className='kn-date-scrim';scrim.setAttribute('aria-hidden','true');
    const wheel=(part,label)=>`<div class="kn-date-column"><span aria-hidden="true">${label}</span><div class="kn-date-wheel" role="spinbutton" tabindex="0" aria-label="${label}" data-date-part="${part}"></div></div>`;
    dialog.innerHTML=`<div class="kn-date-handle" aria-hidden="true"></div><header><h2>${birthday?'選擇生日':type==='time'?'選擇時間':type==='date'?'選擇日期':'選擇日期與時間'}</h2></header>${type==='datetime-local'?'<div class="kn-date-shortcuts"><button type="button" data-date-shortcut="0">今天</button><button type="button" data-date-shortcut="1">明天</button><button type="button" data-date-shortcut="weekend">週末</button></div>':''}${type!=='time'?`<div class="kn-date-columns">${wheel('year','年')}${wheel('month','月')}${wheel('day','日')}</div>`:''}${type!=='date'?`<div class="kn-time-columns">${wheel('hour','時')}<span class="kn-time-colon" aria-hidden="true">:</span>${wheel('minute','分')}</div>`:''}<div class="kn-date-selection" aria-live="polite"></div><p class="kn-date-error" role="alert" hidden></p><button type="button" class="kn-date-confirm">確定</button>`;
@@ -126,7 +128,7 @@ export function initDatePickers(root=document){
    const wheels=new Map();
    const refresh=()=>{for(const[part,wheel]of wheels)wheel.update(options(part),current(part));dialog.querySelector('.kn-date-selection').textContent=formatPickerValue(value(),type);dialog.querySelector('.kn-date-error').hidden=true;};
    const onChange=(part,n)=>{if(part==='year')y=n;if(part==='month')m=n;if(part==='day')d=n;if(part==='hour')h=n;if(part==='minute')minute=n;d=clampCalendarDay(y,m,d);assign(clampPickerValue(value(),type,limits));refresh();};
-   const position=()=>{const r=phone.getBoundingClientRect(),width=Math.min(400,r.width-16);dialog.style.width=`${width}px`;dialog.style.left=`${r.left+(r.width-width)/2}px`;dialog.style.bottom=`${Math.max(8,win.innerHeight-r.bottom+8)}px`;dialog.style.maxHeight=`${Math.max(260,r.height-38)}px`;for(const wheel of wheels.values())wheel.align();};
+   const position=()=>{const r=phone.getBoundingClientRect(),width=Math.min(birthday?352:400,r.width-(birthday?32:16));dialog.style.width=`${width}px`;dialog.style.left=`${r.left+(r.width-width)/2}px`;dialog.style.bottom=`${Math.max(8,win.innerHeight-r.bottom+8)}px`;dialog.style.maxHeight=`${Math.max(260,r.height-38)}px`;for(const wheel of wheels.values())wheel.align();};
    let clearDismiss;
    const close=(restore=true)=>{clearDismiss?.();dialog.removeEventListener('cancel',cancel);win.removeEventListener('resize',position);win.visualViewport?.removeEventListener('resize',position);win.visualViewport?.removeEventListener('scroll',position);for(const wheel of wheels.values())wheel.destroy();if(dialog.open)dialog.close();dialog.remove();scrim.remove();trigger.setAttribute('aria-expanded','false');disposeDialog=null;openPicker=null;if(restore&&trigger.isConnected)trigger.focus();};
    const cancel=e=>{e.preventDefault();close();};disposeDialog=()=>close(false);openPicker=disposeDialog;dialog.addEventListener('cancel',cancel);

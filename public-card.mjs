@@ -3,7 +3,7 @@ import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=202
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
 export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
 
-const BRAND_LOGO = 'assets/brand-20261016/knoknok-logo-latest.png';
+const BRAND_LOGO = 'assets/brand-20261026/knoknok-handwritten-white.png';
 export { DEFAULT_CARD_AVATAR };
 const LIMITS = Object.freeze({ name: 40, bio: 180, language: 24, region: 60, encoded: 32768, jsonBytes: 24576 });
 const own = (value, key) => Object.prototype.hasOwnProperty.call(value, key);

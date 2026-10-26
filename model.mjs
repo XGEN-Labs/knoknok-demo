@@ -35,17 +35,53 @@ export function hasSignedCompanionContract(state) {
 }
 
 export const DEMO_FRIENDS = Object.freeze([
-  Object.freeze({ id: 'b', cardDesign: 7, name: '阿朗', initial: '朗', interests: Object.freeze(['攝影', '看展']), recent: '剛看完一個攝影展，想交換幾張喜歡的照片。', greeting: '你好，我是阿朗。最近有看到讓你想停下來的畫面嗎？' }),
-  Object.freeze({ id: 'c', cardDesign: 14, name: '小雨', initial: '雨', interests: Object.freeze(['閱讀', '咖啡']), recent: '找到一家安靜的小書店，正在讀一本散文。', greeting: '嗨，我是小雨。今天有什麼小事讓你心情好一點嗎？' }),
-  Object.freeze({ id: 'd', cardDesign: 21, name: '阿哲', initial: '哲', interests: Object.freeze(['散步', '音樂']), recent: '最近喜歡傍晚散步，順便收集新的歌單。', greeting: '你好，我是阿哲。你散步時會聽音樂，還是聽城市的聲音？' }),
+  Object.freeze({ id: 'b', cardDesign: 7, closenessSeed: 48, name: '阿朗', initial: '朗', interests: Object.freeze(['攝影', '看展']), recent: '剛看完一個攝影展，想交換幾張喜歡的照片。', greeting: '你好，我是阿朗。最近有看到讓你想停下來的畫面嗎？' }),
+  Object.freeze({ id: 'c', cardDesign: 14, closenessSeed: 40, name: '小雨', initial: '雨', interests: Object.freeze(['閱讀', '咖啡']), recent: '找到一家安靜的小書店，正在讀一本散文。', greeting: '嗨，我是小雨。今天有什麼小事讓你心情好一點嗎？' }),
+  Object.freeze({ id: 'd', cardDesign: 21, closenessSeed: 32, name: '阿哲', initial: '哲', interests: Object.freeze(['散步', '音樂']), recent: '最近喜歡傍晚散步，順便收集新的歌單。', greeting: '你好，我是阿哲。你散步時會聽音樂，還是聽城市的聲音？' }),
+  Object.freeze({ id: 'e', cardDesign: 3, closenessSeed: 26, name: '阿棠', initial: '棠', interests: Object.freeze(['植物', '手作']), recent: '陽台的小葉子又長大了，想給它做個新花盆。', greeting: '嗨，我是阿棠。最近有什麼想慢慢養大的小事嗎？' }),
+  Object.freeze({ id: 'f', cardDesign: 4, closenessSeed: 21, name: '可可', initial: '可', interests: Object.freeze(['烘焙', '甜點']), recent: '剛試了一款不太甜的餅乾，想聽聽大家的點子。', greeting: '你好，我是可可。如果今天是一種味道，你會選什麼？' }),
+  Object.freeze({ id: 'g', cardDesign: 5, closenessSeed: 16, name: '小野', initial: '野', interests: Object.freeze(['徒步', '自然']), recent: '記下了一條有樹蔭的小徑，週末想去走走。', greeting: '嗨，我是小野。你有沒有一個想再去一次的地方？' }),
+  Object.freeze({ id: 'h', cardDesign: 1, closenessSeed: 12, name: '阿澄', initial: '澄', interests: Object.freeze(['電影', '故事']), recent: '看完一部溫柔的電影，有個片段一直留在心裡。', greeting: '你好，我是阿澄。最近有哪個故事讓你想起自己的生活嗎？' }),
+  Object.freeze({ id: 'i', cardDesign: 2, closenessSeed: 8, name: '沐沐', initial: '沐', interests: Object.freeze(['插畫', '色彩']), recent: '畫了一張今天的天空，正想替它取個名字。', greeting: '嗨，我是沐沐。今天的心情如果是一種顏色，會是什麼呢？' }),
 ]);
+
+/** Derive visual closeness from local, successful two-way contact. Demo seeds
+ * give an empty prototype a readable hierarchy, never fabricated chat history.
+ * Opening a door and its automatic greeting carry no interaction weight. */
+export function deriveFriendCloseness(state, friendId, userId = active(state)) {
+  const friend = DEMO_FRIENDS.find(item => item.id === friendId);
+  const seed = friend?.closenessSeed || 0;
+  const relationships = state.relationships.filter(item => item.status === 'active' && item.members.includes(userId) && item.members.includes(friendId));
+  const relationshipIds = new Set(relationships.map(item => item.id));
+  const messages = state.messages.filter(message => {
+    if (!relationshipIds.has(message.relationshipId) || message.status !== 'sent' || message.isAI || ![userId, friendId].includes(message.senderId)) return false;
+    if (message.kind === 'demo-greeting') return false;
+    // Pre-v41 saves have no kind on their auto-created welcome message.
+    const relationship = relationships.find(item => item.id === message.relationshipId);
+    const sender = DEMO_FRIENDS.find(item => item.id === message.senderId);
+    return !(message.isSimulated && relationship.isSimulated && message.createdAt === relationship.createdAt && message.text === sender?.greeting);
+  });
+  const own = messages.filter(message => message.senderId === userId);
+  const other = messages.filter(message => message.senderId === friendId);
+  const mutualMessages = 2 * Math.min(own.length, other.length);
+  const validTime = value => Number.isFinite(value) && value >= 0 && value <= state.now;
+  const latest = values => values.filter(validTime).reduce((result, value) => Math.max(result, value), 0);
+  const mutualTime = mutualMessages ? Math.min(latest(own.map(message => message.createdAt)), latest(other.map(message => message.createdAt))) : 0;
+  const moments = relationships.map(item => item.sharedMoment?.completedAt).filter(value => validTime(value) && value > 0);
+  const lastInteractionAt = Math.max(mutualTime, latest(moments)) || null;
+  const age = lastInteractionAt === null ? Infinity : state.now - lastInteractionAt;
+  const recency = age <= DAY ? 10 : age <= 7 * DAY ? 7 : age <= 30 * DAY ? 4 : 0;
+  const closeness = Math.min(100, seed + Math.min(36, mutualMessages * 3) + Math.min(24, moments.length * 24) + recency);
+  return {closeness, closenessSignals: {seed, mutualMessages, sharedMoments: moments.length, recency, lastInteractionAt}};
+}
 
 export function getDemoFriends(state, userId = active(state)) {
   return DEMO_FRIENDS.filter(friend => friend.id !== userId && !pairBlocked(state, userId, friend.id) &&
     !state.relationships.some(item => item.id === `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}` && item.status !== 'active')).map(friend => {
     const relationship = state.relationships.find(item => item.members.includes(userId) && item.members.includes(friend.id) && item.status === 'active');
-    return { ...friend, interests: [...friend.interests], isSimulated: true, relationshipId: relationship?.id || `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}`, connected: Boolean(relationship) };
-  });
+    return { ...friend, interests: [...friend.interests], isSimulated: true, relationshipId: relationship?.id || `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}`, connected: Boolean(relationship), ...deriveFriendCloseness(state, friend.id, userId) };
+  }).sort((a, b) => b.closeness - a.closeness || DEMO_FRIENDS.findIndex(item => item.id === a.id) - DEMO_FRIENDS.findIndex(item => item.id === b.id))
+    .map((friend, closenessRank) => ({...friend, closenessRank}));
 }
 
 export const SHARED_MOMENT_OPTIONS = Object.freeze([
@@ -137,8 +173,12 @@ export function initialState(now = Date.now()) {
       b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       c: { id: 'c', name: '小雨', language: '粵語', region: '香港', bio: '喜歡閱讀、咖啡和安靜的小書店。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['閱讀', '咖啡'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       d: { id: 'd', name: '阿哲', language: '粵語', region: '香港', bio: '喜歡散步、音樂和城市裡的小發現。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['散步', '音樂'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
+      ...Object.fromEntries(DEMO_FRIENDS.slice(3).map(friend => [friend.id, {
+        id: friend.id, cardDesign: friend.cardDesign, name: friend.name, language: '粵語', region: '香港', bio: friend.recent,
+        introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [...friend.interests], cardTagsEdited: true, cardAvatar: '', shareRegion: false,
+      }])),
     },
-    private: { a: privateSpace('a', now), b: privateSpace('b', now), c: privateSpace('c', now), d: privateSpace('d', now) },
+    private: Object.fromEntries(['a', ...DEMO_FRIENDS.map(friend => friend.id)].map(id => [id, privateSpace(id, now)])),
     draft: {
       topic: '一起看展，聊聊最近喜歡的作品', language: '粵語', time: futureTime(now), mode: 'online', area: '九龍',
       expiresAt: now + 7 * DAY, intro: '想認識喜歡看展的朋友，可以先在線上聊聊。', hard: ['language', 'mode'],
@@ -584,7 +624,7 @@ export function reduce(previous, action = {}) {
         if (state.relationships.some(item => item.id === id)) return fail(state, '這段示範聯繫已結束。');
         relationship = { id, invitationId: null, members: [actorId, friend.id], status: 'active', createdAt: state.now, endedAt: null, isSimulated: true };
         state.relationships.push(relationship);
-        state.messages.push({ id: nextId(state, 'message'), relationshipId: id, senderId: friend.id, text: friend.greeting, status: 'sent', createdAt: state.now, isAI: false, isSimulated: true });
+        state.messages.push({ id: nextId(state, 'message'), relationshipId: id, senderId: friend.id, text: friend.greeting, status: 'sent', createdAt: state.now, isAI: false, isSimulated: true, kind: 'demo-greeting' });
       }
       space.socialIntent ||= newSocialIntent(); space.socialIntent.selectedRelationshipId = relationship.id;
       return state;
@@ -717,12 +757,12 @@ export function hydrateState(serialized, now = Date.now()) {
     const defaults = initialState(now);
     const savedOnboarding = state.onboarding && typeof state.onboarding === 'object' && !Array.isArray(state.onboarding) ? state.onboarding : {};
     const ready = savedOnboarding.status === 'ready' && savedOnboarding.basicsComplete === true && savedOnboarding.birthComplete === true;
-    for (const id of ['c', 'd']) {
+    for (const id of DEMO_FRIENDS.map(friend => friend.id).filter(id => id !== 'b')) {
       state.users[id] ||= defaults.users[id];
       state.private[id] ||= defaults.private[id];
       if (!Array.isArray(state.private[id].memory) || !Array.isArray(state.private[id].companionMessages)) state.private[id] = defaults.private[id];
     }
-    for (const id of ['a', 'b', 'c', 'd']) {
+    for (const id of ['a', ...DEMO_FRIENDS.map(friend => friend.id)]) {
       state.users[id].language ||= '粵語';
       state.users[id].region ||= '香港';
       const companionName = clean(state.users[id].companionName);

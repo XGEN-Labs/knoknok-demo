@@ -1,4 +1,4 @@
-import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261023-experience-34d';
+import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261026-experience-41c';
 
 const normalize = value => String(value || '').normalize('NFKC').replace(/\.{2,}/g, '…').replace(/\s+/g, ' ').trim();
 const clips = new Map(LANDING_VOICE_CLIPS.map(clip => [normalize(clip.text), clip.src]));

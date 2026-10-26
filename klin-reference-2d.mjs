@@ -1,12 +1,12 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET } from './scene-assets.mjs?v=20261023-original-room-character-39';
+import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-41c';
 
 // Restore the selected original PNG and the previous illustrated room directly.
 // Native modeling and action drafts remain archived outside this renderer.
 const SCENES = Object.freeze({
   home: HOME_SCENE_ASSET,
   porch: VISIT_SCENE_ASSET,
-  shared: 'assets/cloud-realm-20261019/shared.webp',
+  shared: SHARED_SCENE_ASSET,
   welcome: 'assets/cloud-realm-20261019/arrival.webp',
 });
 const clamp = value => Math.max(0, Math.min(1, value));
@@ -16,7 +16,7 @@ const isCard = page => ['profile', 'public-card'].includes(page);
 
 export function getIllustratedLayout(page) {
   if (['relations', 'search', 'invite'].includes(page)) return {x: .5, footY: .62, height: .18, world: 'porch', character: false};
-  if (['chat', 'connected'].includes(page)) return {x: .30, footY: .55, height: .16, world: 'shared', shared: true};
+  if (['chat', 'connected'].includes(page)) return {x: .5, footY: .68, height: .16, world: 'shared', character: false, shared: false};
   if (isCard(page)) return {x: .5, footY: .68, height: .31, world: 'home', character: false};
   return {x: .5, footY: .68, height: .31, world: 'home'};
 }

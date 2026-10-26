@@ -1,0 +1,167 @@
+/* The room stays behind private chat. Its companion becomes a small identity
+   in the safe-area header instead of being lifted above the conversation. */
+.phone#phone #app .room-chat-page .home-chat-identity {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  height: 44px;
+  padding: 3px 12px 3px 3px;
+  border: var(--kn-glass-edge-width, 1px) solid var(--kn-glass-edge, #ffffffa6);
+  border-radius: 24px;
+  background: var(--kn-glass-fill, #ffffffb3);
+  color: var(--kn-glass-ink, #26242c);
+  box-shadow: var(--kn-glass-control-shadow, none);
+  backdrop-filter: blur(var(--kn-glass-blur, 24px));
+  -webkit-backdrop-filter: blur(var(--kn-glass-blur, 24px));
+}
+.phone#phone #app .home-chat-identity[hidden] { display: none; }
+.phone#phone #app .home-chat-avatar {
+  display: block;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #e6e7ed;
+}
+.phone#phone #app .home-chat-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.65);
+  transform-origin: 48% 50%;
+}
+.phone#phone #app .home-chat-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+.phone#phone[data-conversation="true"] #app .home-companion,
+.phone#phone[data-conversation="true"] > .klin-illustrated-world .klin-illustrated-actor {
+  display: none !important;
+}
+.phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log {
+  top: calc(var(--app-safe-top) + 60px);
+  left: var(--kn-safe-left);
+  right: var(--kn-safe-right);
+  bottom: calc(var(--app-safe-bottom) + 76px);
+  padding-top: 8px;
+}
+.phone#phone[data-conversation="true"] #app .room-chat-page:has(.conversation-replies:not([hidden]):not(:empty)) .conversation-log {
+  bottom: calc(var(--app-safe-bottom) + 126px);
+}
+/* The keyboard shrinks the message viewport, but the recipient remains clear. */
+.phone#phone[data-conversation="true"][data-keyboard-open="true"] #app .room-chat-page .home-top {
+  visibility: visible;
+}
+
+/* Shared chat uses the same safe-area identity bar. Both participants stay
+   in the header; the room below is a setting, not a second avatar layer. */
+.phone#phone #app .page.shared-chat-page .page-top {
+  min-height:44px;
+  height:44px;
+  justify-content:space-between;
+}
+.phone#phone #app .page.shared-chat-page .page-top > div:not(.top-right) {display:none;}
+.phone#phone #app .page.shared-chat-page .shared-people {
+  position:absolute;
+  top:var(--app-safe-top);
+  left:calc(var(--kn-safe-left) + 52px);
+  right:calc(var(--kn-safe-right) + 52px);
+  z-index:4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  width:auto;
+  height:44px;
+  box-sizing:border-box;
+  padding:4px 8px;
+  border:var(--kn-glass-edge-width,1px) solid var(--kn-glass-edge,#ffffffa6);
+  border-radius:24px;
+  background:var(--kn-glass-fill,#ffffffb3);
+  box-shadow:var(--kn-glass-control-shadow,none);
+  backdrop-filter:blur(var(--kn-glass-blur,24px));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur,24px));
+  pointer-events:none;
+}
+.phone#phone #app .page.shared-chat-page .shared-people > .shared-person,
+.phone#phone #app .page.shared-chat-page .shared-people > .shared-person:nth-child(2) {
+  position:static;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 1 auto;
+  gap:5px;
+  width:auto;
+  min-width:0;
+  max-width:calc(50% - 5px);
+  height:32px;
+  margin:0;
+  padding:0;
+  color:var(--kn-glass-ink,#26242c);
+  text-shadow:none;
+}
+.phone#phone #app .page.shared-chat-page .shared-people .avatar {
+  position:relative;
+  display:grid;
+  place-items:center;
+  flex:0 0 28px;
+  width:28px;
+  height:28px;
+  min-width:28px;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  border:0;
+  border-radius:50%;
+  background:#e7e8ef;
+  color:#536071;
+  font:500 12px/1 var(--kn-ui-font-ui);
+  box-shadow:none;
+  text-shadow:none;
+}
+.phone#phone #app .page.shared-chat-page .shared-people .avatar img {
+  display:block;width:100%;height:100%;object-fit:cover;
+}
+.phone#phone #app .page.shared-chat-page .shared-person strong {
+  display:block;
+  min-width:0;
+  width:auto;
+  max-width:none;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  border:0;
+  border-radius:0;
+  background:none;
+  color:var(--kn-glass-ink,#26242c)!important;
+  font:600 14px/20px var(--kn-ui-font-ui);
+  font-weight:600!important;
+  box-shadow:none;
+  text-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.phone#phone #app .page.shared-chat-page .shared-messages {
+  top:calc(var(--app-safe-top) + 60px);
+  bottom:calc(var(--app-safe-bottom) + 124px);
+  left:var(--kn-safe-left);
+  right:var(--kn-safe-right);
+  padding-top:8px;
+}
+.phone#phone:is([data-world-page="chat"],[data-world-page="connected"]) > .klin-illustrated-world .klin-illustrated-actor {
+  display:none!important;
+}

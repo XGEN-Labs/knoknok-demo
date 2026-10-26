@@ -1,3 +1,13 @@
+# Latest Demo · 2026-10-26
+
+New landing film and matching plush rooms; eight-contact relationship village; compact birthday picker and hand-drawn controls; chat header avatars; updated handwritten logo; local registration flow. Registration is a frontend prototype and creates no remote account or saved password.
+
+Preview: https://xgen-labs.github.io/knoknok-demo/?rev=20261026-experience-41c
+
+The existing formal Web compatibility build, service integration code and tests below are preserved. This release updates only the root static Pages demo.
+
+---
+
 # Knoknok · Klin interactive demo
 
 Revision `20261023-login-video-40`.

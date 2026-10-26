@@ -1,5 +1,5 @@
-// Welcome/sign-in lead into the film's opening meadow; home follows its ending room.
-// Keep this separate from character assets and the archived native 3D scene.
+// Current film-matched plush world. Originals remain in the private references.
 export const WELCOME_SCENE_ASSET = 'assets/home-scene-20261023-v35/welcome-meadow.webp';
-export const HOME_SCENE_ASSET = 'assets/home-scene-20261023-v35/room-film.webp';
-export const VISIT_SCENE_ASSET = 'assets/home-scene-20261023-v35/visit-elements.webp';
+export const HOME_SCENE_ASSET = 'assets/scenes-20261026-41/home.webp';
+export const VISIT_SCENE_ASSET = 'assets/scenes-20261026-41/network-meadow.webp';
+export const SHARED_SCENE_ASSET = 'assets/scenes-20261026-41/shared.webp';

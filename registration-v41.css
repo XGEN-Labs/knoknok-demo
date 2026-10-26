@@ -1,0 +1,57 @@
+/* Registration uses the same approved glass panel and centred white wordmark
+   as login. Only its additional field, errors and navigation need new rules. */
+.phone#phone #app .auth-page .auth-switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 12px 0 0;
+  color: var(--kn-glass-ink, #26242c);
+  font-size: 13px;
+  line-height: 20px;
+}
+.phone#phone #app .auth-page .auth-switch-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  line-height: inherit;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  box-shadow: none;
+  cursor: pointer;
+}
+.phone#phone #app .auth-page .auth-switch-link:hover { background: transparent; color: inherit; }
+.phone#phone #app .auth-register .auth-field-error {
+  margin: 0;
+  color: #8d3347;
+  font-size: 12px;
+  line-height: 18px;
+}
+.phone#phone #app .auth-register .auth-field-error[hidden] { display: none; }
+.phone#phone #app .auth-register .auth-form .auth-field > .input {
+  height: 48px;
+  min-height: 48px;
+}
+.phone#phone #app .auth-register .auth-form .auth-field > .input[aria-invalid="true"] {
+  background: rgba(255, 241, 244, .88);
+}
+.phone#phone #app .auth-register .auth-heading { margin-bottom: 18px; }
+.phone#phone #app .auth-register .auth-form { gap: 10px; }
+.phone#phone #app .auth-register .auth-form .auth-field { margin: 0; gap: 6px; }
+.phone#phone #app .auth-register .auth-form .auth-submit { position: static; margin-top: 10px !important; }
+.phone#phone:has(.auth-register), .device-viewport:has(.auth-register) { min-height: 0 !important; }
+@media (max-height: 740px) {
+  .phone#phone #app .auth-register > .auth-panel { padding: 16px 24px; }
+  .phone#phone #app .auth-register .auth-heading { margin-bottom: 12px; }
+  .phone#phone #app .auth-register .auth-heading h1 { font-size: 22px; }
+  .phone#phone #app .auth-register .auth-heading p { margin-top: 5px; }
+  .phone#phone #app .auth-register .auth-form { gap: 8px; }
+  .phone#phone #app .auth-register .auth-switch { margin-top: 4px; }
+}

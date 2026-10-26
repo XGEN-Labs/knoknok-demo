@@ -6,6 +6,10 @@ import { createLandingDeparture } from './landing-departure.mjs?v=20261023-exper
 // All information is entered on the same early meadow frame, before the group
 // approaches. Only the completed profile unlocks the encounter/contract film;
 // the actual signed contract then unlocks growth and the final trip home.
+// Reviewed against 06-original-complete-ground-review.mp4 (1157 frames / 24fps):
+// frame 120 precedes the approach, 732 holds the fully appeared paper before
+// its transformation, and 1156 is the final interior frame. Keep these exact
+// shared boundaries so form steps never reseek or flash the paused backdrop.
 const frame = number => number / 24;
 export const LANDING_VIDEO_CUES = Object.freeze([
   {key:'birthDate',start:0,end:frame(120)},
@@ -25,7 +29,7 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
   const video=document.createElement('video');video.className='landing-video-plate';
   video.setAttribute('aria-hidden','true');video.setAttribute('playsinline','');video.setAttribute('webkit-playsinline','');
   video.muted=true;video.defaultMuted=true;video.playsInline=true;video.preload='auto';video.disablePictureInPicture=true;
-  video.src='assets/landing-mini-20261022/nok-complete-mini-draft.mp4';
+  video.src='assets/landing-20261026-41/06-original-complete-ground-review.mp4';
   const still=document.createElement('canvas');still.className='landing-video-still landing-video-plate';still.setAttribute('aria-hidden','true');
   const resume=document.createElement('button');resume.type='button';resume.className='landing-video-resume kn-glass-control';resume.textContent='繼續相遇';resume.hidden=true;
   const skip=document.createElement('button');skip.type='button';skip.className='landing-video-skip kn-glass-control';skip.textContent='跳過';skip.setAttribute('aria-label','跳過這段影片，開始回答');skip.hidden=true;

@@ -1,30 +1,14 @@
+import { uiIcon } from './ui-icons.mjs?v=20261026-experience-41c';
 // Voice input is an explicit, user-started browser dictation session. Recognition
 // results are held until the session ends, then placed in a draft, never sent.
 export function communicationModeMarkup(){return '';}
-const iconAssets=Object.freeze({
-  microphone:'./assets/ui/microphone.svg',
-  'x-mark':'./assets/ui/x-mark.svg',
-  stop:'./assets/ui/stop.svg',
-  'arrow-up':'./assets/ui/arrow-up.svg',
-  'speaker-x-mark':'./assets/ui/speaker-x-mark.svg',
-  'speaker-wave':'./assets/ui/speaker-wave.svg',
-});
-const image=(name,extra='')=>iconAssets[name]?`<img src="${iconAssets[name]}" width="24" height="24" alt="" aria-hidden="true" ${extra}>`:'';
-// Exact Heroicons 24 outline paths from the existing MIT-licensed UI assets.
-// Inline the two states so muting never depends on loading a second image.
-const speakerPaths=Object.freeze({
-  sound:'M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z',
-  muted:'M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z',
-});
-const speaker=(muted=false,className='')=>`<svg xmlns="http://www.w3.org/2000/svg" class="${className}" data-speaker-state="${muted?'muted':'sound'}" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="${speakerPaths[muted?'muted':'sound']}"/></svg>`;
 export function voiceComposerMarkup(){
-  return `<button type="button" class="voice-open-button voice-icon-control" data-voice-open aria-label="開始語音輸入">${image('microphone','class="voice-microphone-icon"')}</button><div class="voice-capture-controls" data-voice-capture hidden><button type="button" class="voice-cancel-button voice-icon-control" data-voice-cancel aria-label="取消錄音">${image('x-mark')}</button><div class="voice-capture-stage"><span data-voice-caption role="status" aria-live="polite"></span></div><button type="button" class="voice-stop-button voice-icon-control" data-voice-stop aria-label="停止錄音並轉錄">${image('stop')}</button><button type="button" class="voice-finish-button voice-icon-control" data-voice-finish aria-label="完成錄音並轉成文字">${image('arrow-up')}</button></div><span class="voice-input-status" data-voice-status role="status" aria-live="polite"></span>`;
+  return `<button type="button" class="voice-open-button voice-icon-control" data-voice-open aria-label="開始語音輸入">${uiIcon('microphone',{className:'voice-microphone-icon'})}</button><div class="voice-capture-controls" data-voice-capture hidden><button type="button" class="voice-cancel-button voice-icon-control" data-voice-cancel aria-label="取消錄音">${uiIcon('close')}</button><div class="voice-capture-stage"><span data-voice-caption role="status" aria-live="polite"></span></div><button type="button" class="voice-stop-button voice-icon-control" data-voice-stop aria-label="停止錄音並轉錄">${uiIcon('stop')}</button><button type="button" class="voice-finish-button voice-icon-control" data-voice-finish aria-label="完成錄音並轉成文字">${uiIcon('send')}</button></div><span class="voice-input-status" data-voice-status role="status" aria-live="polite"></span>`;
 }
 export function restoredControlIcon(name){
-  const source=name==='profile'?'./assets/figma-nav-20261009/nav-profile.svg':name==='visit'?'./assets/figma-nav-20261009/nav-visit.svg':name==='more'?'./assets/ui/ellipsis-horizontal.svg':null;
-  return source?`<img class="nav-icon restored-control-icon" src="${source}" width="26" height="26" alt="" aria-hidden="true" draggable="false">`:'';
+  return ['profile','visit','more'].includes(name)?uiIcon(name,{className:'nav-icon restored-control-icon'}):'';
 }
-export function centeredVolumeIcon(muted=false){return speaker(muted,'nav-icon centered-volume-icon');}
+export function centeredVolumeIcon(muted=false){return uiIcon(muted?'volume-muted':'volume',{className:'nav-icon centered-volume-icon',attributes:`data-speaker-state="${muted?'muted':'sound'}"`});}
 export function recognitionLanguage(profileLanguage,host=globalThis.window){
   const value=String(profileLanguage||'').trim();
   const named={'粵語':'zh-HK','粤语':'zh-HK','廣東話':'zh-HK','广东话':'zh-HK','普通話':'zh-CN','普通话':'zh-CN','國語':'zh-TW','国语':'zh-TW','英語':'en-US','英语':'en-US'};

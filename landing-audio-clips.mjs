@@ -1,5 +1,6 @@
 // Neural character narration candidate. Original renders and provenance are archived.
-export const LANDING_MUSIC = Object.freeze({"src": "assets/scene-audio-20261022/meadow-original-score.m4a", "duration": 48.208333333333336});
+// The selected landing film's original AAC track, copied without re-encoding.
+export const LANDING_MUSIC = Object.freeze({"src": "assets/landing-20261026-41/film-original-audio.m4a", "duration": 48.209});
 export const LANDING_VOICE_CLIPS = Object.freeze([
   {
     "text": "我好像刚刚醒来…",
