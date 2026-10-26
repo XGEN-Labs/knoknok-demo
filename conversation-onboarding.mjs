@@ -1,6 +1,6 @@
 // Deterministic, local conversation parsing. No remote AI or birth-based traits.
 import { dayMasterFromDate, zodiacFromDate } from './social-tags.mjs?v=20261026-social-tags-45';
-export const CONVERSATION_VERSION = 2;
+export const CONVERSATION_VERSION = 3;
 const clean = value => typeof value === 'string' ? value.normalize('NFKC').replace(/[\u0000-\u001f\u007f]/g, ' ').trim() : '';
 const pad = value => String(value).padStart(2, '0');
 const own = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
@@ -75,15 +75,18 @@ export function suggestedCardTags(answers = {}) {
 }
 
 const STEPS = Object.freeze([
-  { key: 'birthDate', prompt: '你还记得你的生日吗…', placeholder: '像 1998 年 6 月 18 日', inputMode: 'text' },
-  { key: 'birthTime', prompt: '那…出生的时辰呢？记不清也可以跳过。', placeholder: '选择一个大概的时辰', options: BIRTH_TIME_OPTIONS, skipLabel: '记不清了，跳过', canSkip: true },
+  { key: 'where', prompt: 'NokNok 敲敲……你终于醒了', replies: ['我在哪兒'], interaction: true, inputMode: 'none' },
+  { key: 'birthDate', prompt: '你可以告诉我你的生日吗', placeholder: '像 1998 年 6 月 18 日', inputMode: 'text' },
+  { key: 'birthTime', prompt: '时辰，不记得也没关系', placeholder: '选择一个大概的时辰', options: BIRTH_TIME_OPTIONS, skipLabel: '记不清了，跳过', canSkip: true },
   { key: 'gender', prompt: '你是…？', placeholder: '性别也可以先不说', replies: ['女生', '男生', '非二元', '暂不说'], canSkip: true },
   { key: 'birthPlace', prompt: '或许还记得你的出生地吗？', placeholder: '城市名称就可以', canSkip: true },
   { key: 'response', prompt: '有些地方开始连起来了。', placeholder: '想到什么，就说给我听', replies: ['……你怎么知道', '想慢慢認識你'], canSkip: false },
+  { key: 'contractLight', prompt: '这个是我们的契约', replies: ['打開我們的契約'], interaction: true, inputMode: 'none' },
   { key: 'name', prompt: '你叫什么名字？', placeholder: '你喜欢的名字或昵称', maxLength: 18 },
   { key: 'companionName', prompt: '你可以叫我 Klin，想换也行', placeholder: '叫 Klin 也很好', replies: ['就叫 Klin'], canSkip: true, maxLength: 18 },
 ]);
 const keys = STEPS.map(step => step.key);
+const interactionReplies = Object.freeze({ where: '我在哪兒', contractLight: '打開我們的契約' });
 const skipped = key => key === 'companionName' ? 'Klin' : null;
 const isUnknown = text => /^(?:我)?(?:不清楚|不知道|不記得|不记得|不太清楚|暫不說|暂不说|不想說|不想说|先不說|先不说|跳過|跳过)[。！!\s]*$/.test(text);
 
@@ -94,6 +97,8 @@ function promptFor(step, answers) {
 
 function parseAnswer(key, text, now) {
   const value = clean(text);
+  if (key === 'where') return /^(?:我在哪兒|我在哪儿)$/.test(value) ? { value: interactionReplies.where } : { error: '輕觸「我在哪兒」，繼續這次相遇。' };
+  if (key === 'contractLight') return /^(?:打開我們的契約|打开我们的契约)$/.test(value) ? { value: interactionReplies.contractLight } : { error: '輕觸亮起的契約，我們再寫下彼此的名字。' };
   if (key === 'birthDate') return parseBirthdayReply(value, now);
   if (key === 'birthTime') return isUnknown(value) ? { value: null } : parseBirthTimeReply(value);
   if (['gender', 'birthPlace'].includes(key) && isUnknown(value)) return { value: null };
@@ -114,17 +119,19 @@ function parseAnswer(key, text, now) {
 
 function answerText(key, value) { return value === null ? key === 'gender' ? '暫不說' : key === 'birthTime' ? '记不清了，跳过' : '不清楚' : String(value); }
 
-function messagesFor(answers, previous = [], now = Date.now()) {
-  const messages = ['我好像刚刚醒来…', '刚才那束光，是你在叫我吗？'].map((text, index) => ({ id: `onboarding-arrival-${index}`, role: 'assistant', key: 'arrival', text, createdAt: previous.find(message => message.id === `onboarding-arrival-${index}`)?.createdAt ?? now }));
+function messagesFor(answers, previous = [], now = Date.now(), implicitInteractions = []) {
+  const messages = [];
   for (const step of STEPS) {
-    const acknowledgements = step.key === 'birthTime' ? ['唔…有点记起来。'] : step.key === 'gender' ? [answers.birthTime===null?'没关系。轮廓已经够亮了。':'嗯，这一下清楚多了。'] : step.key === 'response' ? ['我在想。'] : step.key === 'name' ? ['等等让我来见你…..','（慢慢睁开眼睛…）'] : step.key === 'companionName' ? [`${answers.name}你好`,'我在彼之境'] : [];
+    const acknowledgements = step.key === 'birthDate' ? ['你在敲敲彼之境'] : step.key === 'companionName' ? [`${answers.name}你好`] : [];
     acknowledgements.forEach((text,index)=>{const id=`onboarding-${step.key}-ack-${index}`;messages.push({id,role:'assistant',key:step.key,text,createdAt:previous.find(message=>message.id===id)?.createdAt??now});});
     messages.push({ id: `onboarding-${step.key}-prompt`, role: 'assistant', key: step.key, text: promptFor(step, answers), createdAt: previous.find(message => message.id === `onboarding-${step.key}-prompt`)?.createdAt ?? now });
     if (!own(answers, step.key)) return messages;
     const saved = previous.find(message => message.role === 'user' && message.key === step.key);
-    messages.push({ id: `onboarding-${step.key}-answer`, role: 'user', key: step.key, text: saved?.text || answerText(step.key, answers[step.key]), createdAt: saved?.createdAt || now });
+    // A migration advances newly introduced film controls, not a user answer.
+    // Keep the existing diary honest instead of inventing clicks they never made.
+    if (saved || !implicitInteractions.includes(step.key)) messages.push({ id: `onboarding-${step.key}-answer`, role: 'user', key: step.key, text: saved?.text || answerText(step.key, answers[step.key]), createdAt: saved?.createdAt || now });
   }
-  messages.push({ id: 'onboarding-complete-prompt', role: 'assistant', key: 'complete', text: `${answers.name}，我是${answers.companionName}。刚才那些还没发生的相遇，现在我想陪你一起去看看。`, createdAt: previous.find(message => message.id === 'onboarding-complete-prompt')?.createdAt ?? now });
+  messages.push({ id: 'onboarding-complete-prompt', role: 'assistant', key: 'complete', text: `${answers.name}，我是${answers.companionName}。留下你的名字，把這次相遇變成我們的約定吧。`, createdAt: previous.find(message => message.id === 'onboarding-complete-prompt')?.createdAt ?? now });
   return messages;
 }
 
@@ -133,9 +140,17 @@ export function createOnboardingConversation(now = Date.now(), { legacyReady = f
 }
 
 export function normalizeOnboardingConversation(saved, now = Date.now(), { legacyReady = false } = {}) {
-  if (!plain(saved) || saved.version !== CONVERSATION_VERSION) return createOnboardingConversation(now, { legacyReady });
+  if (!plain(saved) || ![2, CONVERSATION_VERSION].includes(saved.version)) return createOnboardingConversation(now, { legacyReady });
   if (saved.migrated === true && saved.complete === true && legacyReady) return createOnboardingConversation(now, { legacyReady: true });
-  const answers = {}, supplied = plain(saved.answers) ? saved.answers : {};
+  const answers = {}, supplied = plain(saved.answers) ? { ...saved.answers } : {};
+  const implicitInteractions = saved.version === 2 ? ['where']
+    : Array.isArray(saved.migration?.implicitInteractions) ? [...new Set(saved.migration.implicitInteractions.filter(key => own(interactionReplies, key)))] : [];
+  if (saved.version === 2) {
+    // Version 2 had no opening question or clickable light. Resume its current
+    // question and retain all validated personal answers, including names.
+    supplied.where = interactionReplies.where;
+    if (own(supplied, 'response')) { supplied.contractLight = interactionReplies.contractLight; implicitInteractions.push('contractLight'); }
+  }
   for (const step of STEPS) {
     if (!own(supplied, step.key)) break;
     if (supplied[step.key] === null && step.canSkip) { answers[step.key] = skipped(step.key); continue; }
@@ -145,7 +160,9 @@ export function normalizeOnboardingConversation(saved, now = Date.now(), { legac
   }
   const step = keys.find(key => !own(answers, key)) || 'complete';
   const previous = Array.isArray(saved.messages) ? saved.messages.filter(message => plain(message) && ['user', 'assistant'].includes(message.role) && typeof message.text === 'string').map(message => ({ ...message, text: clean(message.text).slice(0, 240) })) : [];
-  return { version: CONVERSATION_VERSION, step, answers, messages: messagesFor(answers, previous, now), complete: step === 'complete' && saved.complete === true };
+  const retainedImplicit = implicitInteractions.filter(key => own(answers, key) && !previous.some(message => message.role === 'user' && message.key === key));
+  return { version: CONVERSATION_VERSION, step, answers, messages: messagesFor(answers, previous, now, retainedImplicit), complete: step === 'complete' && saved.complete === true,
+    ...(retainedImplicit.length ? { migration: { fromVersion: 2, implicitInteractions: retainedImplicit } } : {}) };
 }
 
 export function getOnboardingTurn(state) {
@@ -168,7 +185,9 @@ export function advanceOnboardingConversation(previous, action, now = Date.now()
     const backIndex = index < 0 ? keys.length - 1 : index - 1;
     if (backIndex < 0) return { conversation };
     for (const key of keys.slice(backIndex)) delete conversation.answers[key];
-    conversation.step = keys[backIndex]; conversation.messages = messagesFor(conversation.answers, conversation.messages, now);
+    const retainedImplicit = (conversation.migration?.implicitInteractions || []).filter(key => own(conversation.answers, key));
+    if (retainedImplicit.length) conversation.migration = { fromVersion: 2, implicitInteractions: retainedImplicit }; else delete conversation.migration;
+    conversation.step = keys[backIndex]; conversation.messages = messagesFor(conversation.answers, conversation.messages, now, retainedImplicit);
     return { conversation };
   }
   const step = STEPS[index];
@@ -179,6 +198,6 @@ export function advanceOnboardingConversation(previous, action, now = Date.now()
   conversation.answers[step.key] = parsed.value;
   conversation.messages.push({ id: `onboarding-${step.key}-answer`, role: 'user', key: step.key, text: action.type === 'ONBOARDING_SKIP' ? answerText(step.key, parsed.value) : clean(action.text), createdAt: now });
   conversation.step = keys[index + 1] || 'complete';
-  conversation.messages = messagesFor(conversation.answers, conversation.messages, now);
+  conversation.messages = messagesFor(conversation.answers, conversation.messages, now, conversation.migration?.implicitInteractions);
   return { conversation };
 }

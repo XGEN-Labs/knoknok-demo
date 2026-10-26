@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-26T09:28:06.639Z",
+  "createdAt": "2026-10-26T10:56:21.300Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 92819537,
+  "payloadBytes": 97636738,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 112552,
-      "sha256": "55bdba630090fd86c06470af69390de6aa9a27939b72b63d2827b353e1d85d55"
+      "bytes": 113658,
+      "sha256": "7d441470e8d2a3e399cbdc1ac5c125194a10fc1da09555023ed78227050cce5b"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -258,16 +258,16 @@
       "sha256": "e2ef10304170cd452c0a686abffd9c479ea16e17c78a69489ddad53a6d9ba9e7"
     },
     {
-      "source": "assets/landing-20261026-41/06-original-complete-ground-review.mp4",
-      "path": "assets/landing-20261026-41/06-original-complete-ground-review.mp4",
-      "bytes": 13993171,
-      "sha256": "49d66ac2b093a82cc15c1c78e56cb022e18d52b9569acbd8bb5b63935b8e9d22"
+      "source": "assets/landing-20261026-46/11-complete-soft-eyelids-review.mp4",
+      "path": "assets/landing-20261026-46/11-complete-soft-eyelids-review.mp4",
+      "bytes": 18129728,
+      "sha256": "324b01d8330aafa1d7660541ef9c291637a8009a326db5a1d9b4dfdc9c64694e"
     },
     {
-      "source": "assets/landing-20261026-41/film-original-audio.m4a",
-      "path": "assets/landing-20261026-41/film-original-audio.m4a",
-      "bytes": 1011226,
-      "sha256": "2bcab45e9537bea37e49975f6a18620cdf783a3745ac742f2adea086eb2f9bb7"
+      "source": "assets/landing-20261026-46/film-original-audio.m4a",
+      "path": "assets/landing-20261026-46/film-original-audio.m4a",
+      "bytes": 1672663,
+      "sha256": "1b4e6e7a3b1b9f8274351a385bd4b3340be60fbe4601e3c3a2c0f8500e56e42c"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -1220,14 +1220,14 @@
     {
       "source": "auth-entry-ui.mjs",
       "path": "auth-entry-ui.mjs",
-      "bytes": 3846,
-      "sha256": "23a3ab151dab4ff5aef412fcb48dd7adc7231d968bda661e707fd85f0e15e8f3"
+      "bytes": 4118,
+      "sha256": "e1efcd2e8864017340f5c1db40282fc154ef0346a273f54737ea7ed4760d7751"
     },
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 3320,
-      "sha256": "60e1e1c8ccd394d2afc753c5d89e657d3cf88941ac89b1f3be387de02cafabc1"
+      "bytes": 3561,
+      "sha256": "ca7e414e5d9741682af17cd07db41bb2097802441a681e792821ecb50f0b2287"
     },
     {
       "source": "auth-entry.mjs",
@@ -1250,8 +1250,8 @@
     {
       "source": "brand-v41.css",
       "path": "brand-v41.css",
-      "bytes": 2227,
-      "sha256": "afe3d78a222296e5b9159ab188dc5ff31c29a61147e70a7b24078ef3c5e0bbf9"
+      "bytes": 2226,
+      "sha256": "d2d921578e756d5f563c518f89cbe4878542f490b1f8cda4e9191b9573d6e5f4"
     },
     {
       "source": "business-card.css",
@@ -1338,10 +1338,16 @@
       "sha256": "f99f0fb62383861ce92a0f7921185e020f5e0f857c631182df96886a708b7e00"
     },
     {
+      "source": "contract-story.css",
+      "path": "contract-story.css",
+      "bytes": 2108,
+      "sha256": "9fa6ffbb15474bd0d228c485ab0b497b5e78d8ab7e1f1764b0250dfe60843d71"
+    },
+    {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 11424,
-      "sha256": "c8365fc28383ec3e82375638bbd6acabb167a41af02714e192ba3c47efa3aa2d"
+      "bytes": 16208,
+      "sha256": "fab75a03261547fef3a836fc0423219c0dea829a06d4b78e568536cfcc4e8c98"
     },
     {
       "source": "conversation-avatar-motion.mjs",
@@ -1358,8 +1364,8 @@
     {
       "source": "conversation-onboarding.mjs",
       "path": "conversation-onboarding.mjs",
-      "bytes": 15412,
-      "sha256": "38a8549bec51f6c4269f403f52855e9e9c56bec8bf30246d9b3acab433fba685"
+      "bytes": 17117,
+      "sha256": "b304123638bfcdc668964485c0228c4ecb4c7d38b274517ceea152989ec11557"
     },
     {
       "source": "date-picker.css",
@@ -1496,8 +1502,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 9925,
-      "sha256": "70319604020b987eea51a8695d5d79fceafe043d67b1de99991e96a52188dad4"
+      "bytes": 10065,
+      "sha256": "5f96cbb10245a59accda1470ba2bcd30a293b763ef8010dcbbb5877ddbe8498b"
     },
     {
       "source": "journey-experience.css",
@@ -1538,20 +1544,26 @@
     {
       "source": "landing-audio-clips.mjs",
       "path": "landing-audio-clips.mjs",
-      "bytes": 3191,
-      "sha256": "80f736fe1e1c73b7ff9c2445a084ab772637925a5c35dd011cf6bc3830a11164"
+      "bytes": 3194,
+      "sha256": "a2dc8d35b4c19aa926a55566518c9115b133f1ecf0536fba795165e9f80931dd"
     },
     {
       "source": "landing-audio-engine.mjs",
       "path": "landing-audio-engine.mjs",
-      "bytes": 14345,
-      "sha256": "d06d91bab751b86560fbae9917954d49c3071f01e4f52cc87032b0b6b2754e95"
+      "bytes": 14414,
+      "sha256": "d43ce928145da61824752a6c51fb588fe8dc04b0ce9d68c37b9669b00570c4f4"
     },
     {
       "source": "landing-departure.mjs",
       "path": "landing-departure.mjs",
       "bytes": 1165,
       "sha256": "563e1daa17b60a45e8440de2c0c789cd09a6f1b69a3aa1ffc0ff1efb429cac68"
+    },
+    {
+      "source": "landing-flow.css",
+      "path": "landing-flow.css",
+      "bytes": 1572,
+      "sha256": "cd1bcfadcfc7dd0a0ae6a343f00e07270b797b34bd2d7c354ae17c3a6dbafbcc"
     },
     {
       "source": "landing-glass.css",
@@ -1572,6 +1584,12 @@
       "sha256": "86ca617840158441d390f647aabed6041c788df37dd0f2b442deee6f38c58e4c"
     },
     {
+      "source": "landing-video-cues.mjs",
+      "path": "landing-video-cues.mjs",
+      "bytes": 2972,
+      "sha256": "59d1611f89b0bf508efb103e25097dc1b4fbc3bb52eb41e441e75228192e69ba"
+    },
+    {
       "source": "landing-video-player.mjs",
       "path": "landing-video-player.mjs",
       "bytes": 11839,
@@ -1580,14 +1598,14 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 8489,
-      "sha256": "46b0cb3b3a4083104286147be3cfffd91d1ddfb8b4321182a3b7dbba0aae6d50"
+      "bytes": 9762,
+      "sha256": "8ff37d62fce9c51382487e57a031ad991ecbc7a64ffd79acada0a90ae9e4334c"
     },
     {
       "source": "landing-video.css",
       "path": "landing-video.css",
-      "bytes": 5310,
-      "sha256": "4f5d076bde986e3925627a1089be2179befbc7b43f92addd4df69466f74e8c88"
+      "bytes": 6716,
+      "sha256": "3f8fea46ff8d0d2827eb7f8d4f2c2c725772000018d89c5c1b5911b1e52ef7bc"
     },
     {
       "source": "landing.mjs",
@@ -1652,8 +1670,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 60809,
-      "sha256": "e41273e94b2f4fc8c42b019837a6458396f200bd2f571dac66ec01888b32f40d"
+      "bytes": 60813,
+      "sha256": "93e96e8a2fb70b282e8dedc9c227e8bfcf73e199b2d65daa9e3081fd359542ff"
     },
     {
       "source": "motion.css",
@@ -1766,8 +1784,8 @@
     {
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
-      "bytes": 257,
-      "sha256": "e7524370fd1878f319e0640f6ce768cf9f64ff2c12a67d1159a680f0e0f57da3"
+      "bytes": 253,
+      "sha256": "fdd4d89717e5f861a6623305fa07c0d32dfaaf94e6c9513967fe5c7421d24831"
     },
     {
       "source": "scenes-v41.css",
@@ -1922,8 +1940,8 @@
     {
       "source": "welcome-logo-motion.mjs",
       "path": "welcome-logo-motion.mjs",
-      "bytes": 3561,
-      "sha256": "edc9da4cc1ca61253c1e81224977232cd2eb104233b739dc3bad65bcdd5761ee"
+      "bytes": 5118,
+      "sha256": "86f1cb5b31f57dbd0500a2e1f18782eabd6fadb9c29e6e6a26340176be993eed"
     }
   ],
   "runtimeDependencies": [
@@ -2258,6 +2276,16 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "landing-flow.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "contract-story.css",
+      "kind": "resource"
+    },
+    {
       "from": "app.mjs",
       "to": "auth-entry.mjs",
       "kind": "module"
@@ -2505,6 +2533,16 @@
     {
       "from": "landing-video-scene.mjs",
       "to": "landing-departure.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-video-cues.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-video-cues.mjs",
       "kind": "module"
     },
     {

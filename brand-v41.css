@@ -29,13 +29,13 @@
 .phone#phone #app .auth-page > .auth-panel { margin-block: auto; }
 .phone#phone[data-keyboard-open="true"] #app .auth-page > .auth-header { visibility: visible; }
 
-/* A persistent white wordmark travels between the existing welcome/header slots.
+/* One wordmark travels from the white welcome title to the black form title.
    Keep their images in layout and the accessibility tree, without a second image. */
 .phone#phone #app > .page:is(.welcome,.auth-page) { animation: none; }
-.phone#phone[data-opening-logo="true"] #app :is(.welcome .brand,.auth-page .auth-brand) > .brand-logo { opacity: 0 !important; }
+.phone#phone[data-opening-logo="true"] #app :is(.welcome .brand,.auth-page .auth-form-brand,.auth-page .auth-brand) > .brand-logo { opacity: 0 !important; }
 .phone#phone > .opening-logo-image {
   position: absolute; display: block; z-index: 6; margin: 0; padding: 0; border: 0;
   max-width: none; object-fit: contain; pointer-events: none; user-select: none;
-  transform-origin: 0 0; filter: brightness(0) invert(1);
+  transform-origin: 0 0;
 }
-.phone#phone[data-opening-logo-motion="moving"] > .opening-logo-image { will-change: transform; }
+.phone#phone[data-opening-logo-motion="moving"] > .opening-logo-image { will-change: transform, filter; }

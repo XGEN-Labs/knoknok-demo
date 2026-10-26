@@ -8,6 +8,62 @@
 .landing-video-scene.has-held-frame>video{visibility:hidden}
 .landing-video-scene.has-held-frame.is-resuming>video{visibility:visible}
 .landing-video-scene.has-held-frame>.landing-video-still{visibility:visible}
+/* Film dialogue stays outside the input layer and follows decoded video time.
+   Keep both overlays above the still/film and clear of the skip control. */
+.landing-video-subtitle,.landing-video-noking{
+  position:absolute;
+  z-index:2;
+  left:50%;
+  bottom:calc(var(--app-safe-bottom,24px) + 78px);
+  transform:translateX(-50%);
+  margin:0;
+  max-width:88%;
+  box-sizing:border-box;
+  pointer-events:none;
+  user-select:none;
+  font-family:inherit;
+  font-size:16px;
+  line-height:1.6;
+  text-align:center;
+}
+.landing-video-subtitle{
+  width:88%;
+  color:#fff;
+  font-weight:600;
+  text-wrap:balance;
+  text-shadow:0 1px 4px #20262499,0 2px 15px #20262466;
+}
+.landing-video-noking{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  min-width:128px;
+  min-height:52px;
+  padding:10px 22px;
+  border-radius:28px;
+  font-weight:600;
+}
+.landing-video-noking-track{
+  position:relative;
+  display:block;
+  width:62px;
+  height:2px;
+  overflow:hidden;
+  border-radius:2px;
+  background:color-mix(in srgb,var(--kn-glass-ink) 12%,transparent);
+}
+.landing-video-noking-track::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  background:var(--kn-glass-ink);
+  transform:scaleX(var(--landing-noking-progress,0));
+  transform-origin:left center;
+}
+.landing-video-subtitle[hidden],.landing-video-noking[hidden]{display:none!important}
 .phone.landing-video-active>#app{z-index:2}
 .phone.landing-video-active>.klin-world-host,
 .phone.landing-video-active>.portal-scene-host,

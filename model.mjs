@@ -1,9 +1,9 @@
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261023-card-36h';
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, validMetalVoice } from './landing.mjs';
-import { interestTags, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs?v=20261026-social-tags-45';
+import { interestTags, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs?v=20261026-landing-46';
 import { ensureSocialTags, syncSocialTags, applyLandingSocialTags, endSocialTagSession, manageSocialTag, updateManualSocialTags, publicSocialTags } from './social-tags.mjs?v=20261026-social-tags-45';
-export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261026-social-tags-45';
+export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261026-landing-46';
 export const STORAGE_KEY = 'knokknok-prototype-v1';
 const DAY = 24 * 60 * 60 * 1000;
 const copy = value => JSON.parse(JSON.stringify(value));
@@ -784,7 +784,7 @@ export function hydrateState(serialized, now = Date.now()) {
       state.users[id].language ||= '粵語';
       state.users[id].region ||= '香港';
       const companionName = clean(state.users[id].companionName);
-      const legacyKnok = companionName === 'Knok' && (savedOnboarding.conversation?.version !== 2 || savedOnboarding.conversation?.migrated === true);
+      const legacyKnok = companionName === 'Knok' && (![2, 3].includes(savedOnboarding.conversation?.version) || savedOnboarding.conversation?.migrated === true);
       state.users[id].companionName = companionName && Array.from(companionName).length <= 18 && !legacyKnok ? companionName : 'Klin';
       const savedTagsEdited = state.users[id].cardTagsEdited;
       const savedTags = migrateCardTags(state.users[id].cardTags, state.users[id].cardLabels);

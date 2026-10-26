@@ -1,8 +1,8 @@
 # Knoknok · Klin interactive demo
 
-Revision `20261026-social-tags-45`.
+Revision `20261026-landing-46`.
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-social-tags-45)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-landing-46)
 
 Visit a tiny plush world: drag, scroll, or use arrow keys to turn the globe. Eight rooms show contact avatars; the closest friend is largest. Tap an avatar to knock. Search also exposes a simple contact list. No self node is shown.
 
@@ -22,3 +22,6 @@ After completing the first encounter, signed-in users reopen directly in their r
 
 
 The v45 update adds confirmed social tags with private journal sources, compact portrait cards with distinct semantic stickers, locally bundled example portrait photos and resource-driven globe loading. Login and registration share a username-first entry. The static Pages site uses an isolated local demo auth adapter, not a production account service; the same-origin API adapter is ready for backend integration. Existing demo account: knoknok.demo / Knoknok2026.
+
+
+The v46 update follows the 68.583-second landing film with input gates, timed subtitles and Noking, a clickable contract light, two names on one paper contract, and a signed journey into the room. The welcome wordmark continuously moves into the account form while turning black. Returning users keep their saved encounter and names.

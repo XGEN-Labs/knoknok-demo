@@ -59,24 +59,79 @@ export function createContractSignature(name,glyphs={},prefix=`contract-name-${+
 
 // This is an in-world promise between the player and Klin, kept locally.
 // Only the explicit signature button can start it; cancellation never commits.
-export function showCompanionContract({phone,getWorld,userName,companionName,reduced=false,onCommit,onClose,loadSignatureGlyphs=loadContractSignatureGlyphs}={}){
- const layer=document.createElement('section');layer.className='contract-story';if(reduced)layer.classList.add('is-reduced');layer.setAttribute('role','dialog');layer.setAttribute('aria-modal','true');layer.setAttribute('aria-labelledby','contract-heading');
+export function showCompanionContract({phone,getWorld,userName,companionName,collectNames=false,onPrepareSign,reduced=false,onCommit,onClose,loadSignatureGlyphs=loadContractSignatureGlyphs}={}){
+ const layer=document.createElement('section');layer.className='contract-story';if(reduced)layer.classList.add('is-reduced');if(collectNames)layer.classList.add('has-name-fields');layer.setAttribute('role','dialog');layer.setAttribute('aria-modal','true');layer.setAttribute('aria-labelledby','contract-heading');
  const now=new Date(),date=[now.getFullYear(),String(now.getMonth()+1).padStart(2,'0'),String(now.getDate()).padStart(2,'0')].join('.');
- const name=String(userName??'');let signature=createContractSignature(name);
- layer.innerHTML=`<div class="contract-paper-viewport" tabindex="0" role="region" aria-label="相遇契約內容"><article class="contract-document"><div class="contract-document-meta"><span>彼之境 · 回響檔案</span><span>No. 0001</span></div><header class="contract-document-heading"><span class="contract-mark" aria-hidden="true">✧</span><h2 id="contract-heading">相遇契約</h2><small>A PROMISE BETWEEN US</small></header><div class="contract-names"><strong>${escape(userName)}</strong><span>與</span><strong>${escape(companionName)}</strong></div><p class="contract-preamble">從這一次相遇開始，<br>我們為彼此留一盞燈。</p><div class="contract-clauses"><p><span>一</span>認真聽見彼此，記得那些微小的心事。</p><p><span>二</span>尊重各自的步調，陪伴每一次新的相遇。</p></div><div class="contract-signatures"><div class="contract-user-signature"><small>你的名字</small><div class="contract-signature-ink"><span class="contract-signature-name" aria-label="${escape(name)}">${signature.markup}</span></div></div><div class="contract-companion-signature"><small>你的同行者</small><strong>${escape(companionName)}</strong></div></div><footer class="contract-document-footer"><time datetime="${date.replaceAll('.','-')}">${date}</time><span>於彼之境，初次相遇</span></footer><span class="contract-seal" aria-hidden="true"><img src="assets/contract-seal-20261021/realm-seal.png" alt="" width="1280" height="1280"></span></article></div><div class="contract-actions"><p role="status" aria-live="polite" class="contract-status contract-sr-only">等待你確認這份相遇契約。</p><button type="button" class="btn contract-sign">留下我的名字</button></div>`;
- layer.querySelector('.contract-document').dataset.longNames=String(Math.max(Array.from(String(userName||'')).length,Array.from(String(companionName||'')).length)>10);
- const signatureSize=graphemes(name).length>8?12:graphemes(name).length>4?18:26;
- layer.querySelector('.contract-signature-name').style?.setProperty('--signature-font-size',`${signatureSize}px`);
+ let names={userName:String(userName??''),companionName:String(companionName??(collectNames?'Klin':''))};
+ let signature=createContractSignature(names.userName);
+ const fields=collectNames?`<div class="contract-name-fields"><label>你的名字<input class="contract-user-name-input" type="text" name="userName" value="${escape(names.userName)}" placeholder="留下你的名字" autocomplete="nickname" aria-describedby="contract-name-error"></label><label>同行者的名字<input class="contract-companion-name-input" type="text" name="companionName" value="${escape(names.companionName)}" placeholder="Klin" autocomplete="off" aria-describedby="contract-name-error"></label><p id="contract-name-error" class="contract-name-error" role="alert" hidden></p></div>`:'';
+ layer.innerHTML=`<div class="contract-paper-viewport" tabindex="0" role="region" aria-label="相遇契約內容"><article class="contract-document"><div class="contract-document-meta"><span>彼之境 · 回響檔案</span><span>No. 0001</span></div><header class="contract-document-heading"><span class="contract-mark" aria-hidden="true">✧</span><h2 id="contract-heading">相遇契約</h2><small>A PROMISE BETWEEN US</small></header>${fields}<div class="contract-names"${collectNames?' hidden':''}><strong class="contract-user-name">${escape(names.userName)}</strong><span>與</span><strong class="contract-companion-name">${escape(names.companionName)}</strong></div><p class="contract-preamble">從這一次相遇開始，<br>我們為彼此留一盞燈。</p><div class="contract-clauses"><p><span>一</span>認真聽見彼此，記得那些微小的心事。</p><p><span>二</span>尊重各自的步調，陪伴每一次新的相遇。</p></div><section class="contract-energy-story" aria-label="回響與能量"><h3>把相遇，收進回響裡</h3><p>在彼之境，每一次真誠的交流，都會留下一點回響。那些被聽見的心事、分享的日常，會慢慢匯成陪伴的能量。</p><p>我們把這些回響收藏起來，讓 Nok 隨著每一次相遇，一起長大。</p></section><div class="contract-signatures"><div class="contract-user-signature"><small>你的名字</small><div class="contract-signature-ink"><span class="contract-signature-name" aria-label="${escape(names.userName)}">${signature.markup}</span></div></div><div class="contract-companion-signature"><small>你的同行者</small><strong>${escape(names.companionName)}</strong></div></div><footer class="contract-document-footer"><time datetime="${date.replaceAll('.','-')}">${date}</time><span>於彼之境，初次相遇</span></footer><span class="contract-seal" aria-hidden="true"><img src="assets/contract-seal-20261021/realm-seal.png" alt="" width="1280" height="1280"></span></article></div><div class="contract-actions"><p role="status" aria-live="polite" class="contract-status contract-sr-only">等待你確認這份相遇契約。</p><button type="button" class="btn contract-sign">留下我的名字</button></div>`;
+ const userInput=collectNames?layer.querySelector('.contract-user-name-input'):null,companionInput=collectNames?layer.querySelector('.contract-companion-name-input'):null;
+ if(userInput)userInput.value=names.userName;if(companionInput)companionInput.value=names.companionName;
+ const signatureNode=layer.querySelector('.contract-signature-name'),button=layer.querySelector('.contract-sign');
+ function renderNames(){
+  layer.querySelector('.contract-document').dataset.longNames=String(Math.max(Array.from(names.userName).length,Array.from(names.companionName).length)>10);
+  layer.querySelector('.contract-user-name').textContent=names.userName;
+  layer.querySelector('.contract-companion-name').textContent=names.companionName;
+  layer.querySelector('.contract-companion-signature strong').textContent=names.companionName;
+  signatureNode.setAttribute('aria-label',names.userName);
+  const size=graphemes(names.userName).length>8?12:graphemes(names.userName).length>4?18:26;
+  signatureNode.style?.setProperty('--signature-font-size',`${size}px`);
+ }
+ renderNames();
  const app=phone.querySelector('#app'),previousInert=app?.inert;
  if(app)app.inert=true;phone.classList.add('contract-open');phone.append(layer);
- let disposed=false,signing=false,stopWorld=null,worldSigned=false,worldComplete=false,paperSealReady=false,paperComplete=false;
- const ready=Promise.resolve().then(()=>loadSignatureGlyphs(name)).catch(()=>({})).then(glyphs=>{if(disposed)return;signature=createContractSignature(name,glyphs);layer.querySelector('.contract-signature-name').innerHTML=signature.markup;layer.dataset.inkComplete=String(signature.timeline.inkComplete);layer.dataset.sealAt=String(signature.timeline.seal);layer.dataset.completeAt=String(signature.timeline.complete);layer.dataset.signatureStrokes=String(signature.strokes);layer.dataset.signatureFallback=String(signature.fallback.length);});
+ let disposed=false,signing=false,stopWorld=null,worldSigned=false,worldComplete=false,paperSealReady=false,paperComplete=false,signatureEpoch=0;
+ function prepareSignature(name){
+  const token=++signatureEpoch;
+  return Promise.resolve().then(()=>name?loadSignatureGlyphs(name):{}).catch(()=>({})).then(glyphs=>{
+   if(disposed||token!==signatureEpoch)return;
+   signature=createContractSignature(name,glyphs);signatureNode.innerHTML=signature.markup;
+   layer.dataset.inkComplete=String(signature.timeline.inkComplete);layer.dataset.sealAt=String(signature.timeline.seal);layer.dataset.completeAt=String(signature.timeline.complete);layer.dataset.signatureStrokes=String(signature.strokes);layer.dataset.signatureFallback=String(signature.fallback.length);
+  });
+ }
+ let ready=prepareSignature(names.userName);
  const timers=new Set();
  function later(callback,delay){const timer=setTimeout(()=>{timers.delete(timer);if(!disposed)callback();},delay);timers.add(timer);}
  function dispose(restore=true){if(disposed)return;disposed=true;for(const timer of timers)clearTimeout(timer);timers.clear();stopWorld?.();stopWorld=null;document.removeEventListener('keydown',escapeKey);layer.remove();phone.classList.remove('contract-open');if(app)app.inert=previousInert;onClose?.();if(restore)app?.querySelector('[data-action="open-contract"]')?.focus({preventScroll:true});}
  function seal(){if(disposed||!paperSealReady||!(worldSigned||worldComplete))return;layer.classList.add('is-sealed');layer.querySelector('.contract-status').textContent='約定收到了。我們一起長大。';}
- function complete(){if(disposed||!paperComplete||!worldComplete)return;seal();stopWorld=null;dispose(false);onCommit?.();}
- async function sign(){if(disposed||signing)return;signing=true;layer.querySelector('.contract-sign').disabled=true;layer.querySelector('.contract-sign').setAttribute('aria-busy','true');layer.querySelector('.contract-sign').textContent='正在寫下我們的約定…';await ready;if(disposed)return;layer.classList.add('is-signing');layer.querySelector('.contract-status').textContent='你的名字，正在成為第一段回響。';
+ function complete(){if(disposed||!paperComplete||!worldComplete)return;seal();stopWorld=null;dispose(false);onCommit?.({...names});}
+ function resetForCorrection(message){
+  signing=false;button.disabled=false;button.setAttribute('aria-busy','false');button.textContent='留下我的名字';
+  if(userInput)userInput.disabled=false;if(companionInput)companionInput.disabled=false;
+  layer.querySelector('.contract-status').textContent=message;
+  if(collectNames){const error=layer.querySelector('.contract-name-error');error.textContent=message;error.hidden=false;}
+ }
+ const namesError=value=>!value.userName?'請留下你的名字。':!value.companionName?'請為同行者留一個名字。':Object.values(value).some(name=>Array.from(name).length>18)?'名字請保持在 18 個字以內。':'';
+ async function sign(){
+  if(disposed||signing)return;
+  const nextNames=collectNames?{userName:String(userInput.value||'').trim(),companionName:String(companionInput.value||'').trim()}:{...names};
+  if(collectNames){
+   const invalid=namesError(nextNames);
+   if(invalid){resetForCorrection(invalid);(!nextNames.userName||Array.from(nextNames.userName).length>18?userInput:companionInput).focus({preventScroll:true});return;}
+   layer.querySelector('.contract-name-error').hidden=true;
+  }
+  signing=true;button.disabled=true;button.setAttribute('aria-busy','true');button.textContent='正在寫下我們的約定…';
+  let preparation;
+  try{preparation=onPrepareSign?.({...nextNames});}catch(error){preparation=error instanceof Error?error:new Error(String(error||'暫時未能確認名字，請再試一次。'));}
+  const problem=preparation===false?'請確認名字後再試一次。':preparation instanceof Error?(preparation.message||'暫時未能確認名字，請再試一次。'):typeof preparation==='string'?preparation:preparation?.error;
+  if(problem){resetForCorrection(String(problem));return;}
+  if(disposed)return;
+  // The model may remove a conversational prefix or normalize full-width
+  // text. Paper, stroke loading and commit must all use that accepted pair.
+  const hasCanonicalNames=preparation&&typeof preparation==='object'&&('userName' in preparation||'companionName' in preparation);
+  const acceptedNames=hasCanonicalNames?{userName:String(preparation.userName??'').trim(),companionName:String(preparation.companionName??'').trim()}:nextNames;
+  if(hasCanonicalNames){const invalid=namesError(acceptedNames);if(invalid){resetForCorrection(invalid);return;}}
+  const namesChanged=acceptedNames.userName!==names.userName||acceptedNames.companionName!==names.companionName;
+  names=acceptedNames;renderNames();
+  if(collectNames){
+   userInput.value=names.userName;companionInput.value=names.companionName;userInput.disabled=true;companionInput.disabled=true;
+   layer.querySelector('.contract-name-fields').hidden=true;layer.querySelector('.contract-names').hidden=false;
+  }
+  if(collectNames||namesChanged)ready=prepareSignature(names.userName);
+  await ready;if(disposed)return;
+  layer.classList.add('is-signing');layer.querySelector('.contract-status').textContent='你的名字，正在成為第一段回響。';
+  layer.querySelector('.contract-signatures').scrollIntoView?.({block:'nearest',behavior:reduced?'auto':'smooth'});
   later(()=>{paperSealReady=true;seal();},reduced?CONTRACT_TIMELINE.reducedSeal:signature.timeline.seal);
   later(()=>{paperComplete=true;complete();},reduced?CONTRACT_TIMELINE.reducedComplete:signature.timeline.complete);
   const world=getWorld?.();
@@ -86,7 +141,7 @@ export function showCompanionContract({phone,getWorld,userName,companionName,red
   }else{worldSigned=true;worldComplete=true;}
  }
  function escapeKey(event){if(event.key==='Escape'){event.preventDefault();dispose();}}
- layer.querySelector('.contract-sign').addEventListener('click',sign);document.addEventListener('keydown',escapeKey);layer.querySelector('.contract-sign').focus({preventScroll:true});
- dispose.ready=ready;
+ button.addEventListener('click',sign);document.addEventListener('keydown',escapeKey);button.focus({preventScroll:true});
+ Object.defineProperty(dispose,'ready',{get:()=>ready});
  return dispose;
 }

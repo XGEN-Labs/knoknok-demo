@@ -1,0 +1,48 @@
+/* Names are written directly on the existing cotton-paper contract. The whole
+   sheet remains one scrollable reading surface, including the energy story. */
+.phone .contract-story .contract-name-fields{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:8px 14px;
+  margin:0 0 18px;
+  text-align:left;
+}
+.phone .contract-story .contract-name-fields label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+  color:var(--contract-muted);
+  font-family:inherit;
+  font-size:11px;
+  line-height:1.5;
+}
+.phone .contract-story .contract-name-fields input{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:44px;
+  margin:0;
+  padding:7px 3px;
+  border:0;
+  border-bottom:1px solid #ad9d8599;
+  border-radius:0;
+  outline:none;
+  color:var(--contract-ink);
+  background:transparent;
+  box-shadow:none;
+  font-family:inherit;
+  font-size:18px;
+  line-height:1.5;
+}
+.phone .contract-story .contract-name-fields input::placeholder{color:#a39683;opacity:1;font-size:14px}
+.phone .contract-story .contract-name-fields input:focus{border-bottom-color:#8f7757;box-shadow:0 1px 0 #8f7757}
+.phone .contract-story .contract-name-fields .contract-name-error{grid-column:1/-1;margin:1px 0 0;color:#9d5140;font-size:12px;line-height:1.6}
+.phone .contract-story .contract-energy-story{margin:16px 0 0;text-align:left}
+.phone .contract-story .contract-energy-story h3{margin:0 0 7px;color:var(--contract-ink);font-family:inherit;font-size:13px;font-weight:600;line-height:1.7;letter-spacing:.03em}
+.phone .contract-story .contract-energy-story p{margin:0;color:#65594d;font-size:12px;line-height:1.9;letter-spacing:.01em}
+.phone .contract-story .contract-energy-story p+p{margin-top:7px}
+.phone .contract-story :is(.contract-name-fields,.contract-names,.contract-name-error)[hidden]{display:none!important}
+.phone .contract-story .contract-paper-viewport{scroll-behavior:smooth}
+.phone .contract-story.is-reduced .contract-paper-viewport{scroll-behavior:auto}
+@media(prefers-reduced-motion:reduce){.phone .contract-story .contract-paper-viewport{scroll-behavior:auto}}

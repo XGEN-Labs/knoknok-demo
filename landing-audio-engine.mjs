@@ -1,4 +1,4 @@
-import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261026-experience-41c';
+import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261026-landing-46';
 
 const normalize = value => String(value || '').normalize('NFKC').replace(/\.{2,}/g, '…').replace(/\s+/g, ' ').trim();
 const clips = new Map(LANDING_VOICE_CLIPS.map(clip => [normalize(clip.text), clip.src]));
@@ -47,14 +47,15 @@ export function createLandingAudio({ environment = {} } = {}) {
     if (context) return context;
     if (!AudioContext) throw new Error('audio-context-unavailable');
     context = new AudioContext();
-    musicGain = context.createGain(); musicGain.gain.value = .22; musicGain.connect(context.destination);
+    // The film contains its own dialogue mix, so retain its original level.
+    musicGain = context.createGain(); musicGain.gain.value = 1; musicGain.connect(context.destination);
     voiceGain = context.createGain(); voiceGain.gain.value = .9; voiceGain.connect(context.destination);
     return context;
   }
   function duck() {
     if (!context || !musicGain) return;
     musicGain.gain.cancelScheduledValues(context.currentTime);
-    musicGain.gain.setTargetAtTime(voiceBusy ? .055 : .22, context.currentTime, .08);
+    musicGain.gain.setTargetAtTime(voiceBusy ? .055 : 1, context.currentTime, .08);
   }
   function disconnect(source) {
     if (!source) return;
