@@ -1,0 +1,64 @@
+{
+  "checkedOn": "2026-10-26",
+  "purpose": "Placeholder portraits for fictional Demo contacts, not real Knoknok accounts. Uploaded contact photos override these samples.",
+  "copyright": "https://randomuser.me/copyright",
+  "usageGuidance": "https://web.archive.org/web/20160811185628/http://uifaces.com/faq",
+  "photos": [
+    {
+      "demoId": "b",
+      "file": "b.jpg",
+      "source": "https://randomuser.me/api/portraits/men/32.jpg",
+      "sha256": "a634d4f02fe5b77804943c1d74b8d70e35ffe26454e0e9af9717432a2c72bfde",
+      "bytes": 5242
+    },
+    {
+      "demoId": "c",
+      "file": "c.jpg",
+      "source": "https://randomuser.me/api/portraits/women/44.jpg",
+      "sha256": "d8dab29a5736d5c2b0084d720d3db02c785560071609be501541922928fdf831",
+      "bytes": 3539
+    },
+    {
+      "demoId": "d",
+      "file": "d.jpg",
+      "source": "https://randomuser.me/api/portraits/men/12.jpg",
+      "sha256": "a501a0a3424e4bf370d77ee94bcc76545df3c9322fe7154d96bcd55b840b5037",
+      "bytes": 5610
+    },
+    {
+      "demoId": "e",
+      "file": "e.jpg",
+      "source": "https://randomuser.me/api/portraits/women/68.jpg",
+      "sha256": "f07b84f12ef125cbb837a7bd64da401992f5f62bd55fee10d01cd3dcc8abae80",
+      "bytes": 6948
+    },
+    {
+      "demoId": "f",
+      "file": "f.jpg",
+      "source": "https://randomuser.me/api/portraits/women/65.jpg",
+      "sha256": "ee794ad2b1016f820a8dffbfe5602d0ef612da197096715c1b200aac385c0017",
+      "bytes": 5972
+    },
+    {
+      "demoId": "g",
+      "file": "g.jpg",
+      "source": "https://randomuser.me/api/portraits/men/45.jpg",
+      "sha256": "8ba1641b9bdbbfbcd96e81d144f40b004cbcdde40250f6a248eed4987ac4a98f",
+      "bytes": 4597
+    },
+    {
+      "demoId": "h",
+      "file": "h.jpg",
+      "source": "https://randomuser.me/api/portraits/men/22.jpg",
+      "sha256": "9aac54d62e727561f6958213b8a3649230a3bba61ba5ddf63c69d3c6e4aecb0a",
+      "bytes": 4752
+    },
+    {
+      "demoId": "i",
+      "file": "i.jpg",
+      "source": "https://randomuser.me/api/portraits/women/49.jpg",
+      "sha256": "ec911d836da2e0c03a0b5bacc06b1cc628ee4db4567dd684e51e3e47d2a2028e",
+      "bytes": 4291
+    }
+  ]
+}

@@ -1,10 +1,11 @@
 // Deterministic, local conversation parsing. No remote AI or birth-based traits.
+import { dayMasterFromDate, zodiacFromDate } from './social-tags.mjs?v=20261026-social-tags-45';
 export const CONVERSATION_VERSION = 2;
 const clean = value => typeof value === 'string' ? value.normalize('NFKC').replace(/[\u0000-\u001f\u007f]/g, ' ').trim() : '';
 const pad = value => String(value).padStart(2, '0');
 const own = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);
-export const NEUTRAL_CARD_TAGS = Object.freeze(['新朋友', '隨心聊聊']);
+export const NEUTRAL_CARD_TAGS = Object.freeze([]);
 // The canonical clock value is the midpoint of the selected two-hour period.
 // Keep these values local; they describe a choice, not a calculated birth trait.
 export const BIRTH_TIME_OPTIONS = Object.freeze([
@@ -69,8 +70,8 @@ export function interestTags(text) {
 }
 
 export function suggestedCardTags(answers = {}) {
-  const tags = interestTags(answers.interests || (/喜歡|喜欢|愛好|爱好/.test(answers.response || '') ? answers.response : ''));
-  return tags.length ? tags : [...NEUTRAL_CARD_TAGS];
+  // PRD defaults only. Conversation interests wait for a session and confirmation.
+  return [dayMasterFromDate(answers.birthDate),zodiacFromDate(answers.birthDate)].filter(Boolean);
 }
 
 const STEPS = Object.freeze([

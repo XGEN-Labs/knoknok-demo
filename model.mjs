@@ -1,8 +1,9 @@
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261023-card-36h';
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, validMetalVoice } from './landing.mjs';
-import { interestTags, suggestedCardTags, NEUTRAL_CARD_TAGS, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs';
-export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs';
+import { interestTags, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs?v=20261026-social-tags-45';
+import { ensureSocialTags, syncSocialTags, applyLandingSocialTags, endSocialTagSession, manageSocialTag, updateManualSocialTags, publicSocialTags } from './social-tags.mjs?v=20261026-social-tags-45';
+export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261026-social-tags-45';
 export const STORAGE_KEY = 'knokknok-prototype-v1';
 const DAY = 24 * 60 * 60 * 1000;
 const copy = value => JSON.parse(JSON.stringify(value));
@@ -79,10 +80,11 @@ export function getDemoFriends(state, userId = active(state)) {
   return DEMO_FRIENDS.filter(friend => friend.id !== userId && !pairBlocked(state, userId, friend.id) &&
     !state.relationships.some(item => item.id === `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}` && item.status !== 'active')).map(friend => {
     const relationship = state.relationships.find(item => item.members.includes(userId) && item.members.includes(friend.id) && item.status === 'active');
-    return { ...friend, interests: [...friend.interests], isSimulated: true, relationshipId: relationship?.id || `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}`, connected: Boolean(relationship), ...deriveFriendCloseness(state, friend.id, userId) };
+    return { ...friend, name:state.users[friend.id]?.name||friend.name, interests: uniqueFriendInterests(state,friend), isSimulated: true, relationshipId: relationship?.id || `demo-friend-${pairKey(userId, friend.id).replace(':', '-')}`, connected: Boolean(relationship), ...deriveFriendCloseness(state, friend.id, userId) };
   }).sort((a, b) => b.closeness - a.closeness || DEMO_FRIENDS.findIndex(item => item.id === a.id) - DEMO_FRIENDS.findIndex(item => item.id === b.id))
     .map((friend, closenessRank) => ({...friend, closenessRank}));
 }
+const uniqueFriendInterests=(state,friend)=>publicSocialTags(state.private?.[friend.id],state.users?.[friend.id]).map(tag=>tag.label);
 
 export const SHARED_MOMENT_OPTIONS = Object.freeze([
   Object.freeze({ id: 'walk', label: '一起走走', detail: '留一点时间，去看看路上的风景。' }),
@@ -170,7 +172,7 @@ export function initialState(now = Date.now()) {
     onboarding: newOnboarding(now),
     users: {
       a: { id: 'a', cardDesign: 0, name: 'Frank', language: '粵語', region: '香港', bio: '喜歡發掘城市裡的小展覽。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: false, cardAvatar: '', shareRegion: false },
-      b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
+      b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['攝影','看展'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       c: { id: 'c', name: '小雨', language: '粵語', region: '香港', bio: '喜歡閱讀、咖啡和安靜的小書店。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['閱讀', '咖啡'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       d: { id: 'd', name: '阿哲', language: '粵語', region: '香港', bio: '喜歡散步、音樂和城市裡的小發現。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['散步', '音樂'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       ...Object.fromEntries(DEMO_FRIENDS.slice(3).map(friend => [friend.id, {
@@ -320,8 +322,24 @@ export function reduce(previous, action = {}) {
   }
   if (action.type === 'DEMO_LOGOUT') { state.session.authenticated = false; return state; }
   if (!state.session.authenticated) return fail(state, '請先進入示範帳號。');
+  ensureSocialTags(space,state.users[actorId]);
 
   switch (action.type) {
+    case 'SOCIAL_TAG_SESSION_END':
+      if(!landingComplete(state))return fail(state,'先完成這次相遇，再一起整理標籤。');
+      endSocialTagSession(space,state.users[actorId],{now:state.now,allowPublic:action.allowPublic===true});
+      return state;
+    case 'SOCIAL_TAG_CONFIRM':
+    case 'SOCIAL_TAG_DECLINE':
+    case 'SOCIAL_TAG_HIDE':
+    case 'SOCIAL_TAG_RESTORE':
+    case 'SOCIAL_TAG_REORDER':
+    case 'SOCIAL_TAG_EDIT': {
+      const error=manageSocialTag(space,state.users[actorId],action,state.now);
+      if(error)return fail(state,error);
+      state.users[actorId].introVersion+=1;
+      return state;
+    }
     case 'SIGN_COMPANION_CONTRACT': {
       if (actorId !== 'a') return fail(state, '這位伙伴已經有自己的約定。');
       if (hasSignedCompanionContract(state)) return state;
@@ -363,7 +381,7 @@ export function reduce(previous, action = {}) {
       if (action.type === 'FINISH_CONVERSATION') {
         state.onboarding.status = 'ready'; state.onboarding.basicsComplete = true; state.onboarding.birthComplete = true;
         state.onboarding.initializedAt ||= state.now;
-        if (!state.users.a.cardTagsEdited) state.users.a.cardTags = suggestedCardTags(answers);
+        applyLandingSocialTags(space,state.users.a,state.now);
         if (state.users.a.bio === '喜歡發掘城市裡的小展覽。') {
           const tags = interestTags(/喜歡|喜欢|愛好|爱好/.test(answers.response || '') ? answers.response : '');
           state.users.a.bio = tags.length ? `喜歡${tags.join('、')}，想和新朋友慢慢聊聊。` : '想和新朋友，慢慢聊些喜歡的事。';
@@ -449,7 +467,7 @@ export function reduce(previous, action = {}) {
       if (patch.name !== undefined && !clean(patch.name)) return fail(state, '請填寫暱稱。');
       for (const key of ['name', 'bio']) if (patch[key] !== undefined) state.users[actorId][key] = clean(patch[key]);
       if (patch.cardTags !== undefined || patch.cardLabels !== undefined) {
-        state.users[actorId].cardTags = migrateCardTags(patch.cardTags ?? state.users[actorId].cardTags, patch.cardLabels);
+        updateManualSocialTags(space,state.users[actorId],migrateCardTags(patch.cardTags ?? state.users[actorId].cardTags, patch.cardLabels),state.now);
         state.users[actorId].cardLabels = {};
         state.users[actorId].cardTagsEdited = true;
       }
@@ -612,7 +630,7 @@ export function reduce(previous, action = {}) {
       const reply = socialReply(state, space, text);
       space.pendingDemandSuggestion = false;
       space.companionMessages.push({ id: nextId(state, 'private-message'), role: 'assistant', text: reply || memoryReply(space), createdAt: state.now });
-      if (/喜歡|喜欢|想先|希望/.test(text)) space.memory.push({ id: nextId(state, 'memory'), text, source: '這次私人對話', status: 'pending', updatedAt: state.now });
+      if (/喜歡|喜欢|想先|希望/.test(text)) space.memory.push({ id: nextId(state, 'memory'), text, source: '這次私人對話', status: 'pending', updatedAt: state.now, messageId:id });
       return state;
     }
     case 'OPEN_DEMO_FRIEND': {
@@ -770,14 +788,16 @@ export function hydrateState(serialized, now = Date.now()) {
       state.users[id].companionName = companionName && Array.from(companionName).length <= 18 && !legacyKnok ? companionName : 'Klin';
       const savedTagsEdited = state.users[id].cardTagsEdited;
       const savedTags = migrateCardTags(state.users[id].cardTags, state.users[id].cardLabels);
-      // Old empty cards gain neutral defaults. An explicit edit, including [], stays authoritative.
+      // A deliberate empty selection remains authoritative; never invent placeholder tags.
       state.users[id].cardTagsEdited = savedTagsEdited === true || savedTagsEdited === undefined && savedTags.length > 0;
-      state.users[id].cardTags = savedTagsEdited === undefined && savedTags.length === 0 ? [...NEUTRAL_CARD_TAGS] : savedTags;
+      state.users[id].cardTags = savedTags;
       state.users[id].cardLabels = {};
       state.users[id].cardDesign = normalizeCardDesign(state.users[id].cardDesign) ?? generateCardDesign(id);
       state.users[id].cardAvatar = normalizeCardAvatar(state.users[id].cardAvatar);
       state.users[id].shareRegion = state.users[id].shareRegion === true;
       state.private[id].birth = { ...defaultBirth(id), ...(state.private[id].birth || {}) };
+      ensureSocialTags(state.private[id],state.users[id]);
+      syncSocialTags(state.private[id],state.users[id]);
       state.private[id].companion = companionProfile(state, id);
       state.private[id].pendingDemandSuggestion = false;
       const savedIntent = state.private[id].socialIntent;
@@ -816,6 +836,7 @@ export function hydrateState(serialized, now = Date.now()) {
       conversation: normalizeOnboardingConversation(savedOnboarding.conversation, now, { legacyReady: ready }),
     };
     if (typeof state.session.activeUserId !== 'string' || !Object.hasOwn(state.users, state.session.activeUserId) || !Object.hasOwn(state.private, state.session.activeUserId)) state.session.activeUserId = 'a';
+    if(state.onboarding.status==='ready'&&state.onboarding.conversation.complete)applyLandingSocialTags(state.private.a,state.users.a,Math.max(state.now,now));
     state.now = Math.max(state.now, now);
     state.error = null;
     return expire(state);

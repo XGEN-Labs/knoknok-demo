@@ -3,12 +3,12 @@
 @font-face{font-family:Card Puff;src:url('assets/business-card-20261023/DynaPuff-Bold.ttf') format('truetype');font-weight:700;font-display:block}
 @font-face{font-family:Card Brush;src:url('assets/business-card-20261023/OleoScript-Bold.ttf') format('truetype');font-weight:700;font-display:block}
 /* Single portrait paper card. Transform belongs to the continuous card handoff. */
-.phone :is(#app,#sheet) .share-card[data-business-card],.card-design-board .share-card[data-business-card]{container-type:inline-size;position:relative;isolation:isolate;display:block;flex:0 0 auto;width:100%;height:auto!important;min-width:0;min-height:0!important;max-height:none!important;aspect-ratio:600/840;padding:0!important;margin:0;overflow:hidden;box-sizing:border-box;border:0;border-radius:5px;background:var(--bc-paper);text-align:left;box-shadow:0 1px 2px #625c4a16,0 3px 0 -1px #f5f0e4,0 20px 36px #413b3524;font-family:"Helvetica Neue","PingFang TC",Arial,sans-serif}
+.phone :is(#app,#sheet) .share-card[data-business-card],.card-design-board .share-card[data-business-card]{container-type:inline-size;position:relative;isolation:isolate;display:block;flex:0 0 auto;width:100%;height:auto!important;min-width:0;min-height:0!important;max-height:none!important;aspect-ratio:600/650;padding:0!important;margin:0;overflow:hidden;box-sizing:border-box;border:0;border-radius:5px;background:var(--bc-paper);text-align:left;box-shadow:0 1px 2px #625c4a16,0 3px 0 -1px #f5f0e4,0 20px 36px #413b3524;font-family:"Helvetica Neue","PingFang TC",Arial,sans-serif}
 .phone :is(#app,#sheet) .share-card[data-business-card]::before{display:none}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-face{position:absolute!important;inset:0!important;box-sizing:border-box;padding:0;overflow:hidden;max-width:none!important}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card [hidden]{display:none!important}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-art{position:absolute;display:block;box-sizing:border-box;min-width:0;min-height:0;max-width:none;margin:0;overflow:hidden;transform-origin:center;border:0;border-radius:0;background:none;box-shadow:none;text-shadow:none;letter-spacing:0;font-synthesis:none;white-space:normal;line-height:1.1;text-align:left}
-:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-name{overflow:visible}
+:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-name{overflow:visible;font-style:normal;font-variant:normal;letter-spacing:0;text-transform:none}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-logo{background:currentColor;mask:url('assets/brand-20261026/knoknok-handwritten-white.png') no-repeat center/100% 100%;-webkit-mask:url('assets/brand-20261026/knoknok-handwritten-white.png') no-repeat center/100% 100%}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-image{object-fit:contain}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-avatar{border-radius:50%;object-fit:cover}
@@ -17,7 +17,7 @@
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card button.bc-tag:hover{filter:brightness(.95)}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card button.bc-tag:focus-visible{outline:2px solid currentColor;outline-offset:3px}
 .phone #app .profile-stage{display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:16px;overflow-x:visible;overflow-y:auto;padding:8px 0 12px;top:calc(var(--app-safe-top,71px) + 60px);bottom:calc(var(--app-safe-bottom,46px) + 68px);scrollbar-width:none}
-.phone #app .profile-stage>.business-card{flex:0 0 auto;width:min(100%,320px,max(240px,calc((100cqh - var(--app-safe-top,71px) - var(--app-safe-bottom,46px) - 208px) * .714286)))}
+.phone #app .profile-stage>.business-card{flex:0 0 auto;width:min(100%,336px)}
 .phone #app .card-tools{display:flex;align-items:center;justify-content:center;flex:none;gap:8px;margin:0}
 .phone #app .card-tools button{display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px 20px;border:1px solid var(--kn-glass-edge);border-radius:24px;background:var(--kn-glass-fill);color:var(--kn-glass-ink);font:500 14px/20px var(--kn-ui-font,system-ui);box-shadow:var(--kn-glass-control-shadow);backdrop-filter:blur(var(--kn-glass-blur));-webkit-backdrop-filter:blur(var(--kn-glass-blur))}
 .phone #sheet .card-share-preview{display:flex;justify-content:center}
@@ -26,8 +26,6 @@
 .phone#phone #app .page:is(.profile-card-page,.public-card-page)>.page-top svg.kn-ui-icon>path{stroke-width:var(--kn-ui-icon-stroke,1.9px);vector-effect:non-scaling-stroke}
 .phone #sheet .card-share-sheet .business-card.is-compact{padding:0;min-height:0}
 @container(max-height:600px){.phone #app .profile-stage{justify-content:flex-start;gap:12px;padding:4px 0 12px}}
-/* Tag details use the same soft paper palette as the single card. */
-.phone #sheet .all-card-tags>span:nth-child(n){border:0;border-radius:22px;background:#edf0e6;color:#657065;font-family:var(--kn-ui-font,system-ui);transform:none;box-shadow:none}
 
 /* Personal portraits remain visible in every print composition and editable on your card. */
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card button.bc-avatar{padding:0;cursor:pointer;appearance:none}
@@ -35,3 +33,22 @@
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card button.bc-avatar:focus-visible{outline:2px solid currentColor;outline-offset:4px}
 
 .phone #sheet .avatar-editor-preview img[src*="klin-20261014/adult.png"]{background:#e8e7df;object-fit:contain;padding:6px;box-sizing:border-box}
+
+/* Collected stickers use the same four drawn shapes in cards, management and diary. */
+.social-tag-sticker.social-tag-sticker{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:9px;box-sizing:border-box;min-width:0;min-height:48px;max-width:100%;margin:0;padding:12px 19px;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--tag-ink,#765925);font:400 17px/1.35 "Card WenKai",var(--kn-ui-font,system-ui);text-align:left;vertical-align:middle;white-space:normal;overflow-wrap:anywhere;backdrop-filter:none;-webkit-backdrop-filter:none}
+.social-tag-sticker>.social-tag-surface,.business-card .bc-tag>.social-tag-surface{position:absolute;inset:0;z-index:-1;width:100%;height:100%;max-width:none;pointer-events:none;overflow:visible}
+.social-tag-sticker>.social-tag-icon{display:block;flex:none;width:20px;height:20px;overflow:visible;pointer-events:none}
+.social-tag-sticker>.social-tag-icon path,.business-card .bc-sticker-icon path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.social-tag-sticker>.social-tag-label{min-width:0;font:inherit;color:inherit;line-height:inherit}
+button.social-tag-sticker{cursor:pointer;touch-action:manipulation;transition:transform 160ms ease,filter 160ms ease}
+button.social-tag-sticker:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.025)}
+button.social-tag-sticker:focus-visible{outline:2px solid var(--tag-ink);outline-offset:3px}
+button.social-tag-sticker:disabled{cursor:default;opacity:.6}
+.social-tag-sticker.is-selected{filter:saturate(1.1);font-weight:700}
+.social-tag-sticker.is-selected>.social-tag-surface path{stroke-width:4}
+:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-tag{isolation:isolate;border:0;overflow:visible;white-space:normal;background:transparent;line-height:1.14;text-overflow:clip}
+:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-sticker-label{position:absolute;display:block;margin:0;padding:0;font-family:inherit!important;font-size:inherit;font-weight:inherit;color:inherit;text-align:left;white-space:nowrap;pointer-events:none}
+:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-sticker-icon{position:absolute;display:block;overflow:visible;max-width:none;color:inherit;pointer-events:none}
+.phone #sheet .all-card-tags>.social-tag-sticker:nth-child(n){max-width:100%;padding:13px 20px;border:0;border-radius:0;background:transparent;color:var(--tag-ink);font-family:"Card WenKai",var(--kn-ui-font,system-ui);transform:none;box-shadow:none}
+@media(prefers-reduced-motion:reduce){button.social-tag-sticker{transition:none}button.social-tag-sticker:not(:disabled):hover{transform:none}}
+:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-sticker-icon path{stroke-width:2}

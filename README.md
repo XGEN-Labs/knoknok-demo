@@ -1,8 +1,8 @@
 # Knoknok · Klin interactive demo
 
-Revision `20261026-motion-44`.
+Revision `20261026-social-tags-45`.
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-motion-44)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-social-tags-45)
 
 Visit a tiny plush world: drag, scroll, or use arrow keys to turn the globe. Eight rooms show contact avatars; the closest friend is largest. Tap an avatar to knock. Search also exposes a simple contact list. No self node is shown.
 
@@ -19,3 +19,6 @@ Local hosting must support HTTP byte ranges for film cue seeking. Private source
 The welcome wordmark moves continuously into the sign-in header and back. Fullscreen loading keeps the small character stationary with a clearer, earlier double blink. Reduced motion remains static.
 
 After completing the first encounter, signed-in users reopen directly in their room. Incomplete encounters resume onboarding; logging out still requires sign-in. Shared-card links retain priority, and explicit reset starts a new first encounter. This prototype stores progress in the current browser.
+
+
+The v45 update adds confirmed social tags with private journal sources, compact portrait cards with distinct semantic stickers, locally bundled example portrait photos and resource-driven globe loading. Login and registration share a username-first entry. The static Pages site uses an isolated local demo auth adapter, not a production account service; the same-origin API adapter is ready for backend integration. Existing demo account: knoknok.demo / Knoknok2026.

@@ -1,4 +1,5 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261026-experience-42';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261026-social-tags-45';
+import { stickerSurfaceMarkup, STICKER_ICONS, traceSticker, traceStickerIcon } from './tag-stickers.mjs?v=20261026-social-tags-45';
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
 export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
@@ -15,7 +16,9 @@ const escape = value => String(value).replace(/[&<>"']/g, character => ({ '&': '
 
 // An explicit public snapshot, never a spread of a user/private record. Avatar,
 // tags and city require caller selection; no birth or memory inference occurs.
-export function publicCardData(user, { includeRegion = false, tags = [], labels = {}, avatar = '' } = {}) {
+const publicTagCategories = (tags, categories) => Object.fromEntries(tags.flatMap(label =>
+  plain(categories) && own(categories, label) && ['identity','daily','skills','exploration'].includes(categories[label]) ? [[label, categories[label]]] : []));
+export function publicCardData(user, { includeRegion = false, tags = [], labels = {}, avatar = '', tagCategories = {} } = {}) {
   const source = plain(user) ? user : {};
   const data = {
     name: shortened(source.name, LIMITS.name) || '新朋友',
@@ -23,6 +26,8 @@ export function publicCardData(user, { includeRegion = false, tags = [], labels 
     language: shortened(source.language, LIMITS.language),
     tags: migrateCardTags(tags, labels),
   };
+  const categories = publicTagCategories(data.tags, tagCategories);
+  if (Object.keys(categories).length) data.tagCategories = categories;
   if (includeRegion === true) {
     const region = shortened(source.region, LIMITS.region);
     if (region) data.region = region;
@@ -50,6 +55,8 @@ function validatedData(value) {
   let labels = {};
   if (own(value, 'labels')) { labels = normalizeCardLabels(value.labels, { strict: true }); if (!labels) return null; }
   data.tags = migrateCardTags(tags, labels);
+  const categories = publicTagCategories(data.tags, value.tagCategories);
+  if (Object.keys(categories).length) data.tagCategories = categories;
   if (own(value, 'avatar')) {
     const avatar = normalizeCardAvatar(value.avatar, { strict: true });
     if (avatar === null) return null;
@@ -113,8 +120,10 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
   if(item.type==='image')return `<img class="bc-art bc-image" src="${escape(artworkAsset(item.src))}" alt="" style="${box}object-fit:${item.fit==='cover'?'cover':'contain'};" draggable="false">`;
   const font=`font-size:${cqw(item.size)}cqw;font-weight:${item.weight};font-family:${CARD_FONTS[item.family]};color:${item.color};`;
   if(item.type==='tag'){
-   const style=`${box}${font}background:${item.fill};border-color:${item.stroke};border-radius:${cqw(item.r)}cqw;padding:${cqw(item.padY)}cqw ${cqw(item.padX)}cqw;text-align:${item.align||'left'};`;
-   return interactive?`<button class="bc-art bc-tag" type="button" data-action="view-card-tags" aria-label="查看全部標籤：${escape(item.text)}" title="${escape(item.text)}" style="${style}">${escape(item.label)}</button>`:`<span class="bc-art bc-tag" title="${escape(item.text)}" style="${style}">${escape(item.label)}</span>`;
+   const textY=(item.h-item.lines.length*item.size*item.lineHeight)/2;
+   const style=`${box}${font}padding:0;text-align:${item.align||'left'};`;
+   const inner=`${stickerSurfaceMarkup(item,item.w,item.h)}<svg class="bc-sticker-icon" viewBox="0 0 24 24" aria-hidden="true" style="left:${cqw(item.padX)}cqw;top:${cqw((item.h-item.iconSize)/2)}cqw;width:${cqw(item.iconSize)}cqw;height:${cqw(item.iconSize)}cqw"><path d="${STICKER_ICONS[item.icon]}"/></svg><span class="bc-sticker-label" style="left:${cqw(item.padX+item.iconSpace)}cqw;top:${cqw(textY)}cqw;line-height:${item.lineHeight}">${item.lines.map(escape).join('<br>')}</span>`;
+   return interactive?`<button class="bc-art bc-tag" type="button" data-action="view-card-tags" data-label="${escape(item.text)}" aria-label="查看全部標籤：${escape(item.text)}" title="${escape(item.text)}" style="${style}">${inner}</button>`:`<span class="bc-art bc-tag" title="${escape(item.text)}" style="${style}">${inner}</span>`;
   }
   const tag=item.kind==='name'?'h2':'p';
   return `<${tag} class="bc-art bc-${item.kind}" title="${escape(item.text)}" style="${box}${font}font-style:${item.italic?'italic':'normal'};text-align:${item.align};line-height:${item.lineHeight}">${item.lines.map(escape).join('<br>')}</${tag}>`;
@@ -152,7 +161,7 @@ async function cardImage(path) {
 }
 
 // HTML and PNG consume exactly the same composition specification.
-export async function downloadCard(value) {
+export async function renderCardImage(value) {
  const data=validatedData(value);if(!data)throw new TypeError('名片內容不完整或超出長度限制。');
  if(typeof document==='undefined')throw new TypeError('請在瀏覽器中下載名片。');
  await prepareCardFonts([data.name,...data.tags].join(' '));
@@ -182,13 +191,21 @@ export async function downloadCard(value) {
   }else{
    ctx.font=`${item.italic?'italic ':''}${item.weight} ${item.size}px ${CARD_FONTS[item.family]}`;ctx.fillStyle=item.color;
    if(item.type==='tag'){
-    rounded(ctx,0,0,item.w,item.h,item.r);if(item.fill!=='transparent'){ctx.fillStyle=item.fill;ctx.fill();}if(item.stroke!=='transparent'){ctx.strokeStyle=item.stroke;ctx.lineWidth=2;ctx.stroke();}
-    ctx.fillStyle=item.color;ctx.textAlign=item.align||'left';ctx.fillText(item.label,item.align==='center'?item.w/2:item.align==='right'?item.w-item.padX:item.padX,item.padY);
+    traceSticker(ctx,item.shape,item.w,item.h);ctx.fillStyle=item.fill;ctx.fill();ctx.strokeStyle=item.stroke;ctx.lineWidth=2.6;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
+    ctx.save();ctx.translate(item.padX,(item.h-item.iconSize)/2);ctx.scale(item.iconSize/24,item.iconSize/24);ctx.lineWidth=2;traceStickerIcon(ctx,item.icon);ctx.stroke();ctx.restore();
+    ctx.fillStyle=item.color;ctx.textAlign='left';
+    const textY=(item.h-item.lines.length*item.size*item.lineHeight)/2;
+    item.lines.forEach((line,index)=>ctx.fillText(line,item.padX+item.iconSpace,textY+index*item.size*item.lineHeight));
    }else{ctx.textAlign=item.align;item.lines.forEach((line,i)=>ctx.fillText(line,item.align==='right'?item.w:item.align==='center'?item.w/2:0,i*item.size*item.lineHeight));}
   }
   ctx.restore();
  }
  const blob=await new Promise((resolve,reject)=>canvas.toBlob(result=>result?resolve(result):reject(new Error('名片暫時未能匯出，請再試一次。')),'image/png'));
+ return blob;
+}
+export async function downloadCard(value) {
+ const data=validatedData(value);if(!data)throw new TypeError('名片內容不完整或超出長度限制。');
+ const blob=await renderCardImage(data);
  const filename='Knoknok-'+(Array.from(data.name.replace(/[^\p{L}\p{N}_-]/gu,'')).slice(0,28).join('')||'friend')+'-名片.png';
  const objectURL=URL.createObjectURL(blob),link=document.createElement('a');link.href=objectURL;link.download=filename;document.body.append(link);
  try{link.click();}finally{link.remove();setTimeout(()=>URL.revokeObjectURL(objectURL),1000);}

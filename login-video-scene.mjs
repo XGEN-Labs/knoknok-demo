@@ -1,5 +1,5 @@
-export const LOGIN_VIDEO_ASSET = 'assets/login-video-20261026-43/welcome-meadow-match.mp4';
-export const LOGIN_VIDEO_POSTER = 'assets/login-video-20261026-43/poster.jpg';
+export const LOGIN_VIDEO_ASSET = 'assets/welcome-sky-20261026-45/welcome-meadow-match.mp4';
+export const LOGIN_VIDEO_POSTER = 'assets/welcome-sky-20261026-45/poster.jpg';
 const openingRoutes = new Set(['welcome','login','register','verify']);
 
 /** One persistent, silent video across welcome and sign-in. The poster is also

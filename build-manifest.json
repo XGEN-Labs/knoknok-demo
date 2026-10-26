@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-26T07:55:37.900Z",
+  "createdAt": "2026-10-26T09:28:06.639Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 92674779,
+  "payloadBytes": 92819537,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 109698,
-      "sha256": "68334d255c7652ae24c2ead083d68aa600c2b4273e8d0e44c3637948b95d211a"
+      "bytes": 112552,
+      "sha256": "55bdba630090fd86c06470af69390de6aa9a27939b72b63d2827b353e1d85d55"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -94,6 +94,66 @@
       "path": "assets/contract-seal-20261021/realm-seal.png",
       "bytes": 1838957,
       "sha256": "c681cb9acff043ba66bece3d91ea4c24eae97667edd7da5f6e79f3d4a545972c"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/b.jpg",
+      "path": "assets/demo-avatars-20261026-45/b.jpg",
+      "bytes": 5242,
+      "sha256": "a634d4f02fe5b77804943c1d74b8d70e35ffe26454e0e9af9717432a2c72bfde"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/c.jpg",
+      "path": "assets/demo-avatars-20261026-45/c.jpg",
+      "bytes": 3539,
+      "sha256": "d8dab29a5736d5c2b0084d720d3db02c785560071609be501541922928fdf831"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/d.jpg",
+      "path": "assets/demo-avatars-20261026-45/d.jpg",
+      "bytes": 5610,
+      "sha256": "a501a0a3424e4bf370d77ee94bcc76545df3c9322fe7154d96bcd55b840b5037"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/e.jpg",
+      "path": "assets/demo-avatars-20261026-45/e.jpg",
+      "bytes": 6948,
+      "sha256": "f07b84f12ef125cbb837a7bd64da401992f5f62bd55fee10d01cd3dcc8abae80"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/f.jpg",
+      "path": "assets/demo-avatars-20261026-45/f.jpg",
+      "bytes": 5972,
+      "sha256": "ee794ad2b1016f820a8dffbfe5602d0ef612da197096715c1b200aac385c0017"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/g.jpg",
+      "path": "assets/demo-avatars-20261026-45/g.jpg",
+      "bytes": 4597,
+      "sha256": "8ba1641b9bdbbfbcd96e81d144f40b004cbcdde40250f6a248eed4987ac4a98f"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/h.jpg",
+      "path": "assets/demo-avatars-20261026-45/h.jpg",
+      "bytes": 4752,
+      "sha256": "9aac54d62e727561f6958213b8a3649230a3bba61ba5ddf63c69d3c6e4aecb0a"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/i.jpg",
+      "path": "assets/demo-avatars-20261026-45/i.jpg",
+      "bytes": 4291,
+      "sha256": "ec911d836da2e0c03a0b5bacc06b1cc628ee4db4567dd684e51e3e47d2a2028e"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/README.md",
+      "path": "assets/demo-avatars-20261026-45/README.md",
+      "bytes": 922,
+      "sha256": "96d9c5109421175e66b5c8e94cac41e55e04e276aec8bd07022797d7acccccbc"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/sources.json",
+      "path": "assets/demo-avatars-20261026-45/sources.json",
+      "bytes": 2154,
+      "sha256": "6b6c779ba50fd3981f77dfe3b7622f8bd94e031a200b4844109cfea8027d550d"
     },
     {
       "source": "assets/figma-20261009/bubble.svg",
@@ -208,18 +268,6 @@
       "path": "assets/landing-20261026-41/film-original-audio.m4a",
       "bytes": 1011226,
       "sha256": "2bcab45e9537bea37e49975f6a18620cdf783a3745ac742f2adea086eb2f9bb7"
-    },
-    {
-      "source": "assets/login-video-20261026-43/poster.jpg",
-      "path": "assets/login-video-20261026-43/poster.jpg",
-      "bytes": 49210,
-      "sha256": "ee916ad82b0b82545a5ad612097db4830a4a83cc83f9588b0c062df59bc1a360"
-    },
-    {
-      "source": "assets/login-video-20261026-43/welcome-meadow-match.mp4",
-      "path": "assets/login-video-20261026-43/welcome-meadow-match.mp4",
-      "bytes": 1518497,
-      "sha256": "c043a74c1ebb5c0f31782080e5c1871dde82a737d6a7fa2a64eb98f51570a5fe"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -1146,6 +1194,18 @@
       "sha256": "7488b6c1ea210268e2c8f5e175ac6b10d1c8342030a0a9abf20566c9e7e21015"
     },
     {
+      "source": "assets/welcome-sky-20261026-45/poster.jpg",
+      "path": "assets/welcome-sky-20261026-45/poster.jpg",
+      "bytes": 49591,
+      "sha256": "ddb02cfc8176785b766c759a4b144e839564f21b106e35870d057c9fc03f2baa"
+    },
+    {
+      "source": "assets/welcome-sky-20261026-45/welcome-meadow-match.mp4",
+      "path": "assets/welcome-sky-20261026-45/welcome-meadow-match.mp4",
+      "bytes": 1536886,
+      "sha256": "96110cefea417bb1dd8d1209d674e283b02997925efabe2c5623508be666e397"
+    },
+    {
       "source": "assets/world-20261026-42/planet-meadow.webp",
       "path": "assets/world-20261026-42/planet-meadow.webp",
       "bytes": 481572,
@@ -1158,16 +1218,28 @@
       "sha256": "cd4849ff75e8cf4800c0d9a44067dba8e0c83d0a98e3c39e255359138b2437cd"
     },
     {
+      "source": "auth-entry-ui.mjs",
+      "path": "auth-entry-ui.mjs",
+      "bytes": 3846,
+      "sha256": "23a3ab151dab4ff5aef412fcb48dd7adc7231d968bda661e707fd85f0e15e8f3"
+    },
+    {
+      "source": "auth-entry.css",
+      "path": "auth-entry.css",
+      "bytes": 3320,
+      "sha256": "60e1e1c8ccd394d2afc753c5d89e657d3cf88941ac89b1f3be387de02cafabc1"
+    },
+    {
+      "source": "auth-entry.mjs",
+      "path": "auth-entry.mjs",
+      "bytes": 16621,
+      "sha256": "1911a0b12e728bf7e2c4a38698aa18a6c6e554eb66655998dad2b19794711364"
+    },
+    {
       "source": "auth-hours-polish.css",
       "path": "auth-hours-polish.css",
       "bytes": 4590,
       "sha256": "c42cce7221460b528ebcdf3a4d46252959a183f43d25f92d3e38ff14743c5af4"
-    },
-    {
-      "source": "auth-registration.mjs",
-      "path": "auth-registration.mjs",
-      "bytes": 1196,
-      "sha256": "db725df27c429b0a5778f0f1867e32046ad8e3174328af270ac72092b6b7f580"
     },
     {
       "source": "avatar-upload.mjs",
@@ -1184,14 +1256,14 @@
     {
       "source": "business-card.css",
       "path": "business-card.css",
-      "bytes": 5751,
-      "sha256": "b3231633e55643367c7fc7bc27b6d924b563be3ecf054b2721ecb70e71535833"
+      "bytes": 8324,
+      "sha256": "6ecdc6d2521bbbe170197cf39bb694c6af315cc6318b71e5a5e25b2e39d1c04e"
     },
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 4087,
-      "sha256": "ec1f3d13a20506737c21994337103e9a4b5c77ec359a009f56a518d1e59a19d5"
+      "bytes": 5970,
+      "sha256": "f9290c9c57e3610bd277856ad941fe26e865149f3546f1f2ff81263dcc9a4a49"
     },
     {
       "source": "card-design.mjs",
@@ -1286,8 +1358,8 @@
     {
       "source": "conversation-onboarding.mjs",
       "path": "conversation-onboarding.mjs",
-      "bytes": 15349,
-      "sha256": "cbfd93552ee39294b89053cd0352d375838dc4f9113e2cf138eae1a6c641f7a9"
+      "bytes": 15412,
+      "sha256": "38a8549bec51f6c4269f403f52855e9e9c56bec8bf30246d9b3acab433fba685"
     },
     {
       "source": "date-picker.css",
@@ -1300,6 +1372,12 @@
       "path": "date-picker.mjs",
       "bytes": 15977,
       "sha256": "adf9665d6418280154ec478f22461d7a56dcd85408cf5b8b8d950199531b5166"
+    },
+    {
+      "source": "demo-account-state.mjs",
+      "path": "demo-account-state.mjs",
+      "bytes": 1479,
+      "sha256": "1bc9ec425c236998f80acf6cfa5930ebcd9d3f86f141ad6579c69555a934f3ba"
     },
     {
       "source": "demo.css",
@@ -1350,16 +1428,28 @@
       "sha256": "b6cebf7814e5077dbe52106e462132f0fcef848aa291e77bcc912f6aa5a2cccb"
     },
     {
+      "source": "friend-avatars.mjs",
+      "path": "friend-avatars.mjs",
+      "bytes": 889,
+      "sha256": "263110cf2d0ebe04d8d76a97e1ca572e0c331dc656df96098883a4fcabfbaab3"
+    },
+    {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 8884,
-      "sha256": "5f3c19be8db373e3108abf8774b0befeacf92a47cf469e007879fbc87f828138"
+      "bytes": 9455,
+      "sha256": "aaaf5656772f5548b75061f357e25e8e67789ea64db7ae3c9bc58402c87a6673"
     },
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2897,
-      "sha256": "72a60dbb356fb60283d1da1b8afd7f1358d7796b994586566c48ed1418b15718"
+      "bytes": 2843,
+      "sha256": "c2a3f148511d4c262b5b0da9b3473fbc130f27f42cf7e7a17760e6c9947360dc"
+    },
+    {
+      "source": "friend-world-loading.mjs",
+      "path": "friend-world-loading.mjs",
+      "bytes": 1970,
+      "sha256": "4ce5bce0be953751e3ee56dbef1e4eed37fee492bbfda45e0e59d8a0adf7a3b7"
     },
     {
       "source": "friend-world-math.mjs",
@@ -1370,8 +1460,8 @@
     {
       "source": "friend-world.mjs",
       "path": "friend-world.mjs",
-      "bytes": 7025,
-      "sha256": "5b1714ab89f300c5b03fadc7b39eb0d4a5ba37bdb99ebd6636225c2ee077f8ea"
+      "bytes": 9049,
+      "sha256": "82467955b8bb25ea78afe495049c6bdb176fa2b71d463b2d65c0784c67e8308e"
     },
     {
       "source": "glass-contract.css",
@@ -1406,8 +1496,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 9769,
-      "sha256": "89796c4aecf5982b00407cefab0d65428c251d4c5ab361f78d8e9527bfdf2fce"
+      "bytes": 9925,
+      "sha256": "70319604020b987eea51a8695d5d79fceafe043d67b1de99991e96a52188dad4"
     },
     {
       "source": "journey-experience.css",
@@ -1533,7 +1623,7 @@
       "source": "login-video-scene.mjs",
       "path": "login-video-scene.mjs",
       "bytes": 4182,
-      "sha256": "ba2511cfbf5a4174e79feea1398c72d066262fbc1e4951ec880ea5a16b50f3f5"
+      "sha256": "98aa4388d5cdf7fc0be45dbdc85d2d0b98f2483416d48b15c249c2f39ab91fd4"
     },
     {
       "source": "logo-brand.css",
@@ -1562,8 +1652,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 59498,
-      "sha256": "c68105f13865f8aebda34a50deccd9a0432985ca3d7ae093a05ed6fa368c1754"
+      "bytes": 60809,
+      "sha256": "e41273e94b2f4fc8c42b019837a6458396f200bd2f571dac66ec01888b32f40d"
     },
     {
       "source": "motion.css",
@@ -1610,8 +1700,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 13873,
-      "sha256": "41e33f123e5c4b17993bd184e0cd5ebc65122bac30f35f900de6d3b56b80165b"
+      "bytes": 15458,
+      "sha256": "04ff9747a4eb9f46fba21a6ff78a665d36ac0b864571e562c8f7bc9fc3da01d1"
     },
     {
       "source": "realm-scene.css",
@@ -1704,6 +1794,24 @@
       "sha256": "03670bd0c8da7e96b81ba7ea42bf861cf7262c8e8954949b2fc9116836df492b"
     },
     {
+      "source": "social-tags-ui.mjs",
+      "path": "social-tags-ui.mjs",
+      "bytes": 7595,
+      "sha256": "b8be3785735821ae85413b24537fc5eefbd09fe0483d0283cc61913642848845"
+    },
+    {
+      "source": "social-tags.css",
+      "path": "social-tags.css",
+      "bytes": 4071,
+      "sha256": "55bc617329c25799dda7f245b4252b52dabe8c143e571fbc3b955939daaa769d"
+    },
+    {
+      "source": "social-tags.mjs",
+      "path": "social-tags.mjs",
+      "bytes": 20487,
+      "sha256": "a270bd35958d72cb8e65ff888e832b593c94aadbcc5fd3c5de924e3ba5d37146"
+    },
+    {
       "source": "soft-companion.css",
       "path": "soft-companion.css",
       "bytes": 1628,
@@ -1714,6 +1822,12 @@
       "path": "styles.css",
       "bytes": 28407,
       "sha256": "b932a55a68ef1398efb1e4a978605751bc10b69acad788879c646f0abe6215b2"
+    },
+    {
+      "source": "tag-stickers.mjs",
+      "path": "tag-stickers.mjs",
+      "bytes": 9913,
+      "sha256": "2872a701d1da53f10510e7f8e3d7eb854ac4c098c1c491b1b09ff8e6878e6720"
     },
     {
       "source": "theme-black.css",
@@ -2134,6 +2248,46 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "social-tags.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "auth-entry.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "auth-entry.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "auth-entry-ui.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "demo-account-state.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "social-tags-ui.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "friend-world.mjs",
       "kind": "module"
@@ -2156,11 +2310,6 @@
     {
       "from": "app.mjs",
       "to": "welcome-logo-motion.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "app.mjs",
-      "to": "auth-registration.mjs",
       "kind": "module"
     },
     {
@@ -2294,6 +2443,16 @@
       "kind": "resource"
     },
     {
+      "from": "social-tags-ui.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "social-tags-ui.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
       "from": "friend-world.mjs",
       "to": "vendor/three/three.module.js",
       "kind": "module"
@@ -2304,13 +2463,18 @@
       "kind": "module"
     },
     {
-      "from": "friend-network.mjs",
-      "to": "card-labels.mjs",
+      "from": "friend-world.mjs",
+      "to": "friend-world-loading.mjs",
       "kind": "module"
     },
     {
       "from": "friend-network.mjs",
-      "to": "ui-icons.mjs",
+      "to": "friend-avatars.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "friend-network.mjs",
+      "to": "loading-state.mjs",
       "kind": "module"
     },
     {
@@ -2321,11 +2485,6 @@
     {
       "from": "shared-agents.mjs",
       "to": "klin-companion.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "auth-registration.mjs",
-      "to": "model.mjs",
       "kind": "module"
     },
     {
@@ -2380,6 +2539,11 @@
     },
     {
       "from": "public-card.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "public-card.mjs",
       "to": "card-design.mjs",
       "kind": "module"
     },
@@ -2404,6 +2568,11 @@
       "kind": "module"
     },
     {
+      "from": "conversation-onboarding.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
       "from": "motion.mjs",
       "to": "card-handoff.mjs",
       "kind": "module"
@@ -2421,6 +2590,11 @@
     {
       "from": "model.mjs",
       "to": "conversation-onboarding.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "model.mjs",
+      "to": "social-tags.mjs",
       "kind": "module"
     },
     {
@@ -2444,6 +2618,11 @@
       "kind": "module"
     },
     {
+      "from": "friend-avatars.mjs",
+      "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
       "from": "landing-audio-engine.mjs",
       "to": "landing-audio-clips.mjs",
       "kind": "module"
@@ -2452,12 +2631,27 @@
       "from": "card-artwork.mjs",
       "to": "card-design.mjs",
       "kind": "module"
+    },
+    {
+      "from": "card-artwork.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
     }
   ],
   "thirdPartyNotices": [
     "vendor/three/LICENSE"
   ],
   "dynamicAssets": {
+    "assets/demo-avatars-20261026-45/": [
+      "assets/demo-avatars-20261026-45/b.jpg",
+      "assets/demo-avatars-20261026-45/c.jpg",
+      "assets/demo-avatars-20261026-45/d.jpg",
+      "assets/demo-avatars-20261026-45/e.jpg",
+      "assets/demo-avatars-20261026-45/f.jpg",
+      "assets/demo-avatars-20261026-45/g.jpg",
+      "assets/demo-avatars-20261026-45/h.jpg",
+      "assets/demo-avatars-20261026-45/i.jpg"
+    ],
     "assets/scenes-20261026-41/house-": [
       "assets/scenes-20261026-41/house-wood.webp",
       "assets/scenes-20261026-41/house-water.webp",
