@@ -1,5 +1,5 @@
-import { resolveCardDesign } from './card-design.mjs?v=20261023-card-36h';
-export const CARD_WIDTH=900, CARD_HEIGHT=560;
+import { resolveCardDesign } from './card-design.mjs?v=20261026-experience-42';
+export const CARD_WIDTH=600, CARD_HEIGHT=840;
 export const DEFAULT_CARD_AVATAR = 'assets/klin-20261014/adult.png';
 export const CARD_FONTS={
  sans:'Helvetica Neue,PingFang TC,PingFang SC,Arial,sans-serif',
@@ -22,91 +22,40 @@ function linesFor(text,size,width,maxLines,weight,family){
  if(lines.length>maxLines){lines.length=maxLines;lines[maxLines-1]=fit(lines[maxLines-1]+'…',size,width,weight,family);}
  return lines;
 }
-// One front only. Each composition follows a different supplied print reference.
-// The same print coordinates drive the responsive DOM and downloadable PNG.
+// One gentle portrait, shared by the browser, shared links and PNG export.
+// The original six print directions remain archived as process history.
 export function cardArtwork(data){
- const d=resolveCardDesign(data),l=d.layout,items=[],ink=d.ink,paper=d.paper,height=[560,510,560,500,540,560][l];
- const logo=(x,y,w,color=ink,rotate=0)=>items.push({type:'logo',x,y,w,h:w/3,color,rotate});
- const backgrounds=[null,null,'assets/business-card-20261023-v2/pet-paper.png','assets/business-card-20261023-v2/blue-paw.png','assets/business-card-20261023-v2/portrait-paper.png','assets/business-card-20261023-v2/creatures-paper.png'];
- if(backgrounds[l])items.push({type:'image',x:0,y:0,w:900,h:height,src:backgrounds[l],fit:'cover'});
- const txt=(kind,text,x,y,w,h,size,{weight=400,family='sans',color=ink,italic=false,align='left',rotate=0,maxLines=2}={})=>{
+ const d=resolveCardDesign(data),items=[],ink=d.ink,paper=d.paper;
+ const txt=(kind,text,x,y,w,h,size,{weight=400,family='sans',color=ink,align='center',maxLines=2,lineHeight=1.3}={})=>{
   if(!text)return;
   let actual=size;
-  if(kind==='name')while(actual>30){const count=linesFor(text,actual,w,40,weight,family).length;if(count<=maxLines&&actual*1.1*count<=h)break;actual-=2;}
-  items.push({type:'text',kind,text,lines:linesFor(text,actual,w,maxLines,weight,family),x,y,w,h,size:actual,weight,family,color,italic,align,rotate,lineHeight:1.1});
- };
- let portrait;
- const identity=(text,x,y,w,h,size,options={})=>{
-  const portraitSize=l===1?144:120,gap=24;
-  txt('name',text,x+portraitSize+gap,y,w-portraitSize-gap,h,size,{...options,align:'left'});
-  const name=items.at(-1),textHeight=name.lines.length*name.size*name.lineHeight;
-  name.h=textHeight;
-  let portraitX=x;
-  if(l===5){
-   const textWidth=Math.min(name.w,Math.max(...name.lines.map(line=>measured(line,name.size,name.weight,name.family)))+2);
-   portraitX=x+(w-portraitSize-gap-textWidth)/2;
-   name.x=portraitX+portraitSize+gap;name.w=textWidth;
+  if(kind==='name')while(actual>24){
+   const count=linesFor(text,actual,w,40,weight,family).length;
+   if(count<=maxLines&&actual*lineHeight*count<=h)break;
+   actual-=2;
   }
-  const portraitY=l===5?Math.max(24,name.y+(textHeight-portraitSize)/2):name.y;
-  if(l===5)name.y=portraitY+(portraitSize-textHeight)/2;
-  portrait={type:'avatar',x:portraitX,y:portraitY,w:portraitSize,h:portraitSize,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#e8e7df',pad:data.avatar?0:9};
+  const lines=linesFor(text,actual,w,maxLines,weight,family);
+  items.push({type:'text',kind,text,lines,x,y,w,h,size:actual,weight,family,color,align,lineHeight});
  };
- const meta=[data.region,data.language].filter(Boolean).join(' · ');
- const tags=(x,y,w,h,size,{columns=2,family='sans',weight=600,color=ink,fill='transparent',stroke='transparent',radius=0,tilt=false,padX=0,padY=0,align='left'}={})=>{
-  const count=data.tags.length;if(!count)return;
-  const cols=Math.min(columns,count),rows=Math.ceil(count/cols),gapX=24,gapY=6;
-  const cell=(w-gapX*(cols-1))/cols,height=Math.min(Math.ceil(size*1.24+padY*2),(h-gapY*(rows-1))/rows);
-  data.tags.forEach((tag,i)=>{
-   const col=i%cols,row=Math.floor(i/cols);
-   const width=fill==='transparent'&&stroke==='transparent'?cell:Math.min(cell,measured(tag,size,weight,family)+padX*2+10);
-   items.push({type:'tag',align,text:tag,label:fit(tag,size,width-padX*2-7,weight,family),x:x+col*(cell+gapX),y:y+row*(height+gapY),w:width,h:height,size,weight,family,fill,color,stroke,r:radius,rotate:tilt?[-2,1,-1,2][i%4]:0,padX,padY});
-  });
- };
- if(l===0){
-  // Selected reference 01: name upper-left, compact information lower-left,
-  // a large vertical wordmark on the right, all on uninterrupted chartreuse.
-  identity(data.name.replace(/\s+/, '\n'),60,44,585,166,72,{weight:600,maxLines:2});
-  txt('bio',data.bio,62,206,590,62,29,{maxLines:2});
-  txt('wordmark','Knoknok',526,216,490,129,110,{weight:700,rotate:-90,maxLines:1});
-  tags(61,346,584,160,36,{columns:data.tags.length>6?3:data.tags.length>3?2:1,weight:550});
-  txt('meta',meta,62,517,590,29,24,{maxLines:1});
- }else if(l===1){
-  // Selected reference 02: shared column edges and aligned header/body/footer rows.
-  const left=50,right=587,bodyTop=219,footerTop=450;
-  // Compensate the original wordmark's transparent padding, preserving its bytes.
-  logo(left-15,60,105);txt('meta','Knoknok',right,64,263,30,23,{maxLines:1});
-  identity(data.name.replace(/\s+/, '\n'),left,bodyTop,471,190,88,{weight:400,maxLines:2});
-  txt('bio',data.bio,left,footerTop,471,30,23,{maxLines:1});
-  // Small optical offset aligns the smaller tag letters with the large name.
-  tags(right,bodyTop+5,263,194,35,{columns:data.tags.length>4?2:1,weight:400});
-  txt('meta',meta,right,footerTop,263,30,23,{maxLines:1});
- }else if(l===2){
-  // Selected reference 03: modest sans name, full pale pattern, stamp and Klin line art.
-  identity(data.name,94,67,555,71,58,{weight:650,maxLines:1});
-  txt('bio',data.bio,238,142,411,63,26,{maxLines:2});
-  tags(105,255,536,222,39,{columns:data.tags.length>4?2:1,weight:550});
-  txt('meta',meta,105,494,536,30,26,{maxLines:1});txt('wordmark','Knoknok',675,115,145,58,42,{family:'hand',weight:700,align:'center',maxLines:1});
- }else if(l===3){
-  // Selected reference 04: three small icons, centered information, right-edge arm.
-  identity(data.name,190,160,550,62,48,{weight:500,maxLines:1});
-  txt('bio',data.bio,334,224,406,30,25,{maxLines:1});
-  tags(155,data.tags.length>3?306:330,590,138,35,{columns:3,weight:500,align:'center'});
-  txt('meta',meta,70,459,760,28,25,{align:'center',maxLines:1});
- }else if(l===4){
-  // Selected reference 05: name left, small Klin upper-right, ruled information columns.
-  identity(data.name,62,61,617,75,43,{weight:400,maxLines:1});
-  txt('bio',data.bio,206,124,473,62,26,{maxLines:2});
-  items.push({type:'rect',x:441,y:219,w:1.7,h:254,fill:ink,r:0});
-  tags(484,228,348,245,38,{columns:data.tags.length>4?2:1,weight:400});
-  txt('meta',meta,62,447,346,32,26,{maxLines:1});logo(62,486,137);
- }else{
-  // Selected reference 06: centered serif name above a cropped Klin illustration band.
-  identity(data.name,68,65,764,91,65,{family:'serif',weight:600,align:'center',maxLines:1});
-  txt('bio',data.bio,201,180,498,28,25,{align:'center',maxLines:1});
-  tags(117,224,666,110,36,{columns:4,weight:400,align:'center'});
-  txt('meta',meta,232,338,436,25,21,{align:'center',maxLines:1});
+ items.push({type:'logo',x:196,y:40,w:208,h:208/3,color:'#657067'});
+ items.push({type:'rect',x:198,y:124,w:204,h:204,fill:'#e9ede3',r:102});
+ items.push({type:'avatar',x:210,y:136,w:180,h:180,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f3f1e9',pad:data.avatar?0:12});
+ txt('name',data.name,56,351,488,88,46,{weight:600,family:'serif',maxLines:2,lineHeight:1.12});
+ txt('bio',data.bio,60,450,480,79,25,{color:'#727680',maxLines:2,lineHeight:1.45});
+ items.push({type:'rect',x:230,y:553,w:140,h:1.5,fill:'#d9ddcf',r:0});
+ // Center whole rows; 7 maximum-width labels still fit in four rows.
+ // Ellipsized labels retain their complete text as a title and accessible action.
+ const size=25,padX=19,padY=10,gap=12,height=48,rows=[[]];
+ for(const text of data.tags){
+  const width=Math.max(76,Math.min(234,measured(text,size,400,'sans')+padX*2+4));
+  let row=rows.at(-1);
+  if(row.length&&row.reduce((n,tag)=>n+tag.w,0)+gap*row.length+width>488){row=[];rows.push(row);}
+  row.push({type:'tag',text,label:fit(text,size,width-padX*2,400,'sans'),w:width,h:height,size,weight:400,family:'sans',align:'center',color:'#657065',fill:'#edf0e6',stroke:'transparent',r:24,padX,padY});
  }
- // Every design reserves a readable profile portrait, separately from Klin artwork.
- items.push(portrait);
- return {width:CARD_WIDTH,height,paper,ink,layout:l,items};
+ rows.forEach((row,ri)=>{
+  let x=(CARD_WIDTH-row.reduce((n,tag)=>n+tag.w,0)-gap*Math.max(0,row.length-1))/2;
+  row.forEach(tag=>{items.push({...tag,x,y:566+ri*56});x+=tag.w+gap;});
+ });
+ txt('meta',[data.region,data.language].filter(Boolean).join(' · '),56,794,488,30,21,{color:'#8a8d94',maxLines:1});
+ return {width:CARD_WIDTH,height:CARD_HEIGHT,paper,ink,layout:0,radius:32,items};
 }

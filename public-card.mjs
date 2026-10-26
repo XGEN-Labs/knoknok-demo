@@ -1,5 +1,5 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261023-card-36h';
-import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261023-card-36h';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261026-experience-42';
+import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
 export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
 
@@ -86,7 +86,7 @@ export function decodeCard(encoded) {
 const artworkAsset = path => path.startsWith('data:') ? path : new URL(path, import.meta.url).href;
 const preparedFontSets = new WeakMap();
 // DOM previews and PNG export must measure the same loaded font faces. Keep one
-// readiness promise per document so opening another style does not reload them.
+// readiness promise per document so reopening or sharing the card does not reload them.
 export function prepareCardFonts(sample = 'Knoknok 名片 標籤') {
  const fonts = typeof document === 'undefined' ? null : document.fonts;
  if (!fonts) return Promise.resolve();
@@ -123,7 +123,7 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
 export function cardMarkup(value, { compact = false, showAllTags = false, editable = false } = {}) {
  const data=validatedData(value);if(!data)return '';
  const art=cardArtwork(data);
- return `<article class="share-card business-card${compact?' is-compact':''}" data-print-card data-business-card data-layout="${art.layout}" style="--bc-paper:${art.paper};aspect-ratio:${art.width}/${art.height}" aria-label="${escape(data.name)}的名片"><div class="bc-face bc-front" style="background:${art.paper};color:${art.ink}">${artworkMarkup(art,{interactive:showAllTags&&!compact,editable:editable&&!compact})}</div></article>`;
+ return `<article class="share-card business-card${compact?' is-compact':''}" data-print-card data-business-card data-layout="${art.layout}" style="--bc-paper:${art.paper};aspect-ratio:${art.width}/${art.height};border-radius:${art.radius/art.width*100}% / ${art.radius/art.height*100}%" aria-label="${escape(data.name)}的名片"><div class="bc-face bc-front" style="background:${art.paper};color:${art.ink}">${artworkMarkup(art,{interactive:showAllTags&&!compact,editable:editable&&!compact})}</div></article>`;
 }
 
 export function cardShareURL(value, baseURL) {
@@ -160,7 +160,7 @@ export async function downloadCard(value) {
  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('瀏覽器暫時無法繪製名片。');
  const paths=[...new Set([BRAND_LOGO,...art.items.filter(i=>i.src).map(i=>i.src)])];
  const loaded=await Promise.all(paths.map(cardImage)),images=new Map(paths.map((p,i)=>[p,loaded[i]]));
- ctx.scale(2,2);ctx.fillStyle=art.paper;ctx.fillRect(0,0,art.width,art.height);ctx.textBaseline='top';
+ ctx.scale(2,2);rounded(ctx,0,0,art.width,art.height,art.radius);ctx.clip();ctx.fillStyle=art.paper;ctx.fillRect(0,0,art.width,art.height);ctx.textBaseline='top';
  for(const item of art.items){
   ctx.save();ctx.translate(item.x+item.w/2,item.y+item.h/2);ctx.rotate((item.rotate||0)*Math.PI/180);ctx.translate(-item.w/2,-item.h/2);
   if(item.type==='rect'){ctx.fillStyle=item.fill;if(item.r){rounded(ctx,0,0,item.w,item.h,Math.min(item.r,item.w/2,item.h/2));ctx.fill();}else ctx.fillRect(0,0,item.w,item.h);}

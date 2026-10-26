@@ -1,87 +1,63 @@
-/* Quiet neighbourhood: colour and distance carry identity; no photo scenery,
-   viewer node, relationship lines, or decorative room props. */
-.phone#phone {--kn-neighbourhood-space:radial-gradient(ellipse at 50% 6%,#faf7ed 0%,#f0f1e8 48%,#e0e7df 100%);}
+/* A quiet sky frames a tactile, turnable miniature world. */
+.phone#phone {--kn-neighbourhood-space:radial-gradient(ellipse at 45% 26%,#f7faf7 0%,#e2edf0 53%,#d5e5e4 100%);}
 .phone#phone #app .page.friends-lounge,
 .phone#phone[data-world-page="relations"] > :is(.home-scene,.klin-illustrated-world) {background:var(--kn-neighbourhood-space)!important;}
 .phone#phone[data-world-page="relations"] > .klin-illustrated-world .klin-illustrated-room {background:var(--kn-neighbourhood-space);}
 .phone#phone[data-world-page="relations"] > .klin-illustrated-world .klin-illustrated-plate {visibility:hidden;}
-.phone#phone #app .page.friends-lounge :is(.page-top h2,.page-top .icon-button,.network-search,.network-search input,.network-search-status) {color:#424957!important;text-shadow:none;}
-.phone#phone #app .page.friends-lounge .page-top .icon-button:hover {color:#424957!important;}
-.phone#phone #app .page.friends-lounge .network-search input::placeholder {color:#697383;opacity:1;}
-.phone#phone #app .page.friends-lounge .network-search svg {color:#596372;stroke-width:1.9;}
-.phone#phone #app .page.friends-lounge .relationship-network.friend-house-network {
-  position:absolute;
-  inset:calc(var(--app-safe-top) + 60px) 16px calc(var(--app-safe-bottom) + 78px);
-  width:auto;height:auto;display:block;transform:none;overflow:visible;
-  pointer-events:none;isolation:isolate;
+.phone#phone #app .page.friends-lounge :is(.page-top h2,.page-top .icon-button,.network-search) {color:var(--kn-ui-color-input-text,#424957)!important;text-shadow:none;}
+.phone#phone #app .page.friends-lounge .network-search input::placeholder {color:var(--kn-ui-color-text-hint,#78818f)!important;opacity:1;}
+.phone#phone #app .page.friends-lounge .network-search svg {color:var(--kn-ui-color-text-hint,#78818f);stroke-width:1.9;}
+.phone#phone #app .page.friends-lounge .network-search-status {color:var(--kn-ui-color-text-hint,#78818f)!important;}
+.phone#phone #app .page.friends-lounge .relationship-network.spirit-world {
+ position:absolute;inset:calc(var(--app-safe-top) + 62px) 8px calc(var(--app-safe-bottom) + 80px);
+ width:auto;height:auto;display:block;transform:none;overflow:visible;isolation:isolate;pointer-events:auto;
 }
-.phone#phone #app .friends-lounge .friend-house-network .network-friend {
-  --house-size:clamp(76px,21.5cqw,88px);
-  position:absolute;left:var(--node-x);top:var(--node-y);
-  transform:translate(-50%,-50%);
-  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
-  width:var(--house-size);min-width:0;max-width:none;height:auto;min-height:0;
-  padding:0;gap:0;border:0!important;border-radius:0;background:transparent!important;
-  color:#424957;box-shadow:none!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  opacity:1;filter:none;pointer-events:auto;z-index:1;transition:none;animation:none;
+.spirit-world .world-viewport {position:absolute;inset:0 0 42px;touch-action:none;cursor:grab;outline:none;overflow:visible;}
+.spirit-world[data-world-dragging="true"] .world-viewport {cursor:grabbing;}
+.spirit-world .world-viewport:focus-visible {outline:2px solid var(--kn-ui-color-focus);outline-offset:3px;border-radius:32px;}
+.spirit-world .world-canvas {position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
+.spirit-world .world-fallback {position:absolute;left:50%;top:var(--world-center-y,50%);transform:translate(-50%,-50%);width:var(--world-diameter,300px);height:var(--world-diameter,300px);border-radius:50%;background:radial-gradient(circle at 32% 25%,#ffffff20,#202d2945),url('assets/world-20261026-42/planet-meadow.webp') center/200% 100%;box-shadow:inset -12px -18px 25px #48583a33;}
+.spirit-world[data-world-renderer="webgl"] .world-fallback {visibility:hidden;}
+.spirit-world .world-shadow {position:absolute;left:50%;top:calc(var(--world-center-y,50%) + var(--world-diameter,300px)*.53);width:calc(var(--world-diameter,300px)*.72);height:18px;transform:translateX(-50%);background:#66857635;filter:blur(14px);border-radius:50%;pointer-events:none;}
+.spirit-world .world-rooms {position:absolute;inset:0;pointer-events:none;}
+.phone#phone #app .friends-lounge .spirit-world .network-friend {
+ --world-node-scale:1;--house-size:72px;position:absolute;left:50%;top:50%;transform:translate(-50%,-100%) scale(var(--world-node-scale));transform-origin:50% 100%;
+ display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:var(--house-size);min-width:0;max-width:none;height:auto;min-height:0;padding:0;gap:0;
+ border:0!important;border-radius:0;background:transparent!important;color:#424957;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none;pointer-events:auto;transition:none;animation:none;user-select:none;-webkit-user-select:none;touch-action:none;
 }
-.phone#phone #app .friends-lounge .friend-house-network .network-friend.is-primary {--house-size:clamp(136px,37cqw,148px);z-index:2;}
-.phone#phone #app .friends-lounge .friend-house-network .network-house {
-  display:block;position:relative;width:var(--house-size);height:var(--house-size);flex:none;pointer-events:none;
+.phone#phone #app .friends-lounge .spirit-world .network-friend.is-primary {--house-size:88px;}
+.phone#phone #app .friends-lounge .spirit-world .network-house {display:block;position:relative;width:var(--house-size);height:calc(var(--house-size)*.75);flex:none;pointer-events:none;}
+.phone#phone #app .friends-lounge .spirit-world .network-house img {display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 3px #53643d24);}
+.phone#phone #app .friends-lounge .spirit-world .world-contact-avatar {
+ display:grid;place-items:center;position:relative;width:40px;height:40px;box-sizing:border-box;flex:none;margin-bottom:-7px;z-index:2;border:2px solid #fffffff2;border-radius:50%;
+ background:linear-gradient(135deg,#f9fbf5,#d9e6cb);color:#5a6e4e;font:600 18px/1 var(--kn-ui-font-ui);box-shadow:0 3px 10px #43563d22;
 }
-.phone#phone #app .friends-lounge .friend-house-network .network-door {
-  display:block;width:100%;height:100%;overflow:visible;
-  --door-frame:#dbe3d5;--door-fill:#f0f3e9;--door-ink:#778574;
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-door.is-water {--door-frame:#dce4ec;--door-fill:#f0f3f6;--door-ink:#788796;}
-.phone#phone #app .friends-lounge .friend-house-network .network-door.is-earth {--door-frame:#e9e0d2;--door-fill:#f7f2e9;--door-ink:#948675;}
-.phone#phone #app .friends-lounge .friend-house-network .network-door path {
-  stroke:var(--door-ink);stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;
-}
-.phone#phone #app .friends-lounge .friend-house-network .door-surround {fill:var(--door-frame);}
-.phone#phone #app .friends-lounge .friend-house-network .door-opening {fill:var(--door-fill);}
-.phone#phone #app .friends-lounge .friend-house-network .door-sill {fill:none;}
-.phone#phone #app .friends-lounge .friend-house-network .door-knob {fill:var(--door-ink);stroke:none;}
-.phone#phone #app .friends-lounge .friend-house-network .network-house-label {
-  display:flex;align-items:center;justify-content:center;
-  min-height:26px;max-width:calc(var(--house-size) + 8px);
-  box-sizing:border-box;margin:0;padding:0;
-  border:0;border-radius:0;background:none;box-shadow:none;
-  backdrop-filter:none;-webkit-backdrop-filter:none;
-}
-.phone#phone #app .friends-lounge .friend-house-network .network-friend strong {
-  margin:0;padding:0;max-width:var(--house-size);
-  border:0;border-radius:0;background:none!important;box-shadow:none!important;
-  font:500 13px/20px var(--kn-ui-font-ui);color:#424957!important;
-  text-shadow:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  backdrop-filter:none;-webkit-backdrop-filter:none;
-}
-.phone#phone #app .friends-lounge .friend-house-network .is-primary strong {font-size:16px;line-height:24px;font-weight:600;}
-.phone#phone #app .friends-lounge .friend-house-network .network-empty {
-  position:absolute;top:42%;left:7%;right:7%;padding:18px 12px;margin:0;
-  border:0;border-radius:20px;background:rgba(255,255,255,.62);color:#596372;
-  font-size:14px;line-height:22px;text-shadow:none;text-align:center;z-index:4;
-}
-.phone#phone #app .friends-lounge .friend-house-network :is(.network-friend,.network-empty)[hidden] {display:none!important;}
-.phone#phone #app .friends-lounge .friend-house-network .network-friend:active {transform:translate(-50%,-50%)!important;}
-.phone#phone #app .friends-lounge .friend-house-network .network-friend:focus-visible {outline:none!important;}
-.phone#phone #app .friends-lounge .friend-house-network .network-friend:focus-visible .network-house-label {outline:2px solid var(--kn-ui-color-focus);outline-offset:3px;border-radius:4px;}
-@media(hover:hover){
- .phone#phone #app .friends-lounge .friend-house-network .network-friend:hover .door-opening {fill:#fffdf8;}
-}
-/* Short keyboard viewports retain eight reachable rows and the fixed search. */
-.phone#phone[data-keyboard-open="true"] #app .page.friends-lounge .relationship-network.friend-house-network {
-  inset:calc(var(--app-safe-top) + 58px) var(--kn-safe-left) calc(var(--app-safe-bottom) + 78px) var(--kn-safe-right);
-  display:flex;flex-direction:column;gap:8px;overflow-y:auto;overflow-x:hidden;
-  padding:4px 0 12px;pointer-events:auto;overscroll-behavior:contain;
-}
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-friend {
-  --house-size:62px;position:relative;left:auto;top:auto;transform:none!important;
-  flex:none;flex-direction:row;justify-content:flex-start;gap:12px;
-  width:100%;height:66px;padding:0 10px 0 2px;box-sizing:border-box;
-  border-radius:18px;background:rgba(255,255,255,.45)!important;
-}
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-house-label {margin:0;max-width:none;}
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-friend strong {max-width:200px;font-size:14px;line-height:20px;}
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .friend-house-network .network-empty {position:relative;inset:auto;width:100%;box-sizing:border-box;}
+.phone#phone #app .friends-lounge .spirit-world .is-water .world-contact-avatar {background:linear-gradient(135deg,#f4fbff,#d1e0ec);color:#596f87;}
+.phone#phone #app .friends-lounge .spirit-world .is-earth .world-contact-avatar {background:linear-gradient(135deg,#fffaf0,#ebd9bd);color:#8a7557;}
+.phone#phone #app .friends-lounge .spirit-world .is-primary .world-contact-avatar {width:52px;height:52px;font-size:23px;}
+.phone#phone #app .friends-lounge .spirit-world .world-contact-avatar img {width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.phone#phone #app .friends-lounge .spirit-world .network-house-label {display:flex;justify-content:center;min-height:22px;max-width:110px;box-sizing:border-box;margin:-4px 0 0;padding:1px 8px;border:1px solid #ffffffb0;border-radius:11px;background:#fffdf0e8;box-shadow:0 2px 6px #6471510d;backdrop-filter:none;-webkit-backdrop-filter:none;}
+.phone#phone #app .friends-lounge .spirit-world .network-friend strong {margin:0;padding:0;max-width:90px;border:0;border-radius:0;background:none!important;box-shadow:none!important;font:500 12px/18px var(--kn-ui-font-ui);color:#434a50!important;text-shadow:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:none;-webkit-backdrop-filter:none;}
+.phone#phone #app .friends-lounge .spirit-world .is-primary strong {font-size:13px;font-weight:600;}
+.phone#phone #app .friends-lounge .spirit-world .network-friend:active {transform:translate(-50%,-100%) scale(var(--world-node-scale))!important;}
+.phone#phone #app .friends-lounge .spirit-world .network-friend:focus-visible {outline:none!important;}
+.phone#phone #app .friends-lounge .spirit-world .network-friend:focus-visible .world-contact-avatar {outline:2px solid var(--kn-ui-color-focus);outline-offset:3px;}
+.phone#phone #app .friends-lounge .spirit-world .network-friend[data-world-back="true"] {visibility:hidden;pointer-events:none;}
+.spirit-world .world-navigation {position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--kn-ui-color-text-hint,#78818f);font:400 12px/18px var(--kn-ui-font-ui);}
+.phone#phone #app .spirit-world .world-navigation button {width:36px;height:36px;min-width:36px;min-height:36px;padding:6px;display:grid;place-items:center;border:0!important;border-radius:50%;background:#ffffff70!important;color:#6c7a80;box-shadow:none;}
+.spirit-world .world-navigation svg {width:20px;height:20px;}
+.spirit-world [data-world-turn="1"] svg {transform:rotate(180deg);}
+.phone#phone #app .friends-lounge .spirit-world .network-empty {position:absolute;top:40%;left:7%;right:7%;padding:18px 12px;margin:0;border:0;border-radius:20px;background:#ffffffb8;color:var(--kn-ui-color-text-hint,#78818f);font-size:14px;line-height:22px;text-shadow:none;text-align:center;z-index:40;}
+.phone#phone #app .friends-lounge .spirit-world :is(.network-friend,.network-empty)[hidden] {display:none!important;}
+/* Text search and a short keyboard viewport use the same accessible contacts. */
+.phone#phone #app .spirit-world[data-world-filtered="true"] .world-viewport,
+.phone#phone[data-keyboard-open="true"] #app .spirit-world .world-viewport {inset:8px 12px 0;overflow-y:auto;touch-action:pan-y;}
+.phone#phone #app .spirit-world[data-world-filtered="true"] :is(.world-canvas,.world-fallback,.world-shadow,.world-navigation),
+.phone#phone[data-keyboard-open="true"] #app .spirit-world :is(.world-canvas,.world-fallback,.world-shadow,.world-navigation) {display:none;}
+.phone#phone #app .spirit-world[data-world-filtered="true"] .world-rooms,
+.phone#phone[data-keyboard-open="true"] #app .spirit-world .world-rooms {display:flex;flex-direction:column;gap:10px;position:relative;pointer-events:auto;padding-bottom:12px;}
+.phone#phone #app .friends-lounge .spirit-world[data-world-filtered="true"] .network-friend,
+.phone#phone[data-keyboard-open="true"] #app .friends-lounge .spirit-world .network-friend {position:relative;left:auto!important;top:auto!important;transform:none!important;visibility:visible;opacity:1!important;pointer-events:auto;display:flex;flex-direction:row;justify-content:flex-start;gap:8px;--house-size:58px;width:100%;height:74px;padding:7px 12px;box-sizing:border-box;border-radius:22px;background:#ffffff86!important;}
+.phone#phone #app .spirit-world[data-world-filtered="true"] .network-house-label,
+.phone#phone[data-keyboard-open="true"] #app .spirit-world .network-house-label {margin:0;background:none;border:0;box-shadow:none;}
+@media(hover:hover){.spirit-world .network-friend:hover .world-contact-avatar {box-shadow:0 0 0 3px #ffffff6b,0 4px 12px #485c3d26;}}

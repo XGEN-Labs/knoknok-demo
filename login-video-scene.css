@@ -1,10 +1,16 @@
 /* Supplied login film owns the complete scene; no second character over it. */
-.phone>.login-video-scene{background:#a2b3ba;filter:none!important;transition:none;opacity:1}
-/* Match the film's clear blue daylight while retaining the supplied video bytes.
-   Poster and moving image share the grade so loading never changes the palette. */
-.login-video-scene>.login-video-poster,.login-video-scene>.login-video-background{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%;pointer-events:none;transform:none;filter:saturate(1.42) brightness(1.08) contrast(1.04) hue-rotate(4deg)}
+.phone>.login-video-scene{background:#a2b3ba;filter:none!important;transition:none;opacity:1;overflow:hidden}
+/* The derivative film grades meadow yellows/greens independently of sky blue.
+   Its matching first-frame poster is the fallback; no global filter re-tints fur. */
+.login-video-scene>.login-video-poster,.login-video-scene>.login-video-background{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%;pointer-events:none;transform:none;filter:none;transition:filter 240ms ease,transform 240ms ease}
 .login-video-scene>.login-video-background{opacity:0}
 .login-video-scene[data-video-ready="true"]>.login-video-background{opacity:1}
 .phone.login-video-active #app .welcome .klin-welcome{display:none!important;visibility:hidden!important}
 .phone.login-video-active #app .welcome .klin-welcome *{visibility:hidden!important}
 .phone.login-video-active #app>.page{background:transparent!important}
+
+/* Auth quiets the scene behind the form; the UI and approved glass stay crisp.
+   Expand the media slightly so the blur never reveals a dark frame edge. */
+.phone[data-portal-scene="login"]>.login-video-scene>:is(.login-video-poster,.login-video-background){filter:blur(16px);transform:scale(1.10)}
+.phone[data-portal-motion="still"]>.login-video-scene>:is(.login-video-poster,.login-video-background){transition:none}
+@media(prefers-reduced-motion:reduce){.login-video-scene>:is(.login-video-poster,.login-video-background){transition:none}}

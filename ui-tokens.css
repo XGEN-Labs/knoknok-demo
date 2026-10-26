@@ -1,4 +1,4 @@
-/* Knoknok UI 1.0 · 2026-10-23
+/* Knoknok UI 1.0 · 2026-10-26
  * Shared tokens for the specification and UI v31 runtime.
  * existing = source baseline; recommended = original proposal; adopted = implemented.
  * Generated from ui-standard/tokens.json: node ui-standard/export-tokens.mjs
@@ -112,8 +112,10 @@
   --kn-ui-color-disabled-edge: #e2e5dd;
   /* adopted | ui-foundations-v31.css; unified cool blue-gray editable text */
   --kn-ui-color-input-text: #30394c;
-  /* adopted | ui-foundations-v31.css; readable cool blue-gray placeholders */
-  --kn-ui-color-input-placeholder: #3c4558;
+  /* adopted | ui-foundations-v31.css; shared hint alias for all empty inputs */
+  --kn-ui-color-input-placeholder: var(--kn-ui-color-text-hint);
   /* adopted | ui-states-v31.css; inner surface feedback without an outline or halo */
   --kn-ui-color-input-focus-surface: rgba(255,255,255,.12);
+  /* adopted | ui-foundations-v31.css; experience-42 quiet empty-field and helper text */
+  --kn-ui-color-text-hint: #78818f;
 }

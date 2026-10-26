@@ -166,6 +166,12 @@
   color: var(--kn-ui-color-text-secondary) !important;
   text-shadow: none;
 }
+/* Empty-field prompts and optional help stay quieter than labels/entered text.
+   Errors, dates, speaker names and live recording states keep their own roles. */
+.phone #app :is(.small-note, .field-help, .field-note, .scene-hint, .network-search-status),
+.phone #sheet .sheet-inner :is(.small-note, .field-help, .field-note, .avatar-editor p) {
+  color: var(--kn-ui-color-text-hint) !important;
+}
 .phone #app .voice-input-status,
 .phone #app [data-voice-caption] {
   font-family: var(--kn-ui-font-ui);

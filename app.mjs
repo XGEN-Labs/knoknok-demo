@@ -1,6 +1,8 @@
-import { renderFriendNetwork } from './friend-network.mjs?v=20261026-experience-41d';
-import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-41d';
-import { CARD_DESIGN_NAMES, resolveCardDesign } from './card-design.mjs?v=20261023-card-36h';
+import { mountFriendWorld } from './friend-world.mjs?v=20261026-experience-42';
+let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
+import { renderFriendNetwork } from './friend-network.mjs?v=20261026-experience-42';
+import { sharedAgentsMarkup } from './shared-agents.mjs';
+import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
 import { submitDemoRegistration } from './auth-registration.mjs?v=20261026-registration-41';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261026-experience-41c';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
@@ -15,12 +17,12 @@ import { initDatePickers } from './date-picker.mjs?v=20261026-experience-41c';
 import { initTypography } from './typography.mjs?v=20261023-experience-34d';
 import { createSceneSound } from './scene-sound.mjs?v=20261026-experience-41c';
 import { landingComplete, onboardingDestination } from './landing.mjs?v=20261023-experience-34d';
-import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261026-experience-41c';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261026-experience-41c';
+import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261026-experience-42';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261026-experience-42';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-reference-2d.mjs?v=20261026-experience-41d';
-import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261023-login-video-40';
-import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-41d';
+import { createKlinWorld } from './klin-reference-2d.mjs?v=20261026-experience-42';
+import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-experience-42';
+import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-42';
 import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-original-room-character-39';
 import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261023-experience-34d';
 import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
@@ -165,7 +167,7 @@ function auth(verification=false,registration=false){
     ['password','密碼','password','至少 6 個字元',64,'new-password'],
     ['confirmPassword','確認密碼','password','再輸入一次密碼',64,'new-password'],
   ].map(([name,label,type,placeholder,maxlength,autocomplete])=>`<div class="field auth-field"><label for="register-${name}">${label}</label><input class="input" id="register-${name}" name="${name}" type="${type}" autocomplete="${autocomplete}" autocapitalize="none" spellcheck="false" maxlength="${maxlength}" placeholder="${placeholder}" value="${esc(registrationDraft[name])}" data-registration-field="${name}" aria-describedby="register-${name}-error"><p class="auth-field-error" id="register-${name}-error" aria-live="polite" hidden></p></div>`).join(''):verification?`<div class="field auth-field"><label for="auth-code">驗證碼</label><input class="input" id="auth-code" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6 位數驗證碼" value="${esc(authDraft.code)}"></div>`:`<div class="field auth-field"><label for="auth-account">帳號</label><input class="input" id="auth-account" name="account" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" value="${esc(authDraft.account)}" aria-describedby="auth-error"></div><div class="field auth-field"><label for="auth-password">密碼</label><input class="input" id="auth-password" name="password" type="password" autocomplete="current-password" value="${esc(authDraft.password)}" aria-describedby="auth-error"></div>`;
-  return shell(`<header class="auth-header"><button type="button" class="icon-button auth-back" data-go="${registration?'login':'welcome'}" data-direction="back" aria-label="${registration?'返回登錄':'返回歡迎頁'}">${backIcon}</button><h2 class="auth-brand">${logoImage}</h2></header><div class="auth-panel"><div class="auth-heading"><h1>${registration?'註冊':'帳號密碼登錄'}</h1><p>${registration?'從這裡，開始我們的第一次相遇。':'讓我們把這次相遇記住。'}</p></div><form id="auth-form" class="auth-form" data-form="${registration?'register':verification?'verify':'login'}" novalidate>${fields}<div id="auth-error" class="auth-error" role="alert"></div><div class="auth-submit"><button class="btn dark" type="submit"><span>${registration?'註冊':'登錄'}</span></button></div></form>${verification?'':`<p class="auth-switch">${registration?'已有帳號？':'還沒有帳號？'}<button class="auth-switch-link" type="button" data-go="${registration?'login':'register'}">${registration?'登錄':'註冊'}</button></p>`}</div>`,'auth-page '+(verification?'auth-verify':registration?'auth-login auth-register':'auth-login'));
+  return shell(`<header class="auth-header"><button type="button" class="icon-button auth-back" data-go="${registration?'login':'welcome'}" data-direction="back" aria-label="${registration?'返回登錄':'返回歡迎頁'}">${backIcon}</button><h2 class="auth-brand">${logoImage}</h2></header><div class="auth-panel">${registration?'<div class="auth-heading"><h1>註冊</h1></div>':`<h1 class="sr-only">${verification?'帳號驗證':'帳號登錄'}</h1>`}<form id="auth-form" class="auth-form" data-form="${registration?'register':verification?'verify':'login'}" novalidate>${fields}<div id="auth-error" class="auth-error" role="alert"></div><div class="auth-submit"><button class="btn dark" type="submit"><span>${registration?'註冊':'登錄'}</span></button></div></form>${verification?'':`<p class="auth-switch">${registration?'已有帳號？':'還沒有帳號？'}<button class="auth-switch-link" type="button" data-go="${registration?'login':'register'}">${registration?'登錄':'註冊'}</button></p>`}</div>`,'auth-page '+(verification?'auth-verify':registration?'auth-login auth-register':'auth-login'));
 }
 
 function updateAuthControls(){
@@ -306,11 +308,11 @@ function friendsSheet(){
 function relations(){
  const friends=getDemoFriends(state),query=String(ui.networkQuery||'').trim().toLocaleLowerCase();
  const matches=friend=>!query||`${friend.name} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase().includes(query),visibleCount=friends.filter(matches).length;
- return shell(top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,query})}`,'friends-lounge');
+ return shell(top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:state.users,query})}`,'friends-lounge');
 }
 function filterNetwork(value){
- ui.networkQuery=value;save();const query=value.trim().toLocaleLowerCase();let count=0;
- document.querySelectorAll('.network-friend').forEach(node=>{const match=!query||node.dataset.search.includes(query);node.hidden=!match;if(match)count++;const path=document.querySelector(`.network-connections path[data-friend-id="${node.dataset.id}"]`);if(path)path.toggleAttribute('hidden',!match);});
+ ui.networkQuery=value;save();friendWorld?.setQuery(value);const query=value.trim().toLocaleLowerCase();let count=0;
+ document.querySelectorAll('.network-friend').forEach(node=>{const match=!query||node.dataset.search.includes(query);node.hidden=!match;if(match)count++;});
  const status=$('.network-search-status');if(status)status.textContent=query?`找到 ${count} 位朋友`:'';
  const empty=$('.network-empty');if(empty)empty.hidden=count>0;const clear=$('[data-action="clear-network-search"]');if(clear)clear.hidden=!query;
 }
@@ -322,7 +324,7 @@ function invitePage(){return relations();}
 function chat(){
  const rel=latestRelationship();if(!rel)return shell(top('共同空間')+content(empty('等你們都願意','互相接受邀約，就能一起坐坐。',btn('查看邀約','invite'))));
  const other=state.users[rel.members.find(x=>x!==actor())],msgs=publicMessages(state,rel.id);
- return shell(top(esc(other.name),'',`<button type="button" class="scene-icon" data-action="relationship-options" aria-label="管理這段聯繫">⋯</button>`)+sharedPeople()+`<div class="shared-messages" id="message-scroll" role="log" aria-label="共同對話">${msgs.map(m=>`<div class="message ${m.senderId===actor()?'own':''}"><div class="message-content"><div class="message-label">${esc(state.users[m.senderId].name)}</div><div class="bubble">${esc(m.text)}</div>${m.status==='failed'?`<button type="button" class="text-button" data-retry="${m.id}">傳送失敗 · 重試</button>`:''}</div></div>`).join('')}${!msgs.length?`<div class="shared-first-hello"><p>坐近一點，從一句你好開始。</p><button type="button" class="tiny-btn" data-public-say="嗨，很高興認識你！">嗨，很高興認識你！ ↗</button></div>`:''}</div><form class="chat-composer shared-composer" data-form="public-message">${rel.status==='active'?`<button type="button" class="private-entry" data-action="private-help">私下問問 ${esc(companionName())}</button><div class="composer-row"><textarea id="public-message" name="message" rows="1" placeholder="和 ${esc(other.name)} 說句話…" aria-label="發送給 ${esc(other.name)} 的訊息" maxlength="1000">${esc(privateSpace().publicDraft)}</textarea><button class="send-button" type="submit" aria-label="發送給朋友">${sendArrow}</button></div>`:`<p class="scene-hint">這段聯繫已結束。</p>${btn('回到房間','home')}`}</form>`,'shared-space shared-chat-page');
+ return shell(top(esc(other.name),'',`<button type="button" class="scene-icon" data-action="relationship-options" aria-label="管理這段聯繫">${uiIcon('more')}</button>`)+sharedPeople()+sharedAgentsMarkup(rel.members.map(id=>({...state.users[id],companion:companionProfile(state,id)})),actor())+`<div class="shared-messages" id="message-scroll" role="log" aria-label="共同對話">${msgs.map(m=>`<div class="message ${m.senderId===actor()?'own':''}"><div class="message-content"><div class="message-label">${esc(state.users[m.senderId].name)}</div><div class="bubble">${esc(m.text)}</div>${m.status==='failed'?`<button type="button" class="text-button" data-retry="${m.id}">傳送失敗 · 重試</button>`:''}</div></div>`).join('')}${!msgs.length?`<div class="shared-first-hello"><p>坐近一點，從一句你好開始。</p><button type="button" class="tiny-btn" data-public-say="嗨，很高興認識你！">嗨，很高興認識你！ ↗</button></div>`:''}</div><form class="chat-composer shared-composer" data-form="public-message">${rel.status==='active'?`<button type="button" class="private-entry" data-action="private-help">私下問問 ${esc(companionName())}</button><div class="composer-row"><textarea id="public-message" name="message" rows="1" placeholder="和 ${esc(other.name)} 說句話…" aria-label="發送給 ${esc(other.name)} 的訊息" maxlength="1000">${esc(privateSpace().publicDraft)}</textarea><button class="send-button" type="submit" aria-label="發送給朋友">${sendArrow}</button></div>`:`<p class="scene-hint">這段聯繫已結束。</p>${btn('回到房間','home')}`}</form>`,'shared-space shared-chat-page');
 }
 function roomMemories(){
  const moments=state.relationships.filter(rel=>rel.members.includes(actor())&&rel.sharedMoment?.completedAt);
@@ -355,8 +357,7 @@ function refreshVisibleCardArtwork(){
  pendingCardFontRefresh=false;
  const ownCard=myCard();
  for(const card of document.querySelectorAll('#app [data-business-card],#sheet[open] [data-business-card]')){
-  const choice=card.closest('.card-design-choice');
-  const data=choice?{...ownCard,design:Number(choice.dataset.design)}:card.closest('.public-card-page')?(sharedCard||ownCard):ownCard;
+  const data=card.closest('.public-card-page')?(sharedCard||ownCard):ownCard;
   const focusedTag=[...card.querySelectorAll('.bc-tag')].indexOf(document.activeElement);
   const focusedAvatar=card.querySelector('.bc-avatar')===document.activeElement;
   const template=document.createElement('template');
@@ -367,12 +368,8 @@ function refreshVisibleCardArtwork(){
   else if(focusedAvatar)card.querySelector('.bc-avatar')?.focus({preventScroll:true});
  }
 }
-function cardTools(editable=false){return editable?'<div class="card-tools"><button type="button" data-action="choose-card-design">更換樣式</button><button type="button" data-action="edit-card"><img src="assets/ui/pencil-square.svg" alt="" aria-hidden="true">編輯</button></div>':'';}
+function cardTools(editable=false){return editable?'<div class="card-tools"><button type="button" data-action="edit-card">編輯名片</button></div>':'';}
 
-function chooseCardDesign(){
- const data=myCard(),current=resolveCardDesign(data).layout;
- showSheet('選一張像你的名片',`<div class="card-design-grid">${CARD_DESIGN_NAMES.map((name,index)=>`<button type="button" class="card-design-choice" data-action="select-card-design" data-design="${index*7}" aria-pressed="${current===index}" aria-label="${name}樣式">${cardMarkup({...data,design:index*7},{compact:true})}<span>${name}</span></button>`).join('')}</div>${btn('再生成一張','regenerate-card-design','kn-glass-control')}`);
-}
 function profile(){return shell(top('我的名片','',`<button class="scene-icon" type="button" data-action="account-menu" aria-label="帳號選單">${restoredControlIcon('more')}</button>`)+`<div class="profile-stage">${cardMarkup(myCard(),{showAllTags:true,editable:true})}${cardTools(true)}</div><div class="profile-footer"><div class="card-actions split-buttons">${btn('保存圖片','download-card','white')}${btn('分享名片','share-card')}</div></div>`,'profile-card-page');}
 function publicCardPage(){const data=sharedCard||myCard();return shell(`<header class="page-top"><button type="button" class="icon-button" data-action="leave-card" aria-label="返回">${backIcon}</button><div><h2>${sharedCard?'你好，新朋友':'訪客眼中的你'}</h2></div></header><div class="profile-stage">${cardMarkup(data,{showAllTags:true})}</div><div class="profile-footer">${btn(sharedCard?'認識我的 Klin':'回到我的名片','leave-card')}</div>`,'public-card-page');}
 function editCard(){
@@ -545,7 +542,9 @@ function render(animate=false,motion={}){
   const scrollPositions=useTransition?[...oldPage.querySelectorAll('.content')].map(node=>({node,top:node.scrollTop,left:node.scrollLeft})):[];
   const source=useTransition?captureCompanion(oldPage,$('#phone')):null;
   cleanDatePickers?.();cleanFormControls?.();cleanCommunication?.dispose();cleanCommunication=null;
+  friendWorld?.dispose();friendWorld=null;
   app.innerHTML=views[ui.route]();
+  if(ui.route==='relations')friendWorld=mountFriendWorld(app.querySelector('.spirit-world'),{reducedMotion:prefersStillness(ui.motion),orientation:friendWorldOrientation,onRotate:value=>{friendWorldOrientation=value;}});
   if(ui.route==='home')setHomeEntryControlsHidden(useTransition);
   cleanFormControls=initFormControls(app);cleanDatePickers=initDatePickers(app);initTypography(app);
   if(['chat','connected'].includes(ui.route)){const rel=latestRelationship();klinWorld?.setParticipants?.((rel?.members||[]).map(id=>state.users[id]),{activeId:actor()});}
@@ -663,9 +662,6 @@ async function runAction(action,element){
       closeContractUI=showCompanionContract({phone:$('#phone'),getWorld:()=>null,userName:name,companionName:partner,reduced:prefersStillness(ui.motion),onClose:()=>{closeContractUI=null;if(soundControl)$('#phone').append(soundControl);},onCommit:()=>{if(ui.route!=='landing'||actor()!==who||me().name!==name||companionName()!==partner)return;if(dispatch({type:'SIGN_COMPANION_CONTRACT'},false))departToHome();else render(false);}});if(soundControl)$('.contract-story')?.append(soundControl);return;
     }
     case 'finish-conversation':return departToHome();
-    case 'choose-card-design':return chooseCardDesign();
-    case 'select-card-design':{if(dispatch({type:'UPDATE_PROFILE',patch:{cardDesign:Number(element.dataset.design)}},false)){closeSheet();render(false);}return;}
-    case 'regenerate-card-design':{const old=resolveCardDesign(myCard()).seed;let seed;do{seed=crypto.getRandomValues(new Uint32Array(1))[0];}while(seed%6===old%6);if(dispatch({type:'UPDATE_PROFILE',patch:{cardDesign:seed}},false)){closeSheet();render(false);}return;}
     case 'view-card-tags':{const data=ui.route==='public-card'&&sharedCard?sharedCard:myCard();return showSheet('所有標籤',`<div class="all-card-tags">${data.tags.length?data.tags.map(tag=>`<span>${esc(tag)}</span>`).join(''):'<p>還沒有留下標籤。</p>'}</div>`);}
     case 'open-demo-friend':return requestVisit(element.dataset.id);
     case 'talk-friends':go('home');setHomeConversation(true);$('#private-message')?.focus({preventScroll:true});return;

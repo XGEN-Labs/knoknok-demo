@@ -1,24 +1,18 @@
+import { normalizeCardAvatar } from './card-labels.mjs';
+import { uiIcon } from './ui-icons.mjs?v=20261026-experience-42';
+import { WORLD_ANCHORS } from './friend-world-math.mjs';
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const doors=Object.freeze({b:'wood',c:'water',d:'earth',e:'wood',f:'earth',g:'wood',h:'water',i:'earth'});
-// A larger nearby door and seven smaller entrances express closeness without
-// inventing links between people or placing the viewer in the neighbourhood.
-const positions=Object.freeze([
-  [50,47], [17,16], [50,13], [83,18],
-  [13,48], [87,50], [20,80], [80,82],
-]);
-const door=kind=>`<svg class="network-door is-${kind}" viewBox="0 0 100 120" aria-hidden="true" focusable="false"><path class="door-surround" d="M21 109 L21.5 51 C21.4 30 32 16.5 49.5 16 C67 15.5 79 30 78.8 50 L79 109 Q50 111 21 109 Z"/><path class="door-opening" d="M32 108 L32.4 53 C32.3 38 39 28 50 28.5 C61.8 28.4 68 38.3 67.7 53 L68 108"/><path class="door-sill" d="M20 110 Q49 112 80 110"/><path class="door-knob" d="M59 76.5 Q61.5 75 62 77.5 Q62.2 80 59.5 79.5 Q57.8 79 59 76.5 Z"/></svg>`;
 export function friendNetworkSearchText(friend){return `${friend.name||''} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase();}
-
-/** Pure view: the existing app owns filtering, visit actions and relationships. */
-export function renderFriendNetwork({friends=[],query=''}={}){
-  const search=String(query).trim().toLocaleLowerCase();
-  const sorted=[...friends].sort((a,b)=>(Number(b.closeness)||0)-(Number(a.closeness)||0)||(Number(a.closenessRank)||0)-(Number(b.closenessRank)||0)).slice(0,8);
-  let visible=0;
-  const nodes=sorted.map((friend,index)=>{
-    const [x,y]=positions[index],primary=index===0;
-    const matches=!search||friendNetworkSearchText(friend).includes(search);if(matches)visible++;
-    const kind=doors[friend.id]||['wood','water','earth'][index%3];
-    return `<button type="button" class="network-friend${primary?' is-primary':''}" style="--node-x:${x}%;--node-y:${y}%" data-action="open-demo-friend" data-id="${esc(friend.id)}" data-search="${esc(friendNetworkSearchText(friend))}" data-closeness-rank="${index}" ${matches?'':'hidden'} aria-label="去 ${esc(friend.name)} 家坐坐${primary?'，最近常聊的朋友':''}"><span class="network-house" aria-hidden="true">${door(kind)}</span><span class="network-house-label"><strong>${esc(friend.name)}</strong></span></button>`;
-  });
-  return `<div class="relationship-network friend-house-network" role="group" aria-label="朋友的門口">${nodes.join('')}<p class="network-empty" ${visible?'hidden':''}>還沒有找到這段回響。<br>換個名字或話題試試。</p></div>`;
+export function renderFriendNetwork({friends=[],users={},query=''}={}){
+ const search=String(query).trim().toLocaleLowerCase();
+ const sorted=[...friends].sort((a,b)=>(Number(b.closeness)||0)-(Number(a.closeness)||0)||(Number(a.closenessRank)||0)-(Number(b.closenessRank)||0)).slice(0,8);
+ let visible=0;
+ const nodes=sorted.map((friend,index)=>{
+  const [lon,lat]=WORLD_ANCHORS[index],primary=index===0;
+  const matches=!search||friendNetworkSearchText(friend).includes(search);if(matches)visible++;
+  const kind=doors[friend.id]||['wood','water','earth'][index%3],avatar=normalizeCardAvatar(users[friend.id]?.cardAvatar);
+  return `<button type="button" class="network-friend${primary?' is-primary':''} is-${kind}" data-action="open-demo-friend" data-id="${esc(friend.id)}" data-search="${esc(friendNetworkSearchText(friend))}" data-closeness-rank="${index}" data-world-lon="${lon}" data-world-lat="${lat}" ${matches?'':'hidden'} aria-label="敲敲 ${esc(friend.name)} 的門${primary?'，最近常聊的朋友':''}"><span class="world-contact-avatar" aria-hidden="true">${avatar?`<img src="${esc(avatar)}" alt="" draggable="false">`:esc(friend.initial||friend.name?.slice(0,1)||'友')}</span><span class="network-house" aria-hidden="true"><img src="assets/scenes-20261026-41/house-${kind}.webp" alt="" draggable="false"></span><span class="network-house-label"><strong>${esc(friend.name)}</strong></span></button>`;
+ });
+ return `<div class="relationship-network friend-house-network spirit-world" data-world-filtered="${!!search}" role="group" aria-label="精靈小星球"><div class="world-viewport" tabindex="0" role="group" aria-label="拖動或使用方向鍵旋轉精靈小星球"><div class="world-shadow" aria-hidden="true"></div><div class="world-fallback" aria-hidden="true"></div><canvas class="world-canvas" aria-hidden="true"></canvas><div class="world-rooms">${nodes.join('')}</div></div><div class="world-navigation"><button type="button" data-world-turn="-1" aria-label="向左轉動小星球">${uiIcon('back')}</button><span>轉動小星球，敲敲朋友的門</span><button type="button" data-world-turn="1" aria-label="向右轉動小星球">${uiIcon('back')}</button></div><p class="network-empty" ${visible?'hidden':''}>還沒有找到這段回響。<br>換個名字或話題試試。</p></div>`;
 }

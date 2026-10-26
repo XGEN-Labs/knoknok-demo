@@ -1,12 +1,14 @@
 # Knoknok · Klin interactive demo
 
-Revision `20261026-experience-41d`.
+Revision `20261026-experience-42`.
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-experience-41d)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-experience-42)
 
-The updated landing film leads into matching plush rooms. Visiting shows eight quiet door entrances, weighted by closeness, without a self node. Shared handwritten controls, a compact birthday picker, the new white wordmark and a local registration flow complete the experience.
+Visit a tiny plush world: drag, scroll, or use arrow keys to turn the globe. Eight rooms show contact avatars; the closest friend is largest. Tap an avatar to knock. Search also exposes a simple contact list. No self node is shown.
 
-Welcome and sign-in use brighter blue daylight. Sign-in cards sit in the middle of the safe area. The full character shrinks and moves into the chat header, returning to the room when chat closes; reduced motion settles immediately.
+Both participants bring their saved Klin companions to the shared room. Welcome meadow colors match the landing film; sign-in and registration blur only the background, leaving controls and the white logo sharp. Hint text uses the shared cool-gray standard.
+
+Business cards use one cream portrait design, with editing, all seven tags, sharing and PNG export. Existing card links render in the same portrait design.
 
 Registration is a frontend prototype: it creates no remote account and stores no account credentials. Other sample state stays in this browser. The in-world contract is fictional.
 
