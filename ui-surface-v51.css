@@ -47,7 +47,7 @@
 }
 .phone#phone #sheet .sheet-handle,
 .phone#phone .kn-date-picker .kn-date-handle {
-  background:var(--kn-glass-sheet-handle,#fff)!important;
+  background:var(--kn-glass-sheet-handle,rgba(0,0,0,.1))!important;
   opacity:1;
 }
 
@@ -65,3 +65,9 @@
 
 /* Explicit layout rules must not override private-chat hidden controls. */
 .phone#phone #app .home-top [hidden]{display:none!important}
+
+/* Message rails keep a consistent safe inset at every supported phone width.
+   Film onboarding uses normal grid flow; room logs use absolute rails. */
+.phone#phone #app :is(.conversation-log,.shared-chat-page .shared-messages){left:24px!important;right:24px!important;width:auto!important;box-sizing:border-box;}
+.phone#phone.landing-video-active #app .page.conversation-onboarding{padding-inline:24px!important;}
+.phone#phone:not(.landing-video-active) #app .onboarding-thread{left:24px!important;right:24px!important;width:auto!important;}

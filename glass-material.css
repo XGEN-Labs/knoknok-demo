@@ -4,7 +4,7 @@
   --kn-glass-fill:rgba(255,255,255,.62);
   --kn-glass-panel-fill:rgba(255,255,255,.38);
   --kn-glass-sheet-fill:var(--kn-ui-glass-sheet-fill,rgba(255,255,255,.9));
-  --kn-glass-sheet-handle:var(--kn-ui-color-sheet-handle,#fff);
+  --kn-glass-sheet-handle:var(--kn-ui-color-sheet-handle,rgba(0,0,0,.1));
   --kn-glass-conversation-fill:rgba(255,255,255,.9);
   --kn-glass-own-fill:rgba(232,241,252,.9);
   --kn-glass-sheen:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 42%,rgba(255,255,255,.025));

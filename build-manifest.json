@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T08:51:03.558Z",
+  "createdAt": "2026-10-27T08:58:06.620Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 100273016,
+  "payloadBytes": 100273591,
   "files": [
     {
       "source": "app.mjs",
@@ -1748,8 +1748,8 @@
     {
       "source": "glass-material.css",
       "path": "glass-material.css",
-      "bytes": 2246,
-      "sha256": "0ee4345012b8c6f188be8dc51165a4127bb20ae033d3efb28038f6c278ac5df2"
+      "bytes": 2256,
+      "sha256": "ca6ac855b31234602241ffbbc48c6513f83a53a43fe2e4f230543bcd82ecb8ae"
     },
     {
       "source": "home-controls-v24.css",
@@ -1773,7 +1773,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 10549,
-      "sha256": "912b1b6daaf5bead94e555959bf4533969341ccbfb959a2b0b127e15fabcdf28"
+      "sha256": "e90da55c919e8699ee4ef2d08e570eafd7da7dba7fc84e55192dd9e17c309c1f"
     },
     {
       "source": "journey-experience.css",
@@ -2210,14 +2210,14 @@
     {
       "source": "ui-surface-v51.css",
       "path": "ui-surface-v51.css",
-      "bytes": 3254,
-      "sha256": "7d9f19d061205c20102d58ca4f43b1a67b17d1b7609c7f37b08c4c6e0b7d9acb"
+      "bytes": 3809,
+      "sha256": "6e034ba3c95ce1fdb8c2f78098e22161d83ede3ad1093a8b4ebc679946a2cb5d"
     },
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 7414,
-      "sha256": "a27b419a067ad5c841b766daaadbf5cb5fb9de92ccba32149da2e0cffc05be79"
+      "bytes": 7424,
+      "sha256": "8a7ef9bee5de52789981088001f2319b091233d4c018bbf97fa9412bb6fa712f"
     },
     {
       "source": "universe-experience.css",
