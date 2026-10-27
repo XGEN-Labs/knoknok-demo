@@ -14,5 +14,6 @@
   background-repeat:no-repeat!important;
   background-origin:border-box!important;
   background-clip:border-box!important;
+  box-shadow:var(--kn-glass-control-shadow)!important;
   filter:none!important;
 }

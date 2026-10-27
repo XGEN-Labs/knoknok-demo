@@ -22,6 +22,8 @@
   --kn-glass-panel-radius:var(--kn-ui-radius-panel);
   --kn-glass-panel-shadow:var(--kn-ui-shadow-panel);
   --kn-glass-control-shadow:var(--kn-ui-shadow-control);
+  --kn-glass-inner-highlight:var(--kn-ui-glass-inner-highlight);
+  --kn-glass-outer-shadow:var(--kn-ui-glass-outer-shadow);
   --kn-glass-input-shadow:var(--kn-ui-shadow-input);
 }
 

@@ -1,17 +1,17 @@
-/* Empty-field prompts use the explicitly requested 10% black. Entered text,
+/* Empty-field prompts use the latest requested 20% black. Entered text,
    labels, errors and ordinary helper copy retain their existing foregrounds. */
 .phone#phone :is(input,textarea)::placeholder,
 .phone#phone #app :is(input,textarea)::placeholder,
 .phone#phone #app .page.friends-lounge .network-search input::placeholder,
 .phone#phone #sheet :is(input,textarea)::placeholder {
-  color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
-  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
+  color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.2))!important;
+  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.2))!important;
   opacity:1;
   text-shadow:none;
 }
 .phone#phone .kn-date-trigger.is-empty .kn-date-value {
-  color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
-  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
+  color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.2))!important;
+  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.2))!important;
   opacity:1;
   text-shadow:none;
 }
@@ -28,7 +28,7 @@
 .phone#phone #app .auth-entry-flow .auth-form .auth-field .input:focus,
 .phone#phone #app .auth-entry-flow .auth-form .auth-field .input:focus-visible {
   background:var(--kn-ui-glass-auth-input-fill,rgba(255,255,255,.1))!important;
-  box-shadow:var(--kn-glass-input-shadow)!important;
+  box-shadow:var(--kn-glass-outer-shadow)!important;
 }
 .phone#phone #app .auth-entry-flow .auth-form .auth-password-wrap {
   background:transparent!important;
@@ -40,6 +40,8 @@
 .phone#phone #sheet,
 .phone#phone dialog.kn-date-picker {
   background:var(--kn-glass-sheet-fill,rgba(255,255,255,.9))!important;
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;
+  box-shadow:var(--kn-glass-panel-shadow)!important;
   -webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
   backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
 }
@@ -48,3 +50,18 @@
   background:var(--kn-glass-sheet-handle,#fff)!important;
   opacity:1;
 }
+
+/* The content of a glass capsule never gets its own focus paint. The single
+   full-size painter above owns the rim light; retain only its outside shadow. */
+.phone#phone #app :is(.home-composer,.chat-composer) .composer-row,
+.phone#phone #app .onboarding-composer .onboarding-input-row:not([data-landing-glass="ready"]) {
+  box-shadow:var(--kn-glass-outer-shadow)!important;
+}
+.phone#phone #app :is(.home-composer,.chat-composer,.onboarding-composer) textarea,
+.phone#phone #app :is(.home-composer,.chat-composer,.onboarding-composer) textarea:focus {
+  box-shadow:none!important;
+  background:transparent!important;
+}
+
+/* Explicit layout rules must not override private-chat hidden controls. */
+.phone#phone #app .home-top [hidden]{display:none!important}

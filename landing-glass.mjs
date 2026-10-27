@@ -14,7 +14,7 @@ export function glassPosition(sceneRect,targetRect,width,height) {
 
 // Three separable box passes approximate a Gaussian when CanvasRenderingContext2D
 // has no filter support (older WebKit). Clamped edges avoid transparent seams.
-export function softwareGlassBlur(image,width,height,sigma,saturation=1.35) {
+export function softwareGlassBlur(image,width,height,sigma,saturation=1) {
   const data=image.data, ideal=Math.sqrt(4*sigma*sigma+1);
   const lower=Math.max(1,Math.floor(ideal)-(Math.floor(ideal)%2===0?1:0)),upper=lower+2;
   const count=Math.round((12*sigma*sigma-3*lower*lower-12*lower-9)/(-4*lower-4));
@@ -39,7 +39,29 @@ export function softwareGlassBlur(image,width,height,sigma,saturation=1.35) {
   return image;
 }
 
-export function renderGlassTexture({sourceCanvas,width,height,ratio=1,blur=30,saturation=1.35,fill='rgba(255,255,255,.62)',createCanvas}) {
+const canvasBlurSupport=new WeakMap();
+
+// A writable filter property is not proof that the engine actually filters
+// pixels. Some WebKit canvas paths accept the string but draw a sharp image.
+// Verify one tiny impulse once per canvas factory; the real scene stays private
+// to the renderer and never needs to be read for this capability check.
+export function canvasBlurWorks(createCanvas){
+  if(canvasBlurSupport.has(createCanvas))return canvasBlurSupport.get(createCanvas);
+  let supported=false;
+  try{
+    const source=createCanvas(),target=createCanvas();source.width=source.height=target.width=target.height=17;
+    const paint=source.getContext('2d',{alpha:false}),filter=target.getContext('2d',{alpha:false,willReadFrequently:true});
+    if(paint&&filter&&'filter'in filter){
+      paint.fillStyle='#000';paint.fillRect(0,0,17,17);paint.fillStyle='#fff';paint.fillRect(8,8,1,1);
+      filter.filter='blur(2px) saturate(1)';filter.drawImage(source,0,0);
+      const pixels=filter.getImageData(8,8,2,1).data;
+      supported=pixels[0]>0&&pixels[0]<254&&pixels[4]>0;
+    }
+  }catch{/* The deterministic software path also covers unreadable probes. */}
+  canvasBlurSupport.set(createCanvas,supported);return supported;
+}
+
+export function renderGlassTexture({sourceCanvas,width,height,ratio=1,blur=30,saturation=1,fill='rgba(255,255,255,.62)',createCanvas,verifyNativeBlur=canvasBlurWorks}) {
   const w=Math.max(1,Math.round(width*ratio)),h=Math.max(1,Math.round(height*ratio)),radius=blur*ratio,pad=Math.ceil(radius*3);
   const make=(cw,ch)=>{const canvas=createCanvas();canvas.width=cw;canvas.height=ch;const context=canvas.getContext('2d',{alpha:false});if(!context)throw new Error('2D canvas unavailable');return [canvas,context];};
   const [scene,paint]=make(w+2*pad,h+2*pad),rect=coverRect(sourceCanvas.width,sourceCanvas.height,w,h);
@@ -55,7 +77,7 @@ export function renderGlassTexture({sourceCanvas,width,height,ratio=1,blur=30,sa
   const [filtered,filter]=make(scene.width,scene.height);
   const expression=`blur(${radius}px) saturate(${saturation})`;
   let method='software';
-  if('filter' in filter){filter.filter=expression;if(filter.filter===expression)method='native';}
+  if('filter' in filter&&verifyNativeBlur(createCanvas)){filter.filter=expression;if(filter.filter===expression)method='native';}
   if(method==='native'){filter.drawImage(scene,0,0);filter.filter='none';}
   else {const pixels=paint.getImageData(0,0,scene.width,scene.height);filter.putImageData(softwareGlassBlur(pixels,scene.width,scene.height,radius,saturation),0,0);}
   const [result,output]=make(w,h);output.drawImage(filtered,pad,pad,w,h,0,0,w,h);
@@ -67,6 +89,7 @@ export function createLandingGlass({phone,sourceCanvas,environment={}}={}) {
   if(!phone||!sourceCanvas)throw new TypeError('A phone and held source canvas are required.');
   const doc=phone.ownerDocument,win=doc.defaultView;
   const createCanvas=environment.createCanvas||(()=>doc.createElement('canvas'));
+  const verifyNativeBlur=environment.verifyNativeBlur||canvasBlurWorks;
   const computed=environment.getComputedStyle||(node=>win.getComputedStyle(node));
   const Resize=environment.ResizeObserver||win.ResizeObserver,Mutation=environment.MutationObserver||win.MutationObserver;
   let active=false,ready=false,key='',disposed=false,textures=new Map(),signature='',renders=0,error='',refreshing=false;
@@ -90,13 +113,15 @@ export function createLandingGlass({phone,sourceCanvas,environment={}}={}) {
       // Cache each computed material once; DOM order must never choose its fill.
       const currentTextures=new Map();
       for(const surface of nodes){
-        const style=computed(surface.node),material=surface.node.matches('.onboarding-message,.onboarding-reading')?'conversation':'control';
+        const style=computed(surface.node),isConversation=surface.node.matches('.onboarding-message,.onboarding-reading');
+        const material=isConversation?(surface.node.matches('.is-user')?'own':'conversation'):'control';
         const blur=parseFloat(style.getPropertyValue('--kn-glass-blur'))||30;
-        const sat=style.getPropertyValue('--kn-glass-saturation').trim()||'135%',saturation=(parseFloat(sat)||135)/(sat.endsWith('%')?100:1);
-        const fill=style.getPropertyValue(material==='conversation'?'--kn-glass-conversation-fill':'--kn-glass-fill').trim()||(material==='conversation'?'rgba(255,255,255,.9)':'rgba(255,255,255,.62)');
+        const sat=style.getPropertyValue('--kn-glass-saturation').trim()||'100%',saturation=(parseFloat(sat)||100)/(sat.endsWith('%')?100:1);
+        const fillProperty=material==='own'?'--kn-glass-own-fill':material==='conversation'?'--kn-glass-conversation-fill':'--kn-glass-fill';
+        const fill=style.getPropertyValue(fillProperty).trim()||(material==='own'?'rgba(232,241,252,.9)':material==='conversation'?'rgba(255,255,255,.9)':'rgba(255,255,255,.62)');
         const materialKey=JSON.stringify([material,blur,saturation,fill]);
         let texture=currentTextures.get(materialKey)||textures.get(materialKey);
-        if(!texture){texture={...renderGlassTexture({sourceCanvas,width,height,ratio,blur,saturation,fill,createCanvas}),material,fill};renders++;}
+        if(!texture){texture={...renderGlassTexture({sourceCanvas,width,height,ratio,blur,saturation,fill,createCanvas,verifyNativeBlur}),material,fill};renders++;}
         currentTextures.set(materialKey,texture);surface.texture=texture;
       }
       textures=currentTextures;

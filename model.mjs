@@ -387,7 +387,9 @@ export function reduce(previous, action = {}) {
           state.users.a.bio = tags.length ? `喜歡${tags.join('、')}，想和新朋友慢慢聊聊。` : '想和新朋友，慢慢聊些喜歡的事。';
         }
         const welcome = space.companionMessages.find(message => message.id === 'welcome-a');
-        if (welcome?.text === '今天想聊什麼？') welcome.text = `${answers.name}，我是${answers.companionName}。今天想先和我聊些什麼？`;
+        const greeting = `Knok knok 敲敲。我是 ${state.onboarding.contract.companionName}，和你結下契約的 Nok。終於見面了。`;
+        if (!welcome) space.companionMessages.unshift({ id: 'welcome-a', role: 'assistant', text: greeting, createdAt: state.now });
+        else if (welcome.text === '今天想聊什麼？') welcome.text = greeting;
       }
       return state;
     }

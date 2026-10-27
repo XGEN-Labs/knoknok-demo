@@ -32,28 +32,30 @@
 @keyframes portal-auth-arrive{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 .phone #app :is(.icon-button,.scene-icon,.onboarding-back,.onboarding-history,.auth-back),
 .phone #app .conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn),
-.phone #app .home-composer .composer-row,
+.phone #app :is(.home-composer,.chat-composer) .composer-row,
 .phone #app .home-chat-actions>.visit-entry{background:var(--kn-glass-sheen),var(--kn-glass-fill)!important;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;box-shadow:var(--kn-glass-control-shadow)!important;backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));color:var(--kn-glass-ink)!important}
 /* Keep each room capsule's glass on one paint-only surface. Native textarea
    and SVG content otherwise share the backdrop-filter backing layer, which
    WebKit can repaint as bright rectangular tiles along the capsule's top.
    The approved fill/blur/edge/highlight tokens and control geometry stay put. */
-.phone #app .home-composer .composer-row,
+.phone #app :is(.home-composer,.chat-composer) .composer-row,
 .phone #app .home-chat-actions>.visit-entry{
   position:relative;overflow:hidden;background:transparent!important;
   background-clip:padding-box!important;
+  box-shadow:var(--kn-glass-outer-shadow)!important;
   backdrop-filter:none;-webkit-backdrop-filter:none;
 }
-.phone #app .home-composer .composer-row::before,
+.phone #app :is(.home-composer,.chat-composer) .composer-row::before,
 .phone #app .home-chat-actions>.visit-entry::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
   background:var(--kn-glass-sheen),var(--kn-glass-fill);
+  box-shadow:var(--kn-glass-inner-highlight);
   backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }
-.phone #app .home-composer .composer-row>:not(.voice-input-status),
+.phone #app :is(.home-composer,.chat-composer) .composer-row>:not(.voice-input-status),
 .phone #app .home-chat-actions>.visit-entry>*{position:relative;z-index:1}
-.phone #app .home-composer .composer-row textarea{
+.phone #app :is(.home-composer,.chat-composer) .composer-row textarea{
   appearance:none;-webkit-appearance:none;background:transparent!important;
   background-image:none!important;filter:none;
   backdrop-filter:none;-webkit-backdrop-filter:none;
@@ -64,11 +66,13 @@
 .phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row{
   position:relative;overflow:hidden;background:transparent!important;
   background-clip:padding-box!important;
+  box-shadow:var(--kn-glass-outer-shadow)!important;
   backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
   background:var(--kn-glass-sheen),var(--kn-glass-fill);
+  box-shadow:var(--kn-glass-inner-highlight);
   backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }

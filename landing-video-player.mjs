@@ -1,6 +1,6 @@
 /**
  * A cue-driven background video. UI is unlocked only after the current cue has
- * stopped, or after a recoverable media failure. This module owns playback only;
+ * stopped. Media failures stay locked until a successful retry. This module owns playback only;
  * callers own the video element, its source/poster, and every visible control.
  *
  * update({ active, key, reducedMotion, restore }) is safe on every app render.
@@ -67,7 +67,7 @@ export function createLandingVideoPlayer({
   function getDiagnostics() {
     return {
       state, key: cue()?.key ?? null, active, reducedMotion, disposed,
-      readyForInput: active && (state === 'waiting' || state === 'fallback'),
+      readyForInput: active && state === 'waiting',
       reason, currentTime: mediaTime(), startTime: cue()?.start ?? null,
       targetTime: cue() ? targetTime() : null,
       duration: Number.isFinite(video.duration) ? video.duration : null,
@@ -79,7 +79,7 @@ export function createLandingVideoPlayer({
   function report(nextState, nextReason = '') {
     state = nextState;
     reason = nextReason;
-    const signature = `${state}|${cue()?.key ?? ''}|${reason}|${active}`;
+    const signature = `${state}|${cue()?.key ?? ''}|${reason}|${active}|${hasPresentedFrame}`;
     if (signature === lastNotification || disposed) return;
     lastNotification = signature;
     onState(getDiagnostics());
@@ -154,7 +154,7 @@ export function createLandingVideoPlayer({
 
   function sampleFrame(presentedTime) {
     if (!canRun()) return;
-    if (pendingSeek !== null) return;
+    if (pendingSeek !== null || Number(video.readyState) < 2 || video.seeking) return;
     const time = mediaTime();
     if (time >= targetTime() - 0.008 || (Number.isFinite(presentedTime) && presentedTime >= targetTime())) {
       finish();
@@ -162,8 +162,9 @@ export function createLandingVideoPlayer({
     }
     if (time > lastProgress + 0.008) {
       lastProgress = time;
+      const firstFrame = !hasPresentedFrame;
       hasPresentedFrame = true;
-      if (state === 'loading') report('playing');
+      if (state === 'loading' || firstFrame) report('playing');
       armWatchdog();
     }
   }
@@ -286,12 +287,17 @@ export function createLandingVideoPlayer({
   }
 
   /** Call directly from a user click/tap to retry autoplay without losing gesture activation. */
-  function retry() {
-    if (disposed || !active || !cue() || (mode !== 'blocked' && mode !== 'fallback')) return false;
-    mode = 'play';
+  function retry({ restore = false } = {}) {
+    if (disposed || !active || !cue() || !['blocked','fallback','hold'].includes(mode)) return false;
+    const reload = mode !== 'blocked';
+    stopPlayback();
+    mode = restore ? 'hold' : 'play';
     reason = '';
+    hasPresentedFrame = false;
+    if (reload) video.load?.();
+    seek(restore ? targetTime() : cue().start);
     suspended = hidden();
-    if (reducedMotion) finish();
+    if (restore || reducedMotion) finish();
     else if (!suspended) startPlayback();
     return true;
   }
@@ -310,12 +316,13 @@ export function createLandingVideoPlayer({
   }
 
   function recoverBufferedFrame() {
-    // A slow range request may finish after the fallback form is already open.
-    // Restore this question's held frame, without replaying dialogue or moving
-    // on to another answer. Real media/format errors retain the fallback.
+    // A slow request may recover. Resume this interval instead of silently
+    // skipping its dialogue and unlocking an answer over a missing frame.
     if (!disposed && active && !hidden() && mode === 'fallback'
       && ['load-timeout', 'playback-stalled'].includes(reason)
-      && !video.error && Number(video.readyState) >= 2) finish();
+      && !video.error && Number(video.readyState) >= 2) {
+      mode = 'play'; reason = ''; startPlayback();
+    }
   }
 
   listen(video, 'loadedmetadata', () => {

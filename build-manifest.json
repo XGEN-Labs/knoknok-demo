@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T07:28:19.758Z",
+  "createdAt": "2026-10-27T08:51:03.558Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 98712941,
+  "payloadBytes": 100273016,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 119580,
-      "sha256": "1ae1f98c72c6566db5d65eec6603235d493be73d3d5985865474b1daa919223f"
+      "bytes": 121022,
+      "sha256": "cc87d307e4ac0c75b1ed2c93a2dd43bdc827657292c457897d2ac99d20c86064"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -244,36 +244,6 @@
       "path": "assets/fonts/klin-paper/OFL.txt",
       "bytes": 4350,
       "sha256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6"
-    },
-    {
-      "source": "assets/friend-realm-20261027-49/distant-islands.svg",
-      "path": "assets/friend-realm-20261027-49/distant-islands.svg",
-      "bytes": 1808,
-      "sha256": "cb03fb765473a7e26de53743652e9216740a2c4f88f6545e366b4f8d82d2743f"
-    },
-    {
-      "source": "assets/friend-realm-20261027-49/house-earth.svg",
-      "path": "assets/friend-realm-20261027-49/house-earth.svg",
-      "bytes": 1870,
-      "sha256": "b5caeb02cf25652bb445d015cfbb7738c3b736eaf966ac2bf9323f4d294711e7"
-    },
-    {
-      "source": "assets/friend-realm-20261027-49/house-water.svg",
-      "path": "assets/friend-realm-20261027-49/house-water.svg",
-      "bytes": 1870,
-      "sha256": "7ee90b2c8a982d60dd226166dadac3430dc2bfeb7e1f822a5262cce7c9a1e503"
-    },
-    {
-      "source": "assets/friend-realm-20261027-49/house-wood.svg",
-      "path": "assets/friend-realm-20261027-49/house-wood.svg",
-      "bytes": 1870,
-      "sha256": "67b590c21758cdbc7f239dda0fa8ad637c932febefc10cecaba750e1cb3ec0ec"
-    },
-    {
-      "source": "assets/friend-realm-20261027-49/meadow-fallback.svg",
-      "path": "assets/friend-realm-20261027-49/meadow-fallback.svg",
-      "bytes": 644,
-      "sha256": "46c07c46fa57012315ae8d2fa9d5f0146397883bb009cefba5772bfd9f3da177"
     },
     {
       "source": "assets/home-scene-20261023-v35/welcome-meadow.webp",
@@ -726,10 +696,34 @@
       "sha256": "f2df35f9a37aac59050213b4a70bfa05ce8a7adfd59e806dfdd8c37750be541d"
     },
     {
+      "source": "assets/scenes-20261026-41/house-earth.webp",
+      "path": "assets/scenes-20261026-41/house-earth.webp",
+      "bytes": 150122,
+      "sha256": "50056857da5792a484f383f5253441e72f425f5cd04a580ac1f7a6de2067cd64"
+    },
+    {
+      "source": "assets/scenes-20261026-41/house-water.webp",
+      "path": "assets/scenes-20261026-41/house-water.webp",
+      "bytes": 136494,
+      "sha256": "c0c7fd380efaa6c7dbbdb2271337c18812881f0caa5915c28db9510cd5d06f24"
+    },
+    {
+      "source": "assets/scenes-20261026-41/house-wood.webp",
+      "path": "assets/scenes-20261026-41/house-wood.webp",
+      "bytes": 153920,
+      "sha256": "f2fe613520640d434eecf2e087c93577babccd06568265302dc779474769bed6"
+    },
+    {
       "source": "assets/scenes-20261026-41/network-calm.svg",
       "path": "assets/scenes-20261026-41/network-calm.svg",
       "bytes": 629,
       "sha256": "46d80cad9c7fde7140aabe35bc6bf9638be934a256f117063576659f525c8158"
+    },
+    {
+      "source": "assets/scenes-20261026-41/network-meadow.webp",
+      "path": "assets/scenes-20261026-41/network-meadow.webp",
+      "bytes": 616034,
+      "sha256": "f57ecb685140ead038c6dfb97d5c8a5079f8d01fbf182298bfd16cea54b186e9"
     },
     {
       "source": "assets/scenes-20261026-41/shared.webp",
@@ -1446,10 +1440,16 @@
       "sha256": "96110cefea417bb1dd8d1209d674e283b02997925efabe2c5623508be666e397"
     },
     {
+      "source": "assets/world-20261026-42/planet-meadow.webp",
+      "path": "assets/world-20261026-42/planet-meadow.webp",
+      "bytes": 481572,
+      "sha256": "1d8f42580bc1683855484530c368e118a1b7f1d6e862204ada659ce0b4689b6f"
+    },
+    {
       "source": "auth-caret.mjs",
       "path": "auth-caret.mjs",
-      "bytes": 2400,
-      "sha256": "cd4849ff75e8cf4800c0d9a44067dba8e0c83d0a98e3c39e255359138b2437cd"
+      "bytes": 3908,
+      "sha256": "61b1590f0cbdb868fb6d9f317c7caf552ce8ee8f3d771d2c09ecb574ebde0ce9"
     },
     {
       "source": "auth-entry-ui.mjs",
@@ -1508,8 +1508,8 @@
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 6674,
-      "sha256": "a4f138a6405b112763b370b568e35a3f97a01c83c042132dfee3b603d4909eab"
+      "bytes": 7012,
+      "sha256": "65cc1e87504eddf19ef048fd29a2052e8c1694c985d2b3f83ddeb6e3c15ae115"
     },
     {
       "source": "card-design.mjs",
@@ -1602,6 +1602,18 @@
       "sha256": "289a9f217c29d49408bbfb8ac7d525f56d31f82a713551a65485cf61c6cd0aa8"
     },
     {
+      "source": "conversation-entry-motion.css",
+      "path": "conversation-entry-motion.css",
+      "bytes": 366,
+      "sha256": "a496b94e33b6a50c069f3351fa0ce5dca934092677bc4b5194abea7909be2872"
+    },
+    {
+      "source": "conversation-entry-motion.mjs",
+      "path": "conversation-entry-motion.mjs",
+      "bytes": 4491,
+      "sha256": "7cad0c7e1b5f7d6dfe51d1736798a9cf2daa700cfffc5b946a90b4ac0ec58692"
+    },
+    {
       "source": "conversation-experience.css",
       "path": "conversation-experience.css",
       "bytes": 22189,
@@ -1682,8 +1694,8 @@
     {
       "source": "form-controls.mjs",
       "path": "form-controls.mjs",
-      "bytes": 17402,
-      "sha256": "b6cebf7814e5077dbe52106e462132f0fcef848aa291e77bcc912f6aa5a2cccb"
+      "bytes": 17423,
+      "sha256": "19f0195631e42898234d044b3cf0b2cbd0c12ec3e66bf56d5c53b8e3e5683fb5"
     },
     {
       "source": "friend-avatars.mjs",
@@ -1694,14 +1706,14 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 10212,
-      "sha256": "61af7c195a127a95f57e2d06f172408c70dadd67f45ac358aeb5f8b03a4442a7"
+      "bytes": 10818,
+      "sha256": "4a42e3309635b18ea8e1ce27f6393535f109a9694a65f286b77ddc96afa725ae"
     },
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2848,
-      "sha256": "664edcfbc3f1d60fbd12c7d47c6ded1c59a3697f1056f1659fc3043c233fb658"
+      "bytes": 2846,
+      "sha256": "9d4122393accbb5a1df714252b2b06a9ebc79beecff793930aef3c70998b3a48"
     },
     {
       "source": "friend-world-loading.mjs",
@@ -1718,8 +1730,8 @@
     {
       "source": "friend-world.mjs",
       "path": "friend-world.mjs",
-      "bytes": 11822,
-      "sha256": "d176d4f91ae1a809fb50d9690c088c5380c1e056a8a16baf3a87476e46edf76e"
+      "bytes": 9916,
+      "sha256": "8e12f99e71a4ae278bbf50a1afa3c09eaad7653585c39d32f27a16df0a9b967e"
     },
     {
       "source": "glass-contract.css",
@@ -1730,14 +1742,14 @@
     {
       "source": "glass-control-surfaces-v51.css",
       "path": "glass-control-surfaces-v51.css",
-      "bytes": 3809,
-      "sha256": "be77f3c9ca8c96d68c9b2716c00e9d485ea0c47bca0d7729348cf54be448231c"
+      "bytes": 4222,
+      "sha256": "7e4f69782f87b6420b6be41bfccca90a75c88fc7fdf08090f4037c3c17661fef"
     },
     {
       "source": "glass-material.css",
       "path": "glass-material.css",
-      "bytes": 1950,
-      "sha256": "171536d441785e86fbae432e1d1186aaed9985106def43dfe9b11fbcf7fb8b35"
+      "bytes": 2246,
+      "sha256": "0ee4345012b8c6f188be8dc51165a4127bb20ae033d3efb28038f6c278ac5df2"
     },
     {
       "source": "home-controls-v24.css",
@@ -1760,8 +1772,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10356,
-      "sha256": "45d0d91f81b0c5c4665d555a467dd20ad8c0ea73f0b206cb78623f9cbfb10f06"
+      "bytes": 10549,
+      "sha256": "912b1b6daaf5bead94e555959bf4533969341ccbfb959a2b0b127e15fabcdf28"
     },
     {
       "source": "journey-experience.css",
@@ -1832,14 +1844,14 @@
     {
       "source": "landing-glass.css",
       "path": "landing-glass.css",
-      "bytes": 1376,
-      "sha256": "59be6482292255595de6ad7869cb90380450ed157e56cab47b232c86835116b1"
+      "bytes": 1431,
+      "sha256": "1d2a257eb5877c73930b1055e6f4b5123d65dcdc56ee4a41ab78bb6a06dfdcfb"
     },
     {
       "source": "landing-glass.mjs",
       "path": "landing-glass.mjs",
-      "bytes": 10002,
-      "sha256": "057c6f0e0f0a98b1c87bf5a4893eab35d466b56049be81ac5a0209530866d27b"
+      "bytes": 11586,
+      "sha256": "c8e207fe129aafd59d5095b9e658d1c2f1cc561978a697e44db894cdd262e028"
     },
     {
       "source": "landing-held-frame.mjs",
@@ -1856,20 +1868,20 @@
     {
       "source": "landing-video-player.mjs",
       "path": "landing-video-player.mjs",
-      "bytes": 12553,
-      "sha256": "a0bc6808a8c283a1c5d9d60fb1e923fa792939cfb6163cde7aba21e90377b66f"
+      "bytes": 12862,
+      "sha256": "e1428465563578fe0d6f0e80c0c4897672cf673ae6d121267e88df67f5ba97ef"
     },
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 9750,
-      "sha256": "8c734f948032738e3ce285974413154cf41c1682c76a4bc70c16aadaf496475c"
+      "bytes": 11762,
+      "sha256": "0c7cad2a42c32b3aefd980467aba0d6840c8ab4998275adbb07f1a2f3b1245cb"
     },
     {
       "source": "landing-video.css",
       "path": "landing-video.css",
-      "bytes": 6716,
-      "sha256": "3f8fea46ff8d0d2827eb7f8d4f2c2c725772000018d89c5c1b5911b1e52ef7bc"
+      "bytes": 7294,
+      "sha256": "1a64c34bf545c4e01bd79b0663ec29b2ee5b98ef49ddcc6a7c5ae81c36bb0545"
     },
     {
       "source": "landing.mjs",
@@ -1934,8 +1946,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 60815,
-      "sha256": "59eecb478672f82f409b1be3f023f2c8424e3413a2f84fd3d013d101ee5d380b"
+      "bytes": 61020,
+      "sha256": "7a931d214e8fa6b24ad1d19c7b24c401057036f53d06477773a016908436d6f8"
     },
     {
       "source": "motion.css",
@@ -1964,8 +1976,8 @@
     {
       "source": "portal-glass.css",
       "path": "portal-glass.css",
-      "bytes": 12509,
-      "sha256": "89e551e3d2d6a740ef233a80cc99bb24d7fa06dfed96a0a9c9feaa9883793dc6"
+      "bytes": 12807,
+      "sha256": "a0fa7b322b08e941de7a06ee15c657516fb9b96710add68a8095f14cdc24ca44"
     },
     {
       "source": "portal-social-v24.css",
@@ -1982,8 +1994,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 15799,
-      "sha256": "f87a4e5f8fe96dc3a9d187a3625e49f0bd8f3ce9018c09219fa02f3ed2b1b9f2"
+      "bytes": 15797,
+      "sha256": "ae8bc88d7c42186a5f6ee552348534c163b904b8d37f4160199721742b2ac3cc"
     },
     {
       "source": "realm-scene.css",
@@ -2050,6 +2062,18 @@
       "path": "scene-assets.mjs",
       "bytes": 395,
       "sha256": "043b64f3d58ed8686355583f00ea1794a1456ddcbbb3433ac265dd743ac49a10"
+    },
+    {
+      "source": "scene-control-glass.css",
+      "path": "scene-control-glass.css",
+      "bytes": 2255,
+      "sha256": "710b80830bf5edcb1b2e8b93137718f75d5de883ec1ff174c787c2e7002c63df"
+    },
+    {
+      "source": "scene-control-glass.mjs",
+      "path": "scene-control-glass.mjs",
+      "bytes": 13036,
+      "sha256": "4cdea641e7a01c3899425e8c316cd68bd04570eddbe831d7e27a9039b8223911"
     },
     {
       "source": "scene-experience.css",
@@ -2142,10 +2166,16 @@
       "sha256": "d5decad9c2b358f30d6fae2b2bfbfd0b5ce188e611e74af07e5d7f99fb1627df"
     },
     {
+      "source": "ui-caret-v52.css",
+      "path": "ui-caret-v52.css",
+      "bytes": 399,
+      "sha256": "3fec2b8a913253a674d9f0d91606e74a66ba8953ce2e237ec6f3258306cb98a5"
+    },
+    {
       "source": "ui-controls-v41.css",
       "path": "ui-controls-v41.css",
-      "bytes": 3836,
-      "sha256": "6d9032e11215d604859319cedc4a65e872e4b2e42622dbd5b4751443472762e6"
+      "bytes": 3759,
+      "sha256": "86655e5e6431be7ab2793b029a9e2719713e77eb4db161e6244b7888c1c810d6"
     },
     {
       "source": "ui-foundations-v31.css",
@@ -2174,20 +2204,20 @@
     {
       "source": "ui-states-v31.css",
       "path": "ui-states-v31.css",
-      "bytes": 6926,
-      "sha256": "b9a2355ae1f17851706a618fe0bf7a60061055d6201d2e470a2c6f9a55c3053f"
+      "bytes": 7050,
+      "sha256": "61d41724f95e8c8ac1a3cb3c479802bf9fdcd217ce55bc7587f834121e37ae63"
     },
     {
       "source": "ui-surface-v51.css",
       "path": "ui-surface-v51.css",
-      "bytes": 2371,
-      "sha256": "d67764e333cb5a2f8e62be6cbc82c626bed22ad9fb6fe2c930a903e3da96489e"
+      "bytes": 3254,
+      "sha256": "7d9f19d061205c20102d58ca4f43b1a67b17d1b7609c7f37b08c4c6e0b7d9acb"
     },
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 6844,
-      "sha256": "d5cc296f83eea8ab3a115faeda440800324b850a40a9cbea782f76b92de3d797"
+      "bytes": 7414,
+      "sha256": "a27b419a067ad5c841b766daaadbf5cb5fb9de92ccba32149da2e0cffc05be79"
     },
     {
       "source": "universe-experience.css",
@@ -2594,6 +2624,21 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "conversation-entry-motion.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "scene-control-glass.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "ui-caret-v52.css",
+      "kind": "resource"
+    },
+    {
       "from": "app.mjs",
       "to": "auth-entry.mjs",
       "kind": "module"
@@ -2636,6 +2681,16 @@
     {
       "from": "app.mjs",
       "to": "shared-agents.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "conversation-entry-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "scene-control-glass.mjs",
       "kind": "module"
     },
     {
@@ -2849,6 +2904,11 @@
       "kind": "module"
     },
     {
+      "from": "scene-control-glass.mjs",
+      "to": "landing-glass.mjs",
+      "kind": "module"
+    },
+    {
       "from": "landing-video-scene.mjs",
       "to": "landing-video-player.mjs",
       "kind": "module"
@@ -2866,6 +2926,11 @@
     {
       "from": "landing-video-scene.mjs",
       "to": "landing-departure.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "loading-state.mjs",
       "kind": "module"
     },
     {
@@ -3043,10 +3108,10 @@
       "assets/demo-avatars-20261026-45/h.jpg",
       "assets/demo-avatars-20261026-45/i.jpg"
     ],
-    "assets/friend-realm-20261027-49/house-": [
-      "assets/friend-realm-20261027-49/house-wood.svg",
-      "assets/friend-realm-20261027-49/house-water.svg",
-      "assets/friend-realm-20261027-49/house-earth.svg"
+    "assets/scenes-20261026-41/house-": [
+      "assets/scenes-20261026-41/house-wood.webp",
+      "assets/scenes-20261026-41/house-water.webp",
+      "assets/scenes-20261026-41/house-earth.webp"
     ],
     "assets/signature-strokes-20261020/": [
       "assets/signature-strokes-20261020/u2e.json",

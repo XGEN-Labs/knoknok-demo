@@ -1,0 +1,5 @@
+/* Native fallback and the desktop fine caret share the same quiet ink. */
+.phone#phone :is(input,textarea,[contenteditable="true"]){caret-color:#625d65;}
+.phone#phone :is(input,textarea).has-fine-caret{caret-color:transparent!important;}
+.phone#phone .auth-fine-caret{width:1px;background:#625d65;border-radius:0;pointer-events:none;}
+.phone#phone .auth-fine-caret[hidden]{display:none!important;}

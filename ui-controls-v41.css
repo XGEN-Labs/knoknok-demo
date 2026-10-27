@@ -37,10 +37,9 @@
   min-width:24px;
 }
 
-/* Navigation and the bottom capsules share one edge and one surface sheen.
-   Clip fill inside the border so its white does not brighten that edge twice.
-   Inset lines used to show on the top buttons while the composer's paint-only
-   pseudo layer covered them; the common shadow now contains no inset stroke. */
+/* Navigation and capsules share the neutral rim, inner light and outer shadow.
+   Paint-only controls move the inner light onto their single ::before surface
+   in glass-control-surfaces-v51.css; direct-paint identity uses both here. */
 .phone#phone #app :is(.icon-button,.scene-icon,.onboarding-back,.auth-back,.scene-more,.scene-sound),
 .phone#phone #app .page.room-chat-page .home-chat-identity,
 .phone#phone > .landing-volume-toggle,

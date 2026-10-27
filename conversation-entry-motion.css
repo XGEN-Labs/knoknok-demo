@@ -1,0 +1,7 @@
+/* The previous entry gate hid the whole log until the avatar settled, then
+   revealed every bubble at once. Individual bubble WAAPI transitions now own
+   entry; retain the log's geometry and each surface's existing edge mask. */
+.phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log {
+  opacity:1!important;
+  transition:none!important;
+}
