@@ -1,7 +1,7 @@
 /* Stable glass for the paused film: the sampled scene, blur and white fill are
    painted once into an ordinary image. Text and controls remain normal DOM. */
-.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn),
-.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn):hover:not(:disabled){
+.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.kn-birth-time-picker,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn),
+.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.kn-birth-time-picker,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn):hover:not(:disabled){
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
 }

@@ -1,9 +1,14 @@
-import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261027-glass-52g';
+import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261027-glass-61';
 
 // Ordinary image backgrounds are deliberately used instead of one composited
 // backdrop per capsule. WebKit can split a live backdrop even on a paint-only
 // pseudo element when a sibling canvas, SVG or textarea repaints.
 export const SCENE_GLASS_TARGETS = [
+  // New components opt into the same paint owner through their material class.
+  // These named exceptions intentionally remain solid or transparent.
+  '.kn-glass-control:not(.kn-birth-time-confirm):not(.landing-video-skip):not(.dark):not(.danger):not(.account-menu-actions > .btn)',
+  '.kn-glass-panel','dialog.kn-date-picker',
+  '.phone[data-scene-overlay="true"] #app .landing-form-card',
   '#app .scene-icon','#app .icon-button','#app .onboarding-back','#app .auth-back',
   '#app .scene-more','#app .scene-sound','#app .onboarding-history',
   '#app .welcome-actions>.btn','#app .onboarding-composer>.btn',
@@ -13,7 +18,9 @@ export const SCENE_GLASS_TARGETS = [
   '#app .profile-edit-footer>.btn:not(.dark):not(.danger)',
   '#app .lounge-footer>.btn:not(.dark):not(.danger)',
   '#app .home-chat-actions>.visit-entry','#app .conversation-replies>button',
+  '#app .shared-composer>.btn:not(.dark):not(.danger)',
   '#app .tag-chat-tools>.tag-ui-button','#app .suggestions>button','#app .home-chat-identity',
+  '#app .shared-chat-page .shared-people',
   '#app .tag-chat-card','#app .tag-chat-card .tag-ui-button:not(.tag-confirm)',
   '#app .tag-chat-card input:not([type=checkbox]):not([type=radio])',
   '#app .tag-chat-card select:not(.klin-native-select)','#app .tag-chat-card .klin-select-trigger',
@@ -21,6 +28,8 @@ export const SCENE_GLASS_TARGETS = [
   '#app .auth-panel','#app .conversation-message','#app .room-speech',
   '#app .bubble:not(.failed)','#app .onboarding-message','#app .onboarding-reading',
   '#sheet','#sheet .sheet-title .icon-button',
+  '#sheet .tag-history-entry','#sheet .tag-history-story',
+  '#sheet .tag-history-options .tag-ui-button','#sheet .tag-diary-browser .tag-diary-list>button',
   '.landing-volume-toggle','.landing-video-resume',
   '.contract-story .contract-actions>.contract-sign'
 ].join(',');
@@ -44,11 +53,11 @@ export function sceneSourceRect(sourceRect,phoneRect,width,height,intrinsicWidth
 }
 export function sceneGlassMaterial(node,style){
   const own=node.matches('.conversation-message.own,.onboarding-message.is-user')||node.closest('.message.own');
-  const kind=node.matches('#sheet')?'sheet':node.matches('.auth-panel,.tag-chat-card')?'panel':node.matches('.conversation-message,.room-speech,.bubble,.onboarding-message,.onboarding-reading')?(own?'own':'conversation'):'control';
+  const kind=node.matches('#sheet,.kn-date-picker')?'sheet':node.matches('.auth-panel,.tag-chat-card,.kn-glass-panel,.landing-form-card,.tag-history-entry')?'panel':node.matches('.conversation-message,.room-speech,.bubble,.onboarding-message,.onboarding-reading')?(own?'own':'conversation'):'control';
   const field={sheet:'--kn-glass-sheet-fill',panel:'--kn-glass-panel-fill',own:'--kn-glass-own-fill',conversation:'--kn-glass-conversation-fill',control:'--kn-glass-fill'}[kind];
   const defaults={sheet:'rgba(255,255,255,.9)',panel:'rgba(255,255,255,.38)',own:'rgba(232,241,252,.9)',conversation:'rgba(255,255,255,.9)',control:'rgba(255,255,255,.62)'};
   const sat=style.getPropertyValue('--kn-glass-saturation').trim()||'100%';
-  return {kind,fill:style.getPropertyValue(field).trim()||defaults[kind],blur:parseFloat(style.getPropertyValue(kind==='panel'||kind==='sheet'?'--kn-glass-panel-blur':'--kn-glass-blur'))||32,saturation:(parseFloat(sat)||100)/(sat.endsWith('%')?100:1),shadow:kind==='panel'||kind==='sheet'?'var(--kn-glass-panel-shadow)':'var(--kn-glass-control-shadow)'};
+  return {kind,fill:style.getPropertyValue(field).trim()||defaults[kind],blur:parseFloat(style.getPropertyValue(kind==='panel'||kind==='sheet'?'--kn-glass-panel-blur':'--kn-glass-blur'))||32,saturation:(parseFloat(sat)||100)/(sat.endsWith('%')?100:1),shadow:(kind==='panel'||kind==='sheet')&&!node.matches('.tag-history-entry')?'var(--kn-glass-panel-shadow)':'var(--kn-glass-control-shadow)'};
 }
 
 export function createSceneControlGlass({phone,environment={}}={}){
@@ -94,7 +103,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
         // Controls inside an already painted form/sheet naturally see that
         // parent's texture. Keep their white layer instead of sampling behind
         // the parent again (which would erase the panel's 38% white material).
-        const parent=node.parentElement?.closest('.auth-panel,.tag-chat-card,#sheet');
+        const parent=node.parentElement?.closest('.auth-panel,.tag-chat-card,#sheet,.kn-date-picker,.kn-glass-panel,.kn-glass-control,.landing-form-card,.tag-history-entry');
         if(parent&&current.has(parent)){surfaces.push({node,material,layer:true});continue;}
         const materialKey=JSON.stringify([material.kind,material.fill,material.blur,material.saturation]);
         let texture=materials.get(materialKey)||textures.get(materialKey);

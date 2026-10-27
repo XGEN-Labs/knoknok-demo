@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T12:24:34.729768Z",
+  "createdAt": "2026-10-27T12:20:37.537836+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 113618047,
+  "payloadBytes": 115446762,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 122840,
-      "sha256": "a0405d7402e8e3f8153e3fe301229cba364ef3d3cd123a1da5a6b2821337dc45"
+      "bytes": 122853,
+      "sha256": "aaa639feb159c987464d974c5b1dd0ccd9326cff37550fc1c6e96248ebccb155"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10619,
-      "sha256": "3f50bdad27f1d47856e8116e04e5279012b5e6ad8b282ef92c34a52a0f1542b4"
+      "bytes": 10644,
+      "sha256": "9f7dbabac596ee65052e5a02fb233b43777ddf45ada9483c4db458fd9b8682ef"
     },
     {
       "source": "journey-experience.css",
@@ -1820,14 +1820,14 @@
     {
       "source": "landing-audio-clips.mjs",
       "path": "landing-audio-clips.mjs",
-      "bytes": 3194,
-      "sha256": "4cb93f9bbc80213e6245a1e6b393b7322d95bfa6095dc7da45050e584f0b4cfc"
+      "bytes": 3556,
+      "sha256": "553707a3dbe1dd1b30297ee438dae606b380c270803e2a38eac44083c70b483d"
     },
     {
       "source": "landing-audio-engine.mjs",
       "path": "landing-audio-engine.mjs",
-      "bytes": 15841,
-      "sha256": "4e62c6f9dd547887ad0233e9da2e176139bf39f1b85ea683b07ef4890fe4fe7d"
+      "bytes": 19477,
+      "sha256": "ea632a21f3c8a5a4d6b9e104056e5342369f1e48b74895e2a7cf51f6d22f5a7e"
     },
     {
       "source": "landing-day-master-reading.mjs",
@@ -1850,14 +1850,14 @@
     {
       "source": "landing-glass.css",
       "path": "landing-glass.css",
-      "bytes": 1431,
-      "sha256": "1d2a257eb5877c73930b1055e6f4b5123d65dcdc56ee4a41ab78bb6a06dfdcfb"
+      "bytes": 1475,
+      "sha256": "4246beaa05df1feb65a05ceb8133c0e6b123ea0831800fc7143b78931a0778d6"
     },
     {
       "source": "landing-glass.mjs",
       "path": "landing-glass.mjs",
-      "bytes": 11586,
-      "sha256": "c8e207fe129aafd59d5095b9e658d1c2f1cc561978a697e44db894cdd262e028"
+      "bytes": 11608,
+      "sha256": "ce8a752ad1e8cf14585071673525704b83a89c078261e9615e7f915b76091057"
     },
     {
       "source": "landing-held-frame.mjs",
@@ -1880,8 +1880,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 11774,
-      "sha256": "e771b377dbac67298950e70a1b3e82ae397092876496482a671c9b0e92abee91"
+      "bytes": 11795,
+      "sha256": "e31a31de8da94284521e7c6c0e6c6c9be034a6f22b7326376cb4e72b4239e4e3"
     },
     {
       "source": "landing-video.css",
@@ -2084,8 +2084,8 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 13202,
-      "sha256": "65858349f640e6d6f6044fd828ce8f77d39e66c14d979eb33272c4bf04ba1839"
+      "bytes": 14048,
+      "sha256": "2ff459ee5a0a3783f47e6a3a030b5a9c84d49185876ce9d491b309eeef29011e"
     },
     {
       "source": "scene-experience.css",
@@ -2096,8 +2096,8 @@
     {
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
-      "bytes": 252,
-      "sha256": "3f0199b036ea8ba2de82ff159cdc03e5db408dc64923211d108c64f3f4fe3bcd"
+      "bytes": 251,
+      "sha256": "6b1b563ccb2869298514621cc3e3932b0325ada00286a119d0f47513a4cb0fe4"
     },
     {
       "source": "scenes-v41.css",
@@ -2326,6 +2326,18 @@
       "path": "assets/shared-room-20261027-61/klin-seated-v2.png",
       "bytes": 1456452,
       "sha256": "5e93e4b6db8efad020f016b7a0372cde2a9f40b85fdd0c57c38fba0bcb18e9c0"
+    },
+    {
+      "source": "assets/landing-audio-20261027-61/background.m4a",
+      "path": "assets/landing-audio-20261027-61/background.m4a",
+      "bytes": 1247864,
+      "sha256": "6aedf6f6062c102c49315ad7bda80df73de12a41df11e4fee7cf0a00b188547c"
+    },
+    {
+      "source": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
+      "path": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
+      "bytes": 575883,
+      "sha256": "55b2b4cf18c1a953e5b89ff2cd1b2fbb3bbe71c0b1119270bf4f7e5dc8466d46"
     }
   ],
   "runtimeDependencies": [

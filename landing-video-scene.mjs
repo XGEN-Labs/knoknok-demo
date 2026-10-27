@@ -1,6 +1,6 @@
 import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261027-glass-52g';
 import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261027-polish-48a';
-import { createLandingGlass } from './landing-glass.mjs?v=20261027-glass-52g';
+import { createLandingGlass } from './landing-glass.mjs?v=20261027-glass-61';
 import { createLandingDeparture } from './landing-departure.mjs?v=20261023-experience-34d';
 import { LOADING_CHARACTER_MARKUP } from './loading-state.mjs?v=20261023-experience-34d';
 import { LANDING_VIDEO_CUES, LANDING_ARRIVAL_CUE, landingVideoSubtitleAt, landingVideoNokingAt, landingVideoOverlaysPlaying } from './landing-video-cues.mjs?v=20261027-glass-52g';
@@ -67,7 +67,7 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
       subtitleFrameKind='animation';subtitleFrame=globalThis.requestAnimationFrame(next);
     }
   }
-  const reportMedia=()=>onMediaChange({active:active&&!disposed,playing:isPlaying(),time:video.currentTime||0,rate:video.playbackRate||1});
+  const reportMedia=()=>onMediaChange({active:active&&!disposed,playing:isPlaying(),ready:hasVisibleFrame,time:video.currentTime||0,rate:video.playbackRate||1});
   const mediaEvents=['timeupdate','playing','pause','waiting','seeking','seeked','ratechange','ended'];
   const onMediaEvent=()=>{syncSubtitle();reportMedia();};
   for(const event of mediaEvents)video.addEventListener(event,onMediaEvent);

@@ -1,6 +1,9 @@
 // Neural character narration candidate. Original renders and provenance are archived.
-// The selected landing film's original AAC track, copied without re-encoding.
-export const LANDING_MUSIC = Object.freeze({"src": "assets/landing-20261027-52/film-original-audio.m4a", "duration": 68.583333});
+// Original isolated character recordings plus independently rebuilt foley.
+// No mixed movie audio is used in either playback track. The pure instrumental
+// score runs independently; character lines and actions follow the video once.
+export const LANDING_FILM_AUDIO = Object.freeze({"src": "assets/landing-audio-20261027-61/dialogue-actions.m4a", "duration": 68.583333});
+export const LANDING_MUSIC = Object.freeze({"src": "assets/landing-audio-20261027-61/background.m4a", "duration": 51.208333333333336, "loopStart": 3, "loopEnd": 48.208333333333336, "gain": 0.65});
 export const LANDING_VOICE_CLIPS = Object.freeze([
   {
     "text": "我好像刚刚醒来…",

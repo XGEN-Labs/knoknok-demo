@@ -1,4 +1,4 @@
-import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261027-glass-52g';
+import { LANDING_FILM_AUDIO, LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261027-audio-61';
 import { ROOM_VOICE_CLIPS } from './room-voice-clips.mjs?v=20261026-room-voice-47';
 import { ROOM_VOICE_PROFILE, isRoomNarration, isMandarin, findLocalLandingVoice } from './room-voice-profile.mjs?v=20261026-room-voice-47';
 
@@ -34,10 +34,12 @@ export function createLandingAudio({ environment = {} } = {}) {
   const later = environment.setTimeout ?? globalThis.setTimeout.bind(globalThis);
   const cancelLater = environment.clearTimeout ?? globalThis.clearTimeout.bind(globalThis);
   const now = environment.now ?? (() => globalThis.performance?.now?.() ?? Date.now());
-  let context = null, musicGain = null, voiceGain = null;
+  let context = null, filmGain = null, voiceGain = null, musicGain = null;
   let enabled = false, disposed = false, enableEpoch = 0;
-  let film = { active: false, playing: false, time: 0, rate: 1, sampledAt: now() }, filmFresh = true;
+  let film = { active: false, playing: false, ready: false, time: 0, rate: 1, sampledAt: now() }, filmFresh = true;
+  let filmSource = null, filmAnchor = null, filmPending = false, filmEpoch = 0;
   let musicSource = null, musicAnchor = null, musicPending = false, musicEpoch = 0;
+  let musicArmed = false, musicOffset = 0, musicDuration = 0;
   let voiceSource = null, utterance = null, voiceEpoch = 0, voiceTimer = null;
   let voiceBusy = false, currentKey = null, scope = null, lastError = '';
   let lastNarration = null;
@@ -51,15 +53,20 @@ export function createLandingAudio({ environment = {} } = {}) {
     if (context) return context;
     if (!AudioContext) throw new Error('audio-context-unavailable');
     context = new AudioContext();
-    // The film contains its own dialogue mix, so retain its original level.
-    musicGain = context.createGain(); musicGain.gain.value = 1; musicGain.connect(context.destination);
+    // The separated dialogue / action stem follows the video timeline.
+    filmGain = context.createGain(); filmGain.gain.value = 1; filmGain.connect(context.destination);
     voiceGain = context.createGain(); voiceGain.gain.value = .9; voiceGain.connect(context.destination);
+    musicGain = context.createGain(); musicGain.gain.value = 0; musicGain.connect(context.destination);
     return context;
   }
   function duck() {
-    if (!context || !musicGain) return;
+    if (!context || !filmGain) return;
+    filmGain.gain.cancelScheduledValues(context.currentTime);
+    filmGain.gain.setTargetAtTime(voiceBusy ? .055 : 1, context.currentTime, .08);
     musicGain.gain.cancelScheduledValues(context.currentTime);
-    musicGain.gain.setTargetAtTime(voiceBusy ? .055 : 1, context.currentTime, .08);
+    // The full background stem has its own clock and remains audible when
+    // the video is playing, held, or seeking. Only explicit narration ducks it.
+    musicGain.gain.setTargetAtTime((LANDING_MUSIC.gain ?? 1) * (voiceBusy ? .55 : 1), context.currentTime, .08);
   }
   function disconnect(source) {
     if (!source) return;
@@ -67,9 +74,25 @@ export function createLandingAudio({ environment = {} } = {}) {
     try { source.stop(); } catch {}
     try { source.disconnect(); } catch {}
   }
-  function stopMusic() {
+  function stopFilmAudio() {
+    filmEpoch++; filmPending = false;
+    disconnect(filmSource); filmSource = filmAnchor = null;
+  }
+  function musicLoopBounds() {
+    const end = Number.isFinite(LANDING_MUSIC.loopEnd) ? Math.max(0, Math.min(LANDING_MUSIC.loopEnd, musicDuration)) : musicDuration;
+    const start = Number.isFinite(LANDING_MUSIC.loopStart) ? Math.max(0, Math.min(LANDING_MUSIC.loopStart, end)) : 0;
+    return end > start ? { start, end } : { start: 0, end: musicDuration };
+  }
+  function musicPosition() {
+    const elapsed = musicOffset + (musicAnchor ? Math.max(0, context.currentTime - musicAnchor.started) : 0);
+    const { start, end } = musicLoopBounds();
+    return end > start && elapsed >= end ? start + (elapsed - start) % (end - start) : elapsed;
+  }
+  function pauseMusic({ reset = false } = {}) {
+    musicOffset = reset ? 0 : musicPosition();
     musicEpoch++; musicPending = false;
     disconnect(musicSource); musicSource = musicAnchor = null;
+    if (reset) musicArmed = false;
   }
   function stopSpeech() {
     voiceEpoch++; queue = []; scope = null;
@@ -82,7 +105,7 @@ export function createLandingAudio({ environment = {} } = {}) {
     for (const [source, gain] of effects) { disconnect(source); gain.disconnect(); }
     effects.clear();
   }
-  function stopAll() { stopMusic(); stopSpeech(); stopEffects(); }
+  function stopAll() { stopFilmAudio(); pauseMusic(); stopSpeech(); stopEffects(); }
 
   function bufferFor(src) {
     if (buffers.has(src)) return buffers.get(src);
@@ -110,28 +133,61 @@ export function createLandingAudio({ environment = {} } = {}) {
     // Cache failures too: frame-by-frame synchronization must not retry-spam.
     buffers.set(src, request); return request;
   }
-  function syncMusic() {
+  function syncFilmAudio() {
     if (!audible() || !film.active || !film.playing || !filmFresh) {
-      if (musicSource || musicPending) stopMusic();
+      if (filmSource || filmPending) stopFilmAudio();
       return;
     }
-    if (musicSource) {
-      const actual = musicAnchor.time + (context.currentTime - musicAnchor.started) * musicAnchor.rate;
-      if (Math.abs(actual - currentFilmTime()) <= .25 && musicAnchor.rate === film.rate) return;
-      stopMusic();
+    if (filmSource) {
+      const actual = filmAnchor.time + (context.currentTime - filmAnchor.started) * filmAnchor.rate;
+      if (Math.abs(actual - currentFilmTime()) <= .25 && filmAnchor.rate === film.rate) return;
+      stopFilmAudio();
     }
-    if (musicPending) return;
-    musicPending = true; const token = ++musicEpoch;
-    bufferFor(LANDING_MUSIC.src).then(buffer => {
-      if (token !== musicEpoch || !audible() || !film.active || !film.playing || !filmFresh) return;
-      musicPending = false;
+    if (filmPending) return;
+    filmPending = true; const token = ++filmEpoch;
+    bufferFor(LANDING_FILM_AUDIO.src).then(buffer => {
+      if (token !== filmEpoch || !audible() || !film.active || !film.playing || !filmFresh) return;
+      filmPending = false;
       const offset = currentFilmTime();
       if (offset >= buffer.duration - .01) return;
       const source = context.createBufferSource(); source.buffer = buffer; source.playbackRate.value = film.rate;
-      source.connect(musicGain); musicSource = source;
-      musicAnchor = { time: offset, started: context.currentTime, rate: film.rate };
-      source.onended = () => { if (musicSource === source) { source.disconnect(); musicSource = musicAnchor = null; } };
+      source.connect(filmGain); filmSource = source;
+      filmAnchor = { time: offset, started: context.currentTime, rate: film.rate };
+      source.onended = () => { if (filmSource === source) { source.disconnect(); filmSource = filmAnchor = null; } };
       duck(); source.start(0, offset);
+    }).catch(error => {
+      if (token !== filmEpoch) return;
+      filmPending = false; lastError = String(error?.message || 'film-audio-unavailable');
+    });
+  }
+  function syncMusic() {
+    if (!audible() || !film.active || !musicArmed) {
+      if (musicSource || musicPending) pauseMusic();
+      return;
+    }
+    // Unlike dialogue, the score has its own clock. Holds, seeking backwards,
+    // and video rate changes must not recreate this full-length looping source.
+    if (musicSource || musicPending) return;
+    musicPending = true; const token = ++musicEpoch;
+    bufferFor(LANDING_MUSIC.src).then(buffer => {
+      if (token !== musicEpoch || !audible() || !film.active || !musicArmed) return;
+      musicPending = false; musicDuration = buffer.duration;
+      if (!(musicDuration > 0)) return;
+      musicOffset = musicPosition();
+      const source = context.createBufferSource(); source.buffer = buffer;
+      const bounds = musicLoopBounds();
+      source.loop = true; source.loopStart = bounds.start; source.loopEnd = bounds.end;
+      source.playbackRate.value = 1; source.connect(musicGain); musicSource = source;
+      musicAnchor = { started: context.currentTime };
+      source.onended = () => {
+        if (musicSource !== source) return;
+        musicOffset = musicPosition();
+        source.disconnect(); musicSource = musicAnchor = null;
+        // A loop normally never ends. Recover an unexpected source end at its
+        // independent position without replaying any film dialogue.
+        syncMusic();
+      };
+      duck(); source.start(0, musicOffset);
     }).catch(error => {
       if (token !== musicEpoch) return;
       musicPending = false; lastError = String(error?.message || 'music-unavailable');
@@ -217,14 +273,16 @@ export function createLandingAudio({ environment = {} } = {}) {
     }
     drainQueue(); return accepted;
   }
-  function syncFilm({ active = false, playing = false, time = 0, rate = 1 } = {}) {
+  function syncFilm({ active = false, playing = false, ready = false, time = 0, rate = 1 } = {}) {
     if (disposed) return;
     const wasActive = film.active, wasPlaying = film.playing;
-    film = { active: Boolean(active), playing: Boolean(playing), time: Number.isFinite(time) ? Math.max(0, time) : 0,
+    film = { active: Boolean(active), playing: Boolean(playing), ready: Boolean(ready), time: Number.isFinite(time) ? Math.max(0, time) : 0,
       rate: Number.isFinite(rate) && rate > 0 ? rate : 1, sampledAt: now() };
     filmFresh = !hidden();
     if (wasActive && !film.active || !wasPlaying && film.playing) stopSpeech();
-    syncMusic();
+    if (!film.active) pauseMusic({ reset: true });
+    else if ((film.playing || film.ready) && filmFresh) musicArmed = true;
+    syncFilmAudio(); syncMusic(); duck();
   }
   async function setEnabled(value) {
     if (disposed) return false;
@@ -239,7 +297,7 @@ export function createLandingAudio({ environment = {} } = {}) {
       if (!hidden()) await context.resume();
       if (token !== enableEpoch || disposed) return enabled;
       if (!hidden() && context.state !== 'running') throw new Error('audio-resume-blocked');
-      syncMusic(); drainQueue(); return enabled;
+      syncFilmAudio(); syncMusic(); drainQueue(); return enabled;
     } catch (error) {
       if (token === enableEpoch) { enabled = false; stopAll(); lastError = String(error?.message || 'audio-unavailable'); }
       return enabled;
@@ -265,17 +323,19 @@ export function createLandingAudio({ environment = {} } = {}) {
       try { context?.suspend?.().catch?.(() => {}); } catch {}
     } else if (enabled && context) {
       const token = ++enableEpoch;
-      try { Promise.resolve(context.resume()).then(() => { if (token === enableEpoch && enabled && !disposed) syncMusic(); }).catch(() => {}); } catch {}
+      try { Promise.resolve(context.resume()).then(() => { if (token === enableEpoch && enabled && !disposed) { syncFilmAudio(); syncMusic(); } }).catch(() => {}); } catch {}
     }
   }
   doc?.addEventListener?.('visibilitychange', visibilityChanged);
   return {
     setEnabled, syncFilm, cue, speakSequence, stopSpeech,
     speak(text, key, options = {}) { return speakSequence([{ text, key }], options); },
-    resetSession() { stopSpeech(); seen.clear(); },
+    resetSession() { stopSpeech(); pauseMusic({ reset: true }); seen.clear(); },
     get enabled() { return enabled; },
     getDiagnostics: () => ({ enabled, disposed, hidden: hidden(), contextState: context?.state || 'uninitialized',
-      musicPlaying: Boolean(musicSource), musicPending, musicTime: musicAnchor ? musicAnchor.time + (context.currentTime - musicAnchor.started) * musicAnchor.rate : null,
+      musicPlaying: Boolean(musicSource), musicPending, musicTime: musicArmed ? musicPosition() : null, musicArmed, musicEnded: false, musicLooping: Boolean(musicSource?.loop), musicLoop: musicLoopBounds(), musicGain: musicGain?.gain.value ?? 0,
+      filmAudioPlaying: Boolean(filmSource), filmAudioPending: filmPending,
+      filmAudioTime: filmAnchor ? filmAnchor.time + (context.currentTime - filmAnchor.started) * filmAnchor.rate : null,
       voicePlaying: voiceBusy, currentKey, queued: queue.length, seenKeys: seen.size, scope, film: { ...film }, lastError,
       lastNarration: lastNarration ? { ...lastNarration } : null }),
     dispose() {
