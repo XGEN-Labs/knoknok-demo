@@ -1,0 +1,26 @@
+/* A single room plate owns both the sofa and seated companion coordinates. */
+.phone#phone #app .page.shared-chat-page {--shared-plate-height:max(100cqh,177.683315cqw);--shared-plate-width:max(100cqw,56.279904cqh);--shared-seat-y:calc(50cqh + var(--shared-plate-height)*.115);background:none;}
+.phone#phone #app .shared-room-scene {position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;background:#eee4d6;}
+.phone#phone #app .shared-room-plate {position:absolute;left:50%;top:50%;width:var(--shared-plate-width);height:var(--shared-plate-height);transform:translate(-50%,-50%);}
+.phone#phone #app .shared-room-backdrop {display:block;width:100%;height:100%;object-fit:cover;}
+.phone#phone #app .page.shared-chat-page .shared-agents {left:24%;right:24%;top:auto;bottom:37.4%;height:auto;gap:0;justify-content:center;align-items:flex-end;}
+.phone#phone #app .page.shared-chat-page .shared-agent {flex:0 0 50%;width:50%;max-width:50%;}
+.phone#phone #app .page.shared-chat-page .shared-agent-art {width:100%;aspect-ratio:1;}
+.phone#phone #app .page.shared-chat-page .shared-agent-art img {transform:translateY(10%);animation:none;}
+.phone#phone #app .page.shared-chat-page .shared-agent:first-child .shared-agent-art img {transform:translateY(10%) scaleX(-1);}
+.phone#phone #app .page.shared-chat-page .shared-agent-shadow {left:18%;bottom:2%;width:65%;height:7%;background:#61402d45;filter:blur(3px);}
+.phone#phone #app .page.shared-chat-page .shared-agent figcaption {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
+.phone#phone #app .page.shared-chat-page .shared-people {gap:7px;}
+.phone#phone #app .page.shared-chat-page .shared-people>.shared-person {max-width:100%;gap:7px;}
+.phone#phone #app .page.shared-chat-page .shared-person strong {font-size:14px;}
+.phone#phone #app .page.shared-chat-page .shared-messages {z-index:2;top:calc(var(--app-safe-top) + 58px);bottom:auto;height:max(100px,calc(var(--shared-seat-y) - var(--shared-plate-width)*.26 - var(--app-safe-top) - 78px));padding:10px 0 8px;overscroll-behavior:contain;}
+.phone#phone #app .page.shared-chat-page .shared-messages .message {margin-bottom:12px;}
+.phone#phone #app .page.shared-chat-page .shared-messages .message-content {max-width:92%;}
+.phone#phone #app .page.shared-chat-page .shared-messages .bubble {padding:12px 15px;font-size:15px;line-height:1.65;border-radius:20px;}
+.phone#phone #app .page.shared-chat-page .shared-messages .message-label {background:none;padding:0 4px;margin-bottom:5px;font-size:11px;color:#635b54;}
+.phone#phone #app .page.shared-chat-page .shared-composer {z-index:3;display:block;}
+.phone#phone #app .page.shared-chat-page .private-entry {display:none;}
+.phone#phone[data-keyboard-open="true"] #app .page.shared-chat-page .shared-room-scene {opacity:.6;}
+.phone#phone[data-keyboard-open="true"] #app .page.shared-chat-page .shared-agents {visibility:hidden;}
+.phone#phone[data-keyboard-open="true"] #app .page.shared-chat-page .shared-messages {height:auto;bottom:calc(var(--app-safe-bottom) + 72px);}
+.phone#phone #app .page.shared-chat-page .shared-messages .message-label {border:0!important;background:none!important;box-shadow:none!important;color:#544b42!important;text-shadow:none!important;backdrop-filter:none!important;}

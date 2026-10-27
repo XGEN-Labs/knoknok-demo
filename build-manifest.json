@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T10:16:27.424782Z",
+  "createdAt": "2026-10-27T12:11:28.608423Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 103789589,
+  "payloadBytes": 113617695,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 121643,
-      "sha256": "3ecff2293b36b8d8169f7c7e2fe2cc9e62e483293c4623f5779b989150920859"
+      "bytes": 122840,
+      "sha256": "a0405d7402e8e3f8153e3fe301229cba364ef3d3cd123a1da5a6b2821337dc45"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1712,14 +1712,14 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 10818,
-      "sha256": "4a42e3309635b18ea8e1ce27f6393535f109a9694a65f286b77ddc96afa725ae"
+      "bytes": 11450,
+      "sha256": "1b0035b132749e90d95af08bfe5843fea0b8de9f20258cdbcdd4844d298d7717"
     },
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2846,
-      "sha256": "9d4122393accbb5a1df714252b2b06a9ebc79beecff793930aef3c70998b3a48"
+      "bytes": 2808,
+      "sha256": "0a3e6495be7861fe5d0029d6628c6dbd15bf432d382a62869541ef68b07f2a53"
     },
     {
       "source": "friend-world-loading.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10541,
-      "sha256": "352d287ef893a5030beee3a22570ebd27cb0d1f5da9de984a7fc013a9c05bf19"
+      "bytes": 10618,
+      "sha256": "aa42ffe338b981cf3c039213d2977f9d7c86d679505f2c10fee5579a7de8a32c"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 12963,
-      "sha256": "46830b04c431da712b2418e03ba420d3f7a4d40cc13f2030a771c06a6bda54cc"
+      "bytes": 13084,
+      "sha256": "d11a8e20d8ea592b82db8be1eca717e96e9fc358493f9eb69a05bac27f30f797"
     },
     {
       "source": "klin-world-2d.css",
@@ -2084,8 +2084,8 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 13036,
-      "sha256": "a2b98fee1168782ba7a07793d8f7a921f9799a8eeba6db80ae88c0c17d5cb847"
+      "bytes": 13202,
+      "sha256": "65858349f640e6d6f6044fd828ce8f77d39e66c14d979eb33272c4bf04ba1839"
     },
     {
       "source": "scene-experience.css",
@@ -2108,8 +2108,8 @@
     {
       "source": "shared-agents.mjs",
       "path": "shared-agents.mjs",
-      "bytes": 1478,
-      "sha256": "ef9c9385a07f6643f69329bd4bd8ba5618c950d796c754f513e649a38be2f1e6"
+      "bytes": 1588,
+      "sha256": "a8303eb843d5315f51919d1a724d92c194ae5d7c13972595d0021b777c3d825b"
     },
     {
       "source": "sheet-dismiss.mjs",
@@ -2278,6 +2278,54 @@
       "path": "assets/brand-20261027-noknok/noknok-selected-white.png",
       "bytes": 561648,
       "sha256": "0f0622e4661f337a30f1fdd4b5bb8733db6184b2f9d02908b3d09c8db4650c2e"
+    },
+    {
+      "source": "cosmos-background.mjs",
+      "path": "cosmos-background.mjs",
+      "bytes": 4129,
+      "sha256": "65dfbc48c4c92501dcf68ede63b56154dc634d2afe29a0df2bcbda58b3e78395"
+    },
+    {
+      "source": "friend-room.mjs",
+      "path": "friend-room.mjs",
+      "bytes": 771,
+      "sha256": "fc54cb0860d697b88c54a8e8d7d07f311e30cc82d00f052324a6a236120d69ec"
+    },
+    {
+      "source": "shared-room-v61.css",
+      "path": "shared-room-v61.css",
+      "bytes": 3328,
+      "sha256": "9955ab81b000ab93be5038b63c1331e747ffda4a5b5131aa09f698df4b3ec4a5"
+    },
+    {
+      "source": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
+      "path": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
+      "bytes": 13950,
+      "sha256": "314e7f5361393962b82826d64fe6b7831a43f7ebc18c30c509976dd72b2a412d"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/earth.png",
+      "path": "assets/shared-room-20261027-61/earth.png",
+      "bytes": 2675985,
+      "sha256": "03970139b6e99c360e8f1e0dbeaa45e6a75d6a1b845d67518a43275d7594b188"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/water.png",
+      "path": "assets/shared-room-20261027-61/water.png",
+      "bytes": 2796993,
+      "sha256": "d8accf59d71c81c65bbf2d030f749c98d1d13a1d665ea776b61066cae65039f0"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/wood.png",
+      "path": "assets/shared-room-20261027-61/wood.png",
+      "bytes": 2874233,
+      "sha256": "9307ac474b7285db543a84c2b90584b523bfc35bded920c8d7b7d41a0e0b01f4"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/klin-seated-v2.png",
+      "path": "assets/shared-room-20261027-61/klin-seated-v2.png",
+      "bytes": 1456452,
+      "sha256": "5e93e4b6db8efad020f016b7a0372cde2a9f40b85fdd0c57c38fba0bcb18e9c0"
     }
   ],
   "runtimeDependencies": [

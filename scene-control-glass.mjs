@@ -26,6 +26,8 @@ export const SCENE_GLASS_TARGETS = [
 ].join(',');
 const PROPERTIES=['--scene-glass-image','--scene-glass-size','--scene-glass-position','--scene-glass-fill','--scene-glass-shadow'];
 const SOURCES=[
+  '#app .shared-chat-page .shared-room-backdrop',
+  '#app .friends-lounge .network-scene-source canvas:not([hidden])',
   '#app .friends-lounge .network-scene-source img',
   '.landing-video-scene.has-held-frame:not(.is-resuming):not([hidden]) .landing-video-still',
   '.landing-video-scene:not([hidden]) video',
@@ -83,7 +85,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
         return false;
       }
       const {node:media}=selected,mediaRect=media.getBoundingClientRect();
-      const next=JSON.stringify([selected.width,selected.height,width,height,media.currentSrc||media.src||'',media.matches('canvas')?phone.dataset.landingCue:'',video?Math.floor((video.currentTime||0)*4):'',mediaRect.left-rect.left,mediaRect.top-rect.top,mediaRect.width,mediaRect.height]);
+      const next=JSON.stringify([selected.width,selected.height,width,height,media.currentSrc||media.src||'',media.matches('canvas')?(media.dataset.cosmosFrame||phone.dataset.landingCue):'',video?Math.floor((video.currentTime||0)*4):'',mediaRect.left-rect.left,mediaRect.top-rect.top,mediaRect.width,mediaRect.height]);
       if(media!==source||next!==signature){textures.clear();signature=next;source=media;}
       let snapshot=null;
       const materials=new Map(),surfaces=[];
@@ -117,7 +119,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
   }
   resize?.observe(phone);
   mutation?.observe(phone,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','hidden','src','data-active','data-video-ready','data-landing-glass','data-landing-cue']});
-  const events=['scroll','load','loadeddata','playing','pause','seeked','transitionend','animationend','pointerover','focusin'];
+  const events=['kn-cosmos-frame','scroll','load','loadeddata','playing','pause','seeked','transitionend','animationend','pointerover','focusin'];
   events.forEach(event=>phone.addEventListener(event,refresh,true));
   win.addEventListener('resize',refresh);win.visualViewport?.addEventListener('resize',refresh);win.visualViewport?.addEventListener('scroll',refresh);doc.addEventListener('visibilitychange',refresh);doc.fonts?.addEventListener('loadingdone',refresh);
   refresh();

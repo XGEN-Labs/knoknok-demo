@@ -1,3 +1,4 @@
+import { SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261027-shared-61';
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
@@ -14,6 +15,6 @@ export function sharedAgentsMarkup(participants = [], activeId) {
     const name = person.companion?.name || 'Klin';
     const owner = person.id === activeId ? '你' : person.name || '朋友';
     const label = `${owner}的 ${name}`;
-    return `<figure class="shared-agent" data-agent-owner="${escape(person.id)}" data-agent-stage="${stage}"><div class="shared-agent-art"><span class="shared-agent-shadow" aria-hidden="true"></span><img src="${klinAssets[stage]}" alt="${escape(label)}" width="1280" height="1280" draggable="false"></div><figcaption>${escape(label)}</figcaption></figure>`;
+    return `<figure class="shared-agent" data-agent-owner="${escape(person.id)}" data-agent-stage="${stage}"><div class="shared-agent-art"><span class="shared-agent-shadow" aria-hidden="true"></span><img src="${stage==='adult'?SEATED_KLIN_ASSET:klinAssets[stage]}" alt="${escape(label)}" width="1280" height="1280" draggable="false"></div><figcaption>${escape(label)}</figcaption></figure>`;
   }).join('')}</div>`;
 }

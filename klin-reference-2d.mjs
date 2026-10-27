@@ -180,6 +180,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   const completeWithoutGrowth = options => { let cancelled = false; queueMicrotask(() => {if (!cancelled && !state.disposed) {options?.onSigned?.(); options?.onComplete?.();}}); return () => {cancelled = true;}; };
   return {
     supported: true, ready, setPage, setStage, setLayout, transition, interact, setConversationMode, setActive, setReducedMotion, resize: draw, dispose,
+    setSharedScene(src) {const url=new URL(src,import.meta.url).href;if(plates.shared.src!==url)plates.shared.src=url;},
     setCardPreview() {}, setParticipants: participants => {state.participants = participants || [];},
     setPortalState: value => {state.portal = value;}, setLoungeState: value => {state.lounge = {...state.lounge, ...value};}, setRealmState: value => {state.realm = {...state.realm, ...value};},
     grow: completeWithoutGrowth, signContract: completeWithoutGrowth,
