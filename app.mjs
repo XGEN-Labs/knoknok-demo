@@ -4,14 +4,16 @@ import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-st
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
 import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261027-clarity-51e';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
-import { mountFriendWorld } from './friend-world.mjs?v=20261027-clarity-51e';
+import { mountFriendWorld } from './friend-world.mjs?v=20261027-glass-52g';
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
-import { renderFriendNetwork } from './friend-network.mjs?v=20261027-clarity-51e';
+import { renderFriendNetwork } from './friend-network.mjs?v=20261027-glass-52g';
 import { sharedAgentsMarkup } from './shared-agents.mjs';
+import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
+import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261027-glass-52g';
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
 import { mountConversationScroll } from './conversation-scroll.mjs?v=20261027-clarity-51e';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
-import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261027-clarity-51e';
+import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261027-glass-52g';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
 import { createSceneAssetReadiness } from './scene-asset-readiness.mjs?v=20261023-experience-34d';
 import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261026-experience-41c';
@@ -19,15 +21,15 @@ import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=2026102
 import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261023-experience-34d';
 import { showCompanionContract } from './contract-story.mjs?v=20261027-clarity-51e';
 import { prepareAvatar } from './avatar-upload.mjs?v=20261023-experience-34d';
-import { initFormControls } from './form-controls.mjs?v=20261023-experience-34d';
+import { initFormControls } from './form-controls.mjs?v=20261027-glass-52g';
 import { birthTimePickerMarkup, mountBirthTimePicker } from './birth-time-picker.mjs?v=20261026-answers-47d';
 import { getLandingReading } from './landing-day-master-reading.mjs?v=20261026-answers-47d';
 import { initDatePickers } from './date-picker.mjs?v=20261027-clarity-51e';
 import { initTypography } from './typography.mjs?v=20261023-experience-34d';
-import { createSceneSound } from './scene-sound.mjs?v=20261026-room-voice-47';
+import { createSceneSound } from './scene-sound.mjs?v=20261027-glass-52g';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261027-polish-48b';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261027-clarity-51e';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261027-glass-52g';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261026-experience-42';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';
@@ -84,7 +86,7 @@ let loginScene=null,landingVideoScene=null,closeContractUI=null,pendingContractD
 let renderSequence=0;
 let pendingCardFontRefresh=false;
 let conversationActive=false,conversationAvatarMotion=null;
-let conversationScroll=null;
+let conversationScroll=null,conversationEntryMotion=null,sceneControlGlass=null;
 let welcomeLogoMotion=null;
 let matchingDemandId=null, matchingPhase=0, matchingTimers=[];
 let timer, initializeTimer, toastTimer, authResendTimer, stopTransition, pendingSceneRefresh=false, adviceRequest=0, busy=false, companionTyping=false;
@@ -294,7 +296,7 @@ async function departToHome(){
  clearTimeout(landingHelloTimer);
  const arrive=()=>{
   if(ui!==originUI||ui.route!=='landing'||!state.session.authenticated||actor()!==who||state.onboarding?.contract?.signedAt!==signature)return;
-  if(dispatch({type:'FINISH_CONVERSATION'},false)){ui.firstNoking=true;go('home',{replace:true,skipTransition:true});}
+  if(dispatch({type:'FINISH_CONVERSATION'},false))go('home',{replace:true,skipTransition:true});
   else render(false);
  };
  initWorld({prewarm:true});
@@ -323,8 +325,16 @@ function syncHomeScene(){
   phone.dataset.roomScene=roomSceneRoutes.has(currentSceneRoute())?(ui.route==='home'?'home':'blurred'):'off';
 }
 function volumeButton(){return `<button type="button" class="scene-icon volume-toggle" data-action="toggle-sound" aria-pressed="${Boolean(ui.soundOn)}" aria-label="${ui.soundOn?'關閉聲音':'開啟聲音'}">${centeredVolumeIcon(!ui.soundOn)}</button>`;}
+function syncConversationEntry(){
+  conversationEntryMotion ||= createConversationEntryMotion($('#phone'));
+  conversationEntryMotion.refresh($('#conversation-log'),{active:conversationActive&&ui.route==='home',scopeKey:actor(),reducedMotion:prefersStillness(ui.motion)});
+}
+function syncSceneGlass(){
+  sceneControlGlass ||= createSceneControlGlass({phone:$('#phone')});
+  sceneControlGlass.refresh();
+}
 function conversationMarkup(messages){
-  return messages.map((m,i)=>`<div class="conversation-message ${m.role==='user'?'own':''}" ${companionTyping&&m.role!=='user'&&i===messages.length-1?'hidden':''}><p>${esc(m.text)}</p></div>`).join('')+(companionTyping?`<div class="conversation-message">${loadingIndicatorMarkup(`${companionName()} 正在回覆…`)}</div>`:'');
+  return messages.map((m,i)=>`<div class="conversation-message ${m.role==='user'?'own':''}" data-conversation-id="${esc(m.id)}" ${companionTyping&&m.role!=='user'&&i===messages.length-1?'hidden':''}><p>${esc(m.text)}</p></div>`).join('')+(companionTyping?`<div class="conversation-message" data-conversation-id="typing-${esc(messages.at(-1)?.id||'pending')}">${loadingIndicatorMarkup(`${companionName()} 正在回覆…`)}</div>`:'');
 }
 function setHomeConversation(active){
   const next=Boolean(active)&&ui.route==='home';
@@ -337,18 +347,24 @@ function setHomeConversation(active){
     klinWorld?.setConversationMode?.(next);
     const identity=$('.home-chat-identity');if(identity)identity.hidden=!next;
     const profile=$('.home-top [data-go="profile"]');if(profile)profile.hidden=next;
+    const diary=$('.home-top [data-action="tag-diary"]');if(diary)diary.hidden=next;
+    const tools=$('.home-top-end');if(tools)tools.hidden=next;
+    const back=$('.home-top [data-action="close-conversation"]');if(back)back.hidden=!next;
     const companion=$('.home-companion');if(companion)companion.hidden=next;
     const log=$('#conversation-log');if(log){log.hidden=!next;if(next)log.scrollTop=log.scrollHeight;}
     const replies=$('.conversation-replies');if(replies)replies.hidden=!next;
-    const dialogue=$('.room-dialogue');if(dialogue)dialogue.setAttribute('aria-hidden',String(next));
+    const dialogue=$('.room-dialogue');if(dialogue){dialogue.hidden=next;dialogue.setAttribute('aria-hidden',String(next));}
+    syncSceneGlass();syncConversationEntry();
   },onComplete(){
     delete phone.dataset.conversationEntering;
     const log=$('#conversation-log');if(conversationActive&&log)log.scrollTop=log.scrollHeight;
   }});
 }
 function home(){
- const space=privateSpace(),messages=space.companionMessages,reply=messages.filter(m=>m.role!=='user').at(-1),turn=getCompanionTurn(state);
- return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="tag-diary" aria-label="Nok 的日記本">${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="我的名片" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${DEFAULT_CARD_AVATAR}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end">${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div><div class="room-dialogue" aria-live="polite" aria-hidden="${conversationActive}"><div class="room-speech">${companionTyping?loadingIndicatorMarkup('Klin 正在想…'):esc(ui.firstNoking?`以後我就是你的${companionName()}啦，請多多指教。第一次 Noking，你想先看看什麼？`:ui.boopReply||reply?.text||'今天想和我聊點什麼？')}</div>${ui.firstNoking?`<div class="first-noking-choices">${['感情','財運','事業','人際關係'].map(topic=>`<button type="button" class="kn-glass-control" data-say="想和你聊聊${topic}">${topic}</button>`).join('')}</div>`:''}</div><button type="button" class="home-companion" data-action="boop" aria-label="輕觸 Klin" ${conversationActive?'hidden':''}>${spiritImage('成年態 Klin','','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}<div class="tag-chat-tools"><button type="button" class="tag-ui-button" data-action="tag-end-session" ${companionTyping?'disabled':''}>把今天收進日記</button><button type="button" class="tag-ui-button" data-action="tag-diary">Nok 日記</button></div></div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}<span>串門</span></button></div></div>`,'home-page room-chat-page');
+ const space=privateSpace(),messages=space.companionMessages,turn=getCompanionTurn(state);
+ const ledger=socialTagState(space,me()),pending=ledger.candidates.filter(candidate=>candidate.status==='pending'&&Array.isArray(candidate.sourceIds)&&candidate.sourceIds.some(id=>ledger.diary.some(entry=>entry.id===id&&entry.allowPublic===true)));
+ const invitation=pending.length?`<div class="room-dialogue" aria-live="polite" aria-hidden="${conversationActive}" ${conversationActive?'hidden':''}><div class="room-speech">有 ${pending.length} 枚新的社交標籤，想一起看看嗎？</div><div class="first-noking-choices"><button type="button" class="kn-glass-control" data-action="tag-open-chat">一起看看</button></div></div>`:'';
+ return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="close-conversation" aria-label="回到首頁" ${conversationActive?'':'hidden'}>${backIcon}</button><button type="button" class="scene-icon" data-action="tag-diary" aria-label="Nok 的日記本" ${conversationActive?'hidden':''}>${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="我的名片" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${DEFAULT_CARD_AVATAR}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end" ${conversationActive?'hidden':''}>${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div>${invitation}<button type="button" class="home-companion" data-action="boop" aria-label="輕觸 Klin" ${conversationActive?'hidden':''}>${spiritImage('成年態 Klin','','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}<div class="tag-chat-tools"><button type="button" class="tag-ui-button" data-action="tag-end-session" ${companionTyping?'disabled':''}>把今天收進日記</button><button type="button" class="tag-ui-button" data-action="tag-diary">Nok 日記</button></div></div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}<span>串門</span></button></div></div>`,'home-page room-chat-page');
 }
 function companion(){const space=privateSpace();const messages=space.companionMessages.map((m,i)=>`<div class="message ${m.role==='user'?'own':''}" ${companionTyping&&i===space.companionMessages.length-1?'hidden':''}>${m.role==='user'?avatar(actor(),true):spiritAvatar()}<div class="message-content"><div class="bubble">${esc(m.text)}</div></div></div>`).join('');return shell(top(companionName())+`<div class="content messages" id="message-scroll">${messages}${companionTyping?`<div class="message">${spiritAvatar()}<div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>`:''}${space.pendingDemandSuggestion&&!companionTyping?`<div class="glass-card"><h4>找個人一起去？</h4><p class="small-note">先確認，再開始尋找。</p>${btn('整理需求','new-demand','compact')}${btn('先聊聊','dismiss-demand','ghost')}</div>`:''}${space.companionMessages.length<3?`<div class="suggestions"><button type="button" data-say="最近想認識一起看展的朋友">找人看展</button><button type="button" data-say="最近工作有點累，想慢慢聊聊">放鬆一下</button></div>`:''}</div><form class="chat-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和我聊聊…" aria-label="私人訊息" maxlength="1000"></textarea><button class="send-button" type="submit" aria-label="發送給伙伴" ${companionTyping?'disabled':''}>${sendArrow}</button></div></form>`,'companion-page');}
 function memories(){const items=privateSpace().memory.filter(m=>m.status!=='deleted');return shell(top('記憶','每一點了解，都可以由你修正')+content(`<p class="body-copy">這些是我目前了解到的你。<br>用來陪伴你，不會直接分享給別人。</p>${items.length?items.map(m=>`<article class="glass-card memory-card"><div class="tag-row">${tag(m.status==='pending'?'等你確認':'你已確認',m.status==='pending'?'':'green')}${tag('私人','quiet')}</div><p>${esc(m.text)}</p><div class="memory-source">來自：${esc(m.source)}</div><div class="memory-actions" style="margin-top:14px">${m.status==='pending'?tiny('是這樣的','confirm-memory',m.id):''}${tiny('修正','edit-memory',m.id)}${tiny('移除','delete-memory',m.id,'danger')}</div></article>`).join(''):empty('我們可以慢慢認識','聊聊你喜歡的事，我會把新的理解交給你確認。',btn('和伙伴聊聊','companion','compact'))}`,'with-nav')+nav('memory'));}
@@ -361,7 +377,7 @@ function friendsSheet(){
 function relations(){
  const friends=getDemoFriends(state),query=String(ui.networkQuery||'').trim().toLocaleLowerCase();
  const matches=friend=>!query||`${friend.name} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase().includes(query),visibleCount=friends.filter(matches).length;
- return shell(top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:state.users,query})}`,'friends-lounge');
+ return shell(`<div class="network-scene-source" aria-hidden="true"><img src="assets/scenes-20261026-41/network-meadow.webp" alt="" draggable="false"></div>`+top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:state.users,query})}`,'friends-lounge');
 }
 function filterNetwork(value){
  ui.networkQuery=value;save();friendWorld?.setQuery(value);const query=value.trim().toLocaleLowerCase();let count=0;
@@ -397,7 +413,10 @@ function visitSheet(){
 function requestVisit(friendId){
  clearTimeout(visitTimer);visitAttempt++;
  const friend=getDemoFriends(state).find(item=>item.id===friendId);if(!friend)return;
- ui.selectedVisitId=friendId;ui.visitPhase=friend.connected?'open':'idle';save();render(false);visitSheet();
+ ui.selectedVisitId=friendId;ui.visitPhase='idle';closeSheet();
+ if(dispatch({type:'OPEN_DEMO_FRIEND',friendId},false)){
+  ui.selectedRelationship=getCompanionTurn(state).relationshipId;go('chat');
+ }
 }
 function knockVisit(friendId){
  const friend=getDemoFriends(state).find(item=>item.id===friendId);if(!friend)return;
@@ -416,7 +435,10 @@ function refreshVisibleCardArtwork(){
   const template=document.createElement('template');
   template.innerHTML=cardMarkup(data,{compact:card.classList.contains('is-compact'),showAllTags:!!card.querySelector('[data-action="view-card-tags"]'),editable:!!card.querySelector('.bc-avatar[data-action="edit-card"]')});
   // Preserve the article used by the handoff and every form/input around it.
-  card.replaceChildren(...template.content.firstElementChild.childNodes);
+  const nextCard=template.content.firstElementChild;
+  card.style.aspectRatio=nextCard.style.aspectRatio;
+  card.style.borderRadius=nextCard.style.borderRadius;
+  card.replaceChildren(...nextCard.childNodes);
   if(focusedTag>=0)card.querySelectorAll('.bc-tag')[focusedTag]?.focus({preventScroll:true});
   else if(focusedAvatar)card.querySelector('.bc-avatar')?.focus({preventScroll:true});
  }
@@ -491,7 +513,7 @@ function focusLandingComposer(){
 }
 function syncLandingVideo(){
  if(ui.route==='landing'&&!landingVideoScene)landingVideoScene=createLandingVideoScene({phone:$('#phone'),
-  onPresentation:next=>{setScenePending('landing-video',ui.route==='landing'&&!next.hasHeldFrame&&['loading','settling'].includes(next.state),'landing');queueMicrotask(()=>{syncNarration();focusLandingComposer();maybeShowLandingContract();continueSignedDeparture();});},
+  onPresentation:next=>{setScenePending('landing-video',ui.route==='landing'&&next.needsLoading,'landing');queueMicrotask(()=>{syncNarration();focusLandingComposer();maybeShowLandingContract();continueSignedDeparture();});},
   onMediaChange:next=>{filmAudioState=next;sceneSound.syncFilm(next);}
  });
  landingVideoScene?.update({active:ui.route==='landing',key:getOnboardingTurn(state).key,reducedMotion:prefersStillness(ui.motion)});
@@ -651,6 +673,7 @@ function render(animate=false,motion={}){
   conversationAvatarMotion?.refresh({reducedMotion:prefersStillness(ui.motion)});
   if(conversationActive&&ui.route==='home'){const log=$('#conversation-log');if(log)log.scrollTop=log.scrollHeight;}
   if(ui.route==='home')conversationScroll=mountConversationScroll($('#conversation-log'));
+  syncSceneGlass();syncConversationEntry();
   if(restoreComposerFocus){const composer=$(focusedComposer);composer?.focus({preventScroll:true});composer?.setSelectionRange(...selection);}
   
   if(!animate||useTransition)$('.page')?.classList.add('reenter');
@@ -810,7 +833,7 @@ async function runAction(action,element){
     case 'auth-show-password':authPasswordVisible=!authPasswordVisible;for(const input of document.querySelectorAll('.auth-password-wrap input'))input.type=authPasswordVisible?'text':'password';element.textContent=authPasswordVisible?'隱藏':'顯示';element.setAttribute('aria-label',authPasswordVisible?'隱藏密碼':'顯示密碼');element.setAttribute('aria-pressed',String(authPasswordVisible));return;
     case 'retry-initialization':if(dispatch({type:'BEGIN_INITIALIZATION'},false)){go('initializing');startInitialization();}return;
 
-    case 'boop':klinWorld?.interact('wave');sceneSound.cue('reply');ui.boopReply=['我在。今天過得怎麼樣？','被你發現了，我一直在等你。','要聊聊，還是一起去串門？'][(ui.boopCount=(ui.boopCount||0)+1)%3];return render(false);
+    case 'boop':klinWorld?.interact('wave');sceneSound.cue('reply');return;
     case 'toggle-sound':{
       const request=++audioToggleSequence,desired=!ui.soundOn;ui.soundOn=desired;syncAudioControls();
       const enabled=await sceneSound.setEnabled(desired).catch(()=>false);
@@ -849,7 +872,7 @@ async function runAction(action,element){
 }
 
 document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!el)return;if(el.dataset.go){e.preventDefault();if(el.closest('.bottom-nav')&&el.dataset.go===ui.route)return;return go(el.dataset.go,{direction:el.dataset.direction});}if(el.dataset.action){e.preventDefault();return runAction(el.dataset.action,el);}if(el.dataset.topic){$('#topic').value=el.dataset.topic;return;}if(el.dataset.mode){dispatch({type:'UPDATE_DRAFT',patch:{...formPatch(),mode:el.dataset.mode}},false);return render(false);}if(el.dataset.invitation){ui.selectedInvite=el.dataset.invitation;return go('invite');}if(el.dataset.relationship){ui.selectedRelationship=el.dataset.relationship;return go('chat');}if(el.dataset.say){return sendCompanion(el.dataset.say);}if(el.dataset.publicSay){dispatch({type:'SET_PUBLIC_DRAFT',text:el.dataset.publicSay},false);render(false);$('#public-message')?.focus();return;}if(el.dataset.retry){dispatch({type:'RETRY_MESSAGE',messageId:el.dataset.retry,fail:consumeFailure()});return;}});
-function sendCompanion(text){if(companionTyping)return;delete ui.firstNoking;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
+function sendCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
 document.addEventListener('submit',e=>{const form=e.target.closest('form[data-form]');if(!form)return;e.preventDefault();const data=new FormData(form);switch(form.dataset.form){case 'auth-entry-flow':{
  if(authView.busy)return;
  authFormDraft.username=String(data.get('username')||'');authFormDraft.password=String(data.get('password')||'');authFormDraft.confirmPassword=String(data.get('confirmPassword')||'');
@@ -939,6 +962,6 @@ if(pixelVariant)initCompanionAnimation();
 if(ui.route==='initializing')startInitialization();
 
 
-matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);conversationAvatarMotion?.refresh({reducedMotion:event.matches||ui.motion});welcomeLogoMotion?.sync({route:ui.route,reducedMotion:event.matches||ui.motion});if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
+matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);conversationAvatarMotion?.refresh({reducedMotion:event.matches||ui.motion});syncConversationEntry();welcomeLogoMotion?.sync({route:ui.route,reducedMotion:event.matches||ui.motion});if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
 
 window.addEventListener('hashchange',()=>{const card=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');if(card){sharedCard=card;go('public-card');}else if(sharedCard){sharedCard=null;go(state.session.authenticated?setupRoute():'welcome',{replace:true});}});

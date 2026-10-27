@@ -1,6 +1,6 @@
 import { resolveCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { socialTagStyle } from './tag-stickers.mjs?v=20261027-tags-50';
-export const CARD_WIDTH=600, CARD_HEIGHT=650;
+export const CARD_WIDTH=600, CARD_HEIGHT=650, CARD_BOTTOM_PADDING=32;
 export const CARD_PAPER_TEXTURE='assets/card-paper-20261027/ivory-cotton.jpg';
 export const CARD_PAPER_OPACITY=.58;
 export const DEFAULT_CARD_AVATAR = 'assets/klin-20261014/adult.png';
@@ -90,6 +90,9 @@ export function cardArtwork(data){
   row.forEach(tag=>{items.push({...tag,x,y:tagY+(height-tag.h)/2});x+=tag.w+gap;});
   if(row.length)tagY+=height+14;
  });
- const height=Math.max(CARD_HEIGHT,tagY+44);
+ // Text boxes reserve room for wrapping, but empty lines are not printed content.
+ // Trim after the last visible line or sticker; the same height drives DOM and PNG.
+ const contentBottom=Math.max(...items.map(item=>item.y+(item.type==='text'?item.lines.length*item.size*item.lineHeight:item.h)));
+ const height=Math.ceil(contentBottom+CARD_BOTTOM_PADDING);
  return {width:CARD_WIDTH,height,paper,ink,paperTexture:CARD_PAPER_TEXTURE,paperOpacity:CARD_PAPER_OPACITY,layout:0,radius:32,items};
 }

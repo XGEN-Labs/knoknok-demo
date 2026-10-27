@@ -1,4 +1,4 @@
-import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261026-landing-47';
+import { LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261027-glass-52g';
 import { ROOM_VOICE_CLIPS } from './room-voice-clips.mjs?v=20261026-room-voice-47';
 import { ROOM_VOICE_PROFILE, isRoomNarration, isMandarin, findLocalLandingVoice } from './room-voice-profile.mjs?v=20261026-room-voice-47';
 

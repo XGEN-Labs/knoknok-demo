@@ -1,25 +1,27 @@
-/* Knoknok glass material v1.8. Soft light edges retain scene transmission
-   without a bright double outline. Keep geometry in components. */
+/* Knoknok glass material v1.9. Reference-led neutral rim, curved inner light and diffuse
+   contact shadow. Keep geometry and the explicit fill percentages intact. */
 .phone{
   --kn-glass-fill:rgba(255,255,255,.62);
   --kn-glass-panel-fill:rgba(255,255,255,.38);
   --kn-glass-sheet-fill:var(--kn-ui-glass-sheet-fill,rgba(255,255,255,.9));
-  --kn-glass-sheet-handle:var(--kn-ui-color-sheet-handle,#fff);
+  --kn-glass-sheet-handle:var(--kn-ui-color-sheet-handle,rgba(0,0,0,.1));
   --kn-glass-conversation-fill:rgba(255,255,255,.9);
-  --kn-glass-own-fill:rgba(255,255,255,.9);
-  --kn-glass-sheen:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,0) 44%,rgba(255,255,255,.06));
-  --kn-glass-edge:rgba(255,255,255,.34);
+  --kn-glass-own-fill:rgba(232,241,252,.9);
+  --kn-glass-sheen:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 42%,rgba(255,255,255,.025));
+  --kn-glass-edge:rgba(30,34,40,.10);
   --kn-glass-edge-width:1px;
   --kn-glass-ink:#26242c;
   --kn-glass-blur:32px;
   --kn-glass-panel-blur:40px;
   --kn-glass-input-blur:18px;
-  --kn-glass-saturation:145%;
+  --kn-glass-saturation:100%;
   --kn-glass-panel-radius:30px;
-  --kn-glass-panel-shadow:inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.06),0 12px 34px #373b4d14;
-  --kn-glass-control-shadow:0 4px 16px #373b4d0d;
+  --kn-glass-inner-highlight:inset 0 1px 1px rgba(255,255,255,.82),inset 0 -1px 1px rgba(255,255,255,.26);
+  --kn-glass-outer-shadow:0 1px 3px rgba(20,24,32,.04),0 6px 18px rgba(20,24,32,.07);
+  --kn-glass-panel-shadow:inset 0 1px 1px rgba(255,255,255,.82),inset 0 -1px 1px rgba(255,255,255,.26),0 3px 8px rgba(20,24,32,.035),0 16px 36px rgba(20,24,32,.09);
+  --kn-glass-control-shadow:var(--kn-glass-inner-highlight),var(--kn-glass-outer-shadow);
   --kn-glass-input-fill:rgba(255,255,255,.62);
-  --kn-glass-input-edge:rgba(255,255,255,.34);
+  --kn-glass-input-edge:rgba(30,34,40,.10);
   --kn-glass-input-shadow:var(--kn-glass-control-shadow);
 }
 .kn-glass-panel,.kn-glass-control{

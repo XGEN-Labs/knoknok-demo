@@ -1,5 +1,5 @@
 /* A quiet sky frames a tactile, turnable miniature world. */
-.phone#phone {--kn-neighbourhood-space:url('assets/friend-realm-20261027-49/distant-islands.svg') center/cover,linear-gradient(180deg,#eff8ff24,#eef5dc66),url('assets/home-scene-20261023-v35/welcome-meadow.webp') center/cover;}
+.phone#phone {--kn-neighbourhood-space:linear-gradient(180deg,#edf5f9a6,#ecf4e6c9),url('assets/scenes-20261026-41/network-meadow.webp') center/cover;}
 .phone#phone #app .page.friends-lounge,
 .phone#phone[data-world-page="relations"] > :is(.home-scene,.klin-illustrated-world) {background:var(--kn-neighbourhood-space)!important;}
 .phone#phone[data-world-page="relations"] > .klin-illustrated-world .klin-illustrated-room {background:var(--kn-neighbourhood-space);}
@@ -16,7 +16,7 @@
 .spirit-world[data-world-dragging="true"] .world-viewport {cursor:grabbing;}
 .spirit-world .world-viewport:focus-visible {outline:2px solid var(--kn-ui-color-focus);outline-offset:3px;border-radius:32px;}
 .spirit-world .world-canvas {position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
-.spirit-world .world-fallback {position:absolute;left:50%;top:var(--world-center-y,50%);transform:translate(-50%,-50%);width:var(--world-diameter,300px);height:var(--world-diameter,300px);border-radius:48% 51% 49% 50%;background:url('assets/friend-realm-20261027-49/meadow-fallback.svg') center/cover,#a7b880;box-shadow:inset -12px -18px 25px #48583a26;}
+.spirit-world .world-fallback {position:absolute;left:50%;top:var(--world-center-y,50%);transform:translate(-50%,-50%);width:var(--world-diameter,300px);height:var(--world-diameter,300px);border-radius:49% 50% 49% 50%;background:linear-gradient(#92b77355,#7b9d4e44),url('assets/world-20261026-42/planet-meadow.webp') center/200% 100%,#b8cb80;box-shadow:inset -12px -18px 25px #48583a26;}
 .spirit-world[data-world-renderer="webgl"] .world-fallback {visibility:hidden;}
 .spirit-world .world-shadow {position:absolute;left:50%;top:calc(var(--world-center-y,50%) + var(--world-diameter,300px)*.53);width:calc(var(--world-diameter,300px)*.7);height:16px;transform:translateX(-50%);background:#50624529;filter:blur(17px);border-radius:50%;pointer-events:none;}
 .spirit-world .world-rooms {position:absolute;inset:0;pointer-events:none;}
@@ -73,3 +73,9 @@ body.reduced-motion .spirit-world .world-loading .loading-character-eyes {animat
 .phone#phone #app .page.friends-lounge .page-top>div:not(.top-right){grid-column:2;grid-row:1;text-align:center;min-width:0;width:auto;margin:0;padding:0;justify-self:stretch}
 .phone#phone #app .page.friends-lounge .page-top>.icon-button{grid-column:1;grid-row:1;justify-self:start}
 .phone#phone #app .page.friends-lounge .page-top h2{margin:0;text-align:center}
+
+/* The visible plate also supplies the shared preblurred control texture. */
+.phone#phone #app .page.friends-lounge {isolation:isolate;background:transparent!important;}
+.phone#phone #app .friends-lounge .network-scene-source {position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;}
+.network-scene-source img {display:block;width:100%;height:100%;object-fit:cover;object-position:center;--kn-scene-overlay-top:rgba(237,245,249,.65);--kn-scene-overlay-bottom:rgba(236,244,230,.79);}
+.network-scene-source::after {content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(237,245,249,.65),rgba(236,244,230,.79));}

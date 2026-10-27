@@ -1,9 +1,20 @@
-import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261027-polish-48a';
+import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261027-glass-52g';
 import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261027-polish-48a';
-import { createLandingGlass } from './landing-glass.mjs?v=20261027-clarity-51e';
+import { createLandingGlass } from './landing-glass.mjs?v=20261027-glass-52g';
 import { createLandingDeparture } from './landing-departure.mjs?v=20261023-experience-34d';
-import { LANDING_VIDEO_CUES, LANDING_ARRIVAL_CUE, landingVideoSubtitleAt, landingVideoNokingAt, landingVideoOverlaysPlaying } from './landing-video-cues.mjs?v=20261026-answers-47';
-export { LANDING_VIDEO_CUES, LANDING_ARRIVAL_CUE } from './landing-video-cues.mjs?v=20261026-answers-47';
+import { LOADING_CHARACTER_MARKUP } from './loading-state.mjs?v=20261023-experience-34d';
+import { LANDING_VIDEO_CUES, LANDING_ARRIVAL_CUE, landingVideoSubtitleAt, landingVideoNokingAt, landingVideoOverlaysPlaying } from './landing-video-cues.mjs?v=20261027-glass-52g';
+export { LANDING_VIDEO_CUES, LANDING_ARRIVAL_CUE } from './landing-video-cues.mjs?v=20261027-glass-52g';
+
+export function landingVideoPresentation(next, held, departing = false, hadVisibleFrame = false) {
+  const frameFailed = next.state === 'waiting' && held.state === 'unavailable';
+  const state = next.state === 'fallback' || frameFailed ? 'error'
+    : next.state === 'waiting' && held.state !== 'ready' ? 'settling'
+    : next.state === 'playing' && !next.hasPresentedFrame ? 'loading' : next.state;
+  const hasFrame = Boolean(hadVisibleFrame || next.hasPresentedFrame || held.captured);
+  return {state, readyForInput: !departing && state === 'waiting' && next.readyForInput && held.captured && held.state === 'ready',
+    gated: ['error','blocked'].includes(state) || (!hasFrame && ['loading','settling'].includes(state))};
+}
 
 export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChange=()=>{}}={}) {
   if(!phone)throw new TypeError('A phone host is required.');
@@ -11,7 +22,7 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
   const video=document.createElement('video');video.className='landing-video-plate';
   video.setAttribute('aria-hidden','true');video.setAttribute('playsinline','');video.setAttribute('webkit-playsinline','');
   video.muted=true;video.defaultMuted=true;video.playsInline=true;video.preload='auto';video.disablePictureInPicture=true;
-  video.src='assets/landing-20261026-47/21-complete-native-mouth-clean.mp4';
+  video.src='assets/landing-20261027-52/34-complete-selected23-original-colors-voice.mp4';
   const still=document.createElement('canvas');still.className='landing-video-still landing-video-plate';still.setAttribute('aria-hidden','true');
   const subtitle=document.createElement('p');subtitle.className='landing-video-subtitle';subtitle.hidden=true;
   const noking=document.createElement('div');noking.className='landing-video-noking kn-glass-control';noking.hidden=true;
@@ -19,12 +30,17 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
   const nokingTrack=document.createElement('span');nokingTrack.className='landing-video-noking-track';nokingTrack.setAttribute('aria-hidden','true');
   noking.append(nokingLabel,nokingTrack);
   const resume=document.createElement('button');resume.type='button';resume.className='landing-video-resume kn-glass-control';resume.textContent='繼續相遇';resume.hidden=true;
+  const gate=document.createElement('div');gate.className='landing-video-gate';gate.hidden=true;
+  const gateContent=document.createElement('div');gateContent.className='scene-loading-content';
+  const gateSymbol=document.createElement('div');gateSymbol.className='scene-loading-symbol';gateSymbol.setAttribute('aria-hidden','true');gateSymbol.innerHTML=LOADING_CHARACTER_MARKUP;
+  const gateLabel=document.createElement('p');gateLabel.className='landing-video-gate-label';gateLabel.setAttribute('role','status');gateLabel.setAttribute('aria-live','polite');
+  gateContent.append(gateSymbol,gateLabel,resume);gate.append(gateContent);
   const skip=document.createElement('button');skip.type='button';skip.className='landing-video-skip kn-glass-control';skip.textContent='跳過';skip.setAttribute('aria-label','跳過這段影片，開始回答');skip.hidden=true;
   const status=document.createElement('span');status.className='sr-only';status.setAttribute('role','status');
-  host.append(video,still,subtitle,noking);phone.prepend(host);phone.append(resume,skip,status);
+  host.append(video,still,subtitle,noking);phone.prepend(host);phone.append(gate,skip,status);
   let active=false,lastState={state:'inactive',readyForInput:false},disposed=false,reducedMotion=false;
   const departure=createLandingDeparture();
-  let presentedState='inactive',presentedReady=false;
+  let presentedState='inactive',presentedReady=false,hasVisibleFrame=false,retainedCapture=false;
   let subtitleFrame=null,subtitleFrameKind='';
   const isPlaying=()=>landingVideoOverlaysPlaying({active,disposed,state:presentedState,paused:video.paused,seeking:video.seeking,readyState:video.readyState});
   function cancelSubtitleFrame(){
@@ -63,46 +79,48 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
     const departing=departure.phase!=='idle';
     phone.dataset.landingPhase=departing?departure.phase:'encounter';
     landingGlass.update({active:true,ready:!departing&&next.state==='waiting'&&held.captured,key:`frame:${next.targetTime}`});
-    const settling=next.state==='waiting'&&held.state==='settling';
-    const frameFailed=next.state==='waiting'&&held.state==='unavailable';
-    // A failed seek may still expose the film's first frame. Fall back to the
-    // matching room plate rather than revealing the form over that wrong frame.
-    presentedState=settling?'settling':frameFailed?'fallback':next.state;
-    presentedReady=!departing&&(presentedState==='fallback'||(next.readyForInput&&held.captured&&held.state==='ready'));
-    const hasHeldFrame=held.captured&&(next.state==='waiting'||held.state==='resuming');
+    hasVisibleFrame=hasVisibleFrame||Boolean(next.hasPresentedFrame||held.captured);
+    retainedCapture=retainedCapture||held.captured;
+    const presentation=landingVideoPresentation(next,held,departing,hasVisibleFrame);
+    presentedState=presentation.state;presentedReady=Boolean(presentation.readyForInput);
+    const hasHeldFrame=held.captured&&(next.state==='waiting'||held.state==='resuming')
+      || retainedCapture&&(presentedState==='error'||!next.hasPresentedFrame&&['loading','settling','blocked'].includes(presentedState));
     host.classList.toggle('has-held-frame',hasHeldFrame);
     host.classList.toggle('is-resuming',hasHeldFrame&&held.state==='resuming');
     phone.dataset.landingPlayback=presentedState;
     phone.dataset.landingFrame=held.state;
     phone.dataset.landingCue=next.key||'';
     phone.dataset.landingVideoTime=Number(next.currentTime||0).toFixed(3);
-    resume.hidden=next.state!=='blocked';
-    skip.hidden=!['loading','playing','blocked'].includes(next.state);
+    gate.hidden=!presentation.gated;gate.dataset.preserveFrame=String(hasVisibleFrame);gate.setAttribute('aria-busy',String(['loading','settling'].includes(presentedState)));
+    gateLabel.textContent=presentedState==='error'?'影片暫時未能載入，請重新試一次。':presentedState==='blocked'?'輕觸下方按鈕，繼續這次相遇。':'正在載入相遇影片…';
+    resume.hidden=!['blocked','error'].includes(presentedState);
+    resume.textContent=presentedState==='error'?'重新載入影片':'繼續相遇';
+    skip.hidden=next.state!=='playing'||!next.hasPresentedFrame;
     skip.setAttribute('aria-label',departing?'跳過影片，直接回家':'跳過這段影片，開始回答');
-    status.textContent=next.state==='blocked'?'輕觸繼續相遇，播放下一段。':presentedState==='fallback'?'場景暫時未能播放，你可以繼續輸入。':'';
+    status.textContent='';
     for(const layer of phone.querySelectorAll('.conversation-onboarding > :is(.onboarding-header,.onboarding-thread,.onboarding-composer)')){
       layer.inert=!presentedReady;
       if(presentedReady)layer.removeAttribute('aria-hidden');else layer.setAttribute('aria-hidden','true');
     }
     syncSubtitle();
-    onPresentation({state:presentedState,readyForInput:presentedReady,hasHeldFrame,key:next.key,currentTime:video.currentTime||0});reportMedia();
+    onPresentation({state:presentedState,readyForInput:presentedReady,hasHeldFrame,needsLoading:!hasVisibleFrame&&['loading','settling'].includes(presentedState),key:next.key,currentTime:video.currentTime||0});reportMedia();
   }
   function applyState(next) {
     lastState=next;if(!active||disposed)return;
-    departure.observe(next);
+    if(next.state!=='fallback')departure.observe(next);
     if(next.state==='waiting'&&next.key!=='arrival')heldFrame.hold({key:`frame:${next.targetTime}`,targetTime:next.targetTime});
     else if(['loading','playing','blocked'].includes(next.state)&&heldFrame.getDiagnostics().captured)heldFrame.resume({startTime:next.startTime,endTime:next.targetTime});
     else heldFrame.release();
     applyPresentation();
   }
   const player=createLandingVideoPlayer({video,cues:[...LANDING_VIDEO_CUES,LANDING_ARRIVAL_CUE],onState:applyState});
-  resume.addEventListener('click',()=>player.retry());
+  resume.addEventListener('click',()=>{const restore=lastState.state==='waiting';heldFrame.release();player.retry({restore});applyState(player.getDiagnostics());});
   skip.addEventListener('click',()=>{if(player.skip())status.textContent=departure.pending?'我們回家了。':'影片已跳過，請回答這一題。';});
   return {
     update({active:enabled=false,key='where',reducedMotion:stillness=false,restore=false}={}) {
       if(disposed)return;
       reducedMotion=stillness;
-      active=enabled;host.hidden=!active;if(!active){departure.cancel();resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame','is-resuming');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
+      active=enabled;host.hidden=!active;if(!active){departure.cancel();gate.hidden=true;resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame','is-resuming');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
       if(!active){delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
       player.update({active,key:departure.phase!=='idle'?'arrival':key,reducedMotion,restore});
       if(active)applyState(lastState);else{syncSubtitle();onPresentation({state:'inactive',readyForInput:false,key:null,currentTime:video.currentTime||0});reportMedia();}
@@ -116,6 +134,6 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
     },
     get readyForInput(){return active&&presentedReady;},
     getDiagnostics:()=>({...player.getDiagnostics(),state:presentedState,readyForInput:active&&presentedReady,phase:departure.phase,heldFrame:heldFrame.getDiagnostics()}),
-    dispose(){disposed=true;cancelSubtitleFrame();reportMedia();for(const event of mediaEvents)video.removeEventListener(event,onMediaEvent);departure.dispose();landingGlass.dispose();heldFrame.dispose();player.dispose();host.remove();resume.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
+    dispose(){disposed=true;cancelSubtitleFrame();reportMedia();for(const event of mediaEvents)video.removeEventListener(event,onMediaEvent);departure.dispose();landingGlass.dispose();heldFrame.dispose();player.dispose();host.remove();gate.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
   };
 }

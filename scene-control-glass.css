@@ -1,0 +1,41 @@
+/* The scene is blurred once as an ordinary image. No live backdrop survives
+   on a sampled control, its pseudo layer, or its native editable contents.
+   Repeated phone specificity retires older !important control painters,
+   including hover/focus variants, without touching unmarked materials. */
+.phone#phone#phone#phone [data-scene-glass] {
+  background:var(--kn-glass-sheen),var(--scene-glass-fill,var(--kn-glass-fill))!important;
+  background-origin:border-box!important;
+  background-clip:border-box!important;
+  box-shadow:var(--scene-glass-shadow,var(--kn-glass-control-shadow))!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.phone#phone#phone#phone [data-scene-glass="ready"] {
+  background-image:var(--scene-glass-image)!important;
+  background-color:var(--scene-glass-fill,var(--kn-glass-fill))!important;
+  background-size:var(--scene-glass-size)!important;
+  background-position:var(--scene-glass-position)!important;
+  background-repeat:no-repeat!important;
+}
+.phone#phone#phone#phone [data-scene-glass]::before {
+  content:none!important;display:none!important;background:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+/* The auth input is 10% white over its 38% white panel. It needs neither a
+   second scene sample nor another blur while text/caret is being edited. */
+.phone#phone #app .auth-panel[data-scene-glass] .auth-field .input,
+.phone#phone #app .auth-panel[data-scene-glass] .auth-field .input:focus,
+.phone#phone #app .auth-panel[data-scene-glass] .auth-field .input:focus-visible {
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+
+/* The top-corner skip is a text action, not a filled glass capsule. Retire
+   the older generic pseudo painter as well as the button's own material. */
+.phone#phone#phone#phone .landing-video-skip {
+  background:transparent!important;border-color:transparent!important;
+  box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+.phone#phone#phone#phone .landing-video-skip::before {
+  content:none!important;display:none!important;background:none!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
