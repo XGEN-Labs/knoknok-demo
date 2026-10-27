@@ -40,7 +40,12 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
     if (!data?.user || !['string', 'number'].includes(typeof data.user.id) || !data.user.username) {
       throw new ApiError('登入回應無效，請重試。');
     }
-    return data.user;
+    // Old auth releases have no onboarding field and contain existing accounts.
+    const onboarding = data.onboarding ?? { status: 'not_required' };
+    if (!['required', 'completed', 'not_required'].includes(onboarding.status)) {
+      throw new ApiError('帳號引導狀態無效，請重試。');
+    }
+    return { ...data.user, onboarding };
   }
   return {
     async me() {
@@ -51,6 +56,7 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
       return userFrom(await request('/auth/login', { body: { username, password } }));
     },
     logout: () => request('/auth/logout', { body: {} }),
+    completeOnboarding: (owner, signal) => request('/auth/onboarding/complete', { body: {}, owner, signal }),
     async chat(messages, owner, signal) {
       const data = await request('/web/chat', { body: { messages }, owner, signal });
       if (typeof data?.text !== 'string' || !data.text.trim() ||

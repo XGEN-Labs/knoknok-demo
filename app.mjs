@@ -1,4 +1,4 @@
-import { createAuthEntry, createDemoAuthAdapter } from './auth-entry.mjs?v=20261026-social-tags-45';
+import { createAuthEntry, createDemoAuthAdapter } from './auth-entry.mjs?v=20261027-first-landing';
 import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261026-answers-47d';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
@@ -27,7 +27,7 @@ import { getLandingReading } from './landing-day-master-reading.mjs?v=20261026-a
 import { initDatePickers } from './date-picker.mjs?v=20261027-clarity-51e';
 import { initTypography } from './typography.mjs?v=20261023-experience-34d';
 import { createSceneSound } from './scene-sound.mjs?v=20261027-glass-52g';
-import { landingComplete, onboardingDestination } from './landing.mjs?v=20261023-experience-34d';
+import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261027-polish-48b';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261027-glass-52g';
 // Current UI uses the original illustration; native model exploration stays archived.
@@ -40,7 +40,7 @@ import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261023-experience-34d';
 import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261023-experience-34d';
 import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261023-actions-38';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261027-glass-52g';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261027-first-landing';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
@@ -193,6 +193,7 @@ function applyAuthenticatedRoom(view){
  if(!same&&!legacyFixture)state=accountRooms.load(id)||(view.bootstrap.demoAccountKind==='fixture'?initialState():freshDemoAccountState(initialState()));
  state=reduce(state,{type:'DEMO_LOGIN',provider:'demo'});
  Object.assign(state.session,{localAuthUserId:id,localAuthUsername:username,localAgentId:view.bootstrap.agent.agentId,localRoomId:view.bootstrap.agent.roomId});
+ applyAccountOnboarding(state,view.bootstrap.onboarding);
  clearAuthDraft();save();
  if(!sharedCard&&['welcome','login','register','verify'].includes(ui.route)){go(setupRoute(),{replace:true});if(ui.route==='landing')revealOnboarding();render(false);}
 }
@@ -202,7 +203,7 @@ function onAuthChange(next){
  if(next.step==='ready'){applyAuthenticatedRoom(next);return;}
  if(['login','register','verify'].includes(ui.route))render(false);
 }
-function initializeAuth(){authController?.dispose();authController=createAuthEntry({adapter:createDemoAuthAdapter({initialSession:state.session.authenticated?{authenticated:true,id:state.session.localAuthUserId,username:state.session.localAuthUsername,agentId:state.session.localAgentId,roomId:state.session.localRoomId}:null}),onChange:onAuthChange});authView=authController.getState();}
+function initializeAuth(){authController?.dispose();authController=createAuthEntry({adapter:createDemoAuthAdapter({initialSession:state.session.authenticated?{authenticated:true,id:state.session.localAuthUserId,username:state.session.localAuthUsername,agentId:state.session.localAgentId,roomId:state.session.localRoomId,onboarding:{status:state.session.onboardingStatus||(landingComplete(state)?'completed':'not_required')}}:null}),onChange:onAuthChange});authView=authController.getState();}
 async function exitAuth(){
  if(state.session.authenticated&&state.session.localAuthUserId)accountRooms.save(state.session.localAuthUserId,state);
  await authController.logout();if(authController.getState().authenticated)return;
@@ -283,10 +284,15 @@ function backOnboarding(drafts){
  landingReveal=null;landingReaction='';pendingContractDeparture=false;ui.onboardingCoda=0;delete ui.onboardingDraft;
  if(dispatch({type:'ONBOARDING_BACK',draft,drafts},false)){delete ui.contractPromptDismissed;save();render(false);}
 }
-function departToHome(){
- if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt)return;
+async function departToHome(){
+ if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt||authView.busy)return;
  sceneSound.stopSpeech();
  const originUI=ui,who=actor(),signature=state.onboarding.contract.signedAt;
+ // This entry is still an offline demo. Real completion requires the Agent handoff first.
+ if(authView.adapterKind!=='demo'){toast('資料交接尚未接通，請稍後再試。');return;}
+ const result=await authController.completeOnboarding();
+ if(result.error||result.bootstrap?.onboarding?.status!=='completed'){if(result.error)toast(result.error);return;}
+ if(ui!==originUI||ui.route!=='landing')return;
  clearTimeout(landingHelloTimer);
  const arrive=()=>{
   if(ui!==originUI||ui.route!=='landing'||!state.session.authenticated||actor()!==who||state.onboarding?.contract?.signedAt!==signature)return;

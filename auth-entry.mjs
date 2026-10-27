@@ -16,6 +16,11 @@ export function authRetryAt(value, now = Date.now()) {
   const date = Date.parse(value); return Number.isFinite(date) ? Math.max(now, date) : now + 30000;
 }
 const protocolError = () => new AuthEntryError('服務回覆不完整，請重試。', {code:'invalid_response'});
+const cleanOnboarding = value => {
+  if (value === undefined) return {status:'not_required'};
+  if (!plain(value) || !['required','completed','not_required'].includes(value.status)) throw protocolError();
+  return clone(value);
+};
 const abortError = () => Object.assign(new Error('Request cancelled'), {name:'AbortError'});
 const assertActive = signal => { if (signal?.aborted) throw abortError(); };
 
@@ -29,11 +34,11 @@ export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin =
     return url.href;
   }
   if (logoutPath !== null) endpoint(logoutPath);
-  async function request(path, {method='POST', body, signal}={}) {
+  async function request(path, {method='POST', body, signal, owner}={}) {
     assertActive(signal);
     const response = await fetcher(endpoint(path), {
       method, credentials:'include', mode:'same-origin', redirect:'error', cache:'no-store', signal,
-      headers:body === undefined ? {Accept:'application/json'} : {Accept:'application/json','Content-Type':'application/json'},
+      headers:{Accept:'application/json',...(body === undefined ? {} : {'Content-Type':'application/json'}),...(owner === undefined ? {} : {'X-Knok-User-Id':String(owner)})},
       ...(body === undefined ? {} : {body:JSON.stringify(body)}),
     });
     assertActive(signal);
@@ -52,6 +57,7 @@ export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin =
     signIn:(username,password,{signal}={})=>request('/api/auth/sign-in',{body:{username,password},signal}),
     register:(username,password,{signal}={})=>request('/api/auth/register',{body:{username,password},signal}),
     bootstrap:({signal}={})=>request('/api/auth/bootstrap',{method:'GET',signal}),
+    completeOnboarding:(owner,{signal}={})=>request('/api/auth/onboarding/complete',{body:{},owner,signal}),
     logout:({signal}={})=>{
       if (!logoutPath) throw new AuthEntryError('尚未設定服務端登出介面，請稍後再試。',{status:501,code:'logout_unavailable'});
       return request(logoutPath,{signal});
@@ -62,11 +68,11 @@ export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin =
 export function createDemoAuthAdapter({
   initialSession = null, accountStore = new Map(), existingUsername = 'knoknok.demo', existingPassword = 'Knoknok2026', crypto = globalThis.crypto,
 } = {}) {
-  const fixture = {user:{id:'demo-fixture',username:existingUsername},agent:{status:'bound',agentId:'demo-fixture-agent',roomId:'demo-fixture-room'},kind:'fixture'};
+  const fixture = {user:{id:'demo-fixture',username:existingUsername},agent:{status:'bound',agentId:'demo-fixture-agent',roomId:'demo-fixture-room'},kind:'fixture',onboarding:{status:'not_required'}};
   let session = null, counter = accountStore.size;
   function record(username) { return username === existingUsername ? fixture : accountStore.get(username); }
   function publicSession(value) {
-    return {user:clone(value.user),accountStatus:'registered',nextAction:'open_chat',agent:clone(value.agent),memory:{status:'not_loaded'},demo:true,demoAccountKind:value.kind};
+    return {user:clone(value.user),accountStatus:'registered',nextAction:'open_chat',agent:clone(value.agent),memory:{status:'not_loaded'},onboarding:clone(value.onboarding),demo:true,demoAccountKind:value.kind};
   }
   // This optional seed only resumes the host's already-authenticated local Demo.
   // It is not a cookie, proof of identity, or an API mode fallback.
@@ -75,7 +81,7 @@ export function createDemoAuthAdapter({
     if (username === existingUsername) session = fixture;
     else {
       const id = String(initialSession.user?.id || initialSession.id || `demo-user-${++counter}`);
-      session = record(username) || {user:{id,username},agent:{status:'bound',agentId:initialSession.agentId||`demo-agent-${id}`,roomId:initialSession.roomId||`demo-room-${id}`},kind:'ephemeral',hash:null,salt:null};
+      session = record(username) || {user:{id,username},agent:{status:'bound',agentId:initialSession.agentId||`demo-agent-${id}`,roomId:initialSession.roomId||`demo-room-${id}`},kind:'ephemeral',onboarding:cleanOnboarding(initialSession.onboarding),hash:null,salt:null};
       accountStore.set(username,session);
     }
   }
@@ -110,10 +116,17 @@ export function createDemoAuthAdapter({
       const salt = crypto?.randomUUID?.() || `${Date.now()}-${++counter}`, hash = await digest(password,salt); assertActive(signal);
       if (record(username)) throw new AuthEntryError('帳號已存在，請登入或修改帳號。',{status:409,code:'account_exists'});
       const id=`demo-user-${salt}`;
-      session={user:{id,username},agent:{status:'bound',agentId:`demo-agent-${salt}`,roomId:`demo-room-${salt}`},kind:'ephemeral',hash,salt};
+      session={user:{id,username},agent:{status:'bound',agentId:`demo-agent-${salt}`,roomId:`demo-room-${salt}`},kind:'ephemeral',onboarding:{status:'required'},hash,salt};
       accountStore.set(username,session); return {user:clone(session.user),nextAction:'bootstrap'};
     },
     async bootstrap({signal}={}) { assertActive(signal); if (!session) throw new AuthEntryError('請重新登入。',{status:401,code:'unauthenticated'}); return publicSession(session); },
+    async completeOnboarding(owner,{signal}={}) {
+      assertActive(signal);
+      if (!session) throw new AuthEntryError('請重新登入。',{status:401,code:'unauthenticated'});
+      if (String(session.user.id)!==String(owner)) throw new AuthEntryError('登入帳號已變更。',{status:409,code:'SESSION_CHANGED'});
+      if (session.onboarding.status==='required') session.onboarding={status:'completed'};
+      return {onboarding:clone(session.onboarding)};
+    },
     async logout({signal}={}) { assertActive(signal); session=null; return null; },
   };
 }
@@ -123,7 +136,7 @@ function cleanBootstrap(value) {
   const bound = value.nextAction === 'open_chat' && value.agent.status === 'bound' && nonempty(value.agent.agentId) && nonempty(value.agent.roomId);
   const setup = value.nextAction === 'setup_agent' && value.agent.status === 'setup_required';
   if (!bound && !setup) throw protocolError();
-  return {user:clone(value.user),accountStatus:'registered',nextAction:value.nextAction,agent:clone(value.agent),memory:plain(value.memory)?clone(value.memory):{status:'not_loaded'},...(value.chat?{chat:clone(value.chat)}:{}),...(value.demo===true?{demo:true,demoAccountKind:value.demoAccountKind}: {})};
+  return {user:clone(value.user),onboarding:cleanOnboarding(value.onboarding),accountStatus:'registered',nextAction:value.nextAction,agent:clone(value.agent),memory:plain(value.memory)?clone(value.memory):{status:'not_loaded'},...(value.chat?{chat:clone(value.chat)}:{}),...(value.demo===true?{demo:true,demoAccountKind:value.demoAccountKind}: {})};
 }
 export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = () => {}, now = Date.now} = {}) {
   let state={step:'entry',username:'',passwordMode:null,busy:false,error:'',errorCode:'',retryAt:0,authenticated:false,bootstrap:null,user:null,adapterKind:adapter.kind||'api'};
@@ -207,6 +220,17 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
       return emit({step:'entry',username:typeof username==='string'?username:state.username,passwordMode:null,busy:false,error:'',errorCode:'',authenticated:false,user:null,bootstrap:null});
     },
     async bootstrap() {if(waiting()||state.busy)return snapshot();return restore(begin({step:'bootstrap'}));},
+    async completeOnboarding() {
+      if(waiting()||state.busy||!state.authenticated||state.step!=='ready')return snapshot();
+      const owner=state.user.id,token=begin();
+      try {
+        const result=await adapter.completeOnboarding(owner,{signal:token.signal});
+        if(!current(token))return snapshot();
+        const onboarding=cleanOnboarding(result?.onboarding);
+        if(onboarding.status==='required'||!result?.onboarding)throw protocolError();
+        return emit({busy:false,bootstrap:{...state.bootstrap,onboarding}});
+      } catch(error){return problem(error,token);}
+    },
     async logout() {
       if(disposed)return snapshot();const token=begin();
       try {await adapter.logout({signal:token.signal});if(!current(token))return snapshot();return emit({step:'entry',username:'',passwordMode:null,busy:false,error:'',errorCode:'',retryAt:0,authenticated:false,user:null,bootstrap:null});}

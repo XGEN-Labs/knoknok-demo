@@ -35,6 +35,12 @@ try {
     await writeFile(path.join(output, name), data);
     files.add(name); overlays.push({ path: name, sha256: hash(data) });
   }
+  // The account policy is shared by the current demo and the compatibility page.
+  for (const name of ['landing.mjs']) {
+    const data = await readFile(path.join(root, name));
+    await writeFile(path.join(output, name), data);
+    files.add(name); overlays.push({ path: name, sha256: hash(data) });
+  }
   const entries = [];
   for (const name of [...files].sort()) {
     const data = await readFile(path.join(output, name));
