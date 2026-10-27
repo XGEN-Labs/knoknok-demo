@@ -1,5 +1,5 @@
 // Local demo only. No credentials, network requests or real messages are stored/sent.
-import { METAL_VOICES, landingComplete, validMetalVoice } from './landing.mjs';
+import { METAL_VOICES, landingComplete, accountLandingComplete, validMetalVoice } from './landing.mjs';
 import { interestTags, suggestedCardTags, NEUTRAL_CARD_TAGS, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs';
 export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs';
 export const STORAGE_KEY = 'knokknok-prototype-v1';
@@ -25,6 +25,7 @@ function normalizedContract(value, now) {
 
 /** Older completed saves remain usable without fabricating a signed contract. */
 export function hasSignedCompanionContract(state) {
+  if (accountLandingComplete(state)) return true;
   const onboarding = state.onboarding, conversation = onboarding?.conversation;
   if (onboarding?.contractRequired === false && onboarding.status === 'ready' && conversation?.complete === true) return true;
   const contract = normalizedContract(onboarding?.contract, state.now);
@@ -393,7 +394,7 @@ export function reduce(previous, action = {}) {
       state.onboarding.conversation = createOnboardingConversation(state.now, { legacyReady: true });
       return state;
     case 'ENTER_COMPANION_HOME':
-      if (actorId === 'a' && state.onboarding.status !== 'ready') return fail(state, '請先完成資料確認，讓 Klin 準備好陪伴你。');
+      if (actorId === 'a' && state.onboarding.status !== 'ready' && !accountLandingComplete(state)) return fail(state, '請先完成資料確認，讓 Klin 準備好陪伴你。');
       if (actorId === 'a' && !hasSignedCompanionContract(state)) return fail(state, '先和我許下陪伴的約定，再一起回家吧。');
       if (!landingComplete(state)) return fail(state, '先和 Klin 慢慢認識，再一起回家。');
       space.companion = companionProfile(state, actorId);

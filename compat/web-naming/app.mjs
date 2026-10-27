@@ -1,4 +1,4 @@
-import { createApi, chatHistory } from './api.mjs?v=20261023-landing-handoff';
+import { createApi, chatHistory } from './api.mjs?v=20261027-first-landing';
 import { createLandingHandoff, landingInformation } from './landing-handoff.mjs?v=20261023-landing-handoff';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-experience-33';
 import { createLoadingState } from './loading-state.mjs?v=20261022-experience-33';
@@ -12,7 +12,7 @@ import { initFormControls } from './form-controls.mjs?v=20261022-experience-33';
 import { initDatePickers } from './date-picker.mjs?v=20261022-experience-33';
 import { initTypography } from './typography.mjs?v=20261022-experience-33';
 import { createSceneSound } from './scene-sound.mjs?v=20261022-experience-33';
-import { landingComplete, onboardingDestination } from './landing.mjs?v=20261022-experience-33';
+import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
 import { navIcon, backArrow, sendArrow } from './ui-icons.mjs?v=20261022-experience-33';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard } from './public-card.mjs?v=20261022-experience-33';
 import { createKlinWorld } from './klin-world.mjs?v=20261022-experience-33';
@@ -23,7 +23,7 @@ import { initPixelRoom } from './pixel-room.mjs?v=20261022-experience-33';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261022-experience-33';
 import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261022-experience-33';
 import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261022-experience-33';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261022-experience-33';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261027-first-landing';
 
 const $ = (query, root=document) => root.querySelector(query);
 const homeGreeting = createHomeGreeting();
@@ -54,6 +54,7 @@ let state, ui;
 try { state=comparisonMode?initialState():hydrateState(localStorage.getItem(STATE_KEY)); ui=comparisonMode?null:JSON.parse(localStorage.getItem(UI_KEY)||'null'); } catch { state=initialState(); }
 if (!offlineDemo) {
   state.session = { authenticated: Boolean(serverUser), activeUserId: 'a', provider: 'account' };
+  if (serverUser) applyAccountOnboarding(state, serverUser.onboarding);
   for (const message of state.private.a.companionMessages) {
     if (message.status === 'pending') { message.status = 'failed'; message.error = '上次連線已中斷，請重新發送。'; }
   }
@@ -63,6 +64,7 @@ ui.history=Array.isArray(ui.history)?ui.history.filter(route=>typeof route==='st
 // A restored page has no pending timer; allow a fresh knock after refresh.
 if(ui.visitPhase==='knocking')ui.visitPhase='idle';
 if (!state.session.authenticated) ui.route='welcome';
+if(!offlineDemo&&serverUser&&landingComplete(state)&&['landing','onboard','initializing'].includes(ui.route))ui.route='home';
 if(ui.route==='profile-edit')ui.route='profile';
 if(ui.route==='invite')ui.route='relations';
 if (['memory','companion','demand','preview','search','candidate','onboard','initializing'].includes(ui.route)) ui.route=state.session.authenticated?onboardingDestination(state):'welcome';
@@ -121,11 +123,18 @@ landingHandoff.activate(serverUser?.id);
 async function handoffLanding(){
  if(offlineDemo)return true;
  if(!serverUser)return false;
+ if(state.session.onboardingStatus !== 'required')return true;
  const epoch=sessionEpoch;
  landingHandoffBusy=true;
  try{
-  await landingHandoff.ensure(landingInformation(state),state.onboarding?.agentHandoff);
-  return epoch===sessionEpoch;
+  if(!await landingHandoff.ensure(landingInformation(state),state.onboarding?.agentHandoff))return false;
+  if(epoch!==sessionEpoch)return false;
+  const result=await api.completeOnboarding(serverUser.id);
+  if(epoch!==sessionEpoch)return false;
+  if(result?.onboarding?.status !== 'completed')throw new Error('Onboarding completion not confirmed');
+  serverUser.onboarding=result.onboarding;
+  applyAccountOnboarding(state,result.onboarding);save();
+  return true;
  }catch(error){
   if(epoch!==sessionEpoch||error.name==='AbortError')return false;
   if(error.status===401||error.code==='SESSION_CHANGED'){activateAccount(null);toast('登入已變更，請重新登入。');}
@@ -700,12 +709,12 @@ document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!
 function sendOfflineCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
 function cancelChat() { sessionEpoch++; chatAbort?.abort(); chatAbort=null; companionTyping=false; landingHandoff.clear(); landingHandoffBusy=false; }
 function announceSession() { try { localStorage.setItem(SESSION_EVENT, crypto.randomUUID()); } catch {} }
-function activateAccount(user,{restartLanding=false}={}) {
+function activateAccount(user) {
   resetSound(); landingVideoScene?.dispose(); landingVideoScene=null; cancelChat(); serverUser=user; landingHandoff.activate(user?.id);
   STATE_KEY=`${BASE_STATE_KEY}-account-${user?.id ?? 'guest'}`; UI_KEY=`${STATE_KEY}-ui`;
   try { state=hydrateState(localStorage.getItem(STATE_KEY)); } catch { state=initialState(); }
-  if(user&&restartLanding)state.onboarding=initialState().onboarding;
   state.session={authenticated:Boolean(user),activeUserId:'a',provider:'account'};
+  if(user)applyAccountOnboarding(state,user.onboarding);
   for(const message of state.private.a.companionMessages)if(message.status==='pending'){message.status='failed';message.error='上次連線已中斷，請重新發送。';}
   ui={route:user?onboardingDestination(state):'welcome',history:[],motion:false,matchResult:'found',failNext:false};
   homeGreeting.reset(); clearMatching(); clearTimeout(initializeTimer); clearTimeout(landingHelloTimer);
@@ -761,7 +770,7 @@ document.addEventListener('submit',async e=>{const form=e.target.closest('form[d
   authDraft.account=account;authDraft.password=password;
   if(!offlineDemo){
     if(authBusy)return; authBusy=true; updateAuthControls();
-    try { const user=await api.login(account,password); activateAccount(user,{restartLanding:true}); announceSession(); revealOnboarding(); }
+    try { const user=await api.login(account,password); activateAccount(user); announceSession(); revealOnboarding(); }
     catch(error){const target=$('#auth-error');if(target)target.textContent=error.message;}
     finally {authBusy=false;authDraft.password='';const input=$('#auth-password');if(input)input.value='';updateAuthControls();}
     return;

@@ -19,8 +19,17 @@ export const METAL_VOICES = {
 
 export const validMetalVoice = tone => typeof tone === 'string' && Object.hasOwn(METAL_VOICES, tone);
 
+// Server-owned account policy takes precedence over browser-local progress.
+export const accountLandingComplete = state => ['completed', 'not_required'].includes(state.session?.onboardingStatus);
+export function applyAccountOnboarding(state, onboarding) {
+  if (!['required', 'completed', 'not_required'].includes(onboarding?.status)) throw new Error('Invalid account onboarding state');
+  state.session.onboardingStatus = onboarding.status;
+}
+
 export function landingComplete(state) {
   if (state.session.activeUserId !== 'a') return true;
+  if (accountLandingComplete(state)) return true;
+  if (state.session?.onboardingStatus === 'required') return false;
   const o = state.onboarding;
   return o?.status === 'ready' && o.basicsComplete === true && o.birthComplete === true &&
     o.conversation?.complete === true;

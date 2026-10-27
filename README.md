@@ -4,7 +4,7 @@ Revision `20261027-clarity-51e`.
 
 [Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261027-clarity-51e)
 
-The 68.583-second first-encounter film pauses at each answer. Birth time uses a scroll wheel, gender has two choices, and each input offers a previous-answer control that preserves drafts. The compact fictional paper contract keeps one promise, both names and the explicit signature action, together with its scroll, paper, archive heading, star and seal. Input underlines remain visible while focused. Late video decoding automatically restores the correct waiting frame instead of leaving the meadow empty. Returning signed-in users enter their room directly after completing the encounter.
+The 68.583-second first-encounter film pauses at each answer. Birth time uses a scroll wheel, gender has two choices, and each input offers a previous-answer control that preserves drafts. The compact fictional paper contract keeps one promise, both names and the explicit signature action, together with its scroll, paper, archive heading, star and seal. Input underlines remain visible while focused. Late video decoding automatically restores the correct waiting frame instead of leaving the meadow empty. Existing accounts enter their room directly, including after signing out and back in. Only newly registered accounts with an unfinished first encounter see Landing.
 
 The handwritten welcome logo moves into the account form while turning black, with its visible ink aligned to the field labels. Login and registration share the account-first entry and matching pill-shaped input fields.
 
@@ -21,3 +21,5 @@ Registration is a frontend prototype: it creates no remote account and stores no
 The root static Pages demo is separate from the formal Web compatibility build. Existing `compat/web-naming`, `scripts`, `test`, package configuration and `docs/LANDING-HANDOFF.md` are preserved.
 
 Local hosting must support HTTP byte ranges for film cue seeking. Private sources, original design explorations, tests, journal data and modeling files are excluded from this public runtime.
+
+The production compatibility page follows the same account-level rule using the backend onboarding state; see [registration-only Landing](docs/first-landing.md) for the deployment dependency and verification scope.
