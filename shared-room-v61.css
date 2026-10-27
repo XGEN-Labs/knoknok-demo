@@ -11,6 +11,9 @@
 .phone#phone #app .page.shared-chat-page .shared-agent-shadow {left:18%;bottom:2%;width:65%;height:7%;background:#61402d45;filter:blur(3px);}
 .phone#phone #app .page.shared-chat-page .shared-agent figcaption {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 .phone#phone #app .page.shared-chat-page .shared-people {gap:7px;}
+/* The shared header is 44px tall; do not inherit the generic 60px action slot. */
+.phone#phone #app .page.shared-chat-page .page-top>.top-right {top:0;height:100%;min-height:0;margin:0;display:flex;align-items:center;}
+.phone#phone #app .page.shared-chat-page .page-top :is(.icon-button,.scene-icon) {width:44px;height:44px;min-width:44px;margin:0;}
 .phone#phone #app .page.shared-chat-page .shared-people>.shared-person {max-width:100%;gap:7px;}
 .phone#phone #app .page.shared-chat-page .shared-person strong {font-size:14px;}
 .phone#phone #app .page.shared-chat-page .shared-messages {z-index:2;top:calc(var(--app-safe-top) + 58px);bottom:auto;height:max(100px,calc(var(--shared-seat-y) - var(--shared-plate-width)*.26 - var(--app-safe-top) - 78px));padding:10px 0 8px;overscroll-behavior:contain;}

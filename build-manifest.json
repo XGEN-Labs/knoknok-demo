@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T12:11:28.608423Z",
+  "createdAt": "2026-10-27T12:24:34.729768Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 113617695,
+  "payloadBytes": 113618047,
   "files": [
     {
       "source": "app.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10618,
-      "sha256": "aa42ffe338b981cf3c039213d2977f9d7c86d679505f2c10fee5579a7de8a32c"
+      "bytes": 10619,
+      "sha256": "3f50bdad27f1d47856e8116e04e5279012b5e6ad8b282ef92c34a52a0f1542b4"
     },
     {
       "source": "journey-experience.css",
@@ -2294,8 +2294,8 @@
     {
       "source": "shared-room-v61.css",
       "path": "shared-room-v61.css",
-      "bytes": 3328,
-      "sha256": "9955ab81b000ab93be5038b63c1331e747ffda4a5b5131aa09f698df4b3ec4a5"
+      "bytes": 3679,
+      "sha256": "7ac8a7764baf54770ce755a3f9cefd0d2c4e3e8387e74e7ac962a2353326ba19"
     },
     {
       "source": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
