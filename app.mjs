@@ -1,5 +1,5 @@
 import { createAuthEntry, createDemoAuthAdapter } from './auth-entry.mjs?v=20261027-first-landing';
-import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261026-answers-47d';
+import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261027-logo-56';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
 import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261027-clarity-51e';
@@ -29,7 +29,7 @@ import { initTypography } from './typography.mjs?v=20261023-experience-34d';
 import { createSceneSound } from './scene-sound.mjs?v=20261027-glass-52g';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261027-polish-48b';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261027-glass-52g';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261027-logo-56';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261027-room-motion-54c';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';
@@ -113,7 +113,7 @@ const avatar = (id,small=false) => `<span class="avatar ${id==='b'?'person-b':''
 const currentCompanionStage = () => ['welcome','login','register','verify','landing','onboard'].includes(ui.route) ? 'juvenile' : companionProfile(state).stage;
 const spiritImage = (label='Klin 伙伴', attrs='', stage=currentCompanionStage()) => pixelVariant ? pixelCompanionMarkup(label, attrs) : klinMarkup({stage,label,attrs});
 const companionName = () => me().companionName || 'Klin';
-const logoImage = `<img class="brand-logo" src="${pixelVariant?'assets/pixel-scene-20261010/knokknok-wordmark-chunky-pixel-white.png':'assets/brand-20261026/knoknok-handwritten-white.png'}" alt="Knoknok" width="2172" height="724">`;
+const logoImage = `<img class="brand-logo" src="${pixelVariant?'assets/pixel-scene-20261010/knokknok-wordmark-chunky-pixel-white.png':'assets/brand-20261027-noknok/noknok-selected-white.png'}" alt="NokNok" width="2172" height="724">`;
 const spiritAvatar = () => `<span class="avatar small">${spiritImage(`${companionName()} 伙伴`)}</span>`;
 const empty = (title,copy,action='') => `<div class="blank-state">${spiritImage(`${companionName()} 伙伴`)}<h3>${title}</h3><p>${copy}</p>${action}</div>`;
 const detail = (label,value) => `<div class="detail-line"><dt>${label}</dt><dd>${esc(value)}</dd></div>`;
@@ -552,10 +552,10 @@ function syncExperience(){
  const opening=['welcome','login','register','verify'].includes(ui.route),landing=ui.route==='landing';
  const scene=landing?'landing':opening?'welcome':'room';
  const images=landing?[]:[opening?LOGIN_VIDEO_POSTER:ui.route==='relations'?VISIT_SCENE_ASSET:HOME_SCENE_ASSET];
- if(opening)images.push('assets/brand-20261026/knoknok-handwritten-white.png');
+ if(opening)images.push('assets/brand-20261027-noknok/noknok-selected-white.png');
  else if(!landing)images.push(klinAssets.adult);
  if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
- if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261026/knoknok-handwritten-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
+ if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261027-noknok/noknok-selected-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
  if(['chat','connected'].includes(ui.route))images.push(SHARED_SCENE_ASSET);
  sceneImages.update({key:ui.route,urls:images,scene});
  setScenePending('world',!opening&&!landing&&!worldReady&&!worldFailed,'room');

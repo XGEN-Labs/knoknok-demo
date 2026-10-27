@@ -9,7 +9,7 @@
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card [hidden]{display:none!important}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-art{position:absolute;display:block;box-sizing:border-box;min-width:0;min-height:0;max-width:none;margin:0;overflow:hidden;transform-origin:center;border:0;border-radius:0;background:none;box-shadow:none;text-shadow:none;letter-spacing:0;font-synthesis:none;white-space:normal;line-height:1.1;text-align:left}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-name{overflow:visible;font-style:normal;font-variant:normal;letter-spacing:0;text-transform:none}
-:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-logo{background:currentColor;mask:url('assets/brand-20261026/knoknok-handwritten-white.png') no-repeat center/100% 100%;-webkit-mask:url('assets/brand-20261026/knoknok-handwritten-white.png') no-repeat center/100% 100%}
+:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-logo{background:currentColor;mask:url('assets/brand-20261027-noknok/noknok-selected-white.png') no-repeat center/100% 100%;-webkit-mask:url('assets/brand-20261027-noknok/noknok-selected-white.png') no-repeat center/100% 100%}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-image{object-fit:contain}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-avatar{border-radius:50%;object-fit:cover}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-tag{border-width:0;border-style:solid;white-space:nowrap;line-height:1.1;text-overflow:ellipsis;backdrop-filter:none;-webkit-backdrop-filter:none}

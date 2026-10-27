@@ -39,3 +39,12 @@
   transform-origin: 0 0;
 }
 .phone#phone[data-opening-logo-motion="moving"] > .opening-logo-image { will-change: transform, filter; }
+
+/* NokNok selected logo 20261027: preserve visible ink size and optical position. */
+/* Uniform 1646/2045 scale compensates the new source's smaller transparent margins.
+   Layout slots stay unchanged. The welcome motion reads this rendered image rect. */
+:is(.workbench-header,.compare-header) .wordmark>.brand-logo[src$="noknok-selected-white.png"],
+.phone#phone #app .welcome .brand>.brand-logo[src$="noknok-selected-white.png"]{
+  transform:translate(11.9727404125%,10.9008969458%) scale(0.8048899756);
+  transform-origin:0 0;
+}

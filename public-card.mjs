@@ -1,10 +1,10 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261027-glass-52g';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261027-logo-56';
 import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261027-tags-50';
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
 export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
 
-const BRAND_LOGO = 'assets/brand-20261026/knoknok-handwritten-white.png';
+const BRAND_LOGO = 'assets/brand-20261027-noknok/noknok-selected-white.png';
 export { DEFAULT_CARD_AVATAR };
 const LIMITS = Object.freeze({ name: 40, bio: 180, language: 24, region: 60, encoded: 32768, jsonBytes: 24576 });
 const own = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
@@ -110,7 +110,7 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
  return art.items.map(item=>{
   const box=geometry(item);
   if(item.type==='rect')return `<div class="bc-art bc-block" aria-hidden="true" style="${box}background:${item.fill};border-radius:${cqw(item.r)}cqw"></div>`;
-  if(item.type==='logo')return `<span class="bc-art bc-logo" role="img" aria-label="Knoknok" style="${box}color:${item.color}"></span>`;
+  if(item.type==='logo')return `<span class="bc-art bc-logo" role="img" aria-label="NokNok" style="${box}color:${item.color}"></span>`;
   if(item.type==='avatar'){
    const alt=item.custom?'名片頭像':'Klin 預設頭像';
    const portraitStyle=`object-fit:${item.fit};background:${item.fill};padding:${cqw(item.pad)}cqw;box-sizing:border-box;`;

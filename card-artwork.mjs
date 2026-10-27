@@ -56,7 +56,9 @@ export function cardArtwork(data){
   items.push({type:'text',kind,text,lines,x,y,w,h,size:actual,weight,family,color,align,lineHeight});
  };
  const tags=Array.isArray(data.tags)?data.tags:[],sparse=tags.length===0;
- items.push({type:'logo',x:208,y:24,w:184,h:184/3,color:'#66705b'});
+ // Match the prior visible ink width and optical centre in both DOM and PNG.
+ const logoScale=1646/2045,logoWidth=184*logoScale;
+ items.push({type:'logo',x:208+184*(318-72*logoScale)/2172,y:24+(184/3)*(371.5-363.5*logoScale)/724,w:logoWidth,h:logoWidth/3,color:'#66705b'});
  const portrait=sparse?{x:210,y:108,w:180,h:180}:{x:52,y:118,w:152,h:152};
  items.push({type:'rect',x:portrait.x-8,y:portrait.y-8,w:portrait.w+16,h:portrait.h+16,fill:'#e5eace',r:portrait.w/2+8});
  items.push({type:'avatar',...portrait,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f4f1e7',pad:data.avatar?0:10});

@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T09:40:10.110Z",
+  "createdAt": "2026-10-27T10:16:27.424782Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 103227207,
+  "payloadBytes": 103789589,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 121641,
-      "sha256": "460dd6a723822f0970295f0c9df91ac939c36592c3776e4c15dc8825991e78a8"
+      "bytes": 121643,
+      "sha256": "3ecff2293b36b8d8169f7c7e2fe2cc9e62e483293c4623f5779b989150920859"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1460,14 +1460,14 @@
     {
       "source": "auth-entry-ui.mjs",
       "path": "auth-entry-ui.mjs",
-      "bytes": 4118,
-      "sha256": "e1efcd2e8864017340f5c1db40282fc154ef0346a273f54737ea7ed4760d7751"
+      "bytes": 4120,
+      "sha256": "a9cb0bddee165a85088089dfc0826edb4da78fb12bb6c3e19e030fd5f07c4048"
     },
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 3932,
-      "sha256": "7c5bd5a7ba8f4eef8d4f808d5093703473b0ffee2e17624c0e7f8fdb27684d42"
+      "bytes": 3930,
+      "sha256": "e7c030c863e0f7b64b1932c7a881b65afd97442c35f4f640014dbce5ff762217"
     },
     {
       "source": "auth-entry.mjs",
@@ -1502,20 +1502,20 @@
     {
       "source": "brand-v41.css",
       "path": "brand-v41.css",
-      "bytes": 2226,
-      "sha256": "d2d921578e756d5f563c518f89cbe4878542f490b1f8cda4e9191b9573d6e5f4"
+      "bytes": 2760,
+      "sha256": "c690cfd34a14f5279ca101f350db6d919ad39754fb2eaad49ca44f23b4a6e3ee"
     },
     {
       "source": "business-card.css",
       "path": "business-card.css",
-      "bytes": 8604,
-      "sha256": "7d20925a6f50286e4896cd931d99f3cb9ff1113b8a1c1a92a2f11f0276d75eb3"
+      "bytes": 8610,
+      "sha256": "8677952e4a3f41a1b2a4069740041ea3e6ffaabf4d4042bc15c9e2b5c9a10f49"
     },
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 7012,
-      "sha256": "65cc1e87504eddf19ef048fd29a2052e8c1694c985d2b3f83ddeb6e3c15ae115"
+      "bytes": 7218,
+      "sha256": "258ff107f6f04e0fb56c8be387a2a89c1609012c970efc267e5869acdd7298e8"
     },
     {
       "source": "card-design.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10555,
-      "sha256": "54b27d08feee9c354be5df5be4d66d1c31cc5bbe1b9920592a5576055ae4c763"
+      "bytes": 10541,
+      "sha256": "352d287ef893a5030beee3a22570ebd27cb0d1f5da9de984a7fc013a9c05bf19"
     },
     {
       "source": "journey-experience.css",
@@ -2001,7 +2001,7 @@
       "source": "public-card.mjs",
       "path": "public-card.mjs",
       "bytes": 15797,
-      "sha256": "f3a5525c9f405e0ee21fb1f0162789c045321e35061424585c46a60eb87a3a89"
+      "sha256": "9bb3552643039302c804d33684cb17ca68c1b2e19a9bf5c39d8954aef5a9be70"
     },
     {
       "source": "realm-scene.css",
@@ -2272,6 +2272,12 @@
       "path": "welcome-logo-motion.mjs",
       "bytes": 5118,
       "sha256": "86f1cb5b31f57dbd0500a2e1f18782eabd6fadb9c29e6e6a26340176be993eed"
+    },
+    {
+      "source": "assets/brand-20261027-noknok/noknok-selected-white.png",
+      "path": "assets/brand-20261027-noknok/noknok-selected-white.png",
+      "bytes": 561648,
+      "sha256": "0f0622e4661f337a30f1fdd4b5bb8733db6184b2f9d02908b3d09c8db4650c2e"
     }
   ],
   "runtimeDependencies": [
