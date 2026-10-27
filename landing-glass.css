@@ -5,9 +5,9 @@
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
 }
-.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-thread,.onboarding-composer) [data-landing-glass="ready"],
-.phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-thread,.onboarding-composer) [data-landing-glass="ready"]:hover:not(:disabled){
-  background-color:var(--kn-glass-fill)!important;
+.phone#phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-thread,.onboarding-composer) [data-landing-glass="ready"],
+.phone#phone.landing-video-active #app .page.conversation-onboarding :is(.onboarding-thread,.onboarding-composer) [data-landing-glass="ready"]:hover:not(:disabled){
+  background-color:var(--landing-glass-fill,var(--kn-glass-fill))!important;
   background-image:var(--landing-glass-image)!important;
   background-size:var(--landing-glass-size)!important;
   background-position:var(--landing-glass-position)!important;

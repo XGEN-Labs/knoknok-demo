@@ -97,3 +97,45 @@
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }
 @container(max-height:740px){.phone#phone #sheet .tag-history-entry{padding:10px}.phone#phone #sheet .tag-history-story{padding:12px}}
+
+/* The diary keeps a complete month even when no stories have been saved. */
+.phone#phone #sheet .tag-diary-browser,.phone#phone #sheet .tag-diary-detail{color:var(--kn-glass-ink,#29272f);min-width:0}
+.phone#phone #sheet .tag-calendar-heading{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;margin:0 0 12px}
+.phone#phone #sheet .tag-calendar-heading h4{margin:0;text-align:center;font-size:17px;line-height:24px;font-weight:500;color:inherit}
+.phone#phone #sheet .tag-calendar-nav{display:grid;place-items:center;width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:inherit;box-shadow:none;cursor:pointer}
+.phone#phone #sheet .tag-calendar-nav svg{width:20px;height:20px}.phone#phone #sheet .tag-calendar-nav.is-next svg{transform:rotate(180deg)}
+.phone#phone #sheet .tag-calendar-weekdays,.phone#phone #sheet .tag-diary-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;text-align:center}
+.phone#phone #sheet .tag-calendar-weekdays{font-size:12px;color:#68656e;line-height:24px;margin:0 0 6px}
+.phone#phone #sheet .tag-diary-calendar{margin:0 0 18px}
+.phone#phone #sheet .tag-calendar-day{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-sizing:border-box;width:100%;min-width:0;height:44px;min-height:44px;padding:0;border:1px solid transparent;border-radius:15px;background:transparent;box-shadow:none;color:inherit;font:400 15px/20px var(--kn-ui-font-ui,system-ui);cursor:pointer}
+.phone#phone #sheet .tag-calendar-day.has-entry{font-weight:500}
+.phone#phone #sheet .tag-calendar-day i{position:absolute;bottom:5px;width:4px;height:4px;border-radius:50%;background:currentColor}
+.phone#phone #sheet .tag-calendar-day[aria-current="date"]{border-color:rgba(67,64,74,.24)}
+.phone#phone #sheet .tag-calendar-day[aria-pressed="true"]{background:#29272f;color:#fff;border-color:#29272f}
+.phone#phone #sheet :is(.tag-calendar-nav,.tag-calendar-day):focus-visible{outline:2px solid #66636e;outline-offset:2px}
+.phone#phone #sheet .tag-diary-day-list>h4{display:flex;align-items:baseline;justify-content:space-between;margin:0;font-size:15px;line-height:22px;font-weight:500;color:inherit}
+.phone#phone #sheet .tag-diary-day-list>h4>span{font-size:12px;font-weight:400;color:#68656e}
+.phone#phone #sheet .tag-diary-browser .tag-diary-list{gap:10px;margin:12px 0 18px}
+.phone#phone #sheet .tag-diary-browser .tag-diary-list>button{width:100%;min-width:0;padding:14px 16px;border-radius:20px;background:var(--kn-glass-sheen),var(--kn-glass-fill);background-clip:padding-box;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);box-shadow:var(--kn-glass-control-shadow);color:inherit;backdrop-filter:blur(var(--kn-glass-blur));-webkit-backdrop-filter:blur(var(--kn-glass-blur))}
+.phone#phone #sheet .tag-diary-browser .tag-diary-list :is(time,span){color:#68656e;font-size:12px}
+.phone#phone #sheet .tag-diary-browser .tag-diary-list p{font-size:14px;line-height:1.6;overflow-wrap:anywhere;margin:8px 0}
+.phone#phone #sheet .tag-diary-browser .tag-empty{margin:0;padding:16px 0;font-size:14px;color:#68656e}
+.phone#phone #sheet .tag-diary-date{font-size:13px;color:#68656e}
+.phone#phone #sheet .tag-diary-section{margin:24px 0}
+.phone#phone #sheet .tag-diary-section h4,.phone#phone #sheet .tag-chat-records summary{margin:0 0 12px;font-size:15px;line-height:22px;font-weight:500;color:inherit}
+.phone#phone #sheet .tag-diary-body{margin:0;font-size:15px;line-height:1.8;overflow-wrap:anywhere}
+.phone#phone #sheet .tag-diary-quote{padding:16px;border-radius:20px;background:rgba(255,247,218,.58)}
+.phone#phone #sheet .tag-diary-quote blockquote{padding:0;margin:0;border:0;background:transparent;color:inherit;font-size:16px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.phone#phone #sheet .tag-diary-detail .tag-associated{display:grid;gap:8px;margin:0}
+.phone#phone #sheet .tag-diary-detail .tag-management-row{flex-wrap:wrap;gap:8px}
+.phone#phone #sheet :is(.tag-diary-detail,.tag-diary-browser) .tag-ui-button{border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);background:var(--kn-glass-sheen),var(--kn-glass-fill);background-clip:padding-box;box-shadow:var(--kn-glass-control-shadow);color:inherit;border-radius:999px;min-height:40px;font-weight:500}
+.phone#phone #sheet .tag-diary-detail .tag-ui-button:disabled{opacity:.55}
+.phone#phone #sheet .tag-chat-records{border-block:1px solid rgba(67,64,74,.12);padding:16px 0}
+.phone#phone #sheet .tag-chat-records summary{cursor:pointer;margin:0;min-height:24px}
+.phone#phone #sheet .tag-original-chat{margin:16px 0 0;gap:12px}
+.phone#phone #sheet .tag-original-chat>div{background:var(--kn-glass-sheen),var(--kn-glass-fill);background-clip:padding-box;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);color:inherit}
+.phone#phone #sheet .tag-original-chat>div.own{background:rgba(255,247,218,.58)}
+.phone#phone #sheet .tag-original-chat small{color:#68656e}.phone#phone #sheet .tag-original-chat p{white-space:pre-wrap;overflow-wrap:anywhere}
+.phone#phone #sheet .tag-diary-privacy{margin:16px 0;font-size:12px;line-height:18px;color:#68656e}
+
+.phone#phone #sheet .tag-calendar-nav:disabled{opacity:.3;cursor:default}

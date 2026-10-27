@@ -72,12 +72,14 @@
   display: none !important;
 }
 .phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log {
-  top: calc(var(--app-safe-top) + 60px);
+  top: calc(var(--app-safe-top) + 48px);
   left: var(--kn-safe-left);
   right: var(--kn-safe-right);
   bottom: calc(var(--app-safe-bottom) + 76px);
-  padding-top: 8px;
+  padding-block: 24px;
+  scroll-padding-block: 24px;
 }
+.phone#phone #app .conversation-log > * { flex-shrink: 0; }
 .phone#phone[data-conversation="true"] #app .room-chat-page:has(.conversation-replies:not([hidden]):not(:empty)) .conversation-log {
   bottom: calc(var(--app-safe-bottom) + 126px);
 }

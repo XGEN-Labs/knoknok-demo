@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="180" viewBox="0 0 240 180">
+<defs><radialGradient id="wall" cx=".3" cy=".2" r=".85"><stop stop-color="#f8f0dc"/><stop offset=".7" stop-color="#cbb89b"/><stop offset="1" stop-color="#a28e70"/></radialGradient><linearGradient id="roof" x2=".3" y2="1"><stop stop-color="#d0c59f"/><stop offset=".5" stop-color="#9ca16f"/><stop offset="1" stop-color="#68754e"/></linearGradient><linearGradient id="door" x2="1" y2=".5"><stop stop-color="#a28e70"/><stop offset="1" stop-color="#665e4e"/></linearGradient><filter id="shade" x="-.5" y="-1" width="2" height="3"><feGaussianBlur stdDeviation="5"/></filter></defs>
+<ellipse cx="122" cy="158" rx="78" ry="9" fill="#465439" opacity=".2" filter="url(#shade)"/>
+<path d="M48 147C40 110 52 72 78 57C99 41 148 41 169 62C192 85 200 121 187 148C160 164 79 164 48 147Z" fill="url(#wall)"/>
+<path d="M41 100C42 79 57 53 83 41C101 32 113 36 127 31C147 32 167 45 180 63C190 77 197 93 196 101C176 106 164 99 150 94C136 98 123 104 106 98C86 100 64 109 41 100Z" fill="url(#roof)"/>
+<path transform="translate(42 17)" d="M120 35C108 34 100 27 101 17C112 18 119 25 120 35ZM121 35C121 23 128 16 138 16C137 27 130 34 121 35Z" fill="url(#roof)"/>
+<path d="M61 80C79 46 114 43 137 44" fill="none" stroke="#d0c59f" opacity=".5" stroke-width="4" stroke-linecap="round"/>
+<path d="M99 154L99 124C99 103 137 102 138 124L138 154Z" fill="#5d614b" opacity=".25" transform="translate(0 2)"/>
+<path d="M102 154L102 126C102 107 135 106 135 126L135 154Z" fill="url(#door)"/>
+<path d="M107 124C108 114 120 111 126 115" fill="none" stroke="#fbebc3" opacity=".3" stroke-width="2" stroke-linecap="round"/>
+<circle cx="128" cy="138" r="2" fill="#dfc99c"/>
+<path d="M62 151C61 141 57 135 54 131C58 131 65 139 67 150M168 153C170 142 174 139 178 136C176 143 176 147 174 153" fill="#68754e" opacity=".8"/>
+</svg>

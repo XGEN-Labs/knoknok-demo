@@ -23,10 +23,12 @@
 .kn-time-columns{display:grid;grid-template-columns:1fr 12px 1fr;gap:4px;margin:4px auto 0;max-width:230px}.kn-time-colon{align-self:center;text-align:center;color:#777;padding-top:17px}
 .phone .kn-date-picker .kn-date-shortcuts{display:flex;justify-content:center;gap:22px;margin:0 0 9px}
 .phone dialog.kn-date-picker .kn-date-shortcuts button{flex:0 1 auto;background:transparent;color:#777;border:0;border-radius:0;padding:5px 2px;min-height:32px;font-size:12px;font-weight:400}
-.phone dialog.kn-date-picker div.kn-date-selection{background:transparent;border:0;color:#999;font-size:11px;letter-spacing:.08em;text-align:center;margin:12px 0 18px;line-height:1.5;min-height:17px}
+/* The wheels already show the selected date. Keep its combined announcement
+   available to assistive technology without repeating a small visual caption. */
+.phone dialog.kn-date-picker .kn-date-announcement{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .phone .kn-date-picker .kn-date-error{color:#666!important;font-size:12px!important;line-height:1.5;margin:8px 0!important}
-.phone .kn-date-picker .kn-date-confirm{width:100%;min-height:48px;background:#222;color:#fff;border:0;border-radius:24px;font-size:14px;font-weight:600;letter-spacing:.05em}
+.phone .kn-date-picker .kn-date-confirm{width:100%;min-height:48px;margin-top:16px;background:#222;color:#fff;border:0;border-radius:24px;font-size:14px;font-weight:600;letter-spacing:.05em}
 .phone .kn-date-picker button:hover:not(:disabled){filter:brightness(.98);transform:none}
 .phone .kn-date-picker[data-picker-type="datetime-local"]{--kn-wheel-row:31px}
-@media(max-height:650px){.phone dialog.kn-date-picker{--kn-wheel-row:38px;padding:9px 22px 18px}.phone .kn-date-picker .kn-date-handle{margin-bottom:13px}.phone .kn-date-picker header{margin-bottom:10px}.phone .kn-date-picker .kn-date-selection{margin:8px 0 14px}.phone .kn-date-picker[data-picker-type="datetime-local"]{--kn-wheel-row:26px}.phone .kn-date-picker[data-picker-type="datetime-local"] .kn-date-wheel-row{font-size:16px}}
+@media(max-height:650px){.phone dialog.kn-date-picker{--kn-wheel-row:38px;padding:9px 22px 18px}.phone .kn-date-picker .kn-date-handle{margin-bottom:13px}.phone .kn-date-picker header{margin-bottom:10px}.phone .kn-date-picker[data-picker-type="datetime-local"]{--kn-wheel-row:26px}.phone .kn-date-picker[data-picker-type="datetime-local"] .kn-date-wheel-row{font-size:16px}}
 @media(prefers-reduced-motion:reduce){.phone .kn-date-picker .kn-date-wheel-row{transition:none}}

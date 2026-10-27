@@ -1,0 +1,50 @@
+/* Empty-field prompts use the explicitly requested 10% black. Entered text,
+   labels, errors and ordinary helper copy retain their existing foregrounds. */
+.phone#phone :is(input,textarea)::placeholder,
+.phone#phone #app :is(input,textarea)::placeholder,
+.phone#phone #app .page.friends-lounge .network-search input::placeholder,
+.phone#phone #sheet :is(input,textarea)::placeholder {
+  color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
+  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
+  opacity:1;
+  text-shadow:none;
+}
+.phone#phone .kn-date-trigger.is-empty .kn-date-value {
+  color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
+  -webkit-text-fill-color:var(--kn-ui-color-input-placeholder,rgba(0,0,0,.1))!important;
+  opacity:1;
+  text-shadow:none;
+}
+
+/* Keep ordinary onboarding controls separate from the denser message material.
+   Older flow styles aliased this entire subtree to the conversation fill. */
+.phone#phone #app .conversation-onboarding {
+  --kn-glass-fill:var(--kn-ui-glass-fill,rgba(255,255,255,.62));
+}
+
+/* Account, password and confirmation fields use one 10% white layer in both
+   resting and focused states. The visibility-action wrapper has no paint. */
+.phone#phone #app .auth-entry-flow .auth-form .auth-field .input,
+.phone#phone #app .auth-entry-flow .auth-form .auth-field .input:focus,
+.phone#phone #app .auth-entry-flow .auth-form .auth-field .input:focus-visible {
+  background:var(--kn-ui-glass-auth-input-fill,rgba(255,255,255,.1))!important;
+  box-shadow:var(--kn-glass-input-shadow)!important;
+}
+.phone#phone #app .auth-entry-flow .auth-form .auth-password-wrap {
+  background:transparent!important;
+  box-shadow:none;
+}
+
+/* Bottom sheets have their own denser white material. Do not reuse this fill
+   for room controls, login panels, conversation bubbles or paper documents. */
+.phone#phone #sheet,
+.phone#phone dialog.kn-date-picker {
+  background:var(--kn-glass-sheet-fill,rgba(255,255,255,.9))!important;
+  -webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+  backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone#phone #sheet .sheet-handle,
+.phone#phone .kn-date-picker .kn-date-handle {
+  background:var(--kn-glass-sheet-handle,#fff)!important;
+  opacity:1;
+}

@@ -16,5 +16,6 @@
 @media(max-height:700px){.phone#phone #app .auth-entry-flow .auth-heading{margin-bottom:14px}.phone#phone #app .auth-entry-flow .auth-heading h1{font-size:22px}.phone#phone #app .auth-entry-flow .auth-form{gap:10px}.phone#phone #app .auth-entry-flow .auth-panel{padding:22px}.auth-demo-note{margin-top:10px!important}}
 /* Short screens scroll the glass form, including its black wordmark. */
 .phone#phone #app .page.auth-entry-flow{overflow:hidden}
+.phone#phone #app .auth-entry-flow .auth-error{color:#52525b!important}
 .phone#phone #app .auth-entry-flow>.auth-panel{flex:0 1 auto;min-height:0;max-height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scroll-padding-block:12px;-webkit-overflow-scrolling:touch}
 @media(max-height:700px){.phone#phone #app .page.auth-entry-flow{padding-bottom:var(--app-safe-bottom)}}

@@ -15,10 +15,11 @@
   inset:var(--kn-birth-time-row) 0 auto;
   height:var(--kn-birth-time-row);
   box-sizing:border-box;
-  border:1px solid rgba(255,255,255,.82);
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);
   border-radius:18px;
   background:rgba(255,255,255,.42);
-  box-shadow:inset 0 1px 0 #ffffffb3,0 2px 9px #24242c08;
+  background-clip:padding-box;
+  box-shadow:var(--kn-glass-control-shadow);
   pointer-events:none;
 }
 .phone .kn-birth-time-wheel {
@@ -48,8 +49,13 @@
 .phone .kn-birth-time-wheel::-webkit-scrollbar { display:none; width:0; height:0; }
 .phone .kn-birth-time-wheel:active { cursor:grabbing; }
 .phone .kn-birth-time-track:focus-within .kn-birth-time-selection {
-  border-color:rgba(255,255,255,.98);
-  box-shadow:inset 0 0 0 1px #ffffff80,0 2px 9px #24242c08;
+  border-color:var(--kn-glass-edge);
+  box-shadow:var(--kn-glass-control-shadow);
+}
+.phone .kn-birth-time-track:has(.kn-birth-time-wheel:focus-visible) {
+  outline:2px solid var(--kn-ui-color-focus);
+  outline-offset:3px;
+  border-radius:18px;
 }
 .phone .kn-birth-time-option {
   box-sizing:border-box;

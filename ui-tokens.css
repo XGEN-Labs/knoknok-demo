@@ -30,12 +30,12 @@
   --kn-ui-color-success: #526b59;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
   --kn-ui-color-focus: #56647f;
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-glass-fill: rgba(255,255,255,.48);
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-glass-panel-fill: rgba(255,255,255,.26);
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-glass-edge: rgba(255,255,255,.76);
+  /* adopted | 2026-10-27 brighter white glass feedback; glass-material.css v1.8 */
+  --kn-ui-glass-fill: rgba(255,255,255,.62);
+  /* adopted | 2026-10-27 brighter white glass feedback; glass-material.css v1.8 */
+  --kn-ui-glass-panel-fill: rgba(255,255,255,.38);
+  /* adopted | 2026-10-27 softer glass edge feedback; glass-material.css v1.6 */
+  --kn-ui-glass-edge: rgba(255,255,255,.34);
   /* existing | glass-material.css */
   --kn-ui-glass-edge-width: 1px;
   /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
@@ -90,12 +90,12 @@
   --kn-ui-layout-compound-gap: 10px;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
   --kn-ui-layout-touch-min: 44px;
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-shadow-control: inset 0 1px 0 #ffffffb8,inset 0 -1px 0 #ffffff38,0 4px 16px #373b4d0d;
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-shadow-panel: inset 0 1px 0 #ffffffd1,inset 0 -1px 0 #ffffff4d,0 12px 34px #373b4d14;
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-shadow-input: inset 0 1px 0 #ffffff80;
+  /* adopted | 2026-10-27 softer glass edge feedback; glass-material.css v1.6 */
+  --kn-ui-shadow-control: 0 4px 16px #373b4d0d;
+  /* adopted | 2026-10-27 softer glass edge feedback; glass-material.css v1.6 */
+  --kn-ui-shadow-panel: inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.06),0 12px 34px #373b4d14;
+  /* adopted | 2026-10-27 softer glass edge feedback; glass-material.css v1.6 */
+  --kn-ui-shadow-input: 0 4px 16px #373b4d0d;
   /* existing | public-card.css */
   --kn-ui-shadow-paper: 0 1px 0 #f2e8d7, 0 3px 0 -1px #fffdf9, 0 4px 0 -1px #e7dfd2, 0 18px 34px #37303f24;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
@@ -112,16 +112,22 @@
   --kn-ui-color-disabled-edge: #e2e5dd;
   /* adopted | ui-foundations-v31.css; unified cool blue-gray editable text */
   --kn-ui-color-input-text: #30394c;
-  /* adopted | ui-foundations-v31.css; shared hint alias for all empty inputs */
-  --kn-ui-color-input-placeholder: var(--kn-ui-color-text-hint);
+  /* adopted | 2026-10-27 explicit placeholder feedback; ui-surface-v51.css */
+  --kn-ui-color-input-placeholder: rgba(0,0,0,.1);
   /* adopted | ui-states-v31.css; inner surface feedback without an outline or halo */
   --kn-ui-color-input-focus-surface: rgba(255,255,255,.12);
   /* adopted | ui-foundations-v31.css; experience-42 quiet empty-field and helper text */
   --kn-ui-color-text-hint: #78818f;
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-glass-conversation-fill: rgba(255,255,255,.50);
-  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
-  --kn-ui-glass-own-fill: rgba(255,244,199,.58);
+  /* adopted | 2026-10-27 all conversation bubbles white feedback; glass-material.css v1.8 / portal-glass.css */
+  --kn-ui-glass-conversation-fill: rgba(255,255,255,.9);
+  /* adopted | 2026-10-27 all conversation bubbles white feedback; glass-material.css v1.8 / portal-glass.css */
+  --kn-ui-glass-own-fill: rgba(255,255,255,.9);
   /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
   --kn-ui-glass-sheen: linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,0) 44%,rgba(255,255,255,.06));
+  /* adopted | 2026-10-27 bottom-sheet feedback; glass-material.css v1.7 / ui-surface-v51.css */
+  --kn-ui-glass-sheet-fill: rgba(255,255,255,.9);
+  /* adopted | 2026-10-27 bottom-sheet feedback; ui-surface-v51.css */
+  --kn-ui-color-sheet-handle: #fff;
+  /* adopted | 2026-10-27 account/password field feedback; ui-surface-v51.css */
+  --kn-ui-glass-auth-input-fill: rgba(255,255,255,.1);
 }

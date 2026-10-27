@@ -1,4 +1,4 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261027-tags-50';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261027-clarity-51e';
 import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261027-tags-50';
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
@@ -99,7 +99,7 @@ export function prepareCardFonts(sample = 'Knoknok 名片 標籤') {
  if (!fonts) return Promise.resolve();
  if (!preparedFontSets.has(fonts)) preparedFontSets.set(fonts, (async () => {
   await fonts.ready;
-  if (fonts.load) await Promise.allSettled([...new Set(Object.values(CARD_FONTS))].map(family => fonts.load(`600 32px ${family}`, sample)));
+  if (fonts.load) await Promise.allSettled([...new Set(Object.values(CARD_FONTS))].map(family => fonts.load(`${family===CARD_FONTS.name?500:600} 32px ${family}`, sample)));
   await fonts.ready;
  })());
  return preparedFontSets.get(fonts);

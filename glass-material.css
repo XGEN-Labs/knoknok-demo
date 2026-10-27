@@ -1,12 +1,14 @@
-/* Knoknok glass material v1.5. More scene transmission and clearer light edges,
-   following the 2026-10-27 glass feedback. Keep geometry in components. */
+/* Knoknok glass material v1.8. Soft light edges retain scene transmission
+   without a bright double outline. Keep geometry in components. */
 .phone{
-  --kn-glass-fill:rgba(255,255,255,.48);
-  --kn-glass-panel-fill:rgba(255,255,255,.26);
-  --kn-glass-conversation-fill:rgba(255,255,255,.50);
-  --kn-glass-own-fill:rgba(255,244,199,.58);
+  --kn-glass-fill:rgba(255,255,255,.62);
+  --kn-glass-panel-fill:rgba(255,255,255,.38);
+  --kn-glass-sheet-fill:var(--kn-ui-glass-sheet-fill,rgba(255,255,255,.9));
+  --kn-glass-sheet-handle:var(--kn-ui-color-sheet-handle,#fff);
+  --kn-glass-conversation-fill:rgba(255,255,255,.9);
+  --kn-glass-own-fill:rgba(255,255,255,.9);
   --kn-glass-sheen:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,0) 44%,rgba(255,255,255,.06));
-  --kn-glass-edge:rgba(255,255,255,.76);
+  --kn-glass-edge:rgba(255,255,255,.34);
   --kn-glass-edge-width:1px;
   --kn-glass-ink:#26242c;
   --kn-glass-blur:32px;
@@ -14,14 +16,15 @@
   --kn-glass-input-blur:18px;
   --kn-glass-saturation:145%;
   --kn-glass-panel-radius:30px;
-  --kn-glass-panel-shadow:inset 0 1px 0 #ffffffd1,inset 0 -1px 0 #ffffff4d,0 12px 34px #373b4d14;
-  --kn-glass-control-shadow:inset 0 1px 0 #ffffffb8,inset 0 -1px 0 #ffffff38,0 4px 16px #373b4d0d;
-  --kn-glass-input-fill:rgba(255,255,255,.48);
-  --kn-glass-input-edge:#ffffffb8;
-  --kn-glass-input-shadow:inset 0 1px 0 #ffffff80;
+  --kn-glass-panel-shadow:inset 0 1px 0 rgba(255,255,255,.24),inset 0 -1px 0 rgba(255,255,255,.06),0 12px 34px #373b4d14;
+  --kn-glass-control-shadow:0 4px 16px #373b4d0d;
+  --kn-glass-input-fill:rgba(255,255,255,.62);
+  --kn-glass-input-edge:rgba(255,255,255,.34);
+  --kn-glass-input-shadow:var(--kn-glass-control-shadow);
 }
 .kn-glass-panel,.kn-glass-control{
   background:var(--kn-glass-sheen),var(--kn-glass-fill);
+  background-clip:padding-box;
   border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);
   color:var(--kn-glass-ink);
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));

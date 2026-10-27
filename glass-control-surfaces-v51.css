@@ -1,0 +1,84 @@
+/* A glass action has one paint surface and one content surface. Keep native
+   buttons/SVG/text out of the backdrop layer: repainting an icon or changing a
+   label must not leave rectangular backing tiles inside a circle or capsule.
+   Scope is explicit: solid primary, microphone/send, paper and date controls
+   retain their own materials. Paused-film controls already painted from the
+   held scene texture keep that single-image path instead of a second blur. */
+.phone#phone :is(
+  #app :is(.scene-icon,.icon-button,.onboarding-back,.auth-back,.scene-more,.scene-sound),
+  #app .page.welcome .welcome-actions > .btn,
+  #app .page.conversation-onboarding .onboarding-composer > .btn,
+  #app .page.conversation-onboarding .onboarding-composer > .quick-replies > button,
+  #app .page .fixed-footer > .btn:not(.dark):not(.danger),
+  #app .page .profile-footer > .btn:not(.dark):not(.danger),
+  #app .page .profile-edit-footer > .btn:not(.dark):not(.danger),
+  #app .page .lounge-footer > .btn:not(.dark):not(.danger),
+  #app .home-chat-actions > .visit-entry,
+  #sheet .sheet-title .icon-button,
+  .contract-story .contract-actions > .contract-sign
+):not([data-landing-glass="ready"]) {
+  position:relative;
+  z-index:0;
+}
+
+.phone#phone :is(
+  #app :is(.scene-icon,.icon-button,.onboarding-back,.auth-back,.scene-more,.scene-sound),
+  #app .page.welcome .welcome-actions > .btn,
+  #app .page.conversation-onboarding .onboarding-composer > .btn,
+  #app .page.conversation-onboarding .onboarding-composer > .quick-replies > button,
+  #app .page .fixed-footer > .btn:not(.dark):not(.danger),
+  #app .page .profile-footer > .btn:not(.dark):not(.danger),
+  #app .page .profile-edit-footer > .btn:not(.dark):not(.danger),
+  #app .page .lounge-footer > .btn:not(.dark):not(.danger),
+  #app .home-chat-actions > .visit-entry,
+  #sheet .sheet-title .icon-button,
+  .landing-volume-toggle,
+  .landing-video-skip,
+  .landing-video-resume,
+  .contract-story .contract-actions > .contract-sign
+):not([data-landing-glass="ready"]) {
+  overflow:hidden;
+  appearance:none;
+  -webkit-appearance:none;
+  background:transparent!important;
+  background-clip:padding-box!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+.phone#phone :is(
+  #app :is(.scene-icon,.icon-button,.onboarding-back,.auth-back,.scene-more,.scene-sound),
+  #app .page.welcome .welcome-actions > .btn,
+  #app .page.conversation-onboarding .onboarding-composer > .btn,
+  #app .page.conversation-onboarding .onboarding-composer > .quick-replies > button,
+  #app .page .fixed-footer > .btn:not(.dark):not(.danger),
+  #app .page .profile-footer > .btn:not(.dark):not(.danger),
+  #app .page .profile-edit-footer > .btn:not(.dark):not(.danger),
+  #app .page .lounge-footer > .btn:not(.dark):not(.danger),
+  #app .home-chat-actions > .visit-entry,
+  #sheet .sheet-title .icon-button,
+  .landing-volume-toggle,
+  .landing-video-skip,
+  .landing-video-resume,
+  .contract-story .contract-actions > .contract-sign
+):not([data-landing-glass="ready"])::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  border-radius:inherit;
+  background:var(--kn-glass-sheen),var(--kn-glass-fill);
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+
+/* The held-film texture already contains its fill and blur. On the transition
+   to ready, retire every legacy/on-demand pseudo painter on these surfaces. */
+.phone#phone.landing-video-active #app .conversation-onboarding [data-landing-glass="ready"]::before {
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}

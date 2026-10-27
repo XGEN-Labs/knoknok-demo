@@ -63,6 +63,14 @@
   font: 400 16px/24px var(--kn-ui-font-ui, var(--klin-hand));
   letter-spacing: 0;
 }
+/* An available date prompt must remain readable over the paused film.
+   The calendar inherits this neutral ink; disabled dates keep their own state. */
+.phone#phone .kn-date-trigger.is-empty:not(:disabled),
+.phone#phone .kn-date-trigger.is-empty:not(:disabled):focus {
+  color: #4d4d55 !important;
+  -webkit-text-fill-color: #4d4d55;
+  opacity: 1;
+}
 
 /* Ordinary fields: keep the composer's nested date trigger separate so it
    never receives a second glass surface. Hidden enhanced native sources are

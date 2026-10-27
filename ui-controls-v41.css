@@ -37,6 +37,27 @@
   min-width:24px;
 }
 
+/* Navigation and the bottom capsules share one edge and one surface sheen.
+   Clip fill inside the border so its white does not brighten that edge twice.
+   Inset lines used to show on the top buttons while the composer's paint-only
+   pseudo layer covered them; the common shadow now contains no inset stroke. */
+.phone#phone #app :is(.icon-button,.scene-icon,.onboarding-back,.auth-back,.scene-more,.scene-sound),
+.phone#phone #app .page.room-chat-page .home-chat-identity,
+.phone#phone > .landing-volume-toggle,
+.phone#phone #sheet .sheet-title .icon-button {
+  background:var(--kn-glass-sheen),var(--kn-glass-fill)!important;
+  background-clip:padding-box!important;
+  border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;
+  box-shadow:var(--kn-glass-control-shadow)!important;
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation))!important;
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation))!important;
+}
+.phone#phone #app :is(.auth-field .input,.profile-edit-field .input),
+.phone#phone #sheet :is(.input,.klin-select-trigger) {
+  background-image:var(--kn-glass-sheen)!important;
+  background-clip:padding-box!important;
+}
+
 /* Three visible birthday rows replace five, while each row remains 44px.
    Wheel hit testing reads this same row count, so drag and click stay aligned. */
 .phone#phone dialog.kn-date-picker[data-date-purpose="birthday"] {

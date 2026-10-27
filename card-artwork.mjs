@@ -6,7 +6,7 @@ export const CARD_PAPER_OPACITY=.58;
 export const DEFAULT_CARD_AVATAR = 'assets/klin-20261014/adult.png';
 export const CARD_FONTS={
  sans:'Helvetica Neue,PingFang TC,PingFang SC,Arial,sans-serif',
- name:'PingFang SC,PingFang TC,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif',
+ name:'Klin Paper Serif,serif',
  serif:'Georgia,Klin Paper Serif,Songti TC,serif',
  round:'Card Puff,Card WenKai,Arial,sans-serif',
  hand:'Card Hand,Card WenKai,cursive',
@@ -60,7 +60,7 @@ export function cardArtwork(data){
  const portrait=sparse?{x:210,y:108,w:180,h:180}:{x:52,y:118,w:152,h:152};
  items.push({type:'rect',x:portrait.x-8,y:portrait.y-8,w:portrait.w+16,h:portrait.h+16,fill:'#e5eace',r:portrait.w/2+8});
  items.push({type:'avatar',...portrait,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f4f1e7',pad:data.avatar?0:10});
- txt('name',data.name,sparse?54:230,sparse?316:136,sparse?492:318,sparse?92:116,48,{weight:600,family:'name',align:sparse?'center':'left',maxLines:2,lineHeight:1.2});
+ txt('name',data.name,sparse?54:230,sparse?316:136,sparse?492:318,sparse?92:116,48,{weight:500,family:'name',align:sparse?'center':'left',maxLines:2,lineHeight:1.2});
  const nameItem=items.find(item=>item.kind==='name');
  const nameBottom=nameItem?nameItem.y+nameItem.lines.length*nameItem.size*nameItem.lineHeight:(sparse?408:252);
  // Region and language belong to the identity block, directly below the name.

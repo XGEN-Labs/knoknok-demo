@@ -36,7 +36,9 @@
   line-height:1.5;
 }
 .phone .contract-story .contract-name-fields input::placeholder{color:#a39683;opacity:1;font-size:14px}
-.phone .contract-story .contract-name-fields input:focus{border-bottom-color:#8f7757;box-shadow:0 1px 0 #8f7757}
+/* These fields belong to paper, so the global glass-input focus treatment
+   must not replace their ink underline or add a light surface over the page. */
+.phone#phone .contract-story .contract-name-fields input:is(:focus,:focus-visible){border-bottom:1px solid #8f7757!important;background:transparent!important;box-shadow:none!important}
 .phone .contract-story .contract-name-fields .contract-name-error{grid-column:1/-1;margin:1px 0 0;color:#9d5140;font-size:12px;line-height:1.6}
 .phone .contract-story :is(.contract-name-fields,.contract-signatures,.contract-name-error)[hidden]{display:none!important}
 .phone .contract-story .contract-paper-viewport{scroll-behavior:smooth}
@@ -50,9 +52,9 @@
 
 /* Compact paper: reserve space for the names once, before or after signing. */
 .phone .contract-story .contract-document{padding:27px 24px 23px}
-.phone .contract-story .contract-document-heading{margin:0 0 16px}
-.phone .contract-story .contract-document-heading h2{margin:0;font-size:28px;font-weight:500;letter-spacing:.12em;text-indent:.12em}
-.phone .contract-story .contract-document .contract-preamble{font-size:14px;line-height:1.9}
+.phone .contract-story .contract-document-heading{margin:15px 0 16px}
+.phone .contract-story .contract-document-heading h2{margin:0 0 6px;font-size:28px;font-weight:500;letter-spacing:.12em;text-indent:.12em}
+.phone .contract-story .contract-document .contract-preamble{padding:12px 0;border-top:1px solid #baac9452;border-bottom:1px solid #baac9452;font-size:14px;line-height:1.9}
 .phone .contract-story .contract-signatures{gap:14px;margin-top:24px}
 .phone .contract-story .contract-signatures small{font-size:11px;line-height:1.5}
 .phone .contract-story .contract-signature-ink,.phone .contract-story .contract-companion-signature strong{height:50px}

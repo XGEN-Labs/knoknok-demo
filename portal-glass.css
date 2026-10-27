@@ -41,6 +41,7 @@
 .phone #app .home-composer .composer-row,
 .phone #app .home-chat-actions>.visit-entry{
   position:relative;overflow:hidden;background:transparent!important;
+  background-clip:padding-box!important;
   backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .phone #app .home-composer .composer-row::before,
@@ -62,6 +63,7 @@
    split the translucent surface into horizontal compositing bands. */
 .phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row{
   position:relative;overflow:hidden;background:transparent!important;
+  background-clip:padding-box!important;
   backdrop-filter:none;-webkit-backdrop-filter:none;
 }
 .phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row::before{
@@ -107,20 +109,24 @@
 @media(prefers-reduced-motion:reduce){.portal-scene-host :is(.portal-welcome-plate,.portal-warm-light,.portal-arrival-plate){transition:none}.phone[data-portal-phase="entering"] #app .auth-page>:is(.auth-brand,.auth-panel){animation:none!important}}
 .phone[data-portal-motion="still"] .portal-scene-host>*{transition:none}
 
-/* Conversation surfaces retain the room behind the softened glass. Own messages
-   carry a light warm tint; failed delivery retains its explicit state styling. */
-.phone#phone #app .page :is(.conversation-message,.room-speech,.bubble:not(.failed)){
-  background:var(--kn-glass-sheen),var(--kn-glass-conversation-fill)!important;
+/* Conversation surfaces use one 90% white fill with their existing blur.
+   Failed delivery retains its explicit state styling. */
+.phone#phone #app .page :is(.conversation-message,.room-speech,.bubble:not(.failed),.onboarding-message,.onboarding-reading){
+  background:var(--kn-glass-conversation-fill)!important;
   border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;
   box-shadow:var(--kn-glass-control-shadow)!important;
   backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }
-/* A masked or partially opaque ancestor is a backdrop root. Keep the live log
-   unmasked and end its hidden phase without an opacity fade, so child glass
-   can sample the room. The existing entering/leave visibility rules remain. */
+/* Keep the scroll viewport unmasked so bubbles can sample the room. The edge
+   controller fades each painted surface itself as it approaches the header
+   or composer; scrolling still exposes every message in full. */
 .phone#phone[data-conversation="true"] #app .conversation-log{
   mask-image:none;-webkit-mask-image:none;transition:none;
+}
+.phone#phone #app .conversation-log [data-conversation-scroll-surface]{
+  mask-image:var(--kn-conversation-edge-mask,none);
+  -webkit-mask-image:var(--kn-conversation-edge-mask,none);
 }
 /* Preserve the arrival movement without briefly isolating a glass bubble in
    its parent's opacity animation. Transform alone keeps the scene available. */
@@ -133,6 +139,10 @@
 .phone#phone #app .home-chat-actions>.visit-entry span{font-weight:500}
 .phone#phone #app .page :is(.conversation-message.own,.message.own .bubble:not(.failed)),
 .phone#phone #app .onboarding-message.is-user{
-  background:var(--kn-glass-sheen),var(--kn-glass-own-fill)!important;
-  border-color:rgba(255,252,233,.86)!important;
+  background:var(--kn-glass-own-fill)!important;
+  border-color:var(--kn-glass-edge)!important;
+}
+.phone#phone #app .page :is(.conversation-message,.room-speech,.bubble:not(.failed)),
+.phone#phone #app .onboarding-message {
+  background-clip:padding-box!important;
 }
