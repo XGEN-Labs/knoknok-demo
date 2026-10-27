@@ -1,5 +1,5 @@
-// Reviewed 21-complete-native-mouth-clean.mp4: 1646 frames at 24 fps.
-// Verified identical PTS, dialogue and UI gates to landing-46; timing retained.
+// Reviewed 34-complete-selected23-original-colors-voice.mp4: 1646 frames at 24 fps.
+// Verified identical frame count and UI gates; updated 08/09 subtitle speech windows.
 // These are manual UI gates, not the individual speech/edit segments. A user
 // answer advances the next interval; pausing never consumes response time.
 const frame = number => number / 24;
@@ -31,8 +31,8 @@ export const LANDING_VIDEO_SUBTITLES = Object.freeze([
   {id:'05-crowd-question',start:13.65,end:15.738,text:'是這個人嗎？'},
   {id:'06-crowd-maybe',start:15.938,end:17.882,text:'好像是……'},
   {id:'07-crowd-arrival',start:18.082,end:20.41,text:'等等，它來了！'},
-  {id:'08-found-you',start:31.375,end:34.855,text:'太好了，你就是我要找的人！'},
-  {id:'09-contract',start:41.458333333333336,end:43.97833333333334,text:'這個是我們的契約'},
+  {id:'08-found-you',start:32.2686666667,end:34.5406666667,text:'太好了，你就是我要找的人！'},
+  {id:'09-contract',start:41.7343333333,end:43.4303333333,text:'這個是我們的契約'},
 ].map(Object.freeze));
 
 export function landingVideoSubtitleAt(currentTime,{playing=false}={}) {

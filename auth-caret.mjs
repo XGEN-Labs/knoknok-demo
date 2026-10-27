@@ -9,7 +9,11 @@ export function initAuthCaret(root) {
   for(const input of root.querySelectorAll(FINE_CARET_INPUTS)){
     const parent=input.parentElement;
     if(view.getComputedStyle(parent).position==='static'&&!parents.has(parent)){parents.set(parent,parent.style.position);parent.style.position='relative';}
-    const caret=document.createElement('span');caret.className='auth-fine-caret';caret.setAttribute('aria-hidden','true');caret.hidden=true;input.after(caret);
+    const caret=document.createElement('span');caret.className='auth-fine-caret';caret.setAttribute('aria-hidden','true');
+    // Composer children are positioned relatively by the glass layer. Keep this
+    // measured overlay out of flex flow instead of adding its top a second time.
+    caret.style.cssText='position:absolute;margin:0;right:auto;bottom:auto;flex:none;';
+    caret.hidden=true;input.after(caret);
     const mirror=document.createElement('div');mirror.setAttribute('aria-hidden','true');mirror.style.cssText='position:absolute;visibility:hidden;pointer-events:none;left:0;top:0;margin:0;padding:0;border:0;';parent.append(mirror);
     const marker=document.createElement('span');marker.textContent='\u200b';
     let composing=false;

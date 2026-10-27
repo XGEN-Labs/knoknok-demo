@@ -1,4 +1,4 @@
-import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261027-glass-52e';
+import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261027-glass-52g';
 
 // Ordinary image backgrounds are deliberately used instead of one composited
 // backdrop per capsule. WebKit can split a live backdrop even on a paint-only
