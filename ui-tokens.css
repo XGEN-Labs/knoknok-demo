@@ -1,4 +1,4 @@
-/* Knoknok UI 1.0 · 2026-10-26
+/* Knoknok UI 1.0 · 2026-10-27
  * Shared tokens for the specification and UI v31 runtime.
  * existing = source baseline; recommended = original proposal; adopted = implemented.
  * Generated from ui-standard/tokens.json: node ui-standard/export-tokens.mjs
@@ -30,22 +30,22 @@
   --kn-ui-color-success: #526b59;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
   --kn-ui-color-focus: #56647f;
-  /* adopted | 2026-10-22 user adjustment; glass-material.css / ui-tokens.css */
-  --kn-ui-glass-fill: rgba(255,255,255,.70);
-  /* existing | glass-material.css */
-  --kn-ui-glass-panel-fill: rgba(255,255,255,.30);
-  /* existing | glass-material.css */
-  --kn-ui-glass-edge: rgba(255,255,255,.65);
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-fill: rgba(255,255,255,.48);
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-panel-fill: rgba(255,255,255,.26);
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-edge: rgba(255,255,255,.76);
   /* existing | glass-material.css */
   --kn-ui-glass-edge-width: 1px;
-  /* existing | glass-material.css */
-  --kn-ui-glass-blur: 30px;
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-blur: 32px;
   /* existing | glass-material.css */
   --kn-ui-glass-panel-blur: 40px;
   /* existing | glass-material.css */
   --kn-ui-glass-input-blur: 18px;
-  /* existing | glass-material.css */
-  --kn-ui-glass-saturation: 135%;
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-saturation: 145%;
   /* existing | refinement-v29.css */
   --kn-ui-size-action: 52px;
   /* existing | refinement-v29.css */
@@ -90,12 +90,12 @@
   --kn-ui-layout-compound-gap: 10px;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
   --kn-ui-layout-touch-min: 44px;
-  /* existing | glass-material.css */
-  --kn-ui-shadow-control: inset 0 1px 0 #ffffff85, inset 0 -1px 0 #ffffff24, 0 5px 22px #3e436510;
-  /* existing | glass-material.css */
-  --kn-ui-shadow-panel: inset 0 1px 0 #ffffffa6, inset 0 -1px 0 #ffffff30, 0 18px 55px #6f6a8c1c;
-  /* existing | glass-material.css */
-  --kn-ui-shadow-input: inset 0 1px 0 #ffffff52;
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-shadow-control: inset 0 1px 0 #ffffffb8,inset 0 -1px 0 #ffffff38,0 4px 16px #373b4d0d;
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-shadow-panel: inset 0 1px 0 #ffffffd1,inset 0 -1px 0 #ffffff4d,0 12px 34px #373b4d14;
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-shadow-input: inset 0 1px 0 #ffffff80;
   /* existing | public-card.css */
   --kn-ui-shadow-paper: 0 1px 0 #f2e8d7, 0 3px 0 -1px #fffdf9, 0 4px 0 -1px #e7dfd2, 0 18px 34px #37303f24;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
@@ -118,4 +118,10 @@
   --kn-ui-color-input-focus-surface: rgba(255,255,255,.12);
   /* adopted | ui-foundations-v31.css; experience-42 quiet empty-field and helper text */
   --kn-ui-color-text-hint: #78818f;
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-conversation-fill: rgba(255,255,255,.50);
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-own-fill: rgba(255,244,199,.58);
+  /* adopted | 2026-10-27 glass feedback; glass-material.css v1.5 */
+  --kn-ui-glass-sheen: linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,0) 44%,rgba(255,255,255,.06));
 }

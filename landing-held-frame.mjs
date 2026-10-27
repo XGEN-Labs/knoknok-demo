@@ -3,7 +3,7 @@
  * samples it. A paused decoder texture can still be replaced while seeking;
  * neither currentTime nor the player's logical waiting state proves it is ready.
  */
-export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, scheduler = {}, timeoutMs = 1500, frameRate = 30 } = {}) {
+export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, scheduler = {}, documentRef = globalThis.document, timeoutMs = 1500, frameRate = 30 } = {}) {
   if (!video?.addEventListener || !canvas) throw new TypeError('A video and canvas are required');
   const later = scheduler.setTimeout || globalThis.setTimeout.bind(globalThis);
   const cancelLater = scheduler.clearTimeout || globalThis.clearTimeout.bind(globalThis);
@@ -18,7 +18,10 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
   const listeners = [];
 
   const diagnostics = () => ({ state, key, targetTime, captured, reason, captures, resumeStart });
-  const pending = token => !disposed && token === epoch && state === 'settling';
+  // The timeout unlocks the form, but it does not make a delayed network seek a
+  // permanent failure. A later decoded frame may restore the film in place.
+  const recoverable = () => state === 'unavailable' && reason === 'frame-timeout';
+  const pending = token => !disposed && token === epoch && (state === 'settling' || recoverable());
   const decoded = () => !video.seeking && video.paused && Number(video.readyState) >= 2
     && video.videoWidth > 0 && video.videoHeight > 0
     && Math.abs(Number(video.currentTime) - targetTime) < 1 / 60;
@@ -59,7 +62,10 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
     frameId = requestFrame(() => {
       if (!pending(token)) return;
       frameId = null;
-      if (!decoded()) stableFrames = 0;
+      if (!decoded()) {
+        stableFrames = 0;
+        if (recoverable()) { cancelPending(); return; }
+      }
       else {
         stableFrames += 1;
         // Paused video does not always dispatch a fresh video-frame callback.
@@ -80,7 +86,10 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
   }
   function hold({ key: nextKey, targetTime: nextTime } = {}) {
     if (disposed) return diagnostics();
-    if (nextKey === key && nextTime === targetTime && state !== 'idle' && state !== 'resuming') return diagnostics();
+    if (nextKey === key && nextTime === targetTime && state !== 'idle' && state !== 'resuming') {
+      recover();
+      return diagnostics();
+    }
     epoch += 1;
     cancelPending();
     key = nextKey;
@@ -146,6 +155,18 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
   const onSeeking = () => { stableFrames = 0; };
   video.addEventListener('seeking', onSeeking);
   listeners.push(() => video.removeEventListener('seeking', onSeeking));
+  function recover() {
+    // No polling while a download is stalled. Browser media events (or returning
+    // to a foreground tab) restart just the bounded two-frame capture, keeping
+    // the fallback form usable until the correct frame is ready.
+    if (!disposed && recoverable() && decoded() && documentRef?.hidden !== true) queue(epoch);
+  }
+  for (const event of ['loadeddata', 'seeked', 'canplay', 'canplaythrough']) {
+    video.addEventListener(event, recover);
+    listeners.push(() => video.removeEventListener(event, recover));
+  }
+  documentRef?.addEventListener?.('visibilitychange', recover);
+  listeners.push(() => documentRef?.removeEventListener?.('visibilitychange', recover));
   function dispose() {
     if (disposed) return;
     release();

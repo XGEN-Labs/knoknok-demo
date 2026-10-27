@@ -238,7 +238,11 @@ export function createLandingVideoPlayer({
     if (!active) { report('inactive'); return; }
     suspended = hidden();
     if (reducedMotion || mode === 'hold') { finish(); return; }
-    if (mode === 'fallback') { report('fallback', reason || 'media-error'); return; }
+    if (mode === 'fallback') {
+      recoverBufferedFrame();
+      if (mode === 'fallback') report('fallback', reason || 'media-error');
+      return;
+    }
     if (mode === 'blocked') { report('blocked', 'user-gesture-required'); return; }
     if (suspended) { report('loading', 'visibility-hidden'); return; }
     startPlayback();
@@ -253,7 +257,7 @@ export function createLandingVideoPlayer({
     if (!active) {
       if (wasActive) stopPlayback();
       suspended = false;
-      report('inactive');
+      report('inactive', mode === 'fallback' ? reason : '');
       return getDiagnostics();
     }
     const nextIndex = cueIndexes.get(key);
@@ -305,6 +309,15 @@ export function createLandingVideoPlayer({
     listeners.push(() => target.removeEventListener(event, handler));
   }
 
+  function recoverBufferedFrame() {
+    // A slow range request may finish after the fallback form is already open.
+    // Restore this question's held frame, without replaying dialogue or moving
+    // on to another answer. Real media/format errors retain the fallback.
+    if (!disposed && active && !hidden() && mode === 'fallback'
+      && ['load-timeout', 'playback-stalled'].includes(reason)
+      && !video.error && Number(video.readyState) >= 2) finish();
+  }
+
   listen(video, 'loadedmetadata', () => {
     if (disposed) return;
     applyPendingSeek();
@@ -323,9 +336,11 @@ export function createLandingVideoPlayer({
   listen(video, 'stalled', () => {
     if (canRun()) report('loading', 'buffering');
   });
+  for (const event of ['loadeddata', 'canplay', 'canplaythrough']) listen(video, event, recoverBufferedFrame);
   listen(video, 'ended', () => { if (canRun()) finish(); });
   listen(video, 'error', () => { if (cue() && !disposed) fallback('media-error'); });
   listen(documentRef, 'visibilitychange', () => {
+    recoverBufferedFrame();
     if (!active || disposed || mode !== 'play') return;
     if (hidden()) {
       suspended = true;

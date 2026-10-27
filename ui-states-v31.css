@@ -7,7 +7,9 @@
   --kn-navigation-inset:var(--kn-ui-layout-gutter);
   --kn-glass-fill:var(--kn-ui-glass-fill);
   --kn-glass-panel-fill:var(--kn-ui-glass-panel-fill);
-  --kn-glass-conversation-fill:var(--kn-ui-glass-fill);
+  --kn-glass-conversation-fill:var(--kn-ui-glass-conversation-fill);
+  --kn-glass-own-fill:var(--kn-ui-glass-own-fill);
+  --kn-glass-sheen:var(--kn-ui-glass-sheen);
   --kn-glass-input-fill:var(--kn-ui-glass-fill);
   --kn-glass-ink:var(--kn-ui-color-text);
   --kn-glass-edge:var(--kn-ui-glass-edge);

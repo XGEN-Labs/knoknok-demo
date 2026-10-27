@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-26T13:11:06.184Z",
+  "createdAt": "2026-10-27T04:38:22.242Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 99087217,
+  "payloadBytes": 99096792,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 117074,
-      "sha256": "4264dda47b8ac79b62864de28a5979d9a6ed2b4af5ee4997beeed4fbfacd868c"
+      "bytes": 118268,
+      "sha256": "1d13151f5945584ff6537349d6979275d5e0c1c5b607f9a0ce24b0d3a20ef28b"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1472,8 +1472,8 @@
     {
       "source": "birth-time-picker.css",
       "path": "birth-time-picker.css",
-      "bytes": 3353,
-      "sha256": "38afee892a291656a0e800a9022e5dbf5c4d43b1640b1faf38db57189e155151"
+      "bytes": 3470,
+      "sha256": "fff50e747103a610228aa32e7d173602943c40b1965571bc2f30e32ff5adc139"
     },
     {
       "source": "birth-time-picker.mjs",
@@ -1544,8 +1544,8 @@
     {
       "source": "chat-header-v41.css",
       "path": "chat-header-v41.css",
-      "bytes": 8675,
-      "sha256": "5fff26044f23bc279ea563e0d460e968c30a5f6920d279778759903568a80865"
+      "bytes": 8832,
+      "sha256": "d78472c42c3f2420433253f874f9b807bae4ad2a36f25c70f39e021929bc8f31"
     },
     {
       "source": "communication-mode.mjs",
@@ -1574,14 +1574,14 @@
     {
       "source": "contract-story.css",
       "path": "contract-story.css",
-      "bytes": 2868,
-      "sha256": "36093caa1753f33a609ce2f0442e54b7d5f747b77ed620054e393079acf46e50"
+      "bytes": 3918,
+      "sha256": "2deda1f7824a278e8833cf6106c75554d4ed0f8ab3b73cd7a1b7fcf93b1981a3"
     },
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 16878,
-      "sha256": "44aac7460274ba4e960d3a3ac3cfa7b80fd21aaccf716fd3edf171653a9eb984"
+      "bytes": 16057,
+      "sha256": "50c446389dfa4467a2c967e84cf72207d9f0a44080f383ea8a0911aa53d2db71"
     },
     {
       "source": "conversation-avatar-motion.mjs",
@@ -1712,8 +1712,8 @@
     {
       "source": "glass-material.css",
       "path": "glass-material.css",
-      "bytes": 1613,
-      "sha256": "bba4f9fbf3db68c0aa4af16c5e5e98d95b918d948f5242a5ca5a7d32b3ed523c"
+      "bytes": 1801,
+      "sha256": "d04a116adb8156d37c95f57806f0ba72867a6e1a37f065095e892cbc6d01dee0"
     },
     {
       "source": "home-controls-v24.css",
@@ -1736,8 +1736,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10138,
-      "sha256": "c8cb379e2ffb46802752651dde64e2c85ac4fcabb0312512b2e9c2179306ddbc"
+      "bytes": 10198,
+      "sha256": "bc6d62ddbf7d70e4de57d82764b77303cc1e9089225d87790f61f869b84bbaae"
     },
     {
       "source": "journey-experience.css",
@@ -1802,8 +1802,8 @@
     {
       "source": "landing-flow.css",
       "path": "landing-flow.css",
-      "bytes": 4276,
-      "sha256": "f2f00124c2364d41501a927492fc0c10833ed4a9b5656649c3a8346f584159ce"
+      "bytes": 4414,
+      "sha256": "da15d80379056cad810950d7f68add349908811d6f05f5d00994d693cf9effe8"
     },
     {
       "source": "landing-glass.css",
@@ -1820,8 +1820,8 @@
     {
       "source": "landing-held-frame.mjs",
       "path": "landing-held-frame.mjs",
-      "bytes": 6907,
-      "sha256": "86ca617840158441d390f647aabed6041c788df37dd0f2b442deee6f38c58e4c"
+      "bytes": 8006,
+      "sha256": "8e771f498d493eeabda3cede1e3930eef02bdfd9ead1cb427d0e96a01695a05a"
     },
     {
       "source": "landing-video-cues.mjs",
@@ -1832,14 +1832,14 @@
     {
       "source": "landing-video-player.mjs",
       "path": "landing-video-player.mjs",
-      "bytes": 11839,
-      "sha256": "1ebf382b3dc1a921ee8a344293485a3a11bfb4389ee5afd8d369551b57c166f2"
+      "bytes": 12553,
+      "sha256": "a0bc6808a8c283a1c5d9d60fb1e923fa792939cfb6163cde7aba21e90377b66f"
     },
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 9761,
-      "sha256": "e97bbe11169d50ab38def18b85c693987e79e0a240ee503e4fa543f090b88d48"
+      "bytes": 9753,
+      "sha256": "79acdfa6ea1615d17a685f73fd189e5b954ffef5d252b437f80e5a69277a33fb"
     },
     {
       "source": "landing-video.css",
@@ -1940,8 +1940,8 @@
     {
       "source": "portal-glass.css",
       "path": "portal-glass.css",
-      "bytes": 11515,
-      "sha256": "6a1e354a15a5d29b871bfe6c19665043ec164110683921be863a490daa77c2b3"
+      "bytes": 12125,
+      "sha256": "b878563c7096c9330c9110330555d1ccb20e924e69e3e6284bbdaca4c9a1970c"
     },
     {
       "source": "portal-social-v24.css",
@@ -2132,8 +2132,8 @@
     {
       "source": "ui-icons.mjs",
       "path": "ui-icons.mjs",
-      "bytes": 4221,
-      "sha256": "58b1e20fb1e5e31ee46e2a8aa7ce5da349b1a4a5afc69ce02e9d7ca2d2f2d413"
+      "bytes": 5115,
+      "sha256": "bee87ea88905136358f87c1ed336e86abb69da2185e6d7b3e8984216799fde86"
     },
     {
       "source": "ui-inputs-v31.css",
@@ -2142,16 +2142,22 @@
       "sha256": "25ca65a44668bd60c714846b7fa2e80df63f854430e22e76b41189d9dd8fd7ac"
     },
     {
+      "source": "ui-refinements-v48.css",
+      "path": "ui-refinements-v48.css",
+      "bytes": 3443,
+      "sha256": "3bfb1706bf893fadc3e2912726b401e7349d1d45904bd33395764bf2a08ad9b4"
+    },
+    {
       "source": "ui-states-v31.css",
       "path": "ui-states-v31.css",
-      "bytes": 6817,
-      "sha256": "6eec7772e39a11e7ca4359cbfd00071944e1d8188f4325520c012530c2fb8cf7"
+      "bytes": 6926,
+      "sha256": "b9a2355ae1f17851706a618fe0bf7a60061055d6201d2e470a2c6f9a55c3053f"
     },
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 5703,
-      "sha256": "8a6d10ea3bdc816fbd7d3a41be6ce506ba8e30003a543d7922e88e277fd2c0c1"
+      "bytes": 6334,
+      "sha256": "0d578f756ba3f3e174af6d769468a76ff271a5818727db902984b00efe9cbd77"
     },
     {
       "source": "universe-experience.css",
@@ -2540,6 +2546,11 @@
     {
       "from": "demo.html",
       "to": "birth-time-picker.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "ui-refinements-v48.css",
       "kind": "resource"
     },
     {

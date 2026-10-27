@@ -1,0 +1,100 @@
+/* Room navigation uses equal side lanes, so the chat identity stays centered
+   when the card button is hidden. Each individual target remains 44px. */
+.phone#phone #app .room-chat-page .home-top {
+  grid-template-columns: 96px minmax(0, 1fr) 96px;
+  column-gap: 6px;
+}
+.phone#phone #app .home-top-start,
+.phone#phone #app .home-top-end {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-row: 1;
+}
+.phone#phone #app .home-top-start { grid-column: 1; justify-content: flex-start; }
+.phone#phone #app .home-top-end { grid-column: 3; justify-content: flex-end; }
+.phone#phone #app .home-top :is(.home-top-start, .home-top-end) > .scene-icon {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+}
+.phone#phone #app .home-chat-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.phone#phone #app .home-chat-identity { width: max-content; max-width: 100%; }
+
+/* The sheet is one translucent surface. Its controls retain clear edges
+   without the former white-on-white floating shadow. */
+.phone#phone #sheet {
+  background: var(--kn-glass-panel-fill);
+  border: 1px solid var(--kn-glass-edge);
+  box-shadow: var(--kn-glass-panel-shadow);
+  -webkit-backdrop-filter: blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+  backdrop-filter: blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone#phone #sheet :is(#sheet-content, .sheet-inner) { background: transparent; }
+.phone#phone #sheet .sheet-title h3 { font-weight: 500; }
+.phone#phone #sheet .btn {
+  min-height: 52px;
+  border-radius: 26px;
+  font-weight: 500 !important;
+  box-shadow: inset 0 1px 0 #ffffff70 !important;
+}
+.phone#phone #sheet :is(.account-menu-actions > .btn, form > .btn[type="submit"], .sheet-inner > .btn:not(.ghost):not(.white):not(.danger)) {
+  background: #202020 !important;
+  border-color: #202020 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.phone#phone #sheet .btn.ghost {
+  background: rgba(255,255,255,.22) !important;
+  border-color: var(--kn-glass-edge) !important;
+}
+.settings-menu { display: grid; gap: 10px; padding: 4px 0 10px; }
+.phone#phone #sheet .settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 16px;
+  border: 1px solid var(--kn-glass-edge);
+  border-radius: 20px;
+  background: var(--kn-glass-input-fill);
+  color: var(--kn-glass-ink);
+  box-shadow: var(--kn-glass-input-shadow);
+  font: 500 15px/22px var(--kn-ui-font-ui);
+  text-align: left;
+  cursor: pointer;
+}
+.settings-row > svg { flex: 0 0 22px; width: 22px; height: 22px; }
+.settings-row > span:nth-child(2) { flex: 1; }
+.settings-chevron { font: 400 24px/1 sans-serif; opacity: .55; }
+.settings-switch {
+  position: relative;
+  flex: 0 0 38px;
+  height: 24px;
+  border-radius: 14px;
+  background: #77747b42;
+}
+.settings-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px #24212726;
+  transition: transform 160ms ease;
+}
+.settings-row[aria-pressed="true"] .settings-switch { background: #27252d; }
+.settings-row[aria-pressed="true"] .settings-switch::after { transform: translateX(14px); }
+@media (prefers-reduced-motion: reduce) { .settings-switch::after { transition: none; } }

@@ -1,14 +1,14 @@
 # Knoknok · Klin interactive demo
 
-Revision `20261026-answers-47d`.
+Revision `20261027-polish-48b`.
 
-[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261026-answers-47d)
+[Open the demo](https://xgen-labs.github.io/knoknok-demo/?rev=20261027-polish-48b)
 
-The 68.583-second first-encounter film pauses at each answer. Birth time uses a scroll wheel, gender has two choices, and each input offers a previous-answer control that preserves drafts. The two names and signature remain on the same fictional paper contract. Returning signed-in users enter their room directly after completing the encounter.
+The 68.583-second first-encounter film pauses at each answer. Birth time uses a scroll wheel, gender has two choices, and each input offers a previous-answer control that preserves drafts. The compact fictional paper contract keeps one promise, both names and the explicit signature action. Late video decoding automatically restores the correct waiting frame instead of leaving the meadow empty. Returning signed-in users enter their room directly after completing the encounter.
 
 The handwritten welcome logo moves into the account form while turning black, with its visible ink aligned to the field labels. Login and registration share the account-first entry and matching pill-shaped input fields.
 
-Chat shows the companion avatar and name in the upper-left corner. Message bubbles, tag proposals and editing controls use the shared glass material. Loading includes a small body hop and double blink; reduced motion remains static. The room includes 37 fixed demo lines recorded with the same Yunxia voice and prosody as the landing film. Arbitrary custom text uses the device voice fallback; there is no dynamic remote speech service.
+Chat centers the companion avatar and name. The upper-left diary and upper-right settings entries complement the card and sound controls. Settings links to the card, account and shared music/voice switch. White glass selection, quiet line icons and stronger previous-answer contrast refine onboarding. Message bubbles and controls use translucent glass with brighter edges; the user’s bubbles carry a pale yellow tint. Bottom-sheet primary actions are black. Loading includes a small body hop and double blink; reduced motion remains static. The room includes 37 fixed demo lines recorded with the same Yunxia voice and prosody as the landing film. Arbitrary custom text uses the device voice fallback; there is no dynamic remote speech service.
 
 Cards show an avatar, name, one-line introduction and up to seven distinct social-tag stickers. Editing includes tag order, hiding and restoring confirmed historical tags from private journals. Tags lead to their source journal and original conversation. Sharing renders only the public card fields and supports link sharing and PNG export.
 

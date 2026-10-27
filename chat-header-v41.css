@@ -1,9 +1,9 @@
 /* The room stays behind private chat. Its companion becomes a small identity
    in the safe-area header instead of being lifted above the conversation. */
 .phone#phone #app .room-chat-page .home-chat-identity {
-  grid-column: 1 / 3;
+  grid-column: 2;
   grid-row: 1;
-  justify-self: start;
+  justify-self: center;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -14,14 +14,14 @@
   padding: 3px 12px 3px 3px;
   border: var(--kn-glass-edge-width, 1px) solid var(--kn-glass-edge, #ffffffa6);
   border-radius: 24px;
-  background: var(--kn-glass-fill, #ffffffb3);
+  background: var(--kn-glass-sheen), var(--kn-glass-fill);
   color: var(--kn-glass-ink, #26242c);
   box-shadow: var(--kn-glass-control-shadow, none);
-  backdrop-filter: blur(var(--kn-glass-blur, 24px));
-  -webkit-backdrop-filter: blur(var(--kn-glass-blur, 24px));
+  backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter: blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }
 .phone#phone #app .home-chat-identity[hidden] { display: none; }
-.phone#phone #app .home-top > [data-go="profile"][hidden] { display: none; }
+.phone#phone #app .home-top [data-go="profile"][hidden] { display: none; }
 .phone#phone #app .home-chat-avatar {
   display: block;
   flex: 0 0 36px;
@@ -110,10 +110,10 @@
   padding:4px 8px;
   border:var(--kn-glass-edge-width,1px) solid var(--kn-glass-edge,#ffffffa6);
   border-radius:24px;
-  background:var(--kn-glass-fill,#ffffffb3);
+  background:var(--kn-glass-sheen),var(--kn-glass-fill);
   box-shadow:var(--kn-glass-control-shadow,none);
-  backdrop-filter:blur(var(--kn-glass-blur,24px));
-  -webkit-backdrop-filter:blur(var(--kn-glass-blur,24px));
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
   pointer-events:none;
 }
 .phone#phone #app .page.shared-chat-page .shared-people > .shared-person,
@@ -251,7 +251,7 @@
   padding:3px 10px;
   overflow:hidden;
   border-radius:20px;
-  background:var(--kn-glass-fill,#ffffffb3);
+  background:var(--kn-glass-sheen),var(--kn-glass-fill);
   color:var(--kn-ui-color-text-secondary,#626773);
   font:500 12px/18px var(--kn-ui-font-ui);
   white-space:nowrap;

@@ -26,14 +26,14 @@
 .phone #app .auth-page>.auth-brand{position:static;display:block;flex:none;width:86%;max-width:358px;height:43px;min-height:43px;margin:auto 0 0;padding:0;line-height:0;align-self:center}
 .phone #app .auth-page>.auth-brand .brand-logo{display:block;width:128px;height:100%;object-fit:contain;object-position:left center;filter:brightness(0)!important}
 .phone #app .auth-page>.auth-panel{position:relative;flex:none;top:auto;bottom:auto;left:auto;right:auto;width:86%;max-width:358px;height:auto;max-height:none;transform:none;margin:0 0 auto;overflow:visible}
-.phone #app .auth-login .auth-panel{background:var(--kn-glass-panel-fill)!important;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;box-shadow:var(--kn-glass-panel-shadow);backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));border-radius:var(--kn-glass-panel-radius);padding:25px}
-.phone #app .auth-login .auth-form .auth-field>.input{background:var(--kn-glass-input-fill);border:var(--kn-glass-edge-width) solid var(--kn-glass-input-edge);backdrop-filter:blur(var(--kn-glass-input-blur));-webkit-backdrop-filter:blur(var(--kn-glass-input-blur));box-shadow:var(--kn-glass-input-shadow)}
+.phone #app .auth-login .auth-panel{background:var(--kn-glass-sheen),var(--kn-glass-panel-fill)!important;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;box-shadow:var(--kn-glass-panel-shadow);backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));border-radius:var(--kn-glass-panel-radius);padding:25px}
+.phone #app .auth-login .auth-form .auth-field>.input{background:var(--kn-glass-sheen),var(--kn-glass-input-fill);border:var(--kn-glass-edge-width) solid var(--kn-glass-input-edge);backdrop-filter:blur(var(--kn-glass-input-blur));-webkit-backdrop-filter:blur(var(--kn-glass-input-blur));box-shadow:var(--kn-glass-input-shadow)}
 .phone[data-portal-phase="entering"] #app .auth-page>:is(.auth-brand,.auth-panel){animation:portal-auth-arrive .6s ease 1.25s both!important}
 @keyframes portal-auth-arrive{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 .phone #app :is(.icon-button,.scene-icon,.onboarding-back,.onboarding-history,.auth-back),
 .phone #app .conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn),
 .phone #app .home-composer .composer-row,
-.phone #app .home-chat-actions>.visit-entry{background:var(--kn-glass-fill)!important;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;box-shadow:var(--kn-glass-control-shadow)!important;backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));color:var(--kn-glass-ink)!important}
+.phone #app .home-chat-actions>.visit-entry{background:var(--kn-glass-sheen),var(--kn-glass-fill)!important;border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;box-shadow:var(--kn-glass-control-shadow)!important;backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));-webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));color:var(--kn-glass-ink)!important}
 /* Keep each room capsule's glass on one paint-only surface. Native textarea
    and SVG content otherwise share the backdrop-filter backing layer, which
    WebKit can repaint as bright rectangular tiles along the capsule's top.
@@ -46,7 +46,7 @@
 .phone #app .home-composer .composer-row::before,
 .phone #app .home-chat-actions>.visit-entry::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
-  background:var(--kn-glass-fill);
+  background:var(--kn-glass-sheen),var(--kn-glass-fill);
   backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }
@@ -66,7 +66,7 @@
 }
 .phone #app .conversation-onboarding .onboarding-composer .onboarding-input-row::before{
   content:"";position:absolute;inset:0;z-index:0;pointer-events:none;border-radius:inherit;
-  background:var(--kn-glass-fill);
+  background:var(--kn-glass-sheen),var(--kn-glass-fill);
   backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }
@@ -107,10 +107,10 @@
 @media(prefers-reduced-motion:reduce){.portal-scene-host :is(.portal-welcome-plate,.portal-warm-light,.portal-arrival-plate){transition:none}.phone[data-portal-phase="entering"] #app .auth-page>:is(.auth-brand,.auth-panel){animation:none!important}}
 .phone[data-portal-motion="still"] .portal-scene-host>*{transition:none}
 
-/* Conversation surfaces share the approved glass; message geometry and state
-   colours stay with their existing components. Failed delivery keeps its tint. */
+/* Conversation surfaces retain the room behind the softened glass. Own messages
+   carry a light warm tint; failed delivery retains its explicit state styling. */
 .phone#phone #app .page :is(.conversation-message,.room-speech,.bubble:not(.failed)){
-  background:var(--kn-glass-fill)!important;
+  background:var(--kn-glass-sheen),var(--kn-glass-conversation-fill)!important;
   border:var(--kn-glass-edge-width) solid var(--kn-glass-edge)!important;
   box-shadow:var(--kn-glass-control-shadow)!important;
   backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
@@ -127,3 +127,12 @@
 .phone#phone #app :is(.messages,.shared-messages) .message{animation-name:kn-glass-message-arrive}
 @keyframes kn-glass-message-arrive{from{transform:translateY(9px) scale(.98)}to{transform:none}}
 @media(prefers-reduced-motion:reduce){.phone#phone #app :is(.messages,.shared-messages) .message{animation:none}}
+
+/* Medium label weight leaves the hand-drawn door icon as the visual anchor. */
+.phone#phone #app .home-chat-actions>.visit-entry,
+.phone#phone #app .home-chat-actions>.visit-entry span{font-weight:500}
+.phone#phone #app .page :is(.conversation-message.own,.message.own .bubble:not(.failed)),
+.phone#phone #app .onboarding-message.is-user{
+  background:var(--kn-glass-sheen),var(--kn-glass-own-fill)!important;
+  border-color:rgba(255,252,233,.86)!important;
+}

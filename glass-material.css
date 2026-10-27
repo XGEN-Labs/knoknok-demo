@@ -1,25 +1,27 @@
-/* Knoknok glass material v1.4. White fill raised to 70% by user request on 2026-10-22.
-   Baseline: portal-24d / login-glass-review.png. Keep geometry in components. */
+/* Knoknok glass material v1.5. More scene transmission and clearer light edges,
+   following the 2026-10-27 glass feedback. Keep geometry in components. */
 .phone{
-  --kn-glass-fill:rgba(255,255,255,.70);
-  --kn-glass-panel-fill:rgba(255,255,255,.30);
-  --kn-glass-conversation-fill:rgba(255,255,255,.70);
-  --kn-glass-edge:rgba(255,255,255,.65);
+  --kn-glass-fill:rgba(255,255,255,.48);
+  --kn-glass-panel-fill:rgba(255,255,255,.26);
+  --kn-glass-conversation-fill:rgba(255,255,255,.50);
+  --kn-glass-own-fill:rgba(255,244,199,.58);
+  --kn-glass-sheen:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,0) 44%,rgba(255,255,255,.06));
+  --kn-glass-edge:rgba(255,255,255,.76);
   --kn-glass-edge-width:1px;
   --kn-glass-ink:#26242c;
-  --kn-glass-blur:30px;
+  --kn-glass-blur:32px;
   --kn-glass-panel-blur:40px;
   --kn-glass-input-blur:18px;
-  --kn-glass-saturation:135%;
+  --kn-glass-saturation:145%;
   --kn-glass-panel-radius:30px;
-  --kn-glass-panel-shadow:inset 0 1px 0 #ffffffa6,inset 0 -1px 0 #ffffff30,0 18px 55px #6f6a8c1c;
-  --kn-glass-control-shadow:inset 0 1px 0 #ffffff85,inset 0 -1px 0 #ffffff24,0 5px 22px #3e436510;
-  --kn-glass-input-fill:rgba(255,255,255,.70);
-  --kn-glass-input-edge:#ffffffa6;
-  --kn-glass-input-shadow:inset 0 1px 0 #ffffff52;
+  --kn-glass-panel-shadow:inset 0 1px 0 #ffffffd1,inset 0 -1px 0 #ffffff4d,0 12px 34px #373b4d14;
+  --kn-glass-control-shadow:inset 0 1px 0 #ffffffb8,inset 0 -1px 0 #ffffff38,0 4px 16px #373b4d0d;
+  --kn-glass-input-fill:rgba(255,255,255,.48);
+  --kn-glass-input-edge:#ffffffb8;
+  --kn-glass-input-shadow:inset 0 1px 0 #ffffff80;
 }
 .kn-glass-panel,.kn-glass-control{
-  background:var(--kn-glass-fill);
+  background:var(--kn-glass-sheen),var(--kn-glass-fill);
   border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);
   color:var(--kn-glass-ink);
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
@@ -27,7 +29,7 @@
   box-shadow:var(--kn-glass-control-shadow);
 }
 .kn-glass-panel{
-  background:var(--kn-glass-panel-fill);
+  background:var(--kn-glass-sheen),var(--kn-glass-panel-fill);
   border-radius:var(--kn-glass-panel-radius);
   -webkit-backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
   backdrop-filter:blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));

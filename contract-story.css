@@ -1,10 +1,10 @@
-/* Names are written directly on the existing cotton-paper contract. The whole
-   sheet remains one scrollable reading surface, including the energy story. */
+/* One short promise, with the editable pair replaced in place by their ink.
+   Paper remains scrollable for larger text and keyboard-constrained screens. */
 .phone .contract-story .contract-name-fields{
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:8px 14px;
-  margin:0 0 18px;
+  margin:24px 0 0;
   text-align:left;
 }
 .phone .contract-story .contract-name-fields label{
@@ -38,16 +38,30 @@
 .phone .contract-story .contract-name-fields input::placeholder{color:#a39683;opacity:1;font-size:14px}
 .phone .contract-story .contract-name-fields input:focus{border-bottom-color:#8f7757;box-shadow:0 1px 0 #8f7757}
 .phone .contract-story .contract-name-fields .contract-name-error{grid-column:1/-1;margin:1px 0 0;color:#9d5140;font-size:12px;line-height:1.6}
-.phone .contract-story .contract-energy-story{margin:16px 0 0;text-align:left}
-.phone .contract-story .contract-energy-story h3{margin:0 0 7px;color:var(--contract-ink);font-family:inherit;font-size:13px;font-weight:600;line-height:1.7;letter-spacing:.03em}
-.phone .contract-story .contract-energy-story p{margin:0;color:#65594d;font-size:12px;line-height:1.9;letter-spacing:.01em}
-.phone .contract-story .contract-energy-story p+p{margin-top:7px}
-.phone .contract-story :is(.contract-name-fields,.contract-names,.contract-name-error)[hidden]{display:none!important}
+.phone .contract-story :is(.contract-name-fields,.contract-signatures,.contract-name-error)[hidden]{display:none!important}
 .phone .contract-story .contract-paper-viewport{scroll-behavior:smooth}
 .phone .contract-story.is-reduced .contract-paper-viewport{scroll-behavior:auto}
 @media(prefers-reduced-motion:reduce){.phone .contract-story .contract-paper-viewport{scroll-behavior:auto}}
 
-.phone .contract-story .contract-back{display:block;min-height:44px;margin:7px auto 0;padding:7px 18px;border:0;border-radius:0;background:transparent;color:rgba(255,255,255,.68);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;font:inherit;font-size:13px;text-shadow:0 1px 4px #0003;cursor:pointer}
+.phone .contract-story .contract-back{display:block;min-height:44px;margin:7px auto 0;padding:7px 18px;border:0;border-radius:0;background:transparent;color:rgba(255,255,255,.94);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;font:inherit;font-size:13px;text-shadow:0 1px 2px #000b,0 2px 8px #0008;cursor:pointer}
 .phone .contract-story .contract-back::before{content:'‹';display:inline-block;margin-right:8px;font-family:system-ui;font-size:22px;line-height:16px;vertical-align:-1px}
 .phone .contract-story .contract-back:focus-visible{outline:1px solid #ffffffa6;outline-offset:2px}.phone .contract-story .contract-back:disabled{opacity:.4;cursor:default}
 .phone#phone .contract-story.has-back{padding-bottom:calc(var(--app-safe-bottom,34px) + 126px)}
+
+/* Compact paper: reserve space for the names once, before or after signing. */
+.phone .contract-story .contract-document{padding:27px 24px 23px}
+.phone .contract-story .contract-document-heading{margin:0 0 16px}
+.phone .contract-story .contract-document-heading h2{margin:0;font-size:28px;font-weight:500;letter-spacing:.12em;text-indent:.12em}
+.phone .contract-story .contract-document .contract-preamble{font-size:14px;line-height:1.9}
+.phone .contract-story .contract-signatures{gap:14px;margin-top:24px}
+.phone .contract-story .contract-signatures small{font-size:11px;line-height:1.5}
+.phone .contract-story .contract-signature-ink,.phone .contract-story .contract-companion-signature strong{height:50px}
+.phone .contract-story .contract-companion-signature strong,.phone .contract-story .contract-user-name{padding:12px 3px 7px;font-size:18px;font-weight:500;line-height:1.5}
+.phone .contract-story .contract-user-name{display:block;overflow-wrap:anywhere}
+.phone .contract-story.is-signing .contract-user-name{display:none}
+.phone .contract-story .contract-document-footer{margin-top:24px;font-size:10px;line-height:1.5}
+.phone .contract-story .contract-document[data-long-names="true"] .contract-companion-signature strong{font-size:13px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
+@container (max-height:700px){
+ .phone .contract-story .contract-document{padding:23px 22px 20px}
+ .phone .contract-story .contract-document-heading h2{font-size:26px}
+}

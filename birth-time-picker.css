@@ -15,9 +15,10 @@
   inset:var(--kn-birth-time-row) 0 auto;
   height:var(--kn-birth-time-row);
   box-sizing:border-box;
-  border:1px solid rgba(140,155,126,.17);
+  border:1px solid rgba(255,255,255,.82);
   border-radius:18px;
-  background:rgba(199,211,185,.25);
+  background:rgba(255,255,255,.42);
+  box-shadow:inset 0 1px 0 #ffffffb3,0 2px 9px #24242c08;
   pointer-events:none;
 }
 .phone .kn-birth-time-wheel {
@@ -47,7 +48,8 @@
 .phone .kn-birth-time-wheel::-webkit-scrollbar { display:none; width:0; height:0; }
 .phone .kn-birth-time-wheel:active { cursor:grabbing; }
 .phone .kn-birth-time-track:focus-within .kn-birth-time-selection {
-  border-color:rgba(91,114,80,.36);
+  border-color:rgba(255,255,255,.98);
+  box-shadow:inset 0 0 0 1px #ffffff80,0 2px 9px #24242c08;
 }
 .phone .kn-birth-time-option {
   box-sizing:border-box;
@@ -78,7 +80,7 @@
   color:inherit;
 }
 .phone .kn-birth-time-option.is-selected { color:var(--kn-glass-ink); font-weight:600; }
-.phone .kn-birth-time-option.is-selected small { color:#626e60; }
+.phone .kn-birth-time-option.is-selected small { color:#60616a; }
 .phone#phone .kn-birth-time-picker .kn-birth-time-confirm {
   display:block;
   width:100%;
@@ -99,7 +101,7 @@
 }
 .phone .kn-birth-time-picker .kn-birth-time-confirm::before,
 .phone .kn-birth-time-picker .kn-birth-time-confirm::after { content:none; }
-.phone .kn-birth-time-confirm:focus-visible { outline:2px solid #7d8e72; outline-offset:3px; }
+.phone .kn-birth-time-confirm:focus-visible { outline:2px solid #fff; outline-offset:3px; }
 @media (prefers-reduced-motion:reduce) {
   .phone .kn-birth-time-option { transition:none; }
 }
