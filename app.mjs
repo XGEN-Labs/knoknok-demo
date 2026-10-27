@@ -2,8 +2,8 @@ import { createAuthEntry, createDemoAuthAdapter } from './auth-entry.mjs?v=20261
 import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261026-answers-47d';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
-import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryListMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261026-answers-47d';
-import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261026-social-tags-45';
+import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryListMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261027-tags-50';
+import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
 import { mountFriendWorld } from './friend-world.mjs?v=20261026-social-tags-45';
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
 import { renderFriendNetwork } from './friend-network.mjs?v=20261026-social-tags-45';
@@ -26,7 +26,7 @@ import { initTypography } from './typography.mjs?v=20261023-experience-34d';
 import { createSceneSound } from './scene-sound.mjs?v=20261026-room-voice-47';
 import { landingComplete, onboardingDestination } from './landing.mjs?v=20261023-experience-34d';
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261027-polish-48b';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261026-social-tags-45';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261027-tags-50';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261026-experience-42';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';

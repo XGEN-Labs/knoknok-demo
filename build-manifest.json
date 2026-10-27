@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T04:38:22.242Z",
+  "createdAt": "2026-10-27T06:49:01.571Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 99096792,
+  "payloadBytes": 99599984,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 118268,
-      "sha256": "1d13151f5945584ff6537349d6979275d5e0c1c5b607f9a0ce24b0d3a20ef28b"
+      "bytes": 118250,
+      "sha256": "ca5cf5a5281ea892d3bb4ee9c23fcb6276292f6c7382280025059e933d3bb777"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -70,6 +70,12 @@
       "path": "assets/business-card-20261023/OleoScript-Bold.ttf",
       "bytes": 32132,
       "sha256": "9d1ed21556e3d260582d42c7cdaeb99192353452b64f42621b1eb61397203da7"
+    },
+    {
+      "source": "assets/card-paper-20261027/ivory-cotton.jpg",
+      "path": "assets/card-paper-20261027/ivory-cotton.jpg",
+      "bytes": 492869,
+      "sha256": "3906bb76c704d172c741ec9c5ae55400d534b81598eb74ce8adc260f8ff7c805"
     },
     {
       "source": "assets/cloud-realm-20261019/arrival.webp",
@@ -1490,14 +1496,14 @@
     {
       "source": "business-card.css",
       "path": "business-card.css",
-      "bytes": 8324,
-      "sha256": "6ecdc6d2521bbbe170197cf39bb694c6af315cc6318b71e5a5e25b2e39d1c04e"
+      "bytes": 8604,
+      "sha256": "7d20925a6f50286e4896cd931d99f3cb9ff1113b8a1c1a92a2f11f0276d75eb3"
     },
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 5970,
-      "sha256": "f9290c9c57e3610bd277856ad941fe26e865149f3546f1f2ff81263dcc9a4a49"
+      "bytes": 6725,
+      "sha256": "417bc5fc5965bd1bab0070ee37006d5fa9f194e7ae88ad1c3d26964f92b8fd30"
     },
     {
       "source": "card-design.mjs",
@@ -1736,8 +1742,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10198,
-      "sha256": "bc6d62ddbf7d70e4de57d82764b77303cc1e9089225d87790f61f869b84bbaae"
+      "bytes": 10188,
+      "sha256": "449401d9ba0340788c5deda5ad3b63a6db991912a8599399b25e65ede0cf9b0d"
     },
     {
       "source": "journey-experience.css",
@@ -1958,8 +1964,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 15458,
-      "sha256": "04ff9747a4eb9f46fba21a6ff78a665d36ac0b864571e562c8f7bc9fc3da01d1"
+      "bytes": 15763,
+      "sha256": "b2ab831de204924170ad9be0aa9c52c3b8bcb14785749596adbc218db823bbcc"
     },
     {
       "source": "realm-scene.css",
@@ -2066,8 +2072,8 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 9797,
-      "sha256": "c717f18e37ea4608625546d2dfe9f7d353586e9d780fb188cf714b0ce26193d6"
+      "bytes": 9790,
+      "sha256": "95dab1c79d2748935658ad129623194e86d592b34f331f1fbc78b38f7f897e51"
     },
     {
       "source": "social-tags.css",
@@ -2096,8 +2102,8 @@
     {
       "source": "tag-stickers.mjs",
       "path": "tag-stickers.mjs",
-      "bytes": 9913,
-      "sha256": "2872a701d1da53f10510e7f8e3d7eb854ac4c098c1c491b1b09ff8e6878e6720"
+      "bytes": 18931,
+      "sha256": "5178f81e8da330ac0655f4fe9b7c53526e9a106506c3f546f525e03fe2525e36"
     },
     {
       "source": "theme-black.css",
@@ -2756,6 +2762,11 @@
     {
       "from": "social-tags-ui.mjs",
       "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "tag-stickers.mjs",
+      "to": "social-tags.mjs",
       "kind": "module"
     },
     {

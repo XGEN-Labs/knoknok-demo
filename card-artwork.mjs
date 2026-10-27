@@ -1,13 +1,15 @@
 import { resolveCardDesign } from './card-design.mjs?v=20261026-experience-42';
-import { socialTagStyle } from './tag-stickers.mjs?v=20261026-social-tags-45';
+import { socialTagStyle } from './tag-stickers.mjs?v=20261027-tags-50';
 export const CARD_WIDTH=600, CARD_HEIGHT=650;
+export const CARD_PAPER_TEXTURE='assets/card-paper-20261027/ivory-cotton.jpg';
+export const CARD_PAPER_OPACITY=.58;
 export const DEFAULT_CARD_AVATAR = 'assets/klin-20261014/adult.png';
 export const CARD_FONTS={
  sans:'Helvetica Neue,PingFang TC,PingFang SC,Arial,sans-serif',
  name:'PingFang SC,PingFang TC,Microsoft YaHei,Noto Sans CJK SC,Arial,sans-serif',
  serif:'Georgia,Klin Paper Serif,Songti TC,serif',
  round:'Card Puff,Card WenKai,Arial,sans-serif',
- hand:'Card WenKai,Card Hand,cursive',
+ hand:'Card Hand,Card WenKai,cursive',
  brush:'Card Brush,Card WenKai,cursive'
 };
 const units=text=>Array.from(text).reduce((n,c)=>n+(/[^\u0000-\u024f]/.test(c)?1:/[MW@]/.test(c)?.86:/[il .\x27!]/.test(c)?.3:.56),0);
@@ -58,33 +60,36 @@ export function cardArtwork(data){
  const portrait=sparse?{x:210,y:108,w:180,h:180}:{x:52,y:118,w:152,h:152};
  items.push({type:'rect',x:portrait.x-8,y:portrait.y-8,w:portrait.w+16,h:portrait.h+16,fill:'#e5eace',r:portrait.w/2+8});
  items.push({type:'avatar',...portrait,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f4f1e7',pad:data.avatar?0:10});
- if(sparse){
-  txt('name',data.name,54,316,492,92,48,{weight:600,family:'name',align:'center',maxLines:2,lineHeight:1.2});
-  txt('bio',data.bio,60,430,480,104,27,{color:'#727680',align:'center',maxLines:3,lineHeight:1.32});
- }else{
-  txt('name',data.name,230,136,318,116,48,{weight:600,family:'name',maxLines:2,lineHeight:1.2});
-  txt('bio',data.bio,54,306,492,78,28,{color:'#727680',maxLines:2,lineHeight:1.35});
- }
+ txt('name',data.name,sparse?54:230,sparse?316:136,sparse?492:318,sparse?92:116,48,{weight:600,family:'name',align:sparse?'center':'left',maxLines:2,lineHeight:1.2});
+ const nameItem=items.find(item=>item.kind==='name');
+ const nameBottom=nameItem?nameItem.y+nameItem.lines.length*nameItem.size*nameItem.lineHeight:(sparse?408:252);
+ // Region and language belong to the identity block, directly below the name.
+ // Measure their actual height so long names and bilingual metadata never collide.
+ const meta=[data.region,data.language].filter(Boolean).join(' · ');
+ txt('meta',meta,sparse?60:230,nameBottom+12,sparse?480:318,58,22,{family:'hand',color:'#737568',align:sparse?'center':'left',maxLines:2,lineHeight:1.25});
+ const metaItem=items.find(item=>item.kind==='meta');
+ const identityBottom=metaItem?metaItem.y+metaItem.lines.length*metaItem.size*metaItem.lineHeight:nameBottom;
+ const bioY=Math.max(sparse?430:306,identityBottom+24);
+ txt('bio',data.bio,sparse?60:54,bioY,sparse?480:492,sparse?104:78,sparse?27:28,{color:'#727680',align:sparse?'center':'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
  const rows=[[]],gap=14,size=30,padX=20,padY=21,iconSize=32,iconSpace=42;
  for(const entry of tags){
   const text=typeof entry==='string'?entry:entry.label||entry.text||'';
   const tagData={label:text,category:typeof entry==='object'?entry.category:data.tagCategories?.[text]};
   const visual=socialTagStyle(tagData),natural=measured(text,size,400,'hand')+padX*2+iconSpace;
-  const width=Math.max(142,Math.min(492,natural));
+  const width=Math.max(142,Math.min(492,Math.ceil(natural)+1));
   const lines=linesFor(text,size,width-padX*2-iconSpace,10,400,'hand');
   const height=Math.max(86,lines.length*size*1.14+padY*2);
   let row=rows.at(-1);
   if(row.length&&row.reduce((n,tag)=>n+tag.w,0)+gap*row.length+width>492){row=[];rows.push(row);}
-  row.push({type:'tag',text,label:text,lines,w:width,h:height,size,weight:400,family:'hand',align:'left',color:visual.ink,fill:visual.fill,stroke:visual.ink,shape:visual.shape,icon:visual.icon,category:visual.category,r:0,padX,padY,iconSize,iconSpace,lineHeight:1.14});
+  row.push({type:'tag',text,label:text,lines,w:width,h:height,size,weight:400,family:'hand',align:'left',color:visual.ink,fill:visual.fill,stroke:visual.outline||visual.ink,shape:visual.shape,icon:visual.icon,category:visual.category,r:0,padX,padY,iconSize,iconSpace,lineHeight:1.14});
  }
- let tagY=tags.length?410:534;
+ let tagY=bioY+104;
  rows.forEach(row=>{
   let x=(CARD_WIDTH-row.reduce((n,tag)=>n+tag.w,0)-gap*Math.max(0,row.length-1))/2;
   const height=Math.max(0,...row.map(tag=>tag.h));
   row.forEach(tag=>{items.push({...tag,x,y:tagY+(height-tag.h)/2});x+=tag.w+gap;});
   if(row.length)tagY+=height+14;
  });
- const height=Math.max(CARD_HEIGHT,tagY+86);
- txt('meta',[data.region,data.language].filter(Boolean).join(' · '),54,height-60,492,30,21,{color:'#8a8d94',align:'center',maxLines:1});
- return {width:CARD_WIDTH,height,paper,ink,layout:0,radius:32,items};
+ const height=Math.max(CARD_HEIGHT,tagY+44);
+ return {width:CARD_WIDTH,height,paper,ink,paperTexture:CARD_PAPER_TEXTURE,paperOpacity:CARD_PAPER_OPACITY,layout:0,radius:32,items};
 }

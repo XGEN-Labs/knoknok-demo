@@ -1,5 +1,5 @@
 import { socialTagState, SOCIAL_TAG_CATEGORIES } from './social-tags.mjs?v=20261026-social-tags-45';
-import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261026-social-tags-45';
+import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const button=(text,action,id='',extra='')=>`<button type="button" class="tag-ui-button" data-action="${action}" data-id="${esc(id)}" ${extra}>${text}</button>`;

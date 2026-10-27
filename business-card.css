@@ -34,8 +34,8 @@
 
 .phone #sheet .avatar-editor-preview img[src*="klin-20261014/adult.png"]{background:#e8e7df;object-fit:contain;padding:6px;box-sizing:border-box}
 
-/* Collected stickers use the same four drawn shapes in cards, management and diary. */
-.social-tag-sticker.social-tag-sticker{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:9px;box-sizing:border-box;min-width:0;min-height:48px;max-width:100%;margin:0;padding:12px 19px;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--tag-ink,#765925);font:400 17px/1.35 "Card WenKai",var(--kn-ui-font,system-ui);text-align:left;vertical-align:middle;white-space:normal;overflow-wrap:anywhere;backdrop-filter:none;-webkit-backdrop-filter:none}
+/* Ink margins: restrained theme silhouettes shared by cards, management and diary. */
+.social-tag-sticker.social-tag-sticker{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:9px;box-sizing:border-box;min-width:0;min-height:48px;max-width:100%;margin:0;padding:12px 19px;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--tag-ink,#765925);font:400 19px/1.25 "Card Hand","Card WenKai",var(--kn-ui-font,system-ui);text-align:left;vertical-align:middle;white-space:normal;overflow-wrap:anywhere;backdrop-filter:none;-webkit-backdrop-filter:none}
 .social-tag-sticker>.social-tag-surface,.business-card .bc-tag>.social-tag-surface{position:absolute;inset:0;z-index:-1;width:100%;height:100%;max-width:none;pointer-events:none;overflow:visible}
 .social-tag-sticker>.social-tag-icon{display:block;flex:none;width:20px;height:20px;overflow:visible;pointer-events:none}
 .social-tag-sticker>.social-tag-icon path,.business-card .bc-sticker-icon path{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -44,11 +44,14 @@ button.social-tag-sticker{cursor:pointer;touch-action:manipulation;transition:tr
 button.social-tag-sticker:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.025)}
 button.social-tag-sticker:focus-visible{outline:2px solid var(--tag-ink);outline-offset:3px}
 button.social-tag-sticker:disabled{cursor:default;opacity:.6}
-.social-tag-sticker.is-selected{filter:saturate(1.1);font-weight:700}
-.social-tag-sticker.is-selected>.social-tag-surface path{stroke-width:4}
+.social-tag-sticker.is-selected{filter:saturate(1.05)}
+.social-tag-sticker.is-selected>.social-tag-surface .social-tag-outline{stroke-width:3.2}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-tag{isolation:isolate;border:0;overflow:visible;white-space:normal;background:transparent;line-height:1.14;text-overflow:clip}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-sticker-label{position:absolute;display:block;margin:0;padding:0;font-family:inherit!important;font-size:inherit;font-weight:inherit;color:inherit;text-align:left;white-space:nowrap;pointer-events:none}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-sticker-icon{position:absolute;display:block;overflow:visible;max-width:none;color:inherit;pointer-events:none}
-.phone #sheet .all-card-tags>.social-tag-sticker:nth-child(n){max-width:100%;padding:13px 20px;border:0;border-radius:0;background:transparent;color:var(--tag-ink);font-family:"Card WenKai",var(--kn-ui-font,system-ui);transform:none;box-shadow:none}
+.phone #sheet .all-card-tags>.social-tag-sticker:nth-child(n){max-width:100%;padding:13px 20px;border:0;border-radius:0;background:transparent;color:var(--tag-ink);font-family:"Card Hand","Card WenKai",var(--kn-ui-font,system-ui);transform:none;box-shadow:none}
 @media(prefers-reduced-motion:reduce){button.social-tag-sticker{transition:none}button.social-tag-sticker:not(:disabled):hover{transform:none}}
 :is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-sticker-icon path{stroke-width:2}
+
+/* Shared raster cotton paper, tiled at one card width in both DOM and PNG. */
+:is(.phone :is(#app,#sheet),.card-design-board) .business-card .bc-paper{position:absolute;inset:0;pointer-events:none;background-repeat:repeat;background-size:100cqw 100cqw}
