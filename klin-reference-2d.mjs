@@ -1,5 +1,6 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261026-experience-41d';
+import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261027-room-motion-54c';
+import { createRoomVideo } from './room-video.mjs?v=20261027-room-motion-54';
 
 // Restore the selected original PNG and the previous illustrated room directly.
 // Native modeling and action drafts remain archived outside this renderer.
@@ -57,6 +58,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   host.classList.add('klin-illustrated-world'); host.dataset.world = 'loading'; host.dataset.rendering = 'illustrated-2d'; host.dataset.model = 'original-adult-illustration';
   host.parentElement?.setAttribute('data-character-renderer', 'illustrated-2d');
   const state = {page: 'home', stage: 'adult', layout: getIllustratedLayout('home'), reduced: !!reducedMotion, active: true, disposed: false, action: null, frame: 0, conversation: false, participants: [], lounge: {}, realm: {}, portal: 'idle'};
+  const roomVideo = createRoomVideo({container: room, src: new URL(HOME_SCENE_VIDEO_ASSET, import.meta.url).href, poster: new URL(HOME_SCENE_ASSET, import.meta.url).href, reducedMotion});
   const dimensions = () => ({width: host.clientWidth || host.getBoundingClientRect().width || 402, height: host.clientHeight || host.getBoundingClientRect().height || 874});
   const stop = () => { if (state.frame) cancelFrame(state.frame); state.frame = 0; state.action = null; host.dataset.transitionPhase = 'idle'; primary.artwork.style.transform = ''; };
 
@@ -65,6 +67,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     const {width, height} = dimensions(), size = Math.min(height * layout.height, width * .78);
     for (const [key, image] of Object.entries(plates)) image.hidden = key !== layout.world;
     host.dataset.scene = layout.world;
+    roomVideo.update({active: state.active && layout.world === 'home', reducedMotion: state.reduced});
     primary.anchor.hidden = layout.character === false;
     secondary.anchor.hidden = !layout.shared;
     for (const [actor, x] of [[primary, layout.x], [secondary, .70]]) {
@@ -145,9 +148,10 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     if (state.action.pausedAt != null) {state.action.started += now() - state.action.pausedAt; state.action.pausedAt = null;}
     state.frame = frame(state.action.tick);
   }
-  function setActive(value) {state.active = !!value; host.dataset.active = String(state.active); if (!state.active) pause(); else resume();}
+  function setActive(value) {state.active = !!value; host.dataset.active = String(state.active); roomVideo.update({active: state.active && state.layout.world === 'home'}); if (!state.active) pause(); else resume();}
   function setReducedMotion(value) {
     state.reduced = !!value;
+    roomVideo.update({reducedMotion: state.reduced});
     if (state.reduced && state.action) {
       state.action.duration = 1; state.action.started = now() - 1;
       if (state.action.pausedAt != null) state.action.pausedAt = now();
@@ -172,7 +176,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     if (state.disposed) return false; host.dataset.world = 'ready'; return true;
   }).catch(() => { host.dataset.world = 'fallback'; return false; });
   const ready = Promise.race([loadedReady, disposedReady]);
-  function dispose() {if (state.disposed) return; stop(); state.disposed = true; releaseDisposed(false); observer.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
+  function dispose() {if (state.disposed) return; stop(); state.disposed = true; roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
   const completeWithoutGrowth = options => { let cancelled = false; queueMicrotask(() => {if (!cancelled && !state.disposed) {options?.onSigned?.(); options?.onComplete?.();}}); return () => {cancelled = true;}; };
   return {
     supported: true, ready, setPage, setStage, setLayout, transition, interact, setConversationMode, setActive, setReducedMotion, resize: draw, dispose,

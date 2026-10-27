@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-27T09:14:35.648Z",
+  "createdAt": "2026-10-27T09:40:10.110Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 100245410,
+  "payloadBytes": 103227207,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 121018,
-      "sha256": "78f03088b455ef2d24ce47e25df2cd841f4974d1f14e1127a8bfa73631e45a1e"
+      "bytes": 121641,
+      "sha256": "460dd6a723822f0970295f0c9df91ac939c36592c3776e4c15dc8825991e78a8"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -322,6 +322,18 @@
       "path": "assets/portal-scenes-20261021/onboarding-empty.png",
       "bytes": 1527227,
       "sha256": "89f9e92a23cc7f46b12992b00ab86c0d4a966a9edf7d03dffcf583f99f37b4af"
+    },
+    {
+      "source": "assets/room-motion-20261027-v54-motion-restored/room-loop.mp4",
+      "path": "assets/room-motion-20261027-v54-motion-restored/room-loop.mp4",
+      "bytes": 3055319,
+      "sha256": "5dbf11a0e9705f810912bedc7c3baac309ee71fb803637fab9a9c0d021e3e270"
+    },
+    {
+      "source": "assets/room-motion-20261027-v54-motion-restored/room.webp",
+      "path": "assets/room-motion-20261027-v54-motion-restored/room.webp",
+      "bytes": 181538,
+      "sha256": "82d658d3700a942e3f06d702515a314405cdb6b3b26e1cd194a4b95eb342dbc5"
     },
     {
       "source": "assets/room-voice-20261026-47/boop-here.m4a",
@@ -688,12 +700,6 @@
       "path": "assets/scene-audio-20261023-r2/time-skipped.m4a",
       "bytes": 29359,
       "sha256": "9b480406b2cd696674ec29f9410f29e07dae787df03c5373a81cfcb3ef2f60b5"
-    },
-    {
-      "source": "assets/scenes-20261026-41/home.webp",
-      "path": "assets/scenes-20261026-41/home.webp",
-      "bytes": 261168,
-      "sha256": "f2df35f9a37aac59050213b4a70bfa05ce8a7adfd59e806dfdd8c37750be541d"
     },
     {
       "source": "assets/scenes-20261026-41/house-earth.webp",
@@ -1466,8 +1472,8 @@
     {
       "source": "auth-entry.mjs",
       "path": "auth-entry.mjs",
-      "bytes": 16621,
-      "sha256": "1911a0b12e728bf7e2c4a38698aa18a6c6e554eb66655998dad2b19794711364"
+      "bytes": 18288,
+      "sha256": "64164597d8a2abc0652820e13cd5941aef7d484a988783ded86dc7d92357e42c"
     },
     {
       "source": "auth-hours-polish.css",
@@ -1772,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10549,
-      "sha256": "cf6b24bc6ed666e090730d55de4449eb239367a7bbc652c29bfba4e0007bf937"
+      "bytes": 10555,
+      "sha256": "54b27d08feee9c354be5df5be4d66d1c31cc5bbe1b9920592a5576055ae4c763"
     },
     {
       "source": "journey-experience.css",
@@ -1802,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 12419,
-      "sha256": "5b045ea00e9644d8ec09d2720784eaac0c274c0bfc60fd5cdec76c7f418f61f2"
+      "bytes": 12963,
+      "sha256": "46830b04c431da712b2418e03ba420d3f7a4d40cc13f2030a771c06a6bda54cc"
     },
     {
       "source": "klin-world-2d.css",
@@ -1886,8 +1892,8 @@
     {
       "source": "landing.mjs",
       "path": "landing.mjs",
-      "bytes": 1574,
-      "sha256": "c6389f3ea984094e15441d5c6970578130203d2c502ed88d93bab9e71d34d24b"
+      "bytes": 2138,
+      "sha256": "8d346effba67fa3d75fd575020b2923b5b4bf787da32cbc04e8b62398a9b5c9a"
     },
     {
       "source": "loading-state.css",
@@ -1946,8 +1952,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 61020,
-      "sha256": "7a931d214e8fa6b24ad1d19c7b24c401057036f53d06477773a016908436d6f8"
+      "bytes": 61128,
+      "sha256": "8dceb6834fdd8d59f6855bc628ef997b2f30959d398234fad53bb8a7fff3acfa"
     },
     {
       "source": "motion.css",
@@ -2034,6 +2040,12 @@
       "sha256": "2ab6e5ceb6fc0df091a6d3b024a48e394bcbe9f37bdc29a82f5474bb8ad32576"
     },
     {
+      "source": "room-video.mjs",
+      "path": "room-video.mjs",
+      "bytes": 2471,
+      "sha256": "550815b11c5a66419b7a005f3931b1eefdf909f397389736a244386231e216a2"
+    },
+    {
       "source": "room-voice-clips.mjs",
       "path": "room-voice-clips.mjs",
       "bytes": 7635,
@@ -2060,8 +2072,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 395,
-      "sha256": "043b64f3d58ed8686355583f00ea1794a1456ddcbbb3433ac265dd743ac49a10"
+      "bytes": 520,
+      "sha256": "8e4e17d1cd57030a47c0281e88aca25ad868024f467d99d03a53e0b0354cb7c3"
     },
     {
       "source": "scene-control-glass.css",
@@ -3011,6 +3023,11 @@
     {
       "from": "klin-reference-2d.mjs",
       "to": "scene-assets.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "room-video.mjs",
       "kind": "module"
     },
     {
