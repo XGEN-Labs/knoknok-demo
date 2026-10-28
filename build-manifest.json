@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T07:27:15.849554+00:00",
+  "createdAt": "2026-10-28T07:52:42.957659+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147014911,
+  "payloadBytes": 147050090,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 123659,
-      "sha256": "e35ef145efeb03f136c0cde4fc716e1f59dbb824c3c9b82a0c3f41531f273523"
+      "bytes": 131213,
+      "sha256": "07e68005464c2a8f03e94cd04770b15769140f6926dff246f506c0129250cc75"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -2422,6 +2422,36 @@
       "path": "assets/landing-audio-20261028-69/background.m4a",
       "bytes": 2045154,
       "sha256": "73041a3cacba353d6b4b579a8931b3f26fd3d2962ac6d25be28f5bbc835ead02"
+    },
+    {
+      "source": "deployment-mode.mjs",
+      "path": "deployment-mode.mjs",
+      "bytes": 123,
+      "sha256": "937193dbd36cebeecb1256c2f3c7033176fb9eacc1db259fa36c95d1ef31c3cd"
+    },
+    {
+      "source": "live-session.mjs",
+      "path": "live-session.mjs",
+      "bytes": 7439,
+      "sha256": "79cfcfcb8bef029f8a75ad24297c3a8b58f0269d31bd0150346f429d5e477bef"
+    },
+    {
+      "source": "native-api.mjs",
+      "path": "native-api.mjs",
+      "bytes": 2857,
+      "sha256": "ea6c4bf1e43fee13cf37cba52b3ec83f9fcb9ec251db06093672050149f4f8b1"
+    },
+    {
+      "source": "native-panels.mjs",
+      "path": "native-panels.mjs",
+      "bytes": 12657,
+      "sha256": "2781b43717b73b24ae4eeb3d5aedd0e6071cb6efc8b11b3dba981b577081c567"
+    },
+    {
+      "source": "compat/web-naming/landing-handoff.mjs",
+      "path": "compat/web-naming/landing-handoff.mjs",
+      "bytes": 4549,
+      "sha256": "47ff4213bf941f13eb9f422c695b10e648cab49152b259c22fbfa844b65a1ce7"
     }
   ],
   "runtimeDependencies": [
