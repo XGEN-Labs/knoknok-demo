@@ -1,7 +1,7 @@
 // Enhanced single selects keep the native control as the actual form value.
 // Load form-controls.css before calling initFormControls(root). Without this
 // module, the original select remains an ordinary, keyboard-accessible select.
-import { initAuthCaret } from './auth-caret.mjs?v=20261027-glass-52g';
+import { initAuthCaret } from './auth-caret.mjs?v=20261028-brand-glass-62b';
 const instances = new WeakMap();
 let controlSequence = 0;
 

@@ -69,7 +69,7 @@
   margin:0;
   border:0;
   background:transparent;
-  color:var(--kn-text-placeholder,#7e8790);
+  color:rgba(0,0,0,.5);
   font-size:17px;
   line-height:1.2;
   font-weight:500;

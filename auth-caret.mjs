@@ -25,10 +25,12 @@ export function initAuthCaret(root) {
       mirror.style.font=css.font;mirror.style.letterSpacing=css.letterSpacing;mirror.style.lineHeight=css.lineHeight;mirror.style.wordSpacing=css.wordSpacing;
       mirror.style.whiteSpace=multiline?'pre-wrap':'pre';mirror.style.overflowWrap=multiline?'break-word':'normal';mirror.style.width=multiline?`${input.clientWidth-left-right}px`:'max-content';
       mirror.replaceChildren(document.createTextNode(input.type==='password'?'•'.repeat(text.length):text),marker);
-      const mr=mirror.getBoundingClientRect(),mark=marker.getBoundingClientRect();
-      const x=(parseFloat(css.borderLeftWidth)||0)+left+mark.left-mr.left-input.scrollLeft;
+      // The phone is scaled on desktop. offsetLeft/Top stay in the same layout
+      // coordinate space as input padding and the absolutely positioned caret;
+      // viewport rectangles would apply that scale a second time.
+      const x=(parseFloat(css.borderLeftWidth)||0)+left+marker.offsetLeft-input.scrollLeft;
       const height=parseFloat(css.fontSize)*1.2,lineHeight=parseFloat(css.lineHeight)||height;
-      const y=multiline?(parseFloat(css.borderTopWidth)||0)+top+mark.top-mr.top+(lineHeight-height)/2-input.scrollTop:(input.offsetHeight-height)/2;
+      const y=multiline?(parseFloat(css.borderTopWidth)||0)+top+marker.offsetTop+(lineHeight-height)/2-input.scrollTop:(input.offsetHeight-height)/2;
       caret.hidden=x<left-1||x>input.clientWidth-right+1||y<0||y+height>input.clientHeight+2;
       caret.style.left=`${input.offsetLeft+x}px`;caret.style.top=`${input.offsetTop+y}px`;caret.style.height=`${height}px`;
     };

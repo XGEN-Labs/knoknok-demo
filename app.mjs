@@ -1,5 +1,5 @@
 import { createAuthEntry, createDemoAuthAdapter } from './auth-entry.mjs?v=20261027-first-landing';
-import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261027-logo-56';
+import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261028-auth-logo-62';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
 import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261027-clarity-51e';
@@ -24,15 +24,15 @@ import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=2026102
 import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261023-experience-34d';
 import { showCompanionContract } from './contract-story.mjs?v=20261027-clarity-51e';
 import { prepareAvatar } from './avatar-upload.mjs?v=20261023-experience-34d';
-import { initFormControls } from './form-controls.mjs?v=20261027-glass-52g';
+import { initFormControls } from './form-controls.mjs?v=20261028-brand-glass-62b';
 import { birthTimePickerMarkup, mountBirthTimePicker } from './birth-time-picker.mjs?v=20261026-answers-47d';
 import { getLandingReading } from './landing-day-master-reading.mjs?v=20261026-answers-47d';
 import { initDatePickers } from './date-picker.mjs?v=20261027-clarity-51e';
 import { initTypography } from './typography.mjs?v=20261023-experience-34d';
-import { createSceneSound } from './scene-sound.mjs?v=20261027-audio-61';
+import { createSceneSound } from './scene-sound.mjs?v=20261028-audio-63';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261027-polish-48b';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261027-logo-56';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261028-auth-logo-62';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261027-shared-61';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';
@@ -116,7 +116,7 @@ const avatar = (id,small=false) => `<span class="avatar ${id==='b'?'person-b':''
 const currentCompanionStage = () => ['welcome','login','register','verify','landing','onboard'].includes(ui.route) ? 'juvenile' : companionProfile(state).stage;
 const spiritImage = (label='Klin 伙伴', attrs='', stage=currentCompanionStage()) => pixelVariant ? pixelCompanionMarkup(label, attrs) : klinMarkup({stage,label,attrs});
 const companionName = () => me().companionName || 'Klin';
-const logoImage = `<img class="brand-logo" src="${pixelVariant?'assets/pixel-scene-20261010/knokknok-wordmark-chunky-pixel-white.png':'assets/brand-20261027-noknok/noknok-selected-white.png'}" alt="NokNok" width="2172" height="724">`;
+const logoImage = `<img class="brand-logo" src="assets/brand-20261028-noknok/noknok-selected-white.png" alt="NokNok" width="2172" height="724">`;
 const spiritAvatar = () => `<span class="avatar small">${spiritImage(`${companionName()} 伙伴`)}</span>`;
 const empty = (title,copy,action='') => `<div class="blank-state">${spiritImage(`${companionName()} 伙伴`)}<h3>${title}</h3><p>${copy}</p>${action}</div>`;
 const detail = (label,value) => `<div class="detail-line"><dt>${label}</dt><dd>${esc(value)}</dd></div>`;
@@ -177,7 +177,7 @@ function nav(){return '';}
 function content(body,cls=''){return `<div class="content ${cls}">${body}</div>`;}
 function field(label,name,value,attrs='',type='text'){return `<div class="field"><label for="${name}">${label}</label><input class="input" id="${name}" name="${name}" type="${type}" value="${esc(value)}" ${attrs}></div>`;}
 function shell(body,cls=''){return `<section class="page ${roomSceneRoutes.has(ui.route)||isRoomOverlayRoute(ui.route)?'room-page':''} ${cls}" data-screen="${ui.route}">${body}</section>`;}
-function welcome(){return shell(`<div class="klin-welcome"><span class="klin-art" role="img" aria-label="幼年態 Klin"><img class="figma-companion-image" src="assets/login-world-20261019/source/character-transparent.png" width="1359" height="1157" alt="" draggable="false"></span></div><h2 class="brand">${logoImage}</h2><div class="welcome-actions">${btn('登入或註冊','login','kn-glass-control')}</div>`,'welcome');}
+function welcome(){return shell(`<div class="klin-welcome"><span class="klin-art" role="img" aria-label="幼年態 Klin"><img class="figma-companion-image" src="assets/login-world-20261019/source/character-transparent.png" width="1359" height="1157" alt="" draggable="false"></span></div><h2 class="brand">${logoImage}<span class="welcome-subtitle">和 AI 夥伴一起，遇見聊得來的人。</span></h2><div class="welcome-actions">${btn('登入或註冊','login','kn-glass-control')}</div>`,'welcome');}
 function auth(){
  const remaining=Math.max(0,Math.ceil((authView.retryAt-Date.now())/1000));
  return shell(`<header class="auth-header"><button type="button" class="icon-button auth-back" data-action="auth-back" aria-label="${authView.step==='entry'?'返回歡迎頁':'返回帳號輸入'}">${backIcon}</button></header><div class="auth-panel">${authEntryPanel(authView,{draft:authFormDraft.username,password:authFormDraft.password,confirmPassword:authFormDraft.confirmPassword,passwordVisible:authPasswordVisible,remaining})}</div>`,'auth-page auth-login auth-entry-flow'+(authView.step==='register'?' auth-register':''));
@@ -557,10 +557,10 @@ function syncExperience(){
  const opening=['welcome','login','register','verify'].includes(ui.route),landing=ui.route==='landing';
  const scene=landing?'landing':opening?'welcome':'room';
  const images=landing?[]:[opening?LOGIN_VIDEO_POSTER:ui.route==='relations'?VISIT_SCENE_ASSET:HOME_SCENE_ASSET];
- if(opening)images.push('assets/brand-20261027-noknok/noknok-selected-white.png');
+ if(opening)images.push('assets/brand-20261028-noknok/noknok-selected-white.png');
  else if(!landing)images.push(klinAssets.adult);
  if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
- if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261027-noknok/noknok-selected-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
+ if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261028-noknok/noknok-selected-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
  if(['chat','connected'].includes(ui.route)){const rel=latestRelationship(),host=rel&&state.users[rel.members.find(id=>id!==actor())];images.push(friendRoomScene(host),SEATED_KLIN_ASSET);}
  sceneImages.update({key:ui.route,urls:images,scene});
  setScenePending('world',!opening&&!landing&&!worldReady&&!worldFailed,'room');

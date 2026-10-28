@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T02:57:22.621903Z",
+  "createdAt": "2026-10-28T03:17:41.723599+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 118401051,
+  "payloadBytes": 122243273,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 122853,
-      "sha256": "e91c3312d1a5a53aa3a80e6bd747773e9db4452e0c5c4ec54eab578aee81fb62"
+      "bytes": 122864,
+      "sha256": "824b81057bfc6c5ec1fb7e74487bcbb6f9555b9e5d53a271f1186e9804734d4b"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1454,20 +1454,20 @@
     {
       "source": "auth-caret.mjs",
       "path": "auth-caret.mjs",
-      "bytes": 4164,
-      "sha256": "da71cf3c6eaec5a74d9b84032c5ae787027cacb914a0d321d48f9d61ae2d3d2e"
+      "bytes": 4309,
+      "sha256": "6f59ea78e431694f2b00ba309645c7e8813ad7334242dda31ab182be442dd6d0"
     },
     {
       "source": "auth-entry-ui.mjs",
       "path": "auth-entry-ui.mjs",
       "bytes": 4120,
-      "sha256": "a9cb0bddee165a85088089dfc0826edb4da78fb12bb6c3e19e030fd5f07c4048"
+      "sha256": "82b44075873bedcc84f7def32434b1c4e87b07549474fba5f61106922553cd08"
     },
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 3930,
-      "sha256": "e7c030c863e0f7b64b1932c7a881b65afd97442c35f4f640014dbce5ff762217"
+      "bytes": 4310,
+      "sha256": "deda2a27e7444d21f2328784b0233bee6a09b1dc28541e564c3f0d3a055458e3"
     },
     {
       "source": "auth-entry.mjs",
@@ -1490,8 +1490,8 @@
     {
       "source": "birth-time-picker.css",
       "path": "birth-time-picker.css",
-      "bytes": 3656,
-      "sha256": "bbbe41615b0e2200b26da355723a3279e7015aa645ecc185339fae4fc90940f5"
+      "bytes": 3636,
+      "sha256": "ef3a20584f53313bf5713d5adb1696c07bcf163764e85cb9bab58576f4e4e309"
     },
     {
       "source": "birth-time-picker.mjs",
@@ -1502,14 +1502,14 @@
     {
       "source": "brand-v41.css",
       "path": "brand-v41.css",
-      "bytes": 2760,
-      "sha256": "c690cfd34a14f5279ca101f350db6d919ad39754fb2eaad49ca44f23b4a6e3ee"
+      "bytes": 3271,
+      "sha256": "bae72508b0954346b827603bb5039d8db90846911f851789fe1d4642bb0b2d53"
     },
     {
       "source": "business-card.css",
       "path": "business-card.css",
       "bytes": 8610,
-      "sha256": "8677952e4a3f41a1b2a4069740041ea3e6ffaabf4d4042bc15c9e2b5c9a10f49"
+      "sha256": "5beec1b78c5ab99e7c3822650ac06a00e687d821d08b9fb6c6bb5b82823027f8"
     },
     {
       "source": "card-artwork.mjs",
@@ -1700,8 +1700,8 @@
     {
       "source": "form-controls.mjs",
       "path": "form-controls.mjs",
-      "bytes": 17423,
-      "sha256": "502e632e57531a5124f4ab07145a5d3f3e48fefc76d084b42ba47be56fd1e6de"
+      "bytes": 17429,
+      "sha256": "5dbf6553a956094e71982dca38b00c1a5821b0b6442a84b62dbfe150c6c4fc73"
     },
     {
       "source": "friend-avatars.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 10658,
-      "sha256": "54aa76e10559788ff5741173bf572e1a649490605a463bfdc32a68ad644be12d"
+      "bytes": 11292,
+      "sha256": "b490cf03ec6da708d5fd4d3f9a5c25521aa331ddbe2db4efb731bb1a5d3cb838"
     },
     {
       "source": "journey-experience.css",
@@ -1820,14 +1820,14 @@
     {
       "source": "landing-audio-clips.mjs",
       "path": "landing-audio-clips.mjs",
-      "bytes": 3556,
-      "sha256": "553707a3dbe1dd1b30297ee438dae606b380c270803e2a38eac44083c70b483d"
+      "bytes": 3527,
+      "sha256": "857000fa5385609df6459c01b2da1429a4bbceca643ba3fd8b6573529ef559ec"
     },
     {
       "source": "landing-audio-engine.mjs",
       "path": "landing-audio-engine.mjs",
       "bytes": 19477,
-      "sha256": "ea632a21f3c8a5a4d6b9e104056e5342369f1e48b74895e2a7cf51f6d22f5a7e"
+      "sha256": "dc87dbcd576c5412c0c3ccf698e31141a5ac7df68f66a5b392b847104a99112f"
     },
     {
       "source": "landing-day-master-reading.mjs",
@@ -2001,7 +2001,7 @@
       "source": "public-card.mjs",
       "path": "public-card.mjs",
       "bytes": 15797,
-      "sha256": "9bb3552643039302c804d33684cb17ca68c1b2e19a9bf5c39d8954aef5a9be70"
+      "sha256": "e677aa7d44fb626f5b55b35b0a231bc5f4ff46ec576609b55119fb91b5d6a2e7"
     },
     {
       "source": "realm-scene.css",
@@ -2097,7 +2097,7 @@
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
       "bytes": 251,
-      "sha256": "6b1b563ccb2869298514621cc3e3932b0325ada00286a119d0f47513a4cb0fe4"
+      "sha256": "587c4cd7f421e9329b75d4c8f9e83fa5a4c9900b1289127fd25804343576eae3"
     },
     {
       "source": "scenes-v41.css",
@@ -2228,8 +2228,8 @@
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 7424,
-      "sha256": "8a7ef9bee5de52789981088001f2319b091233d4c018bbf97fa9412bb6fa712f"
+      "bytes": 7536,
+      "sha256": "b99bcc45becf7b52fb4f900e91bd54e116fb979d54c99031a3f84d29c51b1d19"
     },
     {
       "source": "universe-experience.css",
@@ -2350,6 +2350,30 @@
       "path": "assets/shared-room-20261027-61/klin-seated-selected.png",
       "bytes": 1533439,
       "sha256": "18b3fff19d0d1bd829abfa359b2d7ee0ce0bae139ef826a0fa794c7dec8e1b62"
+    },
+    {
+      "source": "assets/brand-20261028-noknok/noknok-selected-white.png",
+      "path": "assets/brand-20261028-noknok/noknok-selected-white.png",
+      "bytes": 530401,
+      "sha256": "a5c8691a7f1830f14ee91819d1c2f711d378bad3b87982520190a8d070df4c5c"
+    },
+    {
+      "source": "assets/landing-audio-20261028-63/background.m4a",
+      "path": "assets/landing-audio-20261028-63/background.m4a",
+      "bytes": 1640505,
+      "sha256": "aee0b6982a4570be210311416777f41b151f963c263732032f5330d1c55de385"
+    },
+    {
+      "source": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
+      "path": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
+      "bytes": 1669000,
+      "sha256": "387f563ce3888f5d981c48ca50708c0f70a1ec1cafc32659368a8d8534099fd9"
+    },
+    {
+      "source": "shared-chat-polish-v62.css",
+      "path": "shared-chat-polish-v62.css",
+      "bytes": 566,
+      "sha256": "84405bf81079d071ff5df4420428a0ebd2ed1e929bc73d852b54e208168502de"
     }
   ],
   "runtimeDependencies": [
