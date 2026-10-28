@@ -29,3 +29,7 @@ test('unknown send is never automatically resubmitted or turned into a fake assi
 test('invalid identity fails closed; missing backend is an error rather than empty history',async()=>{
  let lost=0;const session=createLiveSession({fetchImpl:async()=>Response.json({error:'SESSION_CHANGED',code:'SESSION_CHANGED'},{status:409}),onSessionLost:()=>lost++});session.activate(1);await session.history();assert.equal(lost,1);assert.equal(session.getState().historyReady,false);assert.ok(session.getState().error);
 });
+
+test('long native history cannot exceed the existing chat request size or per-message contract',async()=>{
+ let sent;const session=createLiveSession({fetchImpl:async(url,init)=>{if(init.method==='POST'){sent=init.body;return Response.json({text:'answer',source:'model',provider:'knok-agent'});}return Response.json(page(Array.from({length:15},(_,i)=>message('e'+i,i+1,'字'.repeat(5000)))));}});session.activate(1);await session.history();await session.send('hello');assert.ok(Buffer.byteLength(sent)<16000);assert.ok(JSON.parse(sent).messages.every(m=>m.content.length<=4000));assert.equal(JSON.parse(sent).messages.at(-1).content,'hello');
+});

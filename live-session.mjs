@@ -87,7 +87,8 @@ export function createLiveSession({fetchImpl = globalThis.fetch, onChange = () =
     async send(text) {
       if(sending||historyBusy||!owner||!text.trim())return false;
       const version=epoch, input=text.trim();sending=true;error='';
-      const context=snapshot().messages.filter(m=>m.source==='model'&&m.status==='complete'&&['user','assistant'].includes(m.role)).slice(-11).map(m=>({role:m.role,content:m.text}));
+      const context=snapshot().messages.filter(m=>m.source==='model'&&m.status==='complete'&&['user','assistant'].includes(m.role)).slice(-11).map(m=>({role:m.role,content:m.text.slice(0,4000)}));
+      while(context.length&&new TextEncoder().encode(JSON.stringify({messages:[...context,{role:'user',content:input}]})).length>15000)context.shift();
       transient.push({id:crypto.randomUUID(),role:'user',text:input,status:'pending',source:'local'});emit();
       try {
         const result=await this.chat([...context,{role:'user',content:input}],owner);

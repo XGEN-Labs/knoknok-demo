@@ -3,7 +3,7 @@
   "createdAt": "2026-10-28T07:46:56.758728+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 124527367,
+  "payloadBytes": 124527533,
   "files": [
     {
       "source": "app.mjs",
@@ -2408,8 +2408,8 @@
     {
       "source": "live-session.mjs",
       "path": "live-session.mjs",
-      "bytes": 7273,
-      "sha256": "3d787d04fa4f90a542cdc6d1230195485bc688c490e440c7b89b856166591940"
+      "bytes": 7439,
+      "sha256": "79cfcfcb8bef029f8a75ad24297c3a8b58f0269d31bd0150346f429d5e477bef"
     },
     {
       "source": "native-api.mjs",

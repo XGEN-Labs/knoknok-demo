@@ -20,7 +20,7 @@ Landing is currently an ordinary native message without a reliable purpose marke
 
 ## Backend and deployment
 
-Existing core baseline: knok-auth `a4d68656069309ec9cdb85ce183986d9076e6ae5`, Agent `1ee43189353372ee1aa80bc30db34b68fa5b2cbf` supporting initialReplay. This release additionally requires the new knok-auth native bridge from its owner; the baseline alone does not expose Memory/profile/groups. Record its fixed commit in the deployment receipt. Keep Cookie, CORS/origin, session secrets and current account/native storage unchanged.
+Existing core baseline: knok-auth `a4d68656069309ec9cdb85ce183986d9076e6ae5`, Agent `1ee43189353372ee1aa80bc30db34b68fa5b2cbf` supporting initialReplay. This release requires knok-auth main `dfedc58ac18e656255e2608712baac229c491a27` (PR5) for Memory/profile/groups. Enable `web.nativeFacade: true` in the existing protected account configuration, preserving all other fields. Keep Cookie, CORS/origin, session secrets and current account/native storage unchanged.
 
 Existing exact public routes used: POST `/api/auth/entry`, `/api/auth/sign-in`, `/api/auth/register`, `/api/auth/logout`, `/api/auth/onboarding/complete`, `/api/web/chat`; GET `/api/auth/bootstrap`. Add the missing exact GET `/api/web/chat/history` route to the same knok-auth upstream (18792). Query strings must be preserved. Native `/v0`, admin/internal paths and tokens must not be exposed to the browser. The retired mobile/profile routes are not used.
 
@@ -32,4 +32,4 @@ Rollback: switch static directory back to the previous Web release while keeping
 
 ## Focused evidence
 
-`npm test` includes Landing policy/handoff and native-session history/privacy tests. `npm run build:live` then `npm run test:live-browser` exercises real Chrome against a synthetic local BFF: login, chat, reload/history, account switch, new registration, Landing failure/retry and completed-account reload, native Memory mutations, profile preservation/nickname revision, and shared-room post/readback. At delivery: 23 Node tests and 10 Chrome scenario checks passed. Set PLAYWRIGHT_MODULE to an existing Playwright installation if needed. These checks do not demonstrate production Memory extraction or a live deployment.
+`npm test` includes Landing policy/handoff and native-session history/privacy tests. `npm run build:live` then `npm run test:live-browser` exercises real Chrome against a synthetic local BFF: login, chat, reload/history, account switch, new registration, Landing failure/retry and completed-account reload, native Memory mutations, profile preservation/nickname revision, and shared-room post/readback. At delivery: 24 Node tests and 10 Chrome scenario checks passed. Set PLAYWRIGHT_MODULE to an existing Playwright installation if needed. These checks do not demonstrate production Memory extraction or a live deployment.
