@@ -24,3 +24,6 @@
 .phone#phone #app .auth-entry-flow>.auth-panel{--kn-glass-panel-fill:var(--kn-ui-glass-auth-panel-fill,rgba(255,255,255,.6))}
 /* Incomplete auth actions use 20% black text; enabled actions remain white. */
 .phone#phone #app .auth-entry-flow .auth-submit{--kn-ui-color-disabled-text:rgba(0,0,0,.2)}
+
+/* Registration keeps a little more space before its primary action. */
+.phone#phone #app .auth-entry-flow.auth-register .auth-form .auth-submit{margin-top:18px!important}

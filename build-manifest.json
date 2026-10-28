@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T03:17:41.723599+00:00",
+  "createdAt": "2026-10-28T03:41:33.409400+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 122243273,
+  "payloadBytes": 122243446,
   "files": [
     {
       "source": "app.mjs",
@@ -1466,8 +1466,8 @@
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 4310,
-      "sha256": "deda2a27e7444d21f2328784b0233bee6a09b1dc28541e564c3f0d3a055458e3"
+      "bytes": 4483,
+      "sha256": "eba3878699a4ea6ed51fb9d4f55c5e4a7f34e19cc5f5e4641ca7df3662185683"
     },
     {
       "source": "auth-entry.mjs",
@@ -1779,7 +1779,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 11292,
-      "sha256": "b490cf03ec6da708d5fd4d3f9a5c25521aa331ddbe2db4efb731bb1a5d3cb838"
+      "sha256": "b1a85560ec9853e7822a43bbf9134fb53e09039ec6655665e18aee6b0238fb71"
     },
     {
       "source": "journey-experience.css",
@@ -2229,7 +2229,7 @@
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
       "bytes": 7536,
-      "sha256": "b99bcc45becf7b52fb4f900e91bd54e116fb979d54c99031a3f84d29c51b1d19"
+      "sha256": "251cbbc2ea6ff86d1dd43d000a899e79a4da3af3c50cf593d2803ac0137ff12a"
     },
     {
       "source": "universe-experience.css",
