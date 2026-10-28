@@ -6,7 +6,7 @@ import {once} from 'node:events';
 // Local protocol fixtures only. All identities, replies and native DTOs are synthetic.
 export async function liveBrowserFixture(webRoot){
  const manifest=JSON.parse(await readFile(join(webRoot,'build-manifest.json'),'utf8')),allowed=new Set(manifest.files.map(f=>f.path)),calls=[],status=new Map([[101,'required'],[202,'not_required'],[303,'completed']]),histories=new Map();
- const controls={failHandoff:false,failCompletion:false},memories=new Map(),profiles=new Map(),nicknames=new Map(),groupEvents=new Map();
+ const controls={failHandoff:false,failCompletion:false};
  const json=(res,code,value)=>{res.writeHead(code,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify(value));};
  const session=id=>({user:{id,username:`test${id}`},onboarding:{status:status.get(id)||'required'}});
  const server=createServer(async(req,res)=>{try{
@@ -29,32 +29,6 @@ export async function liveBrowserFixture(webRoot){
   if(!id)return json(res,401,{error:'unauthenticated'});
   if(url.pathname==='/api/auth/bootstrap')return json(res,200,{...session(id),accountStatus:'registered',nextAction:'open_chat',agent:{status:'bound',agentId:`agent-${id}`,roomId:`room-${id}`},memory:{status:'not_loaded'}});
   if(req.headers['x-knok-user-id']!==String(id))return json(res,409,{error:'SESSION_CHANGED',code:'SESSION_CHANGED'});
-  const memory=()=>{if(!memories.has(id))memories.set(id,{record:{id:'memory-'+id,text:'記憶內容 '+id},version:1});return memories.get(id);};
-  if(url.pathname==='/api/web/memories/capabilities')return json(res,200,{available:true,features:{list:true,get:true,correct:true,forget:true}});
-  if(url.pathname==='/api/web/memories/list')return json(res,200,{revision:1,items:memory()?[memory()]:[],nextCursor:null});
-  if(url.pathname==='/api/web/memories/get')return json(res,200,memory()?.record.id===body.id?memory():null);
-  if(url.pathname==='/api/web/memories/correct'){
-   const item=memory(),source=(histories.get(id)||[]).find(m=>m.eventId===body.sourceEventId&&m.seq===body.sourceSeq&&m.role==='user');
-   if(!source||body.text!==source.content||item?.record.id!==body.id||item.version!==body.expectedVersion)return json(res,409,{code:'KNOK_MEMORY_CONFLICT'});
-   memories.set(id,{record:{...item.record,text:body.text},version:item.version+1});return json(res,200,{revision:2,changed:1});
-  }
-  if(url.pathname==='/api/web/memories/forget'){if(!body.ids.includes(memory()?.record.id))return json(res,400,{code:'invalid'});memories.set(id,null);return json(res,200,{revision:3,changed:1});}
-  if(url.pathname==='/api/web/profile'){
-   if(!profiles.has(id))profiles.set(id,{agentId:'agent-'+id,fields:{preferredName:{value:'原稱呼'+id,visibility:'private'},homeCity:{value:'香港',visibility:'private'}}});const profile=profiles.get(id);
-   if(req.method==='PATCH')Object.assign(profile.fields,body);return json(res,200,profile);
-  }
-  if(url.pathname==='/api/web/agent/nickname'){
-   if(!nicknames.has(id))nicknames.set(id,{agentId:'agent-'+id,agentNickname:'原伙伴'+id,revision:1});const nick=nicknames.get(id);
-   if(req.method==='PATCH'){if(body.expectedRevision!==nick.revision)return json(res,409,{code:'revision_conflict'});nick.agentNickname=body.agentNickname;nick.revision++;}return json(res,200,nick);
-  }
-  if(url.pathname==='/api/web/rooms')return json(res,200,{rooms:[{roomId:'shared-'+id,kind:'group'}]});
-  if(url.pathname.startsWith('/api/web/groups/')){
-   const parts=url.pathname.split('/'),roomId=parts[4];if(roomId!=='shared-'+id)return json(res,403,{code:'forbidden'});
-   const events=groupEvents.get(id)||[];
-   if(parts[5]==='events')return json(res,200,{events:url.searchParams.get('cursor')===String(events.length+1)?[]:events,cursor:String(events.length+1)});
-   if(parts[5]==='post'){const seq=events.length+1,event={id:'group-event-'+seq,seq,at:'2026-10-28T00:00:00Z',type:'message.posted',message:{id:'group-message-'+seq,text:body.text,origin:'human',status:'complete'}};events.push(event);groupEvents.set(id,events);return json(res,200,{eventId:event.id,messageId:event.message.id,seq,deduplicated:false});}
-   return json(res,200,{roomId,version:1,lastSeq:events.length});
-  }
   if(url.pathname==='/api/auth/onboarding/complete'){if(controls.failCompletion)return json(res,503,{error:'completion_unavailable'});status.set(id,'completed');return json(res,200,{onboarding:{status:'completed'}});}
   if(url.pathname==='/api/web/chat/history')return json(res,200,{user:session(id).user,items:histories.get(id)||[],order:'asc',hasMore:false,nextCursor:null,resumeCursor:'fixture-cursor'});
   if(url.pathname==='/api/web/chat'){
@@ -65,5 +39,5 @@ export async function liveBrowserFixture(webRoot){
   }
   return json(res,404,{error:'missing'});
  }catch(error){json(res,500,{error:error.message});}});
- server.listen(0,'127.0.0.1');await once(server,'listening');return{url:`http://127.0.0.1:${server.address().port}`,calls,controls,status,histories,memories,profiles,nicknames,groupEvents,close:async()=>{const done=new Promise(r=>server.close(r));server.closeAllConnections();await done;}};
+ server.listen(0,'127.0.0.1');await once(server,'listening');return{url:`http://127.0.0.1:${server.address().port}`,calls,controls,status,histories,close:async()=>{const done=new Promise(r=>server.close(r));server.closeAllConnections();await done;}};
 }
