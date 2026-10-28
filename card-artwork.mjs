@@ -57,10 +57,12 @@ export function cardArtwork(data){
   items.push({type:'text',kind,text,lines,x,y,w,h,size:actual,weight,family,color,align,lineHeight});
  };
  const tags=Array.isArray(data.tags)?data.tags:[],sparse=tags.length===0;
- // Match the prior visible ink width and optical centre in both DOM and PNG.
- const logoScale=1646/2045,logoWidth=184*logoScale;
- items.push({type:'logo',x:208+184*(318-72*logoScale)/2172,y:24+(184/3)*(371.5-363.5*logoScale)/724,w:logoWidth,h:logoWidth/3,color:'#66705b'});
  const portrait=sparse?{x:210,y:108,w:180,h:180}:{x:52,y:118,w:152,h:152};
+ const contentLeft=portrait.x-8,contentWidth=Math.min(492,CARD_WIDTH-contentLeft-44);
+ // Align visible logo ink, biography and sticker rows with the avatar ring.
+ // The selected 2172px PNG's alpha>=32 ink starts at x76; its size stays unchanged.
+ const logoScale=1646/2045,logoWidth=184*logoScale;
+ items.push({type:'logo',x:contentLeft-logoWidth*76/2172,y:24+(184/3)*(371.5-363.5*logoScale)/724,w:logoWidth,h:logoWidth/3,color:'#66705b'});
  items.push({type:'rect',x:portrait.x-8,y:portrait.y-8,w:portrait.w+16,h:portrait.h+16,fill:'#e5eace',r:portrait.w/2+8});
  items.push({type:'avatar',...portrait,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f4f1e7',pad:data.avatar?0:10});
  txt('name',data.name,sparse?54:230,sparse?316:136,sparse?492:318,sparse?92:116,48,{weight:500,family:'name',align:sparse?'center':'left',maxLines:2,lineHeight:1.2});
@@ -74,7 +76,7 @@ export function cardArtwork(data){
  const identityBottom=metaItem?metaItem.y+metaItem.lines.length*metaItem.size*metaItem.lineHeight:nameBottom;
  const bio=String(data.bio||'').trim();
  const bioY=Math.max(sparse?430:306,identityBottom+24);
- txt('bio',bio,sparse?60:54,bioY,sparse?480:492,sparse?104:78,sparse?27:28,{color:'#727680',align:sparse?'center':'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
+ txt('bio',bio,contentLeft,bioY,contentWidth,sparse?104:78,sparse?27:28,{color:'#727680',align:'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
  const rows=[[]],gap=14,size=30,padX=20,padY=21,iconSize=32,iconSpace=42;
  for(const entry of tags){
   const text=typeof entry==='string'?entry:entry.label||entry.text||'';
@@ -91,7 +93,7 @@ export function cardArtwork(data){
  // whichever identity element extends lowest, including a wrapped name or city.
  let tagY=bio?bioY+104:Math.max(portrait.y+portrait.h+8,identityBottom)+32;
  rows.forEach(row=>{
-  let x=(CARD_WIDTH-row.reduce((n,tag)=>n+tag.w,0)-gap*Math.max(0,row.length-1))/2;
+  let x=contentLeft;
   const height=Math.max(0,...row.map(tag=>tag.h));
   row.forEach(tag=>{items.push({...tag,x,y:tagY+(height-tag.h)/2});x+=tag.w+gap;});
   if(row.length)tagY+=height+14;

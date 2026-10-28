@@ -1,4 +1,4 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261028-card-paper-71';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261028-card-alignment-72';
 import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261027-tags-50';
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
