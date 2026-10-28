@@ -161,3 +161,9 @@
 .phone#phone #sheet .tag-undated-chat{margin-top:22px;padding-top:18px;border-top:1px solid rgba(67,64,74,.12)}
 .phone#phone #sheet .tag-original-chat small{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .phone#phone #sheet .tag-original-chat time{font-size:11px;white-space:nowrap}
+
+/* Diary72: the month and saved records live in the secondary sheet. */
+.phone#phone #sheet .tag-diary-summary>.tag-diary-date{display:block;margin:0 0 12px}
+.phone#phone #sheet .tag-diary-summary>.tag-diary-quote{margin-top:0}
+.phone#phone #sheet .tag-diary-summary>.tag-ui-button{width:100%;margin-top:4px}
+.phone#phone #sheet .tag-diary-records>.tag-ui-button{margin:0 0 18px}

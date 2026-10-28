@@ -1,7 +1,7 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
 import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261028-klin-alive-room-v02';
 import { createRoomVideo } from './room-video.mjs?v=20261027-room-motion-54';
-import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261028-opening-music-69';
+import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261028-diary-profile-72b';
 
 // Home/adult uses the approved room-and-character films. Original separate
 // artwork remains available for the avatar/card bridge and other scenes/ages.
@@ -84,7 +84,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     // existing room-to-header flight. character:false retains normal hiding.
     primary.anchor.style.visibility = owns ? 'hidden' : '';
     positionActors(renderedLayout, owns);
-    const nextHit = owns ? host.parentElement?.querySelector?.('.home-companion') : null;
+    const nextHit = owns && !personalRoom.status.held ? host.parentElement?.querySelector?.('.home-companion') : null;
     if (hitTarget && hitTarget !== nextHit) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = '';
     hitTarget = nextHit;
     if (hitTarget) {
@@ -93,6 +93,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     }
     roomVideo.update({active: state.active && renderedLayout.world === 'home' && !owns, reducedMotion: state.reduced});
     host.dataset.personalRoom = owns ? personalRoom.status.mode : 'off';
+    host.dataset.personalRoomHeld = String(personalRoom.status.held === true);
   }
   function positionActors(layout, owns) {
     const {width, height} = dimensions(), size = Math.min(height * layout.height, width * .78);
@@ -116,7 +117,10 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   }
   function syncMedia(layout = renderedLayout) {
     renderedLayout = layout;
-    personalRoom.update({active: state.active && personalSceneEligible(layout), reducedMotion: state.reduced});
+    const holdFrame = state.active && layout.world === 'home' && state.stage === 'adult' && !state.conversation
+      && !host.parentElement?.dataset?.conversationAvatarMotion
+      && (isCard(state.page) || host.parentElement?.dataset?.sceneOverlay === 'true');
+    personalRoom.update({active: state.active && personalSceneEligible(layout), holdFrame, reducedMotion: state.reduced});
     applyMediaOwnership();
   }
 

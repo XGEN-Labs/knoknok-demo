@@ -28,20 +28,21 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
   }
   layer.append(still, idle, react);
   container.append(layer);
-  let active = false, reduced = !!reducedMotion, disposed = false, failed = false, blocked = false;
+  let active = false, held = false, reduced = !!reducedMotion, disposed = false, failed = false, blocked = false;
   let posterReady = false, desired = 'idle', showing = null, pending = null, attempt = 0, response = 0;
   let reported = '';
-  const shouldPlay = () => active && !reduced && !doc.hidden && !disposed && !failed && !blocked;
-  const ownsScene = () => active && !disposed && (posterReady || showing !== null);
+  const shouldPlay = () => active && !held && !reduced && !doc.hidden && !disposed && !failed && !blocked;
+  const ownsScene = () => (active || held) && !disposed && (posterReady || showing !== null);
   const notify = () => {
     layer.hidden = !ownsScene();
     layer.dataset.mode = showing || 'poster';
-    const signature = `${layer.hidden}|${layer.dataset.mode}|${desired === 'react'}`;
+    const signature = `${layer.hidden}|${layer.dataset.mode}|${desired === 'react'}|${held}`;
     if (signature !== reported) {reported = signature; onChange?.();}
   };
-  const pauseFilms = () => {
-    attempt++; pending = null; showing = null;
-    for (const video of Object.values(films)) {video.pause(); video.hidden = true;}
+  const pauseFilms = ({preserveFrame = false} = {}) => {
+    attempt++; pending = null;
+    if (!preserveFrame) showing = null;
+    for (const video of Object.values(films)) {video.pause(); if (!preserveFrame) video.hidden = true;}
     notify();
   };
   const reset = () => {desired = 'idle'; response++; pauseFilms();};
@@ -55,7 +56,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
     notify();
   }
   function sync({restart = false} = {}) {
-    if (!shouldPlay()) {pauseFilms(); return;}
+    if (!shouldPlay()) {pauseFilms({preserveFrame: held}); return;}
     const kind = desired, video = films[kind];
     if (pending?.kind === kind && !restart) return;
     if (!restart && showing === kind && !video.paused) {notify(); return;}
@@ -81,14 +82,14 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
   const ended = () => {
     // A tap may already have sought back to the start before a queued ended
     // event from the previous playback arrives. Only the current end owns idle.
-    if (disposed || desired !== 'react' || !react.ended) return;
+    if (disposed || held || desired !== 'react' || !react.ended) return;
     desired = 'idle'; response++;
     // Direct cut back to the idle start; no frame blending or duplicated actor.
     sync({restart: true});
   };
   const loaded = () => {posterReady = !!still.naturalWidth; notify();};
   const posterError = () => {posterReady = false; notify();};
-  const visibility = () => {reset(); if (!doc.hidden) sync({restart: true});};
+  const visibility = () => {if (held) {pauseFilms({preserveFrame: true}); return;} reset(); if (!doc.hidden) sync({restart: true});};
   for (const [kind, video] of Object.entries(films)) {
     video.addEventListener('playing', playing[kind]);
     video.addEventListener('error', decodeError);
@@ -106,16 +107,22 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
       if (disposed) return;
       const nextActive = options.active ?? active, nextReduced = options.reducedMotion ?? reduced;
       const changed = nextActive !== active || nextReduced !== reduced;
+      const wasHeld = held;
+      // An overlay may retain only a scene that already owns visible pixels.
+      // Pause the current film in place; never substitute the empty-room plate.
+      held = !!options.holdFrame && ownsScene();
       active = !!nextActive; reduced = !!nextReduced;
+      if (held) {if (!wasHeld) {desired = showing || 'idle'; response++;} pauseFilms({preserveFrame: true}); return;}
       // Warm the short response while idle plays, so the first click does not
       // have to begin its network request. No offscreen response is played.
       if (shouldPlay() && !react.getAttribute('src')) {react.src = reactSrc; react.preload = 'auto'; react.load();}
-      if (changed) {reset(); if (shouldPlay()) sync({restart: true});}
+      if (wasHeld && active) sync();
+      else if (changed || wasHeld) {reset(); if (shouldPlay()) sync({restart: true});}
       else sync();
       notify();
     },
     respond() {
-      if (disposed || !active || reduced || doc.hidden || failed) return () => {};
+      if (disposed || !active || held || reduced || doc.hidden || failed) return () => {};
       blocked = false;
       const token = ++response;
       desired = 'react';
@@ -127,7 +134,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
     },
     dispose() {
       if (disposed) return;
-      disposed = true; active = false; reset();
+      disposed = true; active = false; held = false; reset();
       for (const [kind, video] of Object.entries(films)) {
         video.removeEventListener('playing', playing[kind]); video.removeEventListener('error', decodeError);
         video.removeAttribute('src'); video.load();
@@ -137,6 +144,6 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
       doc.removeEventListener('visibilitychange', visibility);
       layer.remove();
     },
-    get status() {return {active, visible: ownsScene(), mode: !active ? 'off' : showing || 'poster', responding: desired === 'react', failed, reduced};},
+    get status() {return {active, held, visible: ownsScene(), mode: !active && !held ? 'off' : showing || 'poster', responding: active && !held && desired === 'react', failed, reduced};},
   };
 }

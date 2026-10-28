@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T08:40:52.714173+00:00",
+  "createdAt": "2026-10-28T09:12:17.575760+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147057559,
+  "payloadBytes": 147063106,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 131101,
-      "sha256": "b8c6d8ec53fc22fce802eb2d9481e4bb307b16cebf8768a1b7dd1828b6ec90c0"
+      "bytes": 131630,
+      "sha256": "b0a67a3cfbb8ebe903308e94b98ac469181917daeb8c45d0328789ad0c6c4c27"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11340,
-      "sha256": "5bc3a83f40f7af4d3705401ae1207f3b739cb1ecf3dca2df4ba8463b94811344"
+      "bytes": 11430,
+      "sha256": "83488fc95e641195b0258279870e139e85fda13ad01d279d0816cba734d742e9"
     },
     {
       "source": "journey-experience.css",
@@ -1808,14 +1808,14 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 17348,
-      "sha256": "927617702097dba1e0c2a69d61a4a9e4313b1ab3d42cd35a1a968669b6572066"
+      "bytes": 17731,
+      "sha256": "34bb855b245c5d99a09c507ae56db71fb5368b210cdef17091cd7a4b170f8da5"
     },
     {
       "source": "klin-world-2d.css",
       "path": "klin-world-2d.css",
-      "bytes": 1696,
-      "sha256": "bb25d8279535bfb4128230959b6dab889f0ab9764025fe1ff26cd1dc27a6011c"
+      "bytes": 2152,
+      "sha256": "16195bf11a24ecd06a3df7dc638bb59970ce90a8fff4209342d961c353ddf76c"
     },
     {
       "source": "landing-audio-clips.mjs",
@@ -2126,14 +2126,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 16791,
-      "sha256": "7b87e7a5aa21751f7e89ffc0e4349a49c50d11a14e299a618dc59ac576508bbe"
+      "bytes": 17680,
+      "sha256": "e29bfe07b1f62da1e11a7d2f2363bcc7bbc0d50fc084519b5a567decafa1eeec"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
-      "bytes": 17535,
-      "sha256": "04e15b4561177dbf7395f032256c1cbdeedb0fa961e434b383686ac518a5dfe3"
+      "bytes": 17916,
+      "sha256": "7f45e885bcb61196fa5a3dbe69a13ced20ea2a78819c5a77ec4f9355d860668b"
     },
     {
       "source": "social-tags.mjs",
@@ -2396,8 +2396,8 @@
     {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 7305,
-      "sha256": "abbf7f46506e5e904e326c6b4193a6a60abfc266cdf70005248a28a3d2bf0959"
+      "bytes": 7965,
+      "sha256": "35a5b1fb512999aa58ff4a7b42f8c20b352e1f01a7ccd25827e6fae3842a902c"
     },
     {
       "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
@@ -2452,6 +2452,12 @@
       "path": "compat/web-naming/landing-handoff.mjs",
       "bytes": 4549,
       "sha256": "47ff4213bf941f13eb9f422c695b10e648cab49152b259c22fbfa844b65a1ce7"
+    },
+    {
+      "source": "chat-edge-blur.css",
+      "path": "chat-edge-blur.css",
+      "bytes": 2159,
+      "sha256": "306f8b9001261340ef4f6cdcc476173348a962784a170accff57c5c3ec1fdca3"
     }
   ],
   "runtimeDependencies": [
