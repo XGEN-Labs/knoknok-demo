@@ -76,6 +76,8 @@ export function createSceneControlGlass({phone,environment={}}={}){
   const resize=Resize?new Resize(()=>{if(disposed||resizeFrame!==null)return;resizeFrame=requestFrame(()=>{resizeFrame=null;if(!disposed)refresh();});}):null;
   const mutation=Mutation?new Mutation(()=>refresh()):null;
   const visible=(node,sourceCheck=false)=>{if(!node||node.hidden||node.closest('[hidden]'))return false;const rect=node.getBoundingClientRect();if(!rect.width||!rect.height)return false;for(let current=node;current;current=current.parentElement){const style=computed(current);if(style.display==='none'||style.visibility==='hidden'||(sourceCheck&&style.opacity==='0'))return false;if(current===phone)break;}return true;};
+  // The floating friend composer must include scrolling bubbles in its backdrop.
+  const sceneTargets=()=>[...phone.querySelectorAll(SCENE_GLASS_TARGETS)].filter(node=>!(node.matches('.composer-row')&&node.closest('.shared-composer'))&&visible(node)&&node.getAttribute('data-landing-glass')!=='ready');
   function chooseSource(){for(const selector of SOURCES)for(const node of phone.querySelectorAll(selector)){if(!visible(node,true))continue;const width=node.videoWidth||node.naturalWidth||node.width,height=node.videoHeight||node.naturalHeight||node.height;if(width&&height&&(!node.matches('video')||node.readyState>=2))return {node,width,height};}return null;}
   function preserve(node){if(!touched.has(node))touched.set(node,{marker:node.getAttribute('data-scene-glass'),styles:PROPERTIES.map(p=>[node.style.getPropertyValue(p),node.style.getPropertyPriority(p)])});}
   function assign(node,marker,values){preserve(node);PROPERTIES.forEach((p,i)=>{const value=values[i]||'';if(node.style.getPropertyValue(p)!==value){if(value)node.style.setProperty(p,value);else node.style.removeProperty(p);}});if(node.getAttribute('data-scene-glass')!==marker)node.setAttribute('data-scene-glass',marker);if(!observed.has(node)){observed.add(node);resize?.observe(node);}}
@@ -84,7 +86,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
   function refresh(){
     if(disposed||refreshing)return false;refreshing=true;
     try{
-      const nodes=[...phone.querySelectorAll(SCENE_GLASS_TARGETS)].filter(node=>visible(node)&&node.getAttribute('data-landing-glass')!=='ready');
+      const nodes=sceneTargets();
       const current=new Set(nodes);for(const [node,prior]of touched)if(!current.has(node))restore(node,prior);
       const selected=chooseSource(),rect=phone.getBoundingClientRect(),width=phone.clientWidth,height=phone.clientHeight;
       const video=selected?.node.matches('video')?selected.node:null;schedule(video);
@@ -123,7 +125,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
         assign(node,'ready',[`url("${texture.url}")`,`${width}px ${height}px`,`${position.x}px ${position.y}px`,material.fill,material.shadow]);
       }
       error='';return true;
-    }catch(cause){error=String(cause?.message||cause);textures.clear();signature='';for(const node of [...phone.querySelectorAll(SCENE_GLASS_TARGETS)].filter(node=>visible(node)&&node.getAttribute('data-landing-glass')!=='ready')){const material=sceneGlassMaterial(node,computed(node));assign(node,'fallback',['','','',material.fill,material.shadow]);}return false;}
+    }catch(cause){error=String(cause?.message||cause);textures.clear();signature='';for(const node of sceneTargets()){const material=sceneGlassMaterial(node,computed(node));assign(node,'fallback',['','','',material.fill,material.shadow]);}return false;}
     finally{refreshing=false;}
   }
   resize?.observe(phone);

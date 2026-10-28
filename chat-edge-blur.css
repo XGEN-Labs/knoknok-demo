@@ -32,4 +32,4 @@
 .phone#phone #app .page.shared-chat-page .shared-composer {z-index:5;}
 /* Own speech keeps the existing pale glass, with a cool blue-grey ink. */
 .phone#phone #app .room-chat-page .conversation-message.own,
-.phone#phone #app .page.shared-chat-page .message.own .bubble {color:#356587!important;}
+.phone#phone #app .page.shared-chat-page .message.own .bubble {color:#2c5878!important;}

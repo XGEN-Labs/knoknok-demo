@@ -69,13 +69,6 @@ export function showCompanionContract({phone,getWorld,userName,companionName,col
  const userInput=collectNames?layer.querySelector('.contract-user-name-input'):null,companionInput=collectNames?layer.querySelector('.contract-companion-name-input'):null;
  if(userInput)userInput.value=names.userName;if(companionInput)companionInput.value=names.companionName;
  const signatureNode=layer.querySelector('.contract-signature-name'),button=layer.querySelector('.contract-sign');
- const backButton=typeof onBack==='function'?document.createElement('button'):null;
- if(backButton){
-  layer.classList.add('has-back');
-  backButton.type='button';backButton.className='contract-back';backButton.textContent='上一步';backButton.setAttribute('aria-label','返回上一個回答');
-  layer.querySelector('.contract-actions').append(backButton);
-  backButton.addEventListener('click',()=>{if(disposed||signing)return;const draft={userName:userInput?.value??names.userName,companionName:companionInput?.value??names.companionName};dispose(false);onBack(draft);});
- }
  function renderNames(){
   layer.querySelector('.contract-document').dataset.longNames=String(Math.max(Array.from(names.userName).length,Array.from(names.companionName).length)>10);
   layer.querySelector('.contract-user-name').textContent=names.userName;
@@ -105,7 +98,6 @@ export function showCompanionContract({phone,getWorld,userName,companionName,col
  function complete(){if(disposed||!paperComplete||!worldComplete)return;seal();stopWorld=null;dispose(false);onCommit?.({...names});}
  function resetForCorrection(message){
   signing=false;button.disabled=false;button.setAttribute('aria-busy','false');button.textContent='留下我的名字';
-  if(backButton)backButton.disabled=false;
   if(userInput)userInput.disabled=false;if(companionInput)companionInput.disabled=false;
   layer.querySelector('.contract-status').textContent=message;
   if(collectNames){const error=layer.querySelector('.contract-name-error');error.textContent=message;error.hidden=false;}
@@ -119,7 +111,7 @@ export function showCompanionContract({phone,getWorld,userName,companionName,col
    if(invalid){resetForCorrection(invalid);(!nextNames.userName||Array.from(nextNames.userName).length>18?userInput:companionInput).focus({preventScroll:true});return;}
    layer.querySelector('.contract-name-error').hidden=true;
   }
-  signing=true;if(backButton)backButton.disabled=true;button.disabled=true;button.setAttribute('aria-busy','true');button.textContent='正在寫下我們的約定…';
+  signing=true;button.disabled=true;button.setAttribute('aria-busy','true');button.textContent='正在寫下我們的約定…';
   let preparation;
   try{preparation=onPrepareSign?.({...nextNames});}catch(error){preparation=error instanceof Error?error:new Error(String(error||'暫時未能確認名字，請再試一次。'));}
   const problem=preparation===false?'請確認名字後再試一次。':preparation instanceof Error?(preparation.message||'暫時未能確認名字，請再試一次。'):typeof preparation==='string'?preparation:preparation?.error;

@@ -17,3 +17,12 @@
   box-shadow:var(--kn-glass-control-shadow)!important;
   filter:none!important;
 }
+
+/* Onboarding quick actions and the signature CTA use brighter white glass.
+   Both held-film and scene samplers read this per-control fill; inputs and
+   ordinary controls continue to inherit the global 62% white material. */
+.phone#phone #app .page.conversation-onboarding .quick-replies > button,
+.phone#phone #app .page.conversation-onboarding .onboarding-composer > .btn,
+.phone#phone .contract-story .contract-actions > .contract-sign {
+  --kn-glass-fill:rgba(255,255,255,.9);
+}

@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T10:14:22.423480+00:00",
+  "createdAt": "2026-10-28T12:25:50.922864+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147068616,
+  "payloadBytes": 147069046,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 132028,
-      "sha256": "76a928e608a24321efc1988beb8be21173a2cc082ef5a763082f39b3e5a5a58f"
+      "bytes": 131813,
+      "sha256": "4282e097c35a39772ef52906376c0b3ee7c87a178b4a7c118292bd7b0f880a88"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1598,8 +1598,8 @@
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 16250,
-      "sha256": "adc4fe5bb0589a53f7b06b39f000df2dd9909f173ede26f9346cf06bb1320bf7"
+      "bytes": 15587,
+      "sha256": "153279228088d3226235d1665cdec32cafd03ac36d6ab507be6dcbac27fb235a"
     },
     {
       "source": "conversation-avatar-motion.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11421,
-      "sha256": "bbfaee1e5bf4d52e019471a13c246584213bf3e2ce0438b03d32d8d44eae986e"
+      "bytes": 11453,
+      "sha256": "289fa71b9dfddad4d7aeb6263e8f16485f0d7690df5ae7b8c7ccbf1d848e2445"
     },
     {
       "source": "journey-experience.css",
@@ -1850,8 +1850,8 @@
     {
       "source": "landing-glass.css",
       "path": "landing-glass.css",
-      "bytes": 1475,
-      "sha256": "4246beaa05df1feb65a05ceb8133c0e6b123ea0831800fc7143b78931a0778d6"
+      "bytes": 1961,
+      "sha256": "14ce10dafa764e24cb6d88ffd9393e1fd9458710f5db99c5168e0285e44614b4"
     },
     {
       "source": "landing-glass.mjs",
@@ -2084,8 +2084,8 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 14028,
-      "sha256": "bcc050a2aacb529bbd147332b3f7fd8ae5b788fac78931229b07f947a1283679"
+      "bytes": 14106,
+      "sha256": "062bf33976e35cba01105c646ee7eb8e355dfb2bd7f78e59dc048f159016b95b"
     },
     {
       "source": "scene-experience.css",
@@ -2222,8 +2222,8 @@
     {
       "source": "ui-surface-v51.css",
       "path": "ui-surface-v51.css",
-      "bytes": 3809,
-      "sha256": "6e034ba3c95ce1fdb8c2f78098e22161d83ede3ad1093a8b4ebc679946a2cb5d"
+      "bytes": 4521,
+      "sha256": "1c575ca5ef10863863fe77bf8d70713370f956a7e098729622da0d53a31a147c"
     },
     {
       "source": "ui-tokens.css",
@@ -2457,7 +2457,7 @@
       "source": "chat-edge-blur.css",
       "path": "chat-edge-blur.css",
       "bytes": 1489,
-      "sha256": "d407692fb0fd07aae187a659f4dc323e0ab36023bdf564839430f7e76456b97a"
+      "sha256": "3e5d000f3d96ac6a09155c3f8c8e1c2f30449d9cc487933ffeb217f511469308"
     },
     {
       "source": "conversation-edge-blur.mjs",
