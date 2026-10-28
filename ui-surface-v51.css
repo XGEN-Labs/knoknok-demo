@@ -63,6 +63,20 @@
   background:transparent!important;
 }
 
+/* This floating composer sees the messages as well as the room beneath it.
+   Keep one neutral live glass surface; a room-only bitmap loses bubble color. */
+.phone#phone #app .shared-chat-page .shared-composer .composer-row {
+  background:var(--kn-glass-sheen),var(--kn-glass-fill)!important;
+  box-shadow:var(--kn-glass-control-shadow)!important;
+  -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+  backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
+}
+.phone#phone #app .shared-chat-page .shared-composer .composer-row::before,
+.phone#phone #app .shared-chat-page .shared-composer .composer-row::after {
+  content:none;
+  display:none;
+}
+
 /* Explicit layout rules must not override private-chat hidden controls. */
 .phone#phone #app .home-top [hidden]{display:none!important}
 

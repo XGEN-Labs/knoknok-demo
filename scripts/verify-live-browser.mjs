@@ -49,9 +49,9 @@ try{
  checks.push('original public card preview and share interaction restored');
  await page.locator('.home-top [data-action="tag-diary"]').click();await page.locator('#sheet-title').getByText('Nok 日記',{exact:true}).waitFor();
  assert.equal(await page.locator('[data-native-panel]').count(),0);await page.keyboard.press('Escape');
- await page.locator('#private-message').click();await page.locator('[data-action="tag-end-session"]').click();await page.locator('[data-form="social-tag-session"]').waitFor();await page.keyboard.press('Escape');
+ await page.locator('#private-message').click();assert.equal(await page.locator('[data-action="tag-end-session"]').count(),0);await page.locator('#conversation-log [data-action="tag-diary"]').click();await page.locator('#sheet-title').getByText('Nok 日記',{exact:true}).waitFor();await page.keyboard.press('Escape');
  await page.locator('[data-action="close-conversation"]').click();
- checks.push('original diary calendar and collect-today interaction restored without exposing raw Memory');
+ checks.push('original diary calendar and chat diary entry restored; rongyu removal of manual collection retained; no raw Memory');
  await page.locator('[data-action="settings-menu"]').click();assert.equal(await page.locator('#sheet .settings-menu').count(),1);assert.equal(await page.locator('[data-action="live-history"]').count(),0);await page.keyboard.press('Escape');
  await page.locator('.visit-entry[data-go="relations"]').click();await page.locator('#network-query').waitFor();assert.equal(await page.locator('[data-native-panel]').count(),0);
  await page.locator('#network-query').fill('不存在的名字');await page.locator('.network-search-status').getByText('找到 0 位朋友',{exact:true}).waitFor();
