@@ -22,7 +22,7 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
   const video=document.createElement('video');video.className='landing-video-plate';
   video.setAttribute('aria-hidden','true');video.setAttribute('playsinline','');video.setAttribute('webkit-playsinline','');
   video.muted=true;video.defaultMuted=true;video.playsInline=true;video.preload='auto';video.disablePictureInPicture=true;
-  video.src='assets/landing-20261027-52/34-complete-selected23-original-colors-voice.mp4';
+  video.src='assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4';
   const still=document.createElement('canvas');still.className='landing-video-still landing-video-plate';still.setAttribute('aria-hidden','true');
   const subtitle=document.createElement('p');subtitle.className='landing-video-subtitle';subtitle.hidden=true;
   const noking=document.createElement('div');noking.className='landing-video-noking kn-glass-control';noking.hidden=true;

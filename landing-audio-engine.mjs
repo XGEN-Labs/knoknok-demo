@@ -1,4 +1,4 @@
-import { LANDING_FILM_AUDIO, LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261028-audio-63';
+import { LANDING_FILM_AUDIO, LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261028-audio-refresh-67';
 import { ROOM_VOICE_CLIPS } from './room-voice-clips.mjs?v=20261026-room-voice-47';
 import { ROOM_VOICE_PROFILE, isRoomNarration, isMandarin, findLocalLandingVoice } from './room-voice-profile.mjs?v=20261026-room-voice-47';
 
@@ -43,8 +43,9 @@ export function createLandingAudio({ environment = {} } = {}) {
   let voiceSource = null, utterance = null, voiceEpoch = 0, voiceTimer = null;
   let voiceBusy = false, currentKey = null, scope = null, lastError = '';
   let lastNarration = null;
+  let recoveryPending = null;
   let queue = [];
-  const seen = new Set(), buffers = new Map(), effects = new Map();
+  const seen = new Set(), buffers = new Map(), failedBuffers = new Set(), effects = new Map();
   const hidden = () => doc?.hidden === true || doc?.visibilityState === 'hidden';
   const audible = () => enabled && !disposed && !hidden() && context?.state === 'running';
   const currentFilmTime = () => Math.max(0, film.time + (film.playing ? Math.max(0, now() - film.sampledAt) / 1000 * film.rate : 0));
@@ -57,7 +58,34 @@ export function createLandingAudio({ environment = {} } = {}) {
     filmGain = context.createGain(); filmGain.gain.value = 1; filmGain.connect(context.destination);
     voiceGain = context.createGain(); voiceGain.gain.value = .9; voiceGain.connect(context.destination);
     musicGain = context.createGain(); musicGain.gain.value = 0; musicGain.connect(context.destination);
+    context.addEventListener?.('statechange', contextStateChanged);
     return context;
+  }
+  function retryFailedBuffers() {
+    if (!failedBuffers.size) return;
+    for (const src of failedBuffers) buffers.delete(src);
+    failedBuffers.clear(); lastError = '';
+  }
+  function contextStateChanged() {
+    if (!enabled || disposed || hidden() || context?.state !== 'running') return;
+    syncFilmAudio(); syncMusic(); drainQueue();
+  }
+  function trustedAudioGesture(event) {
+    if (!event.isTrusted || !enabled || disposed || hidden() || !context) return;
+    if (event.target?.closest?.('[data-action="toggle-sound"]')) return;
+    // Retry only after an explicit gesture, never on every animation frame.
+    retryFailedBuffers();
+    if (context.state === 'running') { contextStateChanged(); return; }
+    if (recoveryPending) return;
+    const token = enableEpoch;
+    try {
+      const pending = Promise.resolve(context.resume()); recoveryPending = pending;
+      pending.then(() => {
+        if (token === enableEpoch) contextStateChanged();
+      }, error => {
+        if (token === enableEpoch && enabled && !disposed) lastError = String(error?.message || 'audio-resume-blocked');
+      }).finally(() => { if (recoveryPending === pending) recoveryPending = null; });
+    } catch (error) { lastError = String(error?.message || 'audio-resume-blocked'); }
   }
   function duck() {
     if (!context || !filmGain) return;
@@ -130,8 +158,10 @@ export function createLandingAudio({ environment = {} } = {}) {
         settled = true; cancelLater(timer); reject(error);
       });
     });
-    // Cache failures too: frame-by-frame synchronization must not retry-spam.
-    buffers.set(src, request); return request;
+    // Keep a failed request until the next explicit enable/gesture. This avoids
+    // frame-by-frame retries without making a transient failure permanent.
+    const cached = request.catch(error => { failedBuffers.add(src); throw error; });
+    buffers.set(src, cached); return cached;
   }
   function syncFilmAudio() {
     if (!audible() || !film.active || !film.playing || !filmFresh) {
@@ -292,6 +322,7 @@ export function createLandingAudio({ environment = {} } = {}) {
       return enabled;
     }
     enabled = true; const token = ++enableEpoch;
+    retryFailedBuffers();
     try {
       createContext();
       if (!hidden()) await context.resume();
@@ -327,6 +358,8 @@ export function createLandingAudio({ environment = {} } = {}) {
     }
   }
   doc?.addEventListener?.('visibilitychange', visibilityChanged);
+  doc?.addEventListener?.('pointerdown', trustedAudioGesture, true);
+  doc?.addEventListener?.('keydown', trustedAudioGesture, true);
   return {
     setEnabled, syncFilm, cue, speakSequence, stopSpeech,
     speak(text, key, options = {}) { return speakSequence([{ text, key }], options); },
@@ -342,6 +375,9 @@ export function createLandingAudio({ environment = {} } = {}) {
       if (disposed) return;
       enabled = false; enableEpoch++; stopAll(); disposed = true;
       doc?.removeEventListener?.('visibilitychange', visibilityChanged);
+      doc?.removeEventListener?.('pointerdown', trustedAudioGesture, true);
+      doc?.removeEventListener?.('keydown', trustedAudioGesture, true);
+      context?.removeEventListener?.('statechange', contextStateChanged);
       try { context?.close?.().catch?.(() => {}); } catch {}
       buffers.clear(); seen.clear();
     },

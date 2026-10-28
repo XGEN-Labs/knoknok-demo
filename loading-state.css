@@ -3,7 +3,8 @@
 .phone > .scene-loading[data-loading-state="visible"],.phone > .scene-loading[data-loading-state="leaving"]{visibility:visible;pointer-events:auto}
 .phone > .scene-loading[data-loading-state="visible"]{opacity:1}
 .scene-loading-content{display:grid;justify-items:center;gap:20px;padding:24px;transform:translateY(-12px)}
-.scene-loading-symbol{display:block;width:72px;height:72px;color:inherit}
+/* Every full-page wait, including the landing film gate, starts at 48px. */
+.scene-loading-symbol{display:block;width:48px;height:48px;color:inherit}
 .scene-loading-symbol svg{display:block;width:100%;height:100%;overflow:visible;color:inherit}
 .loading-character-body{transform-origin:72px 124px;animation:kn-loading-curious 4800ms ease-in-out infinite}
 .loading-character-outline,.loading-character-foot path{stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;fill:none}
