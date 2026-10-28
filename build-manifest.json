@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T03:41:33.409400+00:00",
+  "createdAt": "2026-10-28T04:24:28.353162+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 122243446,
+  "payloadBytes": 124492354,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 122864,
-      "sha256": "824b81057bfc6c5ec1fb7e74487bcbb6f9555b9e5d53a271f1186e9804734d4b"
+      "bytes": 122878,
+      "sha256": "5c7c18e82824fb2c9af4f19c28b7f0e2761394665915523d839d8fdba96963ac"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11292,
-      "sha256": "b1a85560ec9853e7822a43bbf9134fb53e09039ec6655665e18aee6b0238fb71"
+      "bytes": 11296,
+      "sha256": "efc4e748dafcd945537434869312060433702eee4b3aca58d96a9b7fca1b3a24"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 13084,
-      "sha256": "d11a8e20d8ea592b82db8be1eca717e96e9fc358493f9eb69a05bac27f30f797"
+      "bytes": 17351,
+      "sha256": "7809a02589d1719b927ee1e4a85ee9e096bb3452ebd866ab792950e0687dcf9c"
     },
     {
       "source": "klin-world-2d.css",
@@ -2072,8 +2072,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 520,
-      "sha256": "8e4e17d1cd57030a47c0281e88aca25ad868024f467d99d03a53e0b0354cb7c3"
+      "bytes": 879,
+      "sha256": "3530d595512018ad9ef220b67d134a16b0bb7b89b1be725f7aad4d2a46a07b55"
     },
     {
       "source": "scene-control-glass.css",
@@ -2374,6 +2374,30 @@
       "path": "shared-chat-polish-v62.css",
       "bytes": 566,
       "sha256": "84405bf81079d071ff5df4420428a0ebd2ed1e929bc73d852b54e208168502de"
+    },
+    {
+      "source": "assets/klin-alive-room-20261028-v02/idle.mp4",
+      "path": "assets/klin-alive-room-20261028-v02/idle.mp4",
+      "bytes": 1090010,
+      "sha256": "c7428378e16d35b979bf26e6b24ef510d4dbef0b185e7f802e7055e3db140966"
+    },
+    {
+      "source": "assets/klin-alive-room-20261028-v02/poster.jpg",
+      "path": "assets/klin-alive-room-20261028-v02/poster.jpg",
+      "bytes": 78694,
+      "sha256": "b02f3197064b7d710dd86776576a996084faa3404fb4450cd8f2393276718deb"
+    },
+    {
+      "source": "assets/klin-alive-room-20261028-v02/react.mp4",
+      "path": "assets/klin-alive-room-20261028-v02/react.mp4",
+      "bytes": 1068577,
+      "sha256": "6e6aca637935a80e0feb78983877fe45c14fcb518f388b3e5371f7bde5073ee6"
+    },
+    {
+      "source": "personal-room-video.mjs",
+      "path": "personal-room-video.mjs",
+      "bytes": 6983,
+      "sha256": "502dde81fca2e085983d75e4bcb55d340a5c82e16cd460107ba655d84cda4394"
     }
   ],
   "runtimeDependencies": [

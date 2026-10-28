@@ -1,9 +1,10 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261027-room-motion-54c';
+import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261028-klin-alive-room-v02';
 import { createRoomVideo } from './room-video.mjs?v=20261027-room-motion-54';
+import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261028-klin-alive-room-v02';
 
-// Restore the selected original PNG and the previous illustrated room directly.
-// Native modeling and action drafts remain archived outside this renderer.
+// Home/adult uses the approved room-and-character films. Original separate
+// artwork remains available for the avatar/card bridge and other scenes/ages.
 const SCENES = Object.freeze({
   home: HOME_SCENE_ASSET,
   porch: VISIT_SCENE_ASSET,
@@ -20,6 +21,14 @@ export function getIllustratedLayout(page) {
   if (['chat', 'connected'].includes(page)) return {x: .5, footY: .68, height: .16, world: 'shared', character: false, shared: false};
   if (isCard(page)) return {x: .5, footY: .68, height: .31, world: 'home', character: false};
   return {x: .5, footY: .68, height: .31, world: 'home'};
+}
+
+// The generated 496×864 scene inherits this actor box from the 720×1280
+// reference. Project through the exact cover crop used by the full-scene film.
+export function personalRoomCharacterFrame(width, height) {
+  const scale = Math.max(width / 496, height / 864);
+  const filmWidth = 496 * scale, filmHeight = 864 * scale;
+  return {x: filmWidth * (162 / 720) - (filmWidth - width) / 2, y: filmHeight * (521 / 1280) - (filmHeight - height) / 2, width: filmWidth * (397 / 720), height: filmHeight * (397 / 1280)};
 }
 
 // Keep the same DOM card anchored to the illustration's raised paw before it
@@ -59,27 +68,72 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   host.parentElement?.setAttribute('data-character-renderer', 'illustrated-2d');
   const state = {page: 'home', stage: 'adult', layout: getIllustratedLayout('home'), reduced: !!reducedMotion, active: true, disposed: false, action: null, frame: 0, conversation: false, participants: [], lounge: {}, realm: {}, portal: 'idle'};
   const roomVideo = createRoomVideo({container: room, src: new URL(HOME_SCENE_VIDEO_ASSET, import.meta.url).href, poster: new URL(HOME_SCENE_ASSET, import.meta.url).href, reducedMotion});
+  let renderedLayout = state.layout;
+  let projectedProxy = false, hitTarget = null;
+  const personalRoom = createPersonalRoomVideo({container: room, idleSrc: new URL(HOME_CHARACTER_IDLE_ASSET, import.meta.url).href, reactSrc: new URL(HOME_CHARACTER_REACT_ASSET, import.meta.url).href, poster: new URL(HOME_CHARACTER_SCENE_ASSET, import.meta.url).href, reducedMotion, onChange: applyMediaOwnership});
   const dimensions = () => ({width: host.clientWidth || host.getBoundingClientRect().width || 402, height: host.clientHeight || host.getBoundingClientRect().height || 874});
   const stop = () => { if (state.frame) cancelFrame(state.frame); state.frame = 0; state.action = null; host.dataset.transitionPhase = 'idle'; primary.artwork.style.transform = ''; };
 
-  function draw(layout = state.layout) {
+  function personalSceneEligible(layout = renderedLayout) {
+    return state.page === 'home' && layout.world === 'home' && state.stage === 'adult' && layout.character !== false && !layout.shared && !state.conversation && state.action?.kind !== 'transition' && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true';
+  }
+  function applyMediaOwnership() {
     if (state.disposed) return;
+    const owns = personalRoom.visible;
+    // Visibility preserves the original image's measurable geometry for the
+    // existing room-to-header flight. character:false retains normal hiding.
+    primary.anchor.style.visibility = owns ? 'hidden' : '';
+    positionActors(renderedLayout, owns);
+    const nextHit = owns ? host.parentElement?.querySelector?.('.home-companion') : null;
+    if (hitTarget && hitTarget !== nextHit) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = '';
+    hitTarget = nextHit;
+    if (hitTarget) {
+      const {width, height} = dimensions(), rect = personalRoomCharacterFrame(width, height);
+      Object.assign(hitTarget.style, {left: `${rect.x}px`, top: `${rect.y}px`, width: `${rect.width}px`, height: `${rect.height}px`, bottom: 'auto', transform: 'none'});
+    }
+    roomVideo.update({active: state.active && renderedLayout.world === 'home' && !owns, reducedMotion: state.reduced});
+    host.dataset.personalRoom = owns ? personalRoom.status.mode : 'off';
+  }
+  function positionActors(layout, owns) {
     const {width, height} = dimensions(), size = Math.min(height * layout.height, width * .78);
-    for (const [key, image] of Object.entries(plates)) image.hidden = key !== layout.world;
-    host.dataset.scene = layout.world;
-    roomVideo.update({active: state.active && layout.world === 'home', reducedMotion: state.reduced});
-    primary.anchor.hidden = layout.character === false;
-    secondary.anchor.hidden = !layout.shared;
+    const homeAdult = state.page === 'home' && layout.world === 'home' && state.stage === 'adult';
+    if (!homeAdult) projectedProxy = false;
+    if (owns) projectedProxy = true;
+    const bridge = host.parentElement?.dataset?.conversationAvatarMotion;
+    const keepProjected = owns || (projectedProxy && homeAdult && (state.conversation || layout.character === false || bridge));
     for (const [actor, x] of [[primary, layout.x], [secondary, .70]]) {
       actor.anchor.style.left = `${x * 100}%`; actor.anchor.style.top = `${layout.footY * 100}%`;
       actor.anchor.style.width = `${size}px`; actor.anchor.style.height = `${size}px`;
     }
+    if (keepProjected) {
+      const rect = personalRoomCharacterFrame(width, height);
+      Object.assign(primary.anchor.style, {left: `${rect.x + rect.width / 2}px`, top: `${rect.y + rect.height}px`, width: `${rect.width}px`, height: `${rect.height}px`});
+      primary.artwork.style.transform = 'none'; primary.artwork.style.objectFit = 'fill';
+    } else {
+      if (primary.artwork.style.transform === 'none') primary.artwork.style.transform = '';
+      primary.artwork.style.objectFit = '';
+    }
+  }
+  function syncMedia(layout = renderedLayout) {
+    renderedLayout = layout;
+    personalRoom.update({active: state.active && personalSceneEligible(layout), reducedMotion: state.reduced});
+    applyMediaOwnership();
+  }
+
+  function draw(layout = state.layout) {
+    if (state.disposed) return;
+    for (const [key, image] of Object.entries(plates)) image.hidden = key !== layout.world;
+    host.dataset.scene = layout.world;
+    primary.anchor.hidden = layout.character === false;
+    secondary.anchor.hidden = !layout.shared;
+    syncMedia(layout);
     host.dataset.conversationMode = state.conversation ? 'conversation' : 'idle';
   }
   function setStage(stage) {
     state.stage = stage === 'juvenile' ? 'juvenile' : 'adult';
     const src = new URL(klinAssets[state.stage], import.meta.url).href;
     for (const actor of [primary, secondary]) if (actor.artwork.src !== src) actor.artwork.src = src;
+    syncMedia();
   }
   function setPage(page, {stage = state.stage, layout, immediate = false} = {}) {
     if (state.disposed) return;
@@ -122,6 +176,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   }
   function interact(kind = 'wave') {
     if (state.action?.kind === 'transition' || state.disposed) return () => {};
+    if (personalRoom.supported && personalSceneEligible()) return kind === 'wave' ? personalRoom.respond() : () => {};
     return runAction(kind, 750, progress => {
       const gesture = Math.sin(progress * Math.PI * 2) * (1 - progress);
       primary.artwork.style.transform = `translateY(12%) rotate(${gesture * (kind === 'look' ? 1.5 : 4)}deg)`;
@@ -148,10 +203,10 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     if (state.action.pausedAt != null) {state.action.started += now() - state.action.pausedAt; state.action.pausedAt = null;}
     state.frame = frame(state.action.tick);
   }
-  function setActive(value) {state.active = !!value; host.dataset.active = String(state.active); roomVideo.update({active: state.active && state.layout.world === 'home'}); if (!state.active) pause(); else resume();}
+  function setActive(value) {state.active = !!value; host.dataset.active = String(state.active); syncMedia(); if (!state.active) pause(); else resume();}
   function setReducedMotion(value) {
     state.reduced = !!value;
-    roomVideo.update({reducedMotion: state.reduced});
+    syncMedia();
     if (state.reduced && state.action) {
       state.action.duration = 1; state.action.started = now() - 1;
       if (state.action.pausedAt != null) state.action.pausedAt = now();
@@ -161,6 +216,8 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   const visibility = () => {if (doc.hidden) pause(); else resume();};
   doc.addEventListener('visibilitychange', visibility);
   const observer = new win.ResizeObserver(() => draw()); observer.observe(host);
+  const bridgeObserver = typeof win.MutationObserver === 'function' ? new win.MutationObserver(() => syncMedia()) : null;
+  if (host.parentElement) bridgeObserver?.observe(host.parentElement, {attributes: true, attributeFilter: ['data-conversation-avatar-motion', 'data-scene-overlay']});
   draw();
   const imageReady = image => image.complete && image.naturalWidth ? Promise.resolve() : new Promise((resolve, reject) => {
     const clear = () => {image.removeEventListener('load', loaded); image.removeEventListener('error', failed);};
@@ -176,7 +233,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     if (state.disposed) return false; host.dataset.world = 'ready'; return true;
   }).catch(() => { host.dataset.world = 'fallback'; return false; });
   const ready = Promise.race([loadedReady, disposedReady]);
-  function dispose() {if (state.disposed) return; stop(); state.disposed = true; roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
+  function dispose() {if (state.disposed) return; stop(); state.disposed = true; if (hitTarget) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = ''; personalRoom.dispose(); roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); bridgeObserver?.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
   const completeWithoutGrowth = options => { let cancelled = false; queueMicrotask(() => {if (!cancelled && !state.disposed) {options?.onSigned?.(); options?.onComplete?.();}}); return () => {cancelled = true;}; };
   return {
     supported: true, ready, setPage, setStage, setLayout, transition, interact, setConversationMode, setActive, setReducedMotion, resize: draw, dispose,
@@ -184,6 +241,6 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     setCardPreview() {}, setParticipants: participants => {state.participants = participants || [];},
     setPortalState: value => {state.portal = value;}, setLoungeState: value => {state.lounge = {...state.lounge, ...value};}, setRealmState: value => {state.realm = {...state.realm, ...value};},
     grow: completeWithoutGrowth, signContract: completeWithoutGrowth,
-    get status() {return {page: state.page, stage: state.stage, action: state.action?.kind || 'idle', world: state.layout.world, rendering: 'illustrated-2d', model: host.dataset.model, nativeReady: false, conversation: state.conversation, transitionPhase: host.dataset.transitionPhase || 'idle', participants: state.participants.map(person => person.id), lounge: {...state.lounge}, realm: {...state.realm}, portal: state.portal, particleSamples: 0};},
+    get status() {return {page: state.page, stage: state.stage, action: state.action?.kind || (personalRoom.status.responding ? 'wave' : 'idle'), world: state.layout.world, rendering: 'illustrated-2d', model: host.dataset.model, nativeReady: false, conversation: state.conversation, personalRoom: personalRoom.status, transitionPhase: host.dataset.transitionPhase || 'idle', participants: state.participants.map(person => person.id), lounge: {...state.lounge}, realm: {...state.realm}, portal: state.portal, particleSamples: 0};},
   };
 }
