@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T07:52:42.957659+00:00",
+  "createdAt": "2026-10-28T08:00:33.151679+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147050090,
+  "payloadBytes": 147050123,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
       "bytes": 131213,
-      "sha256": "07e68005464c2a8f03e94cd04770b15769140f6926dff246f506c0129250cc75"
+      "sha256": "9433c9a194953b0a406f1d888398494a18e2e78e530616d4cca6d38e2b3cb94c"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1712,8 +1712,8 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 11450,
-      "sha256": "1b0035b132749e90d95af08bfe5843fea0b8de9f20258cdbcdd4844d298d7717"
+      "bytes": 11406,
+      "sha256": "9c27a3df55f4ec5574612086700900a317e38ff105a9a087008c0d14140fead5"
     },
     {
       "source": "friend-network.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11303,
-      "sha256": "a4e969397dc0692393b6bdd93150ea4e7b46c332e9c21c136daf4d24fef12958"
+      "bytes": 11309,
+      "sha256": "90870f215725a35b039533687d345a7820629edaf09d3257b7b0e9e76c805c81"
     },
     {
       "source": "journey-experience.css",
@@ -1820,14 +1820,14 @@
     {
       "source": "landing-audio-clips.mjs",
       "path": "landing-audio-clips.mjs",
-      "bytes": 3524,
-      "sha256": "2bb38f09c6696668059d4440feef364e56054b4c3d5fb40c97c2ee87a5d0a409"
+      "bytes": 3516,
+      "sha256": "a40eeddf117f1b1e63750b0c9160324b2d8eaed3e9ab6472e0d00b390527791c"
     },
     {
       "source": "landing-audio-engine.mjs",
       "path": "landing-audio-engine.mjs",
-      "bytes": 21861,
-      "sha256": "d03a80e566bf168b19d15a99f1a5e73ae3d17cdc374f9e993f6a0527cc86c4aa"
+      "bytes": 21940,
+      "sha256": "03e18e0fb887f624918278147369fd73775a5eddedf828eb25b15c2250023aa4"
     },
     {
       "source": "landing-day-master-reading.mjs",
@@ -2097,7 +2097,7 @@
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
       "bytes": 259,
-      "sha256": "a2190794b4387ec687f0c6cf3286a1f1aa4c3ed20367dc09258b9371042eb257"
+      "sha256": "721e9929dd92ff2fed81f23a06fdd186b7fef08a7a68dfed72fcf7c0022ade15"
     },
     {
       "source": "scenes-v41.css",

@@ -1,9 +1,9 @@
 // Neural character narration candidate. Original renders and provenance are archived.
 // User-selected35 film voice/effects and37 soft meadow BGM, no re-encoding.
-// Original levels and audio content are preserved. Voice/effects follow the
-// identical34 picture; BGM keeps its own clock and repeats the complete track.
+// Voice/effects keep their original level and follow the identical34 picture.
+// Background playback is -14 dB and keeps its own full-track loop.
 export const LANDING_FILM_AUDIO = Object.freeze({"src": "assets/landing-audio-20261028-67/dialogue-actions.m4a", "duration": 68.583});
-export const LANDING_MUSIC = Object.freeze({"src": "assets/landing-audio-20261028-69/background.m4a", "duration": 68.583, "loopStart": 0, "loopEnd": 68.583, "gain": 1});
+export const LANDING_MUSIC = Object.freeze({"src": "assets/landing-audio-20261028-69/background.m4a", "duration": 68.583, "loopStart": 0, "loopEnd": 68.583, "gain": 0.2});
 export const LANDING_VOICE_CLIPS = Object.freeze([
   {
     "text": "我好像刚刚醒来…",

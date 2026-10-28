@@ -1,4 +1,4 @@
-import { LANDING_FILM_AUDIO, LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261028-opening-music-69';
+import { LANDING_FILM_AUDIO, LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261028-music-balance-70';
 import { ROOM_VOICE_CLIPS } from './room-voice-clips.mjs?v=20261026-room-voice-47';
 import { ROOM_VOICE_PROFILE, isRoomNarration, isMandarin, findLocalLandingVoice } from './room-voice-profile.mjs?v=20261026-room-voice-47';
 
@@ -92,9 +92,10 @@ export function createLandingAudio({ environment = {} } = {}) {
     filmGain.gain.cancelScheduledValues(context.currentTime);
     filmGain.gain.setTargetAtTime(voiceBusy ? .055 : 1, context.currentTime, .08);
     musicGain.gain.cancelScheduledValues(context.currentTime);
-    // The full background stem has its own clock and remains audible when
-    // the video is playing, held, or seeking. Only explicit narration ducks it.
-    musicGain.gain.setTargetAtTime((LANDING_MUSIC.gain ?? 1) * (voiceBusy ? .55 : 1), context.currentTime, .08);
+    // Keep the independent music clock, but leave space for the original
+    // film dialogue and quiet action sounds as well as explicit narration.
+    const foreground = voiceBusy || film.active && film.playing;
+    musicGain.gain.setTargetAtTime((LANDING_MUSIC.gain ?? 1) * (foreground ? .15 : 1), context.currentTime, foreground ? .08 : .35);
   }
   function disconnect(source) {
     if (!source) return;

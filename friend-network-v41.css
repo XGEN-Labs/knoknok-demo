@@ -9,8 +9,8 @@
 .phone#phone[data-world-page="relations"] .status-bar {color:#f3f6ff;}
 .phone#phone[data-world-page="relations"] #status-icons {filter:brightness(0) invert(1);}
 .phone#phone[data-world-page="relations"] .home-indicator {background:#f3f6ff;}
-.phone#phone #app .page.friends-lounge .network-search input::placeholder {color:var(--kn-ui-color-text-hint,#78818f)!important;opacity:1;}
-.phone#phone #app .page.friends-lounge .network-search svg {color:var(--kn-ui-color-text-hint,#78818f);stroke-width:1.9;}
+.phone#phone #app .page.friends-lounge .network-search input::placeholder {color:rgba(0,0,0,.2)!important;opacity:1;}
+.phone#phone #app .page.friends-lounge .network-search svg {color:rgba(0,0,0,.2);stroke-width:1.9;}
 .phone#phone #app .page.friends-lounge .network-search-status {color:var(--kn-ui-color-text-hint,#78818f)!important;}
 .phone#phone #app .page.friends-lounge .relationship-network.spirit-world {
  position:absolute;inset:calc(var(--app-safe-top) + 62px) 8px calc(var(--app-safe-bottom) + 80px);
