@@ -3,13 +3,13 @@
   "createdAt": "2026-10-28T10:14:22.423480+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147074279,
+  "payloadBytes": 147068588,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 132311,
-      "sha256": "755455ebba26efb93733eb7075a8f0396ea3427110b8f7c257642617480fcb94"
+      "bytes": 132034,
+      "sha256": "8d7ae7f1ec71fe02004273e7824d4e38d29250f221c94ec3058007c178d397d9"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -2438,14 +2438,14 @@
     {
       "source": "native-api.mjs",
       "path": "native-api.mjs",
-      "bytes": 2857,
-      "sha256": "ea6c4bf1e43fee13cf37cba52b3ec83f9fcb9ec251db06093672050149f4f8b1"
+      "bytes": 2567,
+      "sha256": "b225a3ce6a5358face9374a96bea6dab6d250a45000a28d519c8c1dc2e516e29"
     },
     {
       "source": "native-panels.mjs",
       "path": "native-panels.mjs",
-      "bytes": 12657,
-      "sha256": "2781b43717b73b24ae4eeb3d5aedd0e6071cb6efc8b11b3dba981b577081c567"
+      "bytes": 7533,
+      "sha256": "121210111c3713f1ca74d8c2ab49f604d46a90e3107f80f78477b8cf0125a541"
     },
     {
       "source": "compat/web-naming/landing-handoff.mjs",

@@ -4,9 +4,6 @@ export function createNativeApi(session){
  const get=path=>session.request(path),post=(path,body)=>session.request(path,{method:'POST',body}),patch=(path,body)=>session.request(path,{method:'PATCH',body});
  const group=id=>'/api/web/groups/'+encodeURIComponent(id);
  return {
-  memoryCapabilities:()=>get('/api/web/memories/capabilities'),
-  memoryList:body=>post('/api/web/memories/list',body),memoryGet:body=>post('/api/web/memories/get',body),
-  memoryCorrect:body=>post('/api/web/memories/correct',body),memoryForget:body=>post('/api/web/memories/forget',body),
   profile:()=>get('/api/web/profile'),updateProfile:body=>patch('/api/web/profile',body),
   nickname:()=>get('/api/web/agent/nickname'),updateNickname:body=>patch('/api/web/agent/nickname',body),
   rooms:()=>get('/api/web/rooms'),group:id=>get(group(id)),

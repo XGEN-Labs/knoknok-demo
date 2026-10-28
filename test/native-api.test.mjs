@@ -16,6 +16,6 @@ test('closed or switched account discards group results',async()=>{
 });
 test('native adapter fixes paths and leaves identity selection to session/server',async()=>{
  const calls=[],api=createNativeApi({request:async(...args)=>{calls.push(args);return {};}});
- await api.memoryList({});await api.updateProfile({homeCity:{value:'上海'}});await api.groupPost('room/id',{clientMsgId:'fixed',text:'hello'});
- assert.deepEqual(calls,[['/api/web/memories/list',{method:'POST',body:{}}],['/api/web/profile',{method:'PATCH',body:{homeCity:{value:'上海'}}}],['/api/web/groups/room%2Fid/post',{method:'POST',body:{clientMsgId:'fixed',text:'hello'}}]]);
+ await api.updateProfile({homeCity:{value:'上海'}});await api.groupPost('room/id',{clientMsgId:'fixed',text:'hello'});
+ assert.deepEqual(calls,[['/api/web/profile',{method:'PATCH',body:{homeCity:{value:'上海'}}}],['/api/web/groups/room%2Fid/post',{method:'POST',body:{clientMsgId:'fixed',text:'hello'}}]]);
 });
