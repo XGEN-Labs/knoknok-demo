@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T04:24:28.353162+00:00",
+  "createdAt": "2026-10-28T07:46:56.758728+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 124492354,
+  "payloadBytes": 124527367,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 122878,
-      "sha256": "5c7c18e82824fb2c9af4f19c28b7f0e2761394665915523d839d8fdba96963ac"
+      "bytes": 130432,
+      "sha256": "d72281b84fe00e947607bc712376e41363610304b597c864066c9b20a1d1c40f"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -2398,6 +2398,36 @@
       "path": "personal-room-video.mjs",
       "bytes": 6983,
       "sha256": "502dde81fca2e085983d75e4bcb55d340a5c82e16cd460107ba655d84cda4394"
+    },
+    {
+      "source": "deployment-mode.mjs",
+      "path": "deployment-mode.mjs",
+      "bytes": 123,
+      "sha256": "937193dbd36cebeecb1256c2f3c7033176fb9eacc1db259fa36c95d1ef31c3cd"
+    },
+    {
+      "source": "live-session.mjs",
+      "path": "live-session.mjs",
+      "bytes": 7273,
+      "sha256": "3d787d04fa4f90a542cdc6d1230195485bc688c490e440c7b89b856166591940"
+    },
+    {
+      "source": "native-api.mjs",
+      "path": "native-api.mjs",
+      "bytes": 2857,
+      "sha256": "ea6c4bf1e43fee13cf37cba52b3ec83f9fcb9ec251db06093672050149f4f8b1"
+    },
+    {
+      "source": "native-panels.mjs",
+      "path": "native-panels.mjs",
+      "bytes": 12657,
+      "sha256": "2781b43717b73b24ae4eeb3d5aedd0e6071cb6efc8b11b3dba981b577081c567"
+    },
+    {
+      "source": "compat/web-naming/landing-handoff.mjs",
+      "path": "compat/web-naming/landing-handoff.mjs",
+      "bytes": 4549,
+      "sha256": "47ff4213bf941f13eb9f422c695b10e648cab49152b259c22fbfa844b65a1ce7"
     }
   ],
   "runtimeDependencies": [

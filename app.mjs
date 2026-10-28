@@ -1,4 +1,9 @@
-import { createAuthEntry, createDemoAuthAdapter } from './auth-entry.mjs?v=20261027-first-landing';
+import { createNativeApi } from './native-api.mjs';
+import { createNativePanels } from './native-panels.mjs';
+import { LIVE_WEB } from './deployment-mode.mjs';
+import { createLiveSession } from './live-session.mjs';
+import { createLandingHandoff, landingInformation } from './compat/web-naming/landing-handoff.mjs';
+import { createAuthEntry, createDemoAuthAdapter, createApiAuthAdapter } from './auth-entry.mjs?v=20261027-first-landing';
 import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261028-auth-logo-62';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
@@ -56,13 +61,14 @@ const variantParams = new URLSearchParams(location.search);
 const shareDemo = document.documentElement.classList.contains('share-demo');
 // Keep historical pixel files archived; the current prototype only presents Klin.
 const pixelVariant = false;
-const comparisonMode = variantParams.get('compare') === '1' && window.parent !== window;
-const STATE_KEY = shareDemo ? `${STORAGE_KEY}-klin-demo-v1` : pixelVariant ? `${STORAGE_KEY}-pixel` : STORAGE_KEY;
+const comparisonMode = !LIVE_WEB && variantParams.get('compare') === '1' && window.parent !== window;
+const STATE_KEY = LIVE_WEB ? `${STORAGE_KEY}-web-live-v1` : shareDemo ? `${STORAGE_KEY}-klin-demo-v1` : pixelVariant ? `${STORAGE_KEY}-pixel` : STORAGE_KEY;
 const UI_KEY = `${STATE_KEY}-ui`;
 document.documentElement.dataset.character = pixelVariant ? 'pixel' : 'soft';
 document.documentElement.classList.toggle('comparison-embed', comparisonMode);
 let state, ui;
 try { state=comparisonMode?initialState():hydrateState(localStorage.getItem(STATE_KEY)); ui=comparisonMode?null:JSON.parse(localStorage.getItem(UI_KEY)||'null'); } catch { state=initialState(); }
+if(LIVE_WEB){state=freshDemoAccountState(initialState());state.session.authenticated=false;}
 ui={route:state.session.authenticated?'home':'welcome',history:[],motion:false,matchResult:'found',failNext:false,selectedInvite:null,selectedRelationship:null,...(ui||{})};
 ui.history=Array.isArray(ui.history)?ui.history.filter(route=>typeof route==='string').slice(-16):[];
 // A restored page has no pending timer; allow a fresh knock after refresh.
@@ -77,7 +83,7 @@ if(state.session.authenticated&&landingComplete(state)){
   ui.route='home';ui.history=[];ui.sceneRoute='home';ui.sceneConversation=false;
 }
 ui.soundOn=false;
-let sharedCard=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');
+let sharedCard=LIVE_WEB?null:decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');
 if(sharedCard)ui.route='public-card';
 let landingHelloTimer,landingReveal=null,landingReaction='';
 let visitTimer,visitAttempt=0;
@@ -94,9 +100,38 @@ let welcomeLogoMotion=null;
 let matchingDemandId=null, matchingPhase=0, matchingTimers=[];
 let timer, initializeTimer, toastTimer, authResendTimer, stopTransition, pendingSceneRefresh=false, adviceRequest=0, busy=false, companionTyping=false;
 // Credentials live only in the current form; the static Demo uses a local adapter.
-const authFormDraft={username:'knoknok.demo',password:'',confirmPassword:''};
+const authFormDraft={username:LIVE_WEB?'':'knoknok.demo',password:'',confirmPassword:''};
 let authController,authPasswordVisible=false,authView={step:'entry',username:'',busy:false,error:'',retryAt:0,adapterKind:'demo'};
 const accountRooms=createDemoAccountRooms({storage:comparisonMode?null:localStorage,key:`${STATE_KEY}-account-rooms`,serialize:serializeState,hydrate:hydrateState});
+let liveView={messages:[],sending:false,historyBusy:false,historyReady:false,error:''}, liveRenderPending=false;
+const liveSession=createLiveSession({onChange(value){
+ liveView=value;
+ if(!LIVE_WEB)return;
+ companionTyping=value.sending;
+ if(state.session.authenticated)state.private.a.companionMessages=value.messages;
+ if(!liveRenderPending){liveRenderPending=true;queueMicrotask(()=>{liveRenderPending=false;if(state.session.authenticated&&ui.route==='home')render(false);});}
+},onSessionLost(){
+ liveHandoff.clear();nativePanels.reset();liveSession.activate(null);state.session.authenticated=false;state.private.a.companionMessages=[];closeSheet();ui.route='login';render(false);authController?.bootstrap();
+}});
+const liveHandoff=createLandingHandoff({chat:(...args)=>liveSession.chat(...args),accepted(receipt,owner){
+ if(state.session.localAuthUserId===owner){state.onboarding.agentHandoff=receipt;save();}
+}});
+const nativePanels=createNativePanels({api:createNativeApi(liveSession),owner:()=>liveSession.getState().owner,showSheet,history:()=>liveSession.getState(),refreshHistory:()=>liveSession.history(),onProfile(profile,nickname){
+ if(typeof profile?.fields?.preferredName?.value==='string')state.users.a.name=profile.fields.preferredName.value;
+ if(typeof nickname?.agentNickname==='string'){state.users.a.companionName=nickname.agentNickname;state.private.a.companion.name=nickname.agentNickname;}
+ save();if(ui.route==='home')render(false);
+}});
+let landingHandoffBusy=false;
+const LIVE_SESSION_EVENT='knoknok-auth-change';
+function announceLiveSession(){try{localStorage.setItem(LIVE_SESSION_EVENT,crypto.randomUUID());}catch{}}
+function cachedLiveRoom(id){
+ const current=accountRooms.load(id);if(current)return current;
+ // Read only the authenticated account's old compatibility cache. Never import sample identities.
+ for(const base of [`${STORAGE_KEY}-klin-demo-v1-rebuild-20261023`,`${STORAGE_KEY}-rebuild-20261023`]){
+  try{const raw=localStorage.getItem(`${base}-account-${id}`);if(raw){const saved=hydrateState(raw);if(!saved.session.localAuthUserId||String(saved.session.localAuthUserId)===id)return saved;}}catch{}
+ }
+ return freshDemoAccountState(initialState());
+}
 const actor = () => state.session.activeUserId;
 const me = () => state.users[actor()];
 const privateSpace = () => state.private[actor()];
@@ -120,10 +155,17 @@ const logoImage = `<img class="brand-logo" src="assets/brand-20261028-noknok/nok
 const spiritAvatar = () => `<span class="avatar small">${spiritImage(`${companionName()} 伙伴`)}</span>`;
 const empty = (title,copy,action='') => `<div class="blank-state">${spiritImage(`${companionName()} 伙伴`)}<h3>${title}</h3><p>${copy}</p>${action}</div>`;
 const detail = (label,value) => `<div class="detail-line"><dt>${label}</dt><dd>${esc(value)}</dd></div>`;
-function save(){if(comparisonMode)return;try{if(state.session.authenticated&&state.session.localAuthUserId)accountRooms.save(state.session.localAuthUserId,state);localStorage.setItem(STATE_KEY,serializeState(state));localStorage.setItem(UI_KEY,JSON.stringify(ui));}catch{toast('瀏覽器暫時無法保存，仍可繼續這次體驗。');}}
-function dispatch(action, renderNow=true){state=reduce(state,action);save();if(renderNow)render(false);if(state.error&&ui.route!=='landing')toast(state.error);return !state.error;}
+function save(){if(comparisonMode)return;try{
+ let saved=state;
+ if(LIVE_WEB){saved=structuredClone(state);saved.private.a.companionMessages=[];saved.private.a.memory=[];}
+ if(saved.session.authenticated&&saved.session.localAuthUserId)accountRooms.save(saved.session.localAuthUserId,saved);
+ localStorage.setItem(STATE_KEY,serializeState(saved));localStorage.setItem(UI_KEY,JSON.stringify(ui));
+}catch{toast('瀏覽器暫時無法保存，仍可繼續這次體驗。');}}
+function dispatch(action, renderNow=true){if(LIVE_WEB&&!['ONBOARDING_REPLY','ONBOARDING_SKIP','ONBOARDING_BACK','SIGN_COMPANION_CONTRACT','FINISH_CONVERSATION','ENTER_COMPANION_HOME'].includes(action.type)){toast('這項功能尚未開放。');return false;}state=reduce(state,action);save();if(renderNow)render(false);if(state.error&&ui.route!=='landing')toast(state.error);return !state.error;}
 function toast(text){const node=$('#toast');node.textContent=text;node.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.classList.remove('visible'),3300);}
 function go(route,options={}){
+  if(LIVE_WEB&&route==='relations'){nativePanels.rooms();return;}
+  if(LIVE_WEB&&['profile','public-card','setup-basics','setup-birth'].includes(route)){showLiveProfile();return;}
   if(route!==ui.route)sceneSound.stopSpeech();
   if(typeof closeContractUI==='function')closeContractUI();
   if(route==='profile-edit')route='profile';
@@ -191,12 +233,13 @@ function syncAuthCountdown(){clearInterval(authResendTimer);authResendTimer=null
 function clearAuthDraft(){clearInterval(authResendTimer);authResendTimer=null;authFormDraft.password='';authFormDraft.confirmPassword='';authPasswordVisible=false;}
 function applyAuthenticatedRoom(view){
  const id=String(view.user.id),username=view.user.username;
- const same=state.session.localAuthUserId===id;
+ const same=state.session.localAuthUserId===id&&(!LIVE_WEB||liveSession.getState().owner===id);
  const legacyFixture=!state.session.localAuthUserId&&view.bootstrap.demoAccountKind==='fixture'&&landingComplete(state);
- if(!same&&!legacyFixture)state=accountRooms.load(id)||(view.bootstrap.demoAccountKind==='fixture'?initialState():freshDemoAccountState(initialState()));
- state=reduce(state,{type:'DEMO_LOGIN',provider:'demo'});
+ if(!same&&!legacyFixture)state=LIVE_WEB?cachedLiveRoom(id):(accountRooms.load(id)||(view.bootstrap.demoAccountKind==='fixture'?initialState():freshDemoAccountState(initialState())));
+ if(LIVE_WEB){state.session={authenticated:true,activeUserId:'a',provider:'account'};state.relationships=[];state.invitations=[];state.messages=[];state.candidates=[];state.private.a.memory=[];delete state.private.a.socialTags;}else state=reduce(state,{type:'DEMO_LOGIN',provider:'demo'});
  Object.assign(state.session,{localAuthUserId:id,localAuthUsername:username,localAgentId:view.bootstrap.agent.agentId,localRoomId:view.bootstrap.agent.roomId});
  applyAccountOnboarding(state,view.bootstrap.onboarding);
+ if(LIVE_WEB&&!same){ui.companionDrafts={};conversationActive=false;liveSession.activate(id);liveHandoff.activate(id);state.private.a.companionMessages=[];void liveSession.history({full:true});}
  clearAuthDraft();save();
  if(!sharedCard&&['welcome','login','register','verify'].includes(ui.route)){go(setupRoute(),{replace:true});if(ui.route==='landing')revealOnboarding();render(false);}
 }
@@ -206,12 +249,14 @@ function onAuthChange(next){
  if(next.step==='ready'){applyAuthenticatedRoom(next);return;}
  if(['login','register','verify'].includes(ui.route))render(false);
 }
-function initializeAuth(){authController?.dispose();authController=createAuthEntry({adapter:createDemoAuthAdapter({initialSession:state.session.authenticated?{authenticated:true,id:state.session.localAuthUserId,username:state.session.localAuthUsername,agentId:state.session.localAgentId,roomId:state.session.localRoomId,onboarding:{status:state.session.onboardingStatus||(landingComplete(state)?'completed':'not_required')}}:null}),onChange:onAuthChange});authView=authController.getState();}
+function initializeAuth(){authController?.dispose();authController=createAuthEntry({adapter:LIVE_WEB?createApiAuthAdapter({logoutPath:'/api/auth/logout'}):createDemoAuthAdapter({initialSession:state.session.authenticated?{authenticated:true,id:state.session.localAuthUserId,username:state.session.localAuthUsername,agentId:state.session.localAgentId,roomId:state.session.localRoomId,onboarding:{status:state.session.onboardingStatus||(landingComplete(state)?'completed':'not_required')}}:null}),onChange:onAuthChange});authView=authController.getState();}
 async function exitAuth(){
- if(state.session.authenticated&&state.session.localAuthUserId)accountRooms.save(state.session.localAuthUserId,state);
- await authController.logout();if(authController.getState().authenticated)return;
+ closeSheet();
+ if(LIVE_WEB){save();liveHandoff.clear();nativePanels.reset();liveSession.activate(null);}
+ if(!LIVE_WEB&&state.session.authenticated&&state.session.localAuthUserId)accountRooms.save(state.session.localAuthUserId,state);
+ await authController.logout();if(authController.getState().authenticated){if(LIVE_WEB){const id=state.session.localAuthUserId;liveSession.activate(id);liveHandoff.activate(id);void liveSession.history({full:true});}return;}if(LIVE_WEB)announceLiveSession();
  clearAuthDraft();resetSound();clearMatching();clearTimeout(timer);clearTimeout(landingHelloTimer);clearTimeout(visitTimer);visitAttempt++;homeGreeting.reset();landingVideoScene?.dispose();landingVideoScene=null;conversationActive=false;companionTyping=false;
- state=initialState();ui={route:'welcome',history:[],motion:ui.motion,matchResult:'found',failNext:false,soundOn:false};save();render(true);
+ state=LIVE_WEB?freshDemoAccountState(initialState()):initialState();ui={route:'welcome',history:[],motion:ui.motion,matchResult:'found',failNext:false,soundOn:false};save();render(true);
 }
 function setupRoute(){return onboardingDestination(state);}
 function basicsDraft(){return {name:me().name,language:me().language||'粵語',region:me().region||'香港',...(ui.setupBasics||{})};}
@@ -288,11 +333,15 @@ function backOnboarding(drafts){
  if(dispatch({type:'ONBOARDING_BACK',draft,drafts},false)){delete ui.contractPromptDismissed;save();render(false);}
 }
 async function departToHome(){
- if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt||authView.busy)return;
+ if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt||authView.busy||landingHandoffBusy)return;
  sceneSound.stopSpeech();
  const originUI=ui,who=actor(),signature=state.onboarding.contract.signedAt;
- // This entry is still an offline demo. Real completion requires the Agent handoff first.
- if(authView.adapterKind!=='demo'){toast('資料交接尚未接通，請稍後再試。');return;}
+ if(LIVE_WEB){
+  landingHandoffBusy=true;
+  try{if(!await liveHandoff.ensure(landingInformation(state),state.onboarding.agentHandoff))return;}
+  catch(error){toast(error.message);return;}
+  finally{landingHandoffBusy=false;}
+ }
  const result=await authController.completeOnboarding();
  if(result.error||result.bootstrap?.onboarding?.status!=='completed'){if(result.error)toast(result.error);return;}
  if(ui!==originUI||ui.route!=='landing')return;
@@ -337,7 +386,7 @@ function syncSceneGlass(){
   sceneControlGlass.refresh();
 }
 function conversationMarkup(messages){
-  return messages.map((m,i)=>`<div class="conversation-message ${m.role==='user'?'own':''}" data-conversation-id="${esc(m.id)}" ${companionTyping&&m.role!=='user'&&i===messages.length-1?'hidden':''}><p>${esc(m.text)}</p></div>`).join('')+(companionTyping?`<div class="conversation-message" data-conversation-id="typing-${esc(messages.at(-1)?.id||'pending')}">${loadingIndicatorMarkup(`${companionName()} 正在回覆…`)}</div>`:'');
+  return messages.map((m,i)=>`<div class="conversation-message ${m.role==='user'?'own':''}" data-conversation-id="${esc(m.id)}" ${!LIVE_WEB&&companionTyping&&m.role!=='user'&&i===messages.length-1?'hidden':''}><p>${esc(m.text)}</p>${LIVE_WEB&&['unknown','interrupted'].includes(m.status)?`<small>${m.status==='unknown'?'傳送結果待確認，請重新讀取記錄。':'這段回覆未完成。'}</small>`:''}</div>`).join('')+(companionTyping?`<div class="conversation-message" data-conversation-id="typing-${esc(messages.at(-1)?.id||'pending')}">${loadingIndicatorMarkup(`${companionName()} 正在回覆…`)}</div>`:'');
 }
 function setHomeConversation(active){
   const next=Boolean(active)&&ui.route==='home';
@@ -364,12 +413,16 @@ function setHomeConversation(active){
   }});
 }
 function home(){
- const space=privateSpace(),messages=space.companionMessages,turn=getCompanionTurn(state);
- const ledger=socialTagState(space,me()),pending=ledger.candidates.filter(candidate=>candidate.status==='pending'&&Array.isArray(candidate.sourceIds)&&candidate.sourceIds.some(id=>ledger.diary.some(entry=>entry.id===id&&entry.allowPublic===true)));
+ const space=privateSpace(),messages=LIVE_WEB?liveView.messages:space.companionMessages,turn=LIVE_WEB?{replies:[],status:'ready'}:getCompanionTurn(state);
+ const ledger=LIVE_WEB?{candidates:[],diary:[]}:socialTagState(space,me()),pending=ledger.candidates.filter(candidate=>candidate.status==='pending'&&Array.isArray(candidate.sourceIds)&&candidate.sourceIds.some(id=>ledger.diary.some(entry=>entry.id===id&&entry.allowPublic===true)));
  const invitation=pending.length?`<div class="room-dialogue" aria-live="polite" aria-hidden="${conversationActive}" ${conversationActive?'hidden':''}><div class="room-speech">有 ${pending.length} 枚新的社交標籤，想一起看看嗎？</div><div class="first-noking-choices"><button type="button" class="kn-glass-control" data-action="tag-open-chat">一起看看</button></div></div>`:'';
- return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="close-conversation" aria-label="回到首頁" ${conversationActive?'':'hidden'}>${backIcon}</button><button type="button" class="scene-icon" data-action="tag-diary" aria-label="Nok 的日記本" ${conversationActive?'hidden':''}>${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="我的名片" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${DEFAULT_CARD_AVATAR}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end" ${conversationActive?'hidden':''}>${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div>${invitation}<button type="button" class="home-companion" data-action="boop" aria-label="輕觸 Klin" ${conversationActive?'hidden':''}>${spiritImage('成年態 Klin','','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}<div class="tag-chat-tools"><button type="button" class="tag-ui-button" data-action="tag-end-session" ${companionTyping?'disabled':''}>把今天收進日記</button><button type="button" class="tag-ui-button" data-action="tag-diary">Nok 日記</button></div></div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}<span>串門</span></button></div></div>`,'home-page room-chat-page');
+ return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="close-conversation" aria-label="回到首頁" ${conversationActive?'':'hidden'}>${backIcon}</button><button type="button" class="scene-icon" data-action="tag-diary" aria-label="${LIVE_WEB?'伙伴的記憶':'Nok 的日記本'}" ${conversationActive?'hidden':''}>${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="${LIVE_WEB?'我的資料':'我的名片'}" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${DEFAULT_CARD_AVATAR}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end" ${conversationActive?'hidden':''}>${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div>${invitation}<button type="button" class="home-companion" data-action="boop" aria-label="輕觸 Klin" ${conversationActive?'hidden':''}>${spiritImage('成年態 Klin','','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${LIVE_WEB?liveChatStatus():''}${LIVE_WEB||companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}<div class="tag-chat-tools" ${LIVE_WEB?'hidden':''}><button type="button" class="tag-ui-button" data-action="tag-end-session" ${companionTyping?'disabled':''}>把今天收進日記</button><button type="button" class="tag-ui-button" data-action="tag-diary">Nok 日記</button></div></div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}<span>串門</span></button></div></div>`,'home-page room-chat-page');
 }
-function companion(){const space=privateSpace();const messages=space.companionMessages.map((m,i)=>`<div class="message ${m.role==='user'?'own':''}" ${companionTyping&&i===space.companionMessages.length-1?'hidden':''}>${m.role==='user'?avatar(actor(),true):spiritAvatar()}<div class="message-content"><div class="bubble">${esc(m.text)}</div></div></div>`).join('');return shell(top(companionName())+`<div class="content messages" id="message-scroll">${messages}${companionTyping?`<div class="message">${spiritAvatar()}<div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>`:''}${space.pendingDemandSuggestion&&!companionTyping?`<div class="glass-card"><h4>找個人一起去？</h4><p class="small-note">先確認，再開始尋找。</p>${btn('整理需求','new-demand','compact')}${btn('先聊聊','dismiss-demand','ghost')}</div>`:''}${space.companionMessages.length<3?`<div class="suggestions"><button type="button" data-say="最近想認識一起看展的朋友">找人看展</button><button type="button" data-say="最近工作有點累，想慢慢聊聊">放鬆一下</button></div>`:''}</div><form class="chat-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和我聊聊…" aria-label="私人訊息" maxlength="1000"></textarea><button class="send-button" type="submit" aria-label="發送給伙伴" ${companionTyping?'disabled':''}>${sendArrow}</button></div></form>`,'companion-page');}
+function liveChatStatus(){return `<div role="status" class="small-note">${esc(liveView.historyBusy?'正在讀取聊天記錄…':liveView.error||(!liveView.historyReady?'尚未讀取聊天記錄。':''))}<button type="button" class="text-button" data-action="live-history">重新讀取</button></div>`;}
+function liveRelations(){return shell(top('串門')+content(`${btn('查看已加入的房間','native-rooms')}${btn('返回小屋','back')}`),'friends-lounge');}
+async function showLiveProfile(){return nativePanels.profile();}
+async function showLiveMemory(){return nativePanels.memories();}
+function companion(){const space=privateSpace();const messages=space.companionMessages.map((m,i)=>`<div class="message ${m.role==='user'?'own':''}" ${companionTyping&&i===space.companionMessages.length-1?'hidden':''}>${m.role==='user'?avatar(actor(),true):spiritAvatar()}<div class="message-content"><div class="bubble">${esc(m.text)}</div></div></div>`).join('');return shell(top(companionName())+`<div class="content messages" id="message-scroll">${messages}${companionTyping?`<div class="message">${spiritAvatar()}<div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>`:''}${space.pendingDemandSuggestion&&!companionTyping?`<div class="glass-card"><h4>找個人一起去？</h4><p class="small-note">先確認，再開始尋找。</p>${btn('整理需求','new-demand','compact')}${btn('先聊聊','dismiss-demand','ghost')}</div>`:''}${space.companionMessages.length<3?`<div class="suggestions"><button type="button" data-say="最近想認識一起看展的朋友">找人看展</button><button type="button" data-say="最近工作有點累，想慢慢聊聊">放鬆一下</button></div>`:''}</div><form class="chat-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和我聊聊…" aria-label="私人訊息" maxlength="1000"></textarea><button class="send-button" type="submit" aria-label="發送給伙伴" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form>`,'companion-page');}
 function memories(){const items=privateSpace().memory.filter(m=>m.status!=='deleted');return shell(top('記憶','每一點了解，都可以由你修正')+content(`<p class="body-copy">這些是我目前了解到的你。<br>用來陪伴你，不會直接分享給別人。</p>${items.length?items.map(m=>`<article class="glass-card memory-card"><div class="tag-row">${tag(m.status==='pending'?'等你確認':'你已確認',m.status==='pending'?'':'green')}${tag('私人','quiet')}</div><p>${esc(m.text)}</p><div class="memory-source">來自：${esc(m.source)}</div><div class="memory-actions" style="margin-top:14px">${m.status==='pending'?tiny('是這樣的','confirm-memory',m.id):''}${tiny('修正','edit-memory',m.id)}${tiny('移除','delete-memory',m.id,'danger')}</div></article>`).join(''):empty('我們可以慢慢認識','聊聊你喜歡的事，我會把新的理解交給你確認。',btn('和伙伴聊聊','companion','compact'))}`,'with-nav')+nav('memory'));}
 function friendsSheet(){
   const invs=state.invitations.filter(x=>x.fromId===actor()||x.toId===actor()).slice().reverse(),rels=state.relationships.filter(x=>x.members.includes(actor())).slice().reverse();
@@ -378,6 +431,7 @@ function friendsSheet(){
 }
 
 function relations(){
+ if(LIVE_WEB)return liveRelations();
  const friends=getDemoFriends(state),query=String(ui.networkQuery||'').trim().toLocaleLowerCase();
  const matches=friend=>!query||`${friend.name} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase().includes(query),visibleCount=friends.filter(matches).length;
  return shell(`<div class="network-scene-source" aria-hidden="true"><img src="assets/visit-cosmos-20261027-55/quiet-cosmos.svg" alt="" draggable="false"><canvas class="cosmos-canvas" hidden></canvas></div>`+top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:state.users,query})}`,'friends-lounge');
@@ -696,7 +750,8 @@ function render(animate=false,motion={}){
   $('#screen-label').textContent=`${String(stage+1).padStart(2,'0')} / ${labels[ui.route]||'對話'}`;
   $('#stage-count').textContent=`0${stage+1} / 0${stages.length}`;
   $('#journey').innerHTML=stages.map(([label,route],i)=>{let enabled=i===0||state.session.authenticated&&(actor()==='b'||landingComplete(state));return `<button type="button" class="journey-step ${i===stage?'current':''} ${i<stage?'done':''}" data-go="${route}" ${!enabled?'disabled':''}><span class="step-num">${i<stage?'✓':`0${i+1}`}</span><span>${label}</span></button>`;}).join('');
-  const g=guides[ui.route]||guides.home;$('#guide-title').textContent=g[0];$('#guide-copy').textContent=g[1];$('#guide-actions').innerHTML=guideButtons();$('#scenario-controls').innerHTML=scenarioControls();
+  const g=guides[ui.route]||guides.home;$('#guide-title').textContent=g[0];$('#guide-copy').textContent=g[1];$('#guide-actions').innerHTML=guideButtons();$('#scenario-controls').innerHTML=LIVE_WEB?'':scenarioControls();
+  if(LIVE_WEB){$('#journey').innerHTML='';$('#guide-actions').innerHTML='';}
   if(['chat','companion'].includes(ui.route)){const s=$('#message-scroll');if(s)s.scrollTop=animate||oldScroll===undefined?s.scrollHeight:Math.max(oldScroll,s.scrollHeight);}
   const arrived=()=>{
     if(sequence!==renderSequence)return;
@@ -752,6 +807,16 @@ function startMatching(){
 function switchActor(userId){closeSheet();if(dispatch({type:'SWITCH_USER',userId},false)){if(ui.route==='invite'||state.invitations.length&&!state.relationships.length)go('invite',{replace:true});else if(ui.route==='chat'&&state.relationships.length)go('chat',{replace:true});else go(userId==='b'?'relations':'home',{replace:true});}}
 function simulateReply(){const rel=latestRelationship();if(!rel||rel.status!=='active')return;const original=actor();dispatch({type:'SWITCH_USER',userId:rel.members.find(id=>id!==original)},false);dispatch({type:'SEND_MESSAGE',relationshipId:rel.id,text:'聽起來不錯，我也想多聽你說說。最近有什麼特別喜歡的嗎？'},false);dispatch({type:'SWITCH_USER',userId:original},false);render(false);toast('已加入一則模擬對方回覆');}
 async function runAction(action,element){
+ if(LIVE_WEB){
+  if(action.startsWith('native-'))return nativePanels.action(action.slice(7),element);
+  if(action==='live-history')return liveSession.history();
+  if(action==='live-profile'||action==='account-menu')return showLiveProfile();
+  if(action==='live-memory'||action==='tag-diary')return showLiveMemory();
+  if(action==='settings-menu')return showSheet('設定',`${btn('我的資料','live-profile')}${btn('伙伴的記憶','live-memory')}${btn('重新讀取聊天記錄','live-history')}${btn('背景音樂與角色聲音','toggle-sound')}${btn('退出帳號','auth-exit')}`);
+  if(action==='reset'||action==='confirm-reset')return exitAuth();
+  if(!['back','login','auth-back','auth-recheck','auth-show-password','auth-bootstrap','auth-exit','close-sheet','toggle-motion','toggle-sound','boop','close-conversation','onboarding-reply','onboarding-skip','onboarding-back','onboarding-touch','onboarding-history','start-conversation','open-contract','finish-conversation'].includes(action)&&!action.startsWith('live-'))return toast('這項功能尚未開放。');
+ }
+
   if(action==='close-conversation'){setHomeConversation(false);$('#private-message')?.blur();$('.home-companion')?.focus({preventScroll:true});return;}
   if(action==='login'){authController.changeUsername(authFormDraft.username);return go('login');}
   if(views[action])return go(action);
@@ -879,11 +944,11 @@ async function runAction(action,element){
 }
 
 document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!el)return;if(el.dataset.go){e.preventDefault();if(el.closest('.bottom-nav')&&el.dataset.go===ui.route)return;return go(el.dataset.go,{direction:el.dataset.direction});}if(el.dataset.action){e.preventDefault();return runAction(el.dataset.action,el);}if(el.dataset.topic){$('#topic').value=el.dataset.topic;return;}if(el.dataset.mode){dispatch({type:'UPDATE_DRAFT',patch:{...formPatch(),mode:el.dataset.mode}},false);return render(false);}if(el.dataset.invitation){ui.selectedInvite=el.dataset.invitation;return go('invite');}if(el.dataset.relationship){ui.selectedRelationship=el.dataset.relationship;return go('chat');}if(el.dataset.say){return sendCompanion(el.dataset.say);}if(el.dataset.publicSay){dispatch({type:'SET_PUBLIC_DRAFT',text:el.dataset.publicSay},false);render(false);$('#public-message')?.focus();return;}if(el.dataset.retry){dispatch({type:'RETRY_MESSAGE',messageId:el.dataset.retry,fail:consumeFailure()});return;}});
-function sendCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
-document.addEventListener('submit',e=>{const form=e.target.closest('form[data-form]');if(!form)return;e.preventDefault();const data=new FormData(form);switch(form.dataset.form){case 'auth-entry-flow':{
+function sendCompanion(text){if(LIVE_WEB){if(companionTyping||liveView.historyBusy||!text.trim())return;ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:''};void liveSession.send(text);return;}if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
+document.addEventListener('submit',e=>{const form=e.target.closest('form[data-form]');if(!form)return;e.preventDefault();if(LIVE_WEB&&form.dataset.form.startsWith('native-'))return nativePanels.submit(form);const data=new FormData(form);switch(form.dataset.form){case 'auth-entry-flow':{
  if(authView.busy)return;
  authFormDraft.username=String(data.get('username')||'');authFormDraft.password=String(data.get('password')||'');authFormDraft.confirmPassword=String(data.get('confirmPassword')||'');
- return submitAuthEntryForm(authController,authFormDraft,{onUsernameCheck(username){clearAuthDraft();authFormDraft.username=username;}});
+ return Promise.resolve(submitAuthEntryForm(authController,authFormDraft,{onUsernameCheck(username){clearAuthDraft();authFormDraft.username=username;}})).then(result=>{if(LIVE_WEB&&result?.step==='ready')announceLiveSession();return result;});
 }
 case 'setup-basics':{const patch=basicsFormPatch(),errors=validateBasics(patch);if(Object.keys(errors).length){$('#basics-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#basics-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BASICS',patch},false)){if(state.onboarding.status!=='ready'&&!state.demand)dispatch({type:'UPDATE_DRAFT',patch:{language:patch.language}},false);ui.setupBasics=null;go('setup-birth');}return;}
 case 'setup-birth':{const patch=birthFormPatch(),errors=validateBirth(patch,state.now);if(Object.keys(errors).length){$('#birth-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#birth-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BIRTH',patch},false)){ui.setupBirth=null;if(state.onboarding.status==='ready'){go('profile');toast('資料已儲存。');}else if(dispatch({type:'BEGIN_INITIALIZATION'},false)){go('initializing');startInitialization();}}return;}
@@ -906,7 +971,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&conversationActive&
 $('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet')){const r=$('#sheet').getBoundingClientRect();if(e.clientY<r.top||e.clientY>r.bottom||e.clientX<r.left||e.clientX>r.right)closeSheet();}});
 $('#reset-button').onclick=()=>runAction('reset');
 $('#motion-toggle').onclick=()=>{closeContractUI?.();ui.motion=!ui.motion;save();render(false);};
-function showControls(){closeContractUI?.();showSheet('演示控制',`${guideButtons()}${scenarioControls()}<button type="button" class="review-btn" data-action="toggle-motion" aria-pressed="${ui.motion}">${ui.motion?'恢復動畫效果':'減少動態'}</button>`);}
+function showControls(){if(LIVE_WEB)return runAction('settings-menu');closeContractUI?.();showSheet('演示控制',`${guideButtons()}${scenarioControls()}<button type="button" class="review-btn" data-action="toggle-motion" aria-pressed="${ui.motion}">${ui.motion?'恢復動畫效果':'減少動態'}</button>`);}
 $('#mobile-controls').onclick=showControls;
 function resize(){const v=visibleViewport(window),root=document.documentElement;root.style.setProperty('--app-height',`${v.height}px`);root.style.setProperty('--app-offset-top',`${v.top}px`);$('#phone').dataset.keyboardOpen=String(v.keyboard);const availableHeight=innerHeight-(shareDemo?140:innerHeight<=850?137:157);const scale=innerWidth<=650?1:Math.max(.62,Math.min(1,availableHeight/874,(innerWidth-80)/402));root.style.setProperty('--scale',String(scale));positionSheet();klinWorld?.resize();}
 window.addEventListener('resize',()=>{resize();requestAnimationFrame(syncWorldAnchor);});
@@ -916,6 +981,7 @@ document.addEventListener('pointerdown',e=>{if(!conversationActive||ui.route!=='
 document.addEventListener('scroll',e=>{if(e.target.matches?.('.visit-content'))requestAnimationFrame(syncWorldAnchor);},true);
 window.addEventListener('scroll',()=>{if($('#sheet').open)positionSheet();},{passive:true});
 window.addEventListener('storage',e=>{
+  if(LIVE_WEB){if(e.key===LIVE_SESSION_EVENT){liveHandoff.clear();nativePanels.reset();liveSession.activate(null);state.session.authenticated=false;closeSheet();ui.route='login';render(false);void authController.bootstrap();}return;}
   if(comparisonMode||e.key!==STATE_KEY)return;
   closeContractUI?.();
   clearTimeout(landingHelloTimer);landingReveal=null;landingReaction='';
@@ -933,7 +999,7 @@ window.addEventListener('storage',e=>{
   render(false);
   if(ui.route==='initializing')startInitialization();
 });
-setInterval(()=>{if(!state.session.authenticated)return;const previous=JSON.stringify([state.demand?.status,state.invitations.map(x=>x.status)]);state=reduce(state,{type:'ADVANCE_TIME'});if(previous!==JSON.stringify([state.demand?.status,state.invitations.map(x=>x.status)])){save();render(false);}},15000);
+setInterval(()=>{if(LIVE_WEB||!state.session.authenticated)return;const previous=JSON.stringify([state.demand?.status,state.invitations.map(x=>x.status)]);state=reduce(state,{type:'ADVANCE_TIME'});if(previous!==JSON.stringify([state.demand?.status,state.invitations.map(x=>x.status)])){save();render(false);}},15000);
 if(ui.route!=='public-card'&&state.session.authenticated&&actor()==='a'&&!landingComplete(state))ui.route=setupRoute();
 if(ui.route==='initializing'&&state.onboarding.status==='ready')ui.route=setupRoute();
 // Comparison frames use disposable demo state; the main prototype stays untouched.
@@ -963,7 +1029,8 @@ if(comparisonMode) {
 }
 if(!pixelVariant&&ui.route==='home'&&state.session.authenticated)state=reduce(state,{type:'ENTER_COMPANION_HOME'});
 initializeAuth();resize();render(true);
-if(!comparisonMode&&!sharedCard)authController.bootstrap();
+if(LIVE_WEB||(!comparisonMode&&!sharedCard))authController.bootstrap();
+if(LIVE_WEB){$('#reset-button').textContent='退出帳號';$('.wordmark span').textContent='Klin · 我的小世界';$('.prototype-note').textContent='你的帳號 · 你的伙伴';$('.review-panel').hidden=true;$('.design-note').hidden=true;$('#mobile-controls').textContent='設定';window.addEventListener('focus',()=>{if(state.session.authenticated)void liveSession.history();});}
 prepareCardFonts().then(()=>{pendingCardFontRefresh=true;refreshVisibleCardArtwork();});
 if(pixelVariant)initCompanionAnimation();
 if(ui.route==='initializing')startInitialization();
@@ -971,4 +1038,4 @@ if(ui.route==='initializing')startInitialization();
 
 matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',event=>{cosmosBackground?.setReducedMotion(event.matches||ui.motion);closeContractUI?.();syncLoginScene();syncLandingVideo();klinWorld?.setReducedMotion(event.matches||ui.motion);conversationAvatarMotion?.refresh({reducedMotion:event.matches||ui.motion});syncConversationEntry();welcomeLogoMotion?.sync({route:ui.route,reducedMotion:event.matches||ui.motion});if(event.matches){const cancel=stopTransition;stopTransition=null;cancel?.();klinWorld?.setPage(currentSceneRoute(),{stage:currentCompanionStage(),layout:currentWorldLayout(),immediate:true});}});
 
-window.addEventListener('hashchange',()=>{const card=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');if(card){sharedCard=card;go('public-card');}else if(sharedCard){sharedCard=null;go(state.session.authenticated?setupRoute():'welcome',{replace:true});}});
+window.addEventListener('hashchange',()=>{if(LIVE_WEB)return;const card=decodeCard(new URLSearchParams(location.hash.slice(1)).get('card')||'');if(card){sharedCard=card;go('public-card');}else if(sharedCard){sharedCard=null;go(state.session.authenticated?setupRoute():'welcome',{replace:true});}});
