@@ -1,4 +1,4 @@
-import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261027-glass-52g';
+import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261028-opening-audio-68';
 import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261027-polish-48a';
 import { createLandingGlass } from './landing-glass.mjs?v=20261027-glass-61';
 import { createLandingDeparture } from './landing-departure.mjs?v=20261023-experience-34d';
@@ -12,8 +12,8 @@ export function landingVideoPresentation(next, held, departing = false, hadVisib
     : next.state === 'waiting' && held.state !== 'ready' ? 'settling'
     : next.state === 'playing' && !next.hasPresentedFrame ? 'loading' : next.state;
   const hasFrame = Boolean(hadVisibleFrame || next.hasPresentedFrame || held.captured);
-  return {state, readyForInput: !departing && state === 'waiting' && next.readyForInput && held.captured && held.state === 'ready',
-    gated: ['error','blocked'].includes(state) || (!hasFrame && ['loading','settling'].includes(state))};
+  return {state, readyForInput: !departing && ['waiting','audio-waiting'].includes(state) && next.readyForInput && held.captured && held.state === 'ready',
+    gated: ['error','blocked'].includes(state) || (!hasFrame && ['loading','settling','audio-waiting'].includes(state))};
 }
 
 export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChange=()=>{}}={}) {
@@ -41,6 +41,7 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
   let active=false,lastState={state:'inactive',readyForInput:false},disposed=false,reducedMotion=false;
   const departure=createLandingDeparture();
   let presentedState='inactive',presentedReady=false,hasVisibleFrame=false,retainedCapture=false;
+  let openingAudioAllowed=true,openingAudioPending=null;
   let subtitleFrame=null,subtitleFrameKind='';
   const isPlaying=()=>landingVideoOverlaysPlaying({active,disposed,state:presentedState,paused:video.paused,seeking:video.seeking,readyState:video.readyState});
   function cancelSubtitleFrame(){
@@ -78,12 +79,12 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
     const next=lastState,held=heldFrame.getDiagnostics();
     const departing=departure.phase!=='idle';
     phone.dataset.landingPhase=departing?departure.phase:'encounter';
-    landingGlass.update({active:true,ready:!departing&&next.state==='waiting'&&held.captured,key:`frame:${next.targetTime}`});
+    landingGlass.update({active:true,ready:!departing&&['waiting','audio-waiting'].includes(next.state)&&held.captured,key:`frame:${held.targetTime}`});
     hasVisibleFrame=hasVisibleFrame||Boolean(next.hasPresentedFrame||held.captured);
     retainedCapture=retainedCapture||held.captured;
     const presentation=landingVideoPresentation(next,held,departing,hasVisibleFrame);
     presentedState=presentation.state;presentedReady=Boolean(presentation.readyForInput);
-    const hasHeldFrame=held.captured&&(next.state==='waiting'||held.state==='resuming')
+    const hasHeldFrame=held.captured&&(['waiting','audio-waiting'].includes(next.state)||held.state==='resuming')
       || retainedCapture&&(presentedState==='error'||!next.hasPresentedFrame&&['loading','settling','blocked'].includes(presentedState));
     host.classList.toggle('has-held-frame',hasHeldFrame);
     host.classList.toggle('is-resuming',hasHeldFrame&&held.state==='resuming');
@@ -103,22 +104,51 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
       if(presentedReady)layer.removeAttribute('aria-hidden');else layer.setAttribute('aria-hidden','true');
     }
     syncSubtitle();
-    onPresentation({state:presentedState,readyForInput:presentedReady,hasHeldFrame,needsLoading:!hasVisibleFrame&&['loading','settling'].includes(presentedState),key:next.key,currentTime:video.currentTime||0});reportMedia();
+    onPresentation({state:presentedState,readyForInput:presentedReady,hasHeldFrame,needsLoading:!hasVisibleFrame&&['loading','settling','audio-waiting'].includes(presentedState),key:next.key,currentTime:video.currentTime||0});reportMedia();
+    if(openingAudioPending&&next.state==='audio-waiting'){
+      if(held.captured&&held.state==='ready')openingAudioPending.resolveFrame(true);
+      else if(held.state==='unavailable')openingAudioPending.resolveFrame(false);
+    }
   }
   function applyState(next) {
     lastState=next;if(!active||disposed)return;
     if(next.state!=='fallback')departure.observe(next);
-    if(next.state==='waiting'&&next.key!=='arrival')heldFrame.hold({key:`frame:${next.targetTime}`,targetTime:next.targetTime});
+    if(next.state==='audio-waiting')heldFrame.hold({key:`frame:${next.currentTime}`,targetTime:next.currentTime});
+    else if(next.state==='waiting'&&next.key!=='arrival')heldFrame.hold({key:`frame:${next.targetTime}`,targetTime:next.targetTime});
     else if(['loading','playing','blocked'].includes(next.state)&&heldFrame.getDiagnostics().captured)heldFrame.resume({startTime:next.startTime,endTime:next.targetTime});
     else heldFrame.release();
     applyPresentation();
   }
   const player=createLandingVideoPlayer({video,cues:[...LANDING_VIDEO_CUES,LANDING_ARRIVAL_CUE],onState:applyState});
+  function cancelOpeningAudio({restore=true}={}){
+    const pending=openingAudioPending;if(!pending)return;
+    openingAudioPending=null;pending.resolveFrame(false);
+    if(restore)player.cancelAudioHold(pending.token);
+  }
+  function holdOpeningForAudio(){
+    if(disposed||!active||!openingAudioAllowed||openingAudioPending||lastState.key!=='where'||reducedMotion)return null;
+    let resolveFrame;
+    const ready=new Promise(resolve=>{resolveFrame=resolve;});
+    const pending={token:null,resolveFrame};openingAudioPending=pending;
+    pending.token=player.holdForAudio();
+    if(!pending.token){cancelOpeningAudio();return null;}
+    return {ready,
+      replay(){
+        if(openingAudioPending!==pending||disposed||!active||lastState.key!=='where')return false;
+        openingAudioPending=null;
+        const replayed=player.replayCurrent(pending.token);
+        if(replayed)openingAudioAllowed=false;
+        return replayed;
+      },
+      cancel(){if(openingAudioPending===pending)cancelOpeningAudio();}
+    };
+  }
   resume.addEventListener('click',()=>{const restore=lastState.state==='waiting';heldFrame.release();player.retry({restore});applyState(player.getDiagnostics());});
   skip.addEventListener('click',()=>{if(player.skip())status.textContent=departure.pending?'我們回家了。':'影片已跳過，請回答這一題。';});
   return {
     update({active:enabled=false,key='where',reducedMotion:stillness=false,restore=false}={}) {
       if(disposed)return;
+      if(!enabled||key!=='where'||restore||stillness){openingAudioAllowed=false;cancelOpeningAudio({restore:false});}
       reducedMotion=stillness;
       active=enabled;host.hidden=!active;if(!active){departure.cancel();gate.hidden=true;resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame','is-resuming');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);
       if(!active){delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
@@ -127,13 +157,15 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
     },
     depart({onComplete,reducedMotion:stillness=reducedMotion}={}) {
       if(disposed||!active||!departure.begin(onComplete))return false;
+      openingAudioAllowed=false;cancelOpeningAudio({restore:false});
       reducedMotion=stillness;
       player.update({active:true,key:'arrival',reducedMotion});
       applyState(lastState);
       return true;
     },
     get readyForInput(){return active&&presentedReady;},
+    holdOpeningForAudio,cancelOpeningAudio,
     getDiagnostics:()=>({...player.getDiagnostics(),state:presentedState,readyForInput:active&&presentedReady,phase:departure.phase,heldFrame:heldFrame.getDiagnostics()}),
-    dispose(){disposed=true;cancelSubtitleFrame();reportMedia();for(const event of mediaEvents)video.removeEventListener(event,onMediaEvent);departure.dispose();landingGlass.dispose();heldFrame.dispose();player.dispose();host.remove();gate.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
+    dispose(){cancelOpeningAudio({restore:false});disposed=true;cancelSubtitleFrame();reportMedia();for(const event of mediaEvents)video.removeEventListener(event,onMediaEvent);departure.dispose();landingGlass.dispose();heldFrame.dispose();player.dispose();host.remove();gate.remove();skip.remove();status.remove();phone.classList.remove('landing-video-active');delete phone.dataset.landingPlayback;delete phone.dataset.landingFrame;delete phone.dataset.landingCue;delete phone.dataset.landingVideoTime;delete phone.dataset.landingPhase;}
   };
 }

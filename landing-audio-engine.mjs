@@ -1,4 +1,4 @@
-import { LANDING_FILM_AUDIO, LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261028-audio-refresh-67';
+import { LANDING_FILM_AUDIO, LANDING_MUSIC, LANDING_VOICE_CLIPS, LANDING_VOICE_TEMPLATES } from './landing-audio-clips.mjs?v=20261028-opening-music-69';
 import { ROOM_VOICE_CLIPS } from './room-voice-clips.mjs?v=20261026-room-voice-47';
 import { ROOM_VOICE_PROFILE, isRoomNarration, isMandarin, findLocalLandingVoice } from './room-voice-profile.mjs?v=20261026-room-voice-47';
 
@@ -334,6 +334,17 @@ export function createLandingAudio({ environment = {} } = {}) {
       return enabled;
     }
   }
+  async function prepareFilmAudio() {
+    if (!enabled || disposed || !context) return false;
+    const token = enableEpoch;
+    try {
+      await bufferFor(LANDING_FILM_AUDIO.src);
+      return token === enableEpoch && enabled && !disposed;
+    } catch (error) {
+      if (token === enableEpoch && enabled && !disposed) lastError = String(error?.message || 'film-audio-unavailable');
+      return false;
+    }
+  }
   function cue(kind = 'reply') {
     if (!audible() || voiceBusy) return;
     const notes = kind === 'portal' ? [220, 330, 440] : kind === 'send' ? [392] : [523.25, 659.25];
@@ -361,7 +372,7 @@ export function createLandingAudio({ environment = {} } = {}) {
   doc?.addEventListener?.('pointerdown', trustedAudioGesture, true);
   doc?.addEventListener?.('keydown', trustedAudioGesture, true);
   return {
-    setEnabled, syncFilm, cue, speakSequence, stopSpeech,
+    setEnabled, prepareFilmAudio, syncFilm, cue, speakSequence, stopSpeech,
     speak(text, key, options = {}) { return speakSequence([{ text, key }], options); },
     resetSession() { stopSpeech(); pauseMusic({ reset: true }); seen.clear(); },
     get enabled() { return enabled; },

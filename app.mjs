@@ -16,7 +16,7 @@ import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261027-sh
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
 import { mountConversationScroll } from './conversation-scroll.mjs?v=20261027-clarity-51e';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
-import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261028-audio-refresh-67';
+import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261028-opening-music-69';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
 import { createSceneAssetReadiness } from './scene-asset-readiness.mjs?v=20261023-experience-34d';
 import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261028-composer-feedback-66';
@@ -29,12 +29,12 @@ import { birthTimePickerMarkup, mountBirthTimePicker } from './birth-time-picker
 import { getLandingReading } from './landing-day-master-reading.mjs?v=20261026-answers-47d';
 import { initDatePickers } from './date-picker.mjs?v=20261027-clarity-51e';
 import { initTypography } from './typography.mjs?v=20261023-experience-34d';
-import { createSceneSound } from './scene-sound.mjs?v=20261028-audio-refresh-67';
+import { createSceneSound } from './scene-sound.mjs?v=20261028-opening-music-69';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261027-polish-48b';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261028-auth-logo-62';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-reference-2d.mjs?v=20261028-klin-alive-room-v02';
+import { createKlinWorld } from './klin-reference-2d.mjs?v=20261028-opening-music-69';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';
 import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261028-klin-alive-room-v02';
 import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-original-room-character-39';
@@ -584,7 +584,7 @@ function syncNarration(){
   if(text)sceneSound.speakSequence([{text,key:`home:${actor()}:${ui.boopCount||0}:${text}`}],{scope:`home:${actor()}`,lang:'zh-CN'});
  }
 }
-function resetSound(){audioToggleSequence++;ui.soundOn=false;sceneSound.setEnabled(false);sceneSound.resetSession();filmAudioState={active:false,playing:false,time:0};syncAudioControls();}
+function resetSound(){audioToggleSequence++;landingVideoScene?.cancelOpeningAudio();ui.soundOn=false;sceneSound.setEnabled(false);sceneSound.resetSession();filmAudioState={active:false,playing:false,time:0};syncAudioControls();}
 function syncLoginScene(){
   ensureExperience();
   if(!loginScene)loginScene=createLoginSceneBridge({phone:$('#phone'),onPending:pending=>setScenePending('login-video',pending,'welcome')});
@@ -842,10 +842,22 @@ async function runAction(action,element){
 
     case 'boop':klinWorld?.interact('wave');sceneSound.cue('reply');return;
     case 'toggle-sound':{
-      const request=++audioToggleSequence,desired=!ui.soundOn;ui.soundOn=desired;syncAudioControls();
+      const request=++audioToggleSequence,desired=!ui.soundOn;
+      landingVideoScene?.cancelOpeningAudio();
+      const openingScene=ui.route==='landing'?landingVideoScene:null;
+      // Hold before enabling the context, so a cold download cannot join the
+      // first greeting halfway through. Other cues retain their current clock.
+      const opening=desired?openingScene?.holdOpeningForAudio():null;
+      ui.soundOn=desired;syncAudioControls();
       const enabled=await sceneSound.setEnabled(desired).catch(()=>false);
-      if(request!==audioToggleSequence)return;
+      if(request!==audioToggleSequence){opening?.cancel();return;}
       ui.soundOn=enabled;save();syncAudioControls();sceneSound.syncFilm(filmAudioState);syncNarration();
+      if(opening){
+        const ready=enabled&&await sceneSound.prepareFilmAudio();
+        const frameReady=ready&&await opening.ready;
+        if(frameReady&&request===audioToggleSequence&&ui.soundOn&&ui.route==='landing'&&landingVideoScene===openingScene&&getOnboardingTurn(state).key==='where')opening.replay();
+        else opening.cancel();
+      }
       return;
     }
     case 'visit-from-chat':return go('relations');

@@ -57,7 +57,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
   function sync({restart = false} = {}) {
     if (!shouldPlay()) {pauseFilms(); return;}
     const kind = desired, video = films[kind];
-    if (pending?.kind === kind) return;
+    if (pending?.kind === kind && !restart) return;
     if (!restart && showing === kind && !video.paused) {notify(); return;}
     if (!video.getAttribute('src')) {video.src = kind === 'idle' ? idleSrc : reactSrc; video.preload = 'auto';}
     if (restart) {try {video.currentTime = 0;} catch {}}
@@ -79,7 +79,9 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
   const playing = Object.fromEntries(Object.keys(films).map(kind => [kind, () => reveal(kind)]));
   const decodeError = () => {failed = true; reset();};
   const ended = () => {
-    if (disposed || desired !== 'react') return;
+    // A tap may already have sought back to the start before a queued ended
+    // event from the previous playback arrives. Only the current end owns idle.
+    if (disposed || desired !== 'react' || !react.ended) return;
     desired = 'idle'; response++;
     // Direct cut back to the idle start; no frame blending or duplicated actor.
     sync({restart: true});
@@ -113,11 +115,13 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, r
       notify();
     },
     respond() {
-      if (disposed || !active || reduced || doc.hidden || failed || desired === 'react') return () => {};
+      if (disposed || !active || reduced || doc.hidden || failed) return () => {};
       blocked = false;
       const token = ++response;
       desired = 'react';
       notify();
+      // Every tap takes ownership immediately, including during the previous
+      // response or its pending play promise. Keep the same visible film layer.
       sync({restart: true});
       return () => {if (!disposed && token === response && desired === 'react') {desired = 'idle'; response++; sync({restart: true});}};
     },
