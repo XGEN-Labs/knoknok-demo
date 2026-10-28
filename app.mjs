@@ -7,7 +7,7 @@ import { createAuthEntry, createDemoAuthAdapter, createApiAuthAdapter } from './
 import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261028-auth-logo-62';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
-import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261028-diary-profile-72b';
+import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261028-diary-header-73';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
 import { mountFriendWorld } from './friend-world.mjs?v=20261027-glass-52g';
 import { mountCosmosBackground } from './cosmos-background.mjs?v=20261027-cosmos-55c';
@@ -17,6 +17,7 @@ import { renderFriendNetwork } from './friend-network.mjs?v=20261027-shared-61';
 import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261028-seated-63';
 import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-63';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
+import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261028-diary-header-73d';
 import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261028-diary-paper-71b&glass=61';
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
@@ -94,7 +95,7 @@ let loginScene=null,landingVideoScene=null,closeContractUI=null,pendingContractD
 let renderSequence=0;
 let pendingCardFontRefresh=false;
 let conversationActive=false,conversationAvatarMotion=null;
-let conversationEntryMotion=null,sceneControlGlass=null;
+let conversationEntryMotion=null,sceneControlGlass=null,conversationEdgeBlur=null;
 let welcomeLogoMotion=null;
 let matchingDemandId=null, matchingPhase=0, matchingTimers=[];
 let timer, initializeTimer, toastTimer, authResendTimer, stopTransition, pendingSceneRefresh=false, adviceRequest=0, busy=false, companionTyping=false;
@@ -379,6 +380,8 @@ function volumeButton(){return `<button type="button" class="scene-icon volume-t
 function syncConversationEntry(){
   conversationEntryMotion ||= createConversationEntryMotion($('#phone'));
   conversationEntryMotion.refresh($('#conversation-log'),{active:conversationActive&&ui.route==='home',scopeKey:actor(),reducedMotion:prefersStillness(ui.motion)});
+  conversationEdgeBlur ||= createConversationEdgeBlur($('#phone'));
+  conversationEdgeBlur.refresh($('#app > .page'),{active:ui.route==='chat'||conversationActive&&ui.route==='home',reducedMotion:prefersStillness(ui.motion)});
 }
 function syncSceneGlass(){
   sceneControlGlass ||= createSceneControlGlass({phone:$('#phone')});
@@ -533,7 +536,7 @@ function showSocialDiary(month=ui.diaryMonth||'',day=ui.diaryDay||''){
 function showSocialDiaryRecords(month=ui.diaryMonth||'',day=ui.diaryDay||''){
  const calendar=diaryCalendarData(privateSpace(),me(),{month,day,now:state.now});
  ui.diaryMonth=calendar.month;ui.diaryDay=calendar.day;
- showSheet('聊天記錄',diaryRecordsMarkup(privateSpace(),me(),{month:calendar.month,day:calendar.day,now:state.now,companionName:companionName()}));
+ showSheet('聊天記錄',diaryRecordsMarkup(privateSpace(),me(),{month:calendar.month,day:calendar.day,now:state.now,companionName:companionName()}),{backAction:'tag-diary',backLabel:'返回 Nok 日記'});
  const sheet=$('#sheet');if(sheet)sheet.scrollTop=0;
 }
 function showSocialDiaryEntry(id,{tab='diary'}={}){
@@ -712,6 +715,7 @@ function render(animate=false,motion={}){
   const scrollPositions=useTransition?[...oldPage.querySelectorAll('.content')].map(node=>({node,top:node.scrollTop,left:node.scrollLeft})):[];
   const source=useTransition?captureCompanion(oldPage,$('#phone')):null;
   birthTimePicker?.destroy();birthTimePicker=null;cleanDatePickers?.();cleanFormControls?.();cleanCommunication?.dispose();cleanCommunication=null;
+  conversationEdgeBlur?.dispose();conversationEdgeBlur=null;
   friendWorld?.dispose();friendWorld=null;
   cosmosBackground?.dispose();cosmosBackground=null;
   app.innerHTML=views[ui.route]();
@@ -785,7 +789,7 @@ function guideButtons(){if(ui.route==='chat'&&latestRelationship()?.status==='ac
 function scenarioControls(){return `<div class="scenario-group"><button class="review-btn" type="button" data-action="reset">重新開始</button></div><p class="small-note">對話與朋友均為本地示範。</p>`;}
 
 let cleanSheetDismiss;
-function showSheet(title,body){cleanSheetDismiss?.();cleanSheetDates?.();cleanSheetControls?.();const dialog=$('#sheet');dialog.classList.toggle('card-editor-sheet',body.includes('data-form="profile"'));$('#sheet-content').innerHTML=`<div class="sheet-inner"><div class="sheet-handle"></div><div class="sheet-title"><h3 id="sheet-title" tabindex="-1" autofocus>${esc(title)}</h3></div>${body}</div>`;dialog.setAttribute('aria-labelledby','sheet-title');if(!dialog.open)dialog.showModal();$('#phone').classList.add('sheet-open');if(!$('#phone > .phone-scrim'))$('#phone').insertAdjacentHTML('beforeend','<div class="phone-scrim" aria-hidden="true"></div>');cleanSheetControls=initFormControls(dialog);cleanSheetDates=initDatePickers(dialog);initTypography(dialog);positionSheet();cleanSheetDismiss=bindSheetDismiss(dialog,closeSheet);$('#sheet-title').focus({preventScroll:true});}
+function showSheet(title,body,{backAction='',backLabel='返回'}={}){cleanSheetDismiss?.();cleanSheetDates?.();cleanSheetControls?.();const dialog=$('#sheet');dialog.classList.toggle('card-editor-sheet',body.includes('data-form="profile"'));$('#sheet-content').innerHTML=`<div class="sheet-inner"><div class="sheet-handle"></div><div class="sheet-title${backAction?' has-back':''}">${backAction?`<button type="button" class="sheet-back" data-action="${esc(backAction)}" aria-label="${esc(backLabel)}">${backArrow}</button>`:''}<h3 id="sheet-title" tabindex="-1" autofocus>${esc(title)}</h3></div>${body}</div>`;dialog.setAttribute('aria-labelledby','sheet-title');if(!dialog.open)dialog.showModal();$('#phone').classList.add('sheet-open');if(!$('#phone > .phone-scrim'))$('#phone').insertAdjacentHTML('beforeend','<div class="phone-scrim" aria-hidden="true"></div>');cleanSheetControls=initFormControls(dialog);cleanSheetDates=initDatePickers(dialog);initTypography(dialog);positionSheet();cleanSheetDismiss=bindSheetDismiss(dialog,closeSheet);$('#sheet-title').focus({preventScroll:true});}
 function positionSheet(){const phone=$('#phone'),dialog=$('#sheet'),v=visibleViewport(window),p=sheetPlacement(phone.getBoundingClientRect(),phone.offsetWidth,{...v,layoutHeight:innerHeight});for(const key of ['left','bottom','width','height'])dialog.style.setProperty(`--sheet-${key}`,`${p[key]}px`);dialog.style.setProperty('--sheet-scale',String(p.scale));}
 function closeSheet(){cleanSheetDismiss?.();cleanSheetDismiss=null;$('#sheet').classList.remove('card-editor-sheet');ui.visitDialog=false;cleanSheetDates?.();cleanSheetDates=null;adviceRequest++;cleanSheetControls?.();cleanSheetControls=null;if($('#sheet').open)$('#sheet').close();$('#phone').classList.remove('sheet-open');}
 $('#sheet').addEventListener('cancel',e=>{e.preventDefault();closeSheet();});

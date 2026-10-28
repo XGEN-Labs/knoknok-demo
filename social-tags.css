@@ -166,4 +166,9 @@
 .phone#phone #sheet .tag-diary-summary>.tag-diary-date{display:block;margin:0 0 12px}
 .phone#phone #sheet .tag-diary-summary>.tag-diary-quote{margin-top:0}
 .phone#phone #sheet .tag-diary-summary>.tag-ui-button{width:100%;margin-top:4px}
-.phone#phone #sheet .tag-diary-records>.tag-ui-button{margin:0 0 18px}
+/* Secondary-sheet navigation shares the title row, with balanced side columns. */
+.phone#phone #sheet .sheet-title.has-back{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:0;min-height:44px}
+.phone#phone #sheet .sheet-title.has-back h3{grid-area:1/2;text-align:center;width:100%}
+.phone#phone #sheet .sheet-back{grid-area:1/1;display:grid;place-items:center;width:44px;height:44px;padding:10px;border:0;border-radius:50%;background:transparent;color:var(--ink);box-shadow:none;cursor:pointer}
+.phone#phone #sheet .sheet-back svg{display:block;width:24px;height:24px}
+.phone#phone #sheet .sheet-back:focus-visible{outline:2px solid currentColor;outline-offset:2px}

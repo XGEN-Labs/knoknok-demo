@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T09:12:17.575760+00:00",
+  "createdAt": "2026-10-28T10:14:22.423480+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147063106,
+  "payloadBytes": 147074279,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 131630,
-      "sha256": "b0a67a3cfbb8ebe903308e94b98ac469181917daeb8c45d0328789ad0c6c4c27"
+      "bytes": 132311,
+      "sha256": "755455ebba26efb93733eb7075a8f0396ea3427110b8f7c257642617480fcb94"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11430,
-      "sha256": "83488fc95e641195b0258279870e139e85fda13ad01d279d0816cba734d742e9"
+      "bytes": 11426,
+      "sha256": "db7b30932897cc138cdc46fa6de79e0cea6cf4a8f6b13bb7cd1f7df4cce9f7c3"
     },
     {
       "source": "journey-experience.css",
@@ -2126,14 +2126,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 17680,
-      "sha256": "e29bfe07b1f62da1e11a7d2f2363bcc7bbc0d50fc084519b5a567decafa1eeec"
+      "bytes": 17638,
+      "sha256": "734f8331cdffededfe76ce623863758114fce69e865d04ab55aadb8e5bd5d11a"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
-      "bytes": 17916,
-      "sha256": "7f45e885bcb61196fa5a3dbe69a13ced20ea2a78819c5a77ec4f9355d860668b"
+      "bytes": 18525,
+      "sha256": "f6db221d85545fed78e383f262eb37ab5bf71b35830885c42964e392ff6a1c63"
     },
     {
       "source": "social-tags.mjs",
@@ -2456,8 +2456,14 @@
     {
       "source": "chat-edge-blur.css",
       "path": "chat-edge-blur.css",
-      "bytes": 2159,
-      "sha256": "306f8b9001261340ef4f6cdcc476173348a962784a170accff57c5c3ec1fdca3"
+      "bytes": 1489,
+      "sha256": "d407692fb0fd07aae187a659f4dc323e0ab36023bdf564839430f7e76456b97a"
+    },
+    {
+      "source": "conversation-edge-blur.mjs",
+      "path": "conversation-edge-blur.mjs",
+      "bytes": 10599,
+      "sha256": "a53bfa3567b1919c784294358daaac8b68894ab49451cad745b96549854786bf"
     }
   ],
   "runtimeDependencies": [

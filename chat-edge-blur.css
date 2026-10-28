@@ -1,5 +1,4 @@
-/* Conversation edges soften the content passing behind floating chrome.
-   The messages themselves keep full opacity and remain naturally scrollable. */
+/* Message-only edge softening; the room stays clear behind floating chrome. */
 .phone#phone[data-conversation="true"] #app .room-chat-page,
 .phone#phone #app .page.shared-chat-page {
   --kn-chat-edge-top:calc(var(--app-safe-top) + 64px);
@@ -8,35 +7,26 @@
 .phone#phone[data-conversation="true"] #app .room-chat-page:has(.conversation-replies:not([hidden]):not(:empty)) {
   --kn-chat-edge-bottom:calc(var(--app-safe-bottom) + 158px);
 }
-.phone#phone[data-conversation="true"] #app .room-chat-page::before,
-.phone#phone[data-conversation="true"] #app .room-chat-page::after,
-.phone#phone #app .page.shared-chat-page::before,
-.phone#phone #app .page.shared-chat-page::after {
-  content:"";
+/* This transparent layer contains only masked, blurred message copies in a
+   shadow tree. Room pixels are never captured or blurred by the edge effect. */
+.phone#phone #app .kn-conversation-edge-group {
   position:absolute;
-  left:0;
-  right:0;
-  z-index:3;
+  inset:0;
+  z-index:2;
+  isolation:isolate;
   pointer-events:none;
-  background:rgba(240,242,245,.025);
-  -webkit-backdrop-filter:blur(12px);
-  backdrop-filter:blur(12px);
-  -webkit-mask-repeat:no-repeat;
-  mask-repeat:no-repeat;
 }
-.phone#phone[data-conversation="true"] #app .room-chat-page::before,
-.phone#phone #app .page.shared-chat-page::before {
-  top:0;
-  height:var(--kn-chat-edge-top);
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 28%,rgba(0,0,0,.7) 60%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 28%,rgba(0,0,0,.7) 60%,transparent 100%);
-}
-.phone#phone[data-conversation="true"] #app .room-chat-page::after,
-.phone#phone #app .page.shared-chat-page::after {
-  bottom:0;
-  height:var(--kn-chat-edge-bottom);
-  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 34%,rgba(0,0,0,.65) 66%,transparent 100%);
-  mask-image:linear-gradient(to top,#000 0%,#000 34%,rgba(0,0,0,.65) 66%,transparent 100%);
+.phone#phone #app .kn-conversation-edge-group > :is(.conversation-log,.shared-messages) {pointer-events:auto;}
+.phone#phone #app .kn-conversation-edge-layer {
+  position:absolute;
+  z-index:2;
+  overflow:hidden;
+  pointer-events:none;
+  background:none;
+  border:0;
+  padding:0;
+  margin:0;
+  mix-blend-mode:plus-lighter;
 }
 .phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log {z-index:2;}
 .phone#phone #app .page.shared-chat-page .shared-composer {z-index:5;}
