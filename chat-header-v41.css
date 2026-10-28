@@ -72,16 +72,19 @@
   display: none !important;
 }
 .phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log {
-  top: calc(var(--app-safe-top) + 48px);
+  top: 0;
   left: var(--kn-safe-left);
   right: var(--kn-safe-right);
-  bottom: calc(var(--app-safe-bottom) + 76px);
-  padding-block: 24px;
-  scroll-padding-block: 24px;
+  bottom: 0;
+  padding-block: calc(var(--app-safe-top) + 72px) calc(var(--app-safe-bottom) + 100px);
+  scroll-padding-block: calc(var(--app-safe-top) + 72px) calc(var(--app-safe-bottom) + 100px);
 }
+.phone#phone[data-conversation="true"] #app .room-chat-page .home-top { z-index: 4; }
+.phone#phone #app .room-chat-page .conversation-message { font-size: 14px; line-height: 20px; }
 .phone#phone #app .conversation-log > * { flex-shrink: 0; }
 .phone#phone[data-conversation="true"] #app .room-chat-page:has(.conversation-replies:not([hidden]):not(:empty)) .conversation-log {
-  bottom: calc(var(--app-safe-bottom) + 126px);
+  padding-bottom: calc(var(--app-safe-bottom) + 150px);
+  scroll-padding-bottom: calc(var(--app-safe-bottom) + 150px);
 }
 /* The keyboard shrinks the message viewport, but the recipient remains clear. */
 .phone#phone[data-conversation="true"][data-keyboard-open="true"] #app .room-chat-page .home-top {

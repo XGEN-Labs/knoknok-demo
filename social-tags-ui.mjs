@@ -1,13 +1,14 @@
 import { socialTagState, SOCIAL_TAG_CATEGORIES } from './social-tags.mjs?v=20261026-social-tags-45';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
-import { uiIcon } from './ui-icons.mjs?v=20261027-polish-48';
+import { uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const button=(text,action,id='',extra='')=>`<button type="button" class="tag-ui-button" data-action="${action}" data-id="${esc(id)}" ${extra}>${text}</button>`;
 const stamp=item=>socialTagStickerMarkup(item);
 const date=time=>new Date(time).toLocaleDateString('zh-HK',{month:'long',day:'numeric'});
 const diaryMonth=time=>{const value=new Date(time);return `${value.getFullYear()}-${String(value.getMonth()+1).padStart(2,'0')}`;};
-const linkedTags=(ledger,entry)=>ledger.items.filter(item=>(entry.tagIds||[]).includes(item.id)||item.sourceIds.includes(entry.id));
+// Current confirmed sources are authoritative after wording/meaning changes.
+const linkedTags=(ledger,entry)=>ledger.items.filter(item=>item.sourceIds.includes(entry.id));
 const sourceTag=(item,{history=false}={})=>`<button type="button" class="tag-sticker-open" data-action="tag-source" data-id="${esc(item.id)}" ${history?'data-history="true" ':''}aria-label="查看 ${esc(item.label)} 的故事">${stamp(item)}</button>`;
 const tagSelection=(item,{history=false,diaryId=''}={})=>`<div class="tag-management-row">${sourceTag(item,{history})}${item.visible?button('已在名片','tag-already-visible',item.id,'disabled aria-disabled="true"'):button('貼回名片',history?'tag-history-restore':diaryId?'tag-diary-restore':'tag-restore',item.id,`${diaryId?`data-entry="${esc(diaryId)}" `:''}aria-label="把 ${esc(item.label)} 貼回名片"`)}</div>`;
 
@@ -45,12 +46,46 @@ export function diaryCalendarData(space,user,{month='',day='',now=Date.now()}={}
  const cells=Array.from({length:Math.ceil((leading+days)/7)*7},(_,i)=>{const number=i-leading+1;if(number<1||number>days)return null;const key=`${selectedMonth}-${String(number).padStart(2,'0')}`;return {day:key,number,count:byDay.get(key)?.length||0,today:key===today,selected:key===selectedDay};});
  return {month:selectedMonth,day:selectedDay,title:`${year} 年 ${monthNumber} 月`,previous:monthOffset(selectedMonth,-1),next:monthOffset(selectedMonth,1),canPrevious:selectedMonth!=='1900-01',canNext:selectedMonth!=='9998-12',cells,entries:byDay.get(selectedDay)||[]};
 }
-export function diaryListMarkup(space,user,options={}){
- const calendar=diaryCalendarData(space,user,options),selectedLabel=`${Number(calendar.day.slice(5,7))} 月 ${Number(calendar.day.slice(8))} 日`;
- return `<div class="social-tags-panel tag-diary-browser" data-diary-month="${calendar.month}" data-diary-day="${calendar.day}"><nav class="tag-calendar-heading" aria-label="日記月份"><button type="button" class="tag-calendar-nav" data-action="tag-diary-month" data-month="${calendar.previous}" ${calendar.canPrevious?'':'disabled'} aria-label="上一個月">${uiIcon('back')}</button><h4>${calendar.title}</h4><button type="button" class="tag-calendar-nav is-next" data-action="tag-diary-month" data-month="${calendar.next}" ${calendar.canNext?'':'disabled'} aria-label="下一個月">${uiIcon('back')}</button></nav><div class="tag-calendar-weekdays" aria-hidden="true">${['一','二','三','四','五','六','日'].map(label=>`<span>${label}</span>`).join('')}</div><div class="tag-diary-calendar" role="group" aria-label="${calendar.title}日記日曆">${calendar.cells.map(cell=>cell?`<button type="button" class="tag-calendar-day${cell.count?' has-entry':''}" data-action="tag-diary-day" data-day="${cell.day}" aria-pressed="${cell.selected}" ${cell.today?'aria-current="date" ':''}aria-label="${cell.day.replaceAll('-',' / ')}，${cell.count?`${cell.count} 篇日記`:'沒有日記'}"><span>${cell.number}</span>${cell.count?'<i aria-hidden="true"></i>':''}</button>`:'<span class="tag-calendar-blank" aria-hidden="true"></span>').join('')}</div><section class="tag-diary-day-list" aria-label="${selectedLabel}的小記"><h4>${selectedLabel}<span>${calendar.entries.length?`${calendar.entries.length} 篇小記`:''}</span></h4><div class="tag-diary-list">${calendar.entries.map(entry=>`<button type="button" data-action="tag-diary-entry" data-id="${esc(entry.id)}"><time datetime="${new Date(entry.createdAt).toISOString()}">${new Date(entry.createdAt).toLocaleTimeString('zh-HK',{hour:'2-digit',minute:'2-digit',hour12:false})}</time><p>${esc(entry.text.slice(0,100))}</p><span>${entry.tagIds.length?`${entry.tagIds.length} 枚關聯標籤`:'翻開小記'}<span aria-hidden="true"> ↗</span></span></button>`).join('')||'<p class="tag-empty">這一天還沒有小記。</p>'}</div></section>${button('回去聊聊','tag-open-chat')}</div>`;
+const nokName=value=>typeof value==='string'&&value.trim()?value.trim():'Klin';
+const nokIntroduction=name=>`<section class="tag-nok-intro" aria-label="Nok 自述"><h4>Nok 自述</h4><p>我是 ${esc(name)}，和你結下契約的 Nok。</p><p>我有點慢熱，也總對小事好奇。喜歡慢慢認識一個人，習慣先聽你說完，再一起把零碎的心事理清。</p></section>`;
+const readOnlyTags=(items,empty='還沒有確認的關聯標籤。')=>`<div class="tag-associated tag-diary-readonly" aria-label="已確認的關聯標籤">${items.map(stamp).join('')||`<p class="small-note">${empty}</p>`}</div>`;
+const messageTime=value=>{
+ const time=typeof value==='number'?value:typeof value==='string'&&value.trim()?Date.parse(value):NaN;
+ return Number.isFinite(time)&&Number.isFinite(new Date(time).getTime())?time:null;
+};
+function diaryChatData(space,entry){
+ const day=diaryDay(entry.createdAt),ids=new Set(entry.messageIds||[]);
+ const records=(space.companionMessages||[]).filter(message=>message&&(message.role==='user'||message.role==='assistant'));
+ const dated=records.map((message,index)=>({message,index,time:messageTime(message.createdAt)}))
+  .filter(record=>record.time!==null&&diaryDay(record.time)===day)
+  .sort((a,b)=>a.time-b.time||a.index-b.index).map(record=>record.message);
+ const undated=records.filter(message=>ids.has(message.id)&&messageTime(message.createdAt)===null);
+ return {dated,undated};
 }
-export function diaryEntryMarkup(space,user,id,{tab='diary',selectTags=false}={}){
+const originalMessages=(messages,name)=>messages.map(message=>{
+ const time=messageTime(message.createdAt);
+ return `<div class="${message.role==='user'?'own':''}"><small>${message.role==='user'?'我':esc(name)}${time!==null?` <time datetime="${new Date(time).toISOString()}">${new Date(time).toLocaleTimeString('zh-HK',{hour:'2-digit',minute:'2-digit',hour12:false})}</time>`:''}</small><p>${esc(message.text)}</p></div>`;
+}).join('');
+
+export function diaryListMarkup(space,user,options={}){
+ const calendar=diaryCalendarData(space,user,options),ledger=socialTagState(space,user),selectedLabel=`${Number(calendar.day.slice(5,7))} 月 ${Number(calendar.day.slice(8))} 日`;
+ const entryIds=new Set(calendar.entries.map(entry=>entry.id)),dayTags=ledger.items.filter(item=>item.sourceIds.some(id=>entryIds.has(id)));
+ const heading=`<nav class="tag-calendar-heading" aria-label="日記月份"><button type="button" class="tag-calendar-nav" data-action="tag-diary-month" data-month="${calendar.previous}" ${calendar.canPrevious?'':'disabled'} aria-label="上一個月">${uiIcon('back')}</button><h4>${calendar.title}</h4><button type="button" class="tag-calendar-nav is-next" data-action="tag-diary-month" data-month="${calendar.next}" ${calendar.canNext?'':'disabled'} aria-label="下一個月">${uiIcon('back')}</button></nav>`;
+ const cells=calendar.cells.map(cell=>cell?`<button type="button" class="tag-calendar-day${cell.count?' has-entry':''}" data-action="tag-diary-day" data-day="${cell.day}" aria-pressed="${cell.selected}" ${cell.today?'aria-current="date" ':''}aria-label="${cell.day.replaceAll('-',' / ')}，${cell.count?`${cell.count} 篇日記`:'沒有日記'}"><span>${cell.number}</span>${cell.count?'<i aria-hidden="true"></i>':''}</button>`:'<span class="tag-calendar-blank" aria-hidden="true"></span>').join('');
+ const entries=calendar.entries.map(entry=>{
+  const count=linkedTags(ledger,entry).length;
+  return `<button type="button" data-action="tag-diary-entry" data-id="${esc(entry.id)}"><time datetime="${new Date(entry.createdAt).toISOString()}">${new Date(entry.createdAt).toLocaleTimeString('zh-HK',{hour:'2-digit',minute:'2-digit',hour12:false})}</time><p>${esc(String(entry.text||'').slice(0,100))}</p><span>${count?`${count} 枚關聯標籤`:'翻開聊天摘記'}<span aria-hidden="true"> ↗</span></span></button>`;
+ }).join('')||'<p class="tag-empty">這一天還沒有小記。</p>';
+ return `<div class="social-tags-panel tag-diary-browser" data-diary-month="${calendar.month}" data-diary-day="${calendar.day}">${nokIntroduction(nokName(options.companionName))}${heading}<div class="tag-calendar-weekdays" aria-hidden="true">${['一','二','三','四','五','六','日'].map(label=>`<span>${label}</span>`).join('')}</div><div class="tag-diary-calendar" role="group" aria-label="${calendar.title}日記日曆">${cells}</div><section class="tag-diary-day-list" aria-label="${selectedLabel}的小記"><h4>${selectedLabel}<span>${calendar.entries.length?`${calendar.entries.length} 篇小記`:''}</span></h4><div class="tag-diary-list">${entries}</div></section><section class="tag-diary-section tag-day-associations"><h4>關聯社交標籤</h4>${readOnlyTags(dayTags,'這一天還沒有已確認的關聯標籤。')}</section>${button('回去聊聊','tag-open-chat')}</div>`;
+}
+export function diaryEntryMarkup(space,user,id,{tab='diary',selectTags=false,companionName='Klin'}={}){
  const ledger=socialTagState(space,user),entry=ledger.diary.find(e=>e.id===id);if(!entry)return '<p>這篇日記暫時找不到。</p>';
- const linked=linkedTags(ledger,entry),messages=(space.companionMessages||[]).filter(m=>entry.messageIds.includes(m.id));
- return `<article class="social-tags-panel tag-diary-detail"><time class="tag-diary-date" datetime="${new Date(entry.createdAt).toISOString()}">${new Date(entry.createdAt).toLocaleDateString('zh-HK',{year:'numeric',month:'long',day:'numeric'})}</time><section class="tag-diary-section"><h4>這天的小記</h4><p class="tag-diary-body">${esc(entry.text)}</p></section><section class="tag-diary-section tag-diary-quote"><h4>今日金句</h4><blockquote>${esc(entry.quote||'這天還沒有留下金句。')}</blockquote></section><section class="tag-diary-section"><h4>關聯社交標籤</h4><div class="tag-associated">${linked.map(item=>tagSelection(item,{history:selectTags,diaryId:selectTags?'':id})).join('')||'<span class="small-note">還沒有確認的關聯標籤。</span>'}</div></section><details class="tag-chat-records" ${tab==='chat'?'open':''}><summary>原始聊天記錄</summary><div class="tag-original-chat">${messages.map(m=>`<div class="${m.role==='user'?'own':''}"><small>${m.role==='user'?'我':'Klin'}</small><p>${esc(m.text)}</p></div>`).join('')||'<p class="small-note">這篇小記沒有保存對應的聊天記錄。</p>'}</div></details><p class="tag-diary-privacy">僅自己可見 · 原始記錄只讀</p>${button(selectTags?'返回歷史標籤':'回到日記',selectTags?'tag-history':'tag-diary')}</article>`;
+ const name=nokName(companionName),linked=linkedTags(ledger,entry),messages=diaryChatData(space,entry),chatActive=tab==='chat',key=encodeURIComponent(entry.id);
+ const tabItems=[{key:'diary',label:'日記',action:selectTags?'tag-history-diary':'tag-diary-entry'},{key:'chat',label:'原始聊天',action:selectTags?'tag-history-chat':'tag-diary-chat'}];
+ const tabs=`<nav class="tag-diary-tabs" role="tablist" aria-label="日記與原始聊天">${tabItems.map(item=>`<button type="button" class="tag-ui-button" role="tab" id="diary-tab-${item.key}-${key}" aria-controls="diary-panel-${item.key}-${key}" aria-selected="${(item.key==='chat')===chatActive}" data-action="${item.action}" data-id="${esc(entry.id)}">${item.label}</button>`).join('')}</nav>`;
+ const tags=selectTags?`<div class="tag-associated">${linked.map(item=>tagSelection(item,{history:true})).join('')||'<span class="small-note">還沒有確認的關聯標籤。</span>'}</div>`:readOnlyTags(linked);
+ const diary=`<div class="tag-diary-panel" role="tabpanel" id="diary-panel-diary-${key}" aria-labelledby="diary-tab-diary-${key}" ${chatActive?'hidden':''}>${nokIntroduction(name)}<section class="tag-diary-section"><h4>這天的聊天摘記</h4><p class="tag-diary-body">${esc(entry.text)}</p></section><section class="tag-diary-section tag-diary-quote"><h4>Quote</h4>${entry.quote?`<blockquote>${esc(entry.quote)}</blockquote>`:'<p class="small-note">這天還沒有留下金句。</p>'}</section><section class="tag-diary-section"><h4>關聯社交標籤</h4>${tags}</section></div>`;
+ const undated=messages.undated.length?`<section class="tag-undated-chat"><h4>未記錄時間的原話</h4><p class="small-note">這些原話曾收在這篇小記裡，但沒有留下日期。</p><div class="tag-original-chat">${originalMessages(messages.undated,name)}</div></section>`:'';
+ const chat=`<div class="tag-diary-panel tag-chat-records" role="tabpanel" id="diary-panel-chat-${key}" aria-labelledby="diary-tab-chat-${key}" ${chatActive?'':'hidden'}><h4>這一天的原始聊天</h4><div class="tag-original-chat">${originalMessages(messages.dated,name)||'<p class="small-note">這一天沒有保存聊天記錄。</p>'}</div>${undated}</div>`;
+ return `<article class="social-tags-panel tag-diary-detail"><time class="tag-diary-date" datetime="${new Date(entry.createdAt).toISOString()}">${new Date(entry.createdAt).toLocaleDateString('zh-HK',{year:'numeric',month:'long',day:'numeric'})}</time>${tabs}${diary}${chat}<p class="tag-diary-privacy">僅自己可見 · 原始記錄只讀</p>${button(selectTags?'返回歷史標籤':'回到日記',selectTags?'tag-history':'tag-diary')}</article>`;
 }

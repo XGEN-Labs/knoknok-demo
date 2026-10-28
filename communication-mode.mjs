@@ -1,4 +1,4 @@
-import { uiIcon } from './ui-icons.mjs?v=20261026-experience-42';
+import { uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
 // Voice input is an explicit, user-started browser dictation session. Recognition
 // results are held until the session ends, then placed in a draft, never sent.
 export function communicationModeMarkup(){return '';}

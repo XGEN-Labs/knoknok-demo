@@ -139,3 +139,25 @@
 .phone#phone #sheet .tag-diary-privacy{margin:16px 0;font-size:12px;line-height:18px;color:#68656e}
 
 .phone#phone #sheet .tag-calendar-nav:disabled{opacity:.3;cursor:default}
+
+/* Diary71: Nok's introduction is separate from saved words and private chat. */
+.phone#phone #sheet :is(.tag-diary-browser,.tag-diary-detail) .tag-nok-intro{
+ margin:0 0 22px;padding:18px;border:1px solid #e0dbcb;border-radius:20px;
+ background:#faf7ef url('assets/card-paper-20261027/ivory-cotton.jpg') center/420px 420px repeat;
+ color:#35362f;box-shadow:0 2px 8px #55493608;
+}
+.phone#phone #sheet .tag-nok-intro h4{margin:0 0 10px;font-size:15px;line-height:22px;font-weight:500;color:inherit}
+.phone#phone #sheet .tag-nok-intro p{margin:8px 0 0;font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.phone#phone #sheet .tag-diary-tabs{display:flex;gap:8px;margin:18px 0}
+.phone#phone #sheet .tag-diary-tabs [role="tab"]{flex:1;min-width:0;min-height:44px;font-size:14px;line-height:20px}
+.phone#phone #sheet .tag-diary-tabs [aria-selected="true"]{background:#e5ecd8;border-color:#aab99b;box-shadow:none}
+.phone#phone #sheet .tag-diary-tabs [role="tab"]:focus-visible{outline:2px solid #66636e;outline-offset:3px}
+.phone#phone #sheet .tag-diary-panel[hidden]{display:none!important}
+.phone#phone #sheet :is(.tag-diary-browser,.tag-diary-detail) .tag-diary-readonly{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;margin:0}
+.phone#phone #sheet .tag-diary-readonly>.social-tag-sticker{max-width:100%;box-sizing:border-box}
+.phone#phone #sheet .tag-diary-readonly>.small-note{margin:0;line-height:1.7}
+.phone#phone #sheet .tag-day-associations{margin:20px 0}
+.phone#phone #sheet .tag-chat-records>h4,.phone#phone #sheet .tag-undated-chat>h4{margin:0;font-size:15px;line-height:22px;font-weight:500;color:inherit}
+.phone#phone #sheet .tag-undated-chat{margin-top:22px;padding-top:18px;border-top:1px solid rgba(67,64,74,.12)}
+.phone#phone #sheet .tag-original-chat small{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.phone#phone #sheet .tag-original-chat time{font-size:11px;white-space:nowrap}

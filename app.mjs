@@ -7,7 +7,7 @@ import { createAuthEntry, createDemoAuthAdapter, createApiAuthAdapter } from './
 import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261028-auth-logo-62';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
-import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261027-clarity-51e';
+import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261028-diary-paper-71b';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
 import { mountFriendWorld } from './friend-world.mjs?v=20261027-glass-52g';
 import { mountCosmosBackground } from './cosmos-background.mjs?v=20261027-cosmos-55c';
@@ -17,14 +17,13 @@ import { renderFriendNetwork } from './friend-network.mjs?v=20261027-shared-61';
 import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261028-seated-63';
 import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-63';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
-import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261027-shared-61&glass=61';
+import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261028-diary-paper-71b&glass=61';
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
-import { mountConversationScroll } from './conversation-scroll.mjs?v=20261027-clarity-51e';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
-import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261028-opening-music-69';
+import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261028-diary-paper-71b';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
 import { createSceneAssetReadiness } from './scene-asset-readiness.mjs?v=20261023-experience-34d';
-import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261028-composer-feedback-66';
+import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261028-diary-paper-71b';
 import { visibleViewport, sheetPlacement } from './mobile-viewport.mjs?v=20261023-experience-34d';
 import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261023-experience-34d';
 import { showCompanionContract } from './contract-story.mjs?v=20261027-clarity-51e';
@@ -36,7 +35,7 @@ import { initDatePickers } from './date-picker.mjs?v=20261027-clarity-51e';
 import { initTypography } from './typography.mjs?v=20261023-experience-34d';
 import { createSceneSound } from './scene-sound.mjs?v=20261028-music-balance-70';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
-import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261027-polish-48b';
+import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261028-card-paper-71';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261028-opening-music-69';
@@ -95,7 +94,7 @@ let loginScene=null,landingVideoScene=null,closeContractUI=null,pendingContractD
 let renderSequence=0;
 let pendingCardFontRefresh=false;
 let conversationActive=false,conversationAvatarMotion=null;
-let conversationScroll=null,conversationEntryMotion=null,sceneControlGlass=null;
+let conversationEntryMotion=null,sceneControlGlass=null;
 let welcomeLogoMotion=null;
 let matchingDemandId=null, matchingPhase=0, matchingTimers=[];
 let timer, initializeTimer, toastTimer, authResendTimer, stopTransition, pendingSceneRefresh=false, adviceRequest=0, busy=false, companionTyping=false;
@@ -528,13 +527,13 @@ function openTagChat(){closeSheet();if(ui.route!=='home')go('home');setHomeConve
 function showSocialDiary(month=ui.diaryMonth||'',day=ui.diaryDay||''){
  const calendar=diaryCalendarData(privateSpace(),me(),{month,day,now:state.now});
  ui.diaryMonth=calendar.month;ui.diaryDay=calendar.day;
- showSheet('Nok 日記',diaryListMarkup(privateSpace(),me(),{month:calendar.month,day:calendar.day,now:state.now}));
+ showSheet('Nok 日記',diaryListMarkup(privateSpace(),me(),{month:calendar.month,day:calendar.day,now:state.now,companionName:companionName()}));
  const sheet=$('#sheet');if(sheet)sheet.scrollTop=0;
 }
 function showSocialDiaryEntry(id,{tab='diary'}={}){
  const entry=socialTagState(privateSpace(),me()).diary.find(item=>item.id===id);
  if(entry){const date=new Date(entry.createdAt);ui.diaryMonth=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;ui.diaryDay=`${ui.diaryMonth}-${String(date.getDate()).padStart(2,'0')}`;}
- showSheet('這天的 Nok 日記',diaryEntryMarkup(privateSpace(),me(),id,{tab}));
+ showSheet('這天的 Nok 日記',diaryEntryMarkup(privateSpace(),me(),id,{tab,companionName:companionName()}));
  const sheet=$('#sheet');if(sheet)sheet.scrollTop=0;
 }
 function showSocialTagSource(id,{selectTags=false}={}){
@@ -709,7 +708,6 @@ function render(animate=false,motion={}){
   birthTimePicker?.destroy();birthTimePicker=null;cleanDatePickers?.();cleanFormControls?.();cleanCommunication?.dispose();cleanCommunication=null;
   friendWorld?.dispose();friendWorld=null;
   cosmosBackground?.dispose();cosmosBackground=null;
-  conversationScroll?.dispose();conversationScroll=null;
   app.innerHTML=views[ui.route]();
   if(ui.route==='relations')cosmosBackground=mountCosmosBackground(app.querySelector('.network-scene-source'),{reducedMotion:prefersStillness(ui.motion)});
   if(ui.route==='relations')friendWorld=mountFriendWorld(app.querySelector('.spirit-world'),{reducedMotion:prefersStillness(ui.motion),orientation:friendWorldOrientation,onRotate:value=>{friendWorldOrientation=value;}});
@@ -733,7 +731,6 @@ function render(animate=false,motion={}){
   if(ui.route==='home'&&!useTransition)klinWorld?.setConversationMode?.(conversationActive);
   conversationAvatarMotion?.refresh({reducedMotion:prefersStillness(ui.motion)});
   if(conversationActive&&ui.route==='home'){const log=$('#conversation-log');if(log)log.scrollTop=log.scrollHeight;}
-  if(ui.route==='home')conversationScroll=mountConversationScroll($('#conversation-log'));
   syncSceneGlass();syncConversationEntry();
   if(restoreComposerFocus){const composer=$(focusedComposer);composer?.focus({preventScroll:true});composer?.setSelectionRange(...selection);}
   
@@ -852,8 +849,8 @@ async function runAction(action,element){
     case 'card-edit-return':return editCard(true);
     case 'tag-history':return chooseHistoryTags();
     case 'tag-history-back':return manageSocialTags();
-    case 'tag-history-diary':return showSheet('記憶碎片',diaryEntryMarkup(privateSpace(),me(),element.dataset.id,{selectTags:true}));
-    case 'tag-history-chat':return showSheet('當時的對話',diaryEntryMarkup(privateSpace(),me(),element.dataset.id,{selectTags:true,tab:'chat'}));
+    case 'tag-history-diary':return showSheet('記憶碎片',diaryEntryMarkup(privateSpace(),me(),element.dataset.id,{selectTags:true,companionName:companionName()}));
+    case 'tag-history-chat':return showSheet('當時的對話',diaryEntryMarkup(privateSpace(),me(),element.dataset.id,{selectTags:true,tab:'chat',companionName:companionName()}));
     case 'tag-history-restore':if(dispatch({type:'SOCIAL_TAG_RESTORE',tagId:element.dataset.id},false)){render(false);chooseHistoryTags();toast('已加入名片展示。');}return;
     case 'tag-source':return showSocialTagSource(element.dataset.id,{selectTags:element.dataset.history==='true'});
     case 'tag-hide':case 'tag-restore':if(dispatch({type:action==='tag-hide'?'SOCIAL_TAG_HIDE':'SOCIAL_TAG_RESTORE',tagId:element.dataset.id},false)){render(false);manageSocialTags();}return;
@@ -989,7 +986,7 @@ function resize(){const v=visibleViewport(window),root=document.documentElement;
 window.addEventListener('resize',()=>{resize();requestAnimationFrame(syncWorldAnchor);});
 window.visualViewport?.addEventListener('resize',resize);
 window.visualViewport?.addEventListener('scroll',resize);
-document.addEventListener('pointerdown',e=>{if(!conversationActive||ui.route!=='home'||$('#sheet').open||e.target.closest('.home-chat-bottom,.home-top,.conversation-message,.tag-chat-card,.tag-chat-tools,dialog,.mobile-controls'))return;setHomeConversation(false);$('#private-message')?.blur();},{capture:true});
+document.addEventListener('pointerdown',e=>{if(!conversationActive||ui.route!=='home'||$('#sheet').open||e.target.closest('.home-chat-bottom,.home-top,.conversation-log,.conversation-message,.tag-chat-card,.tag-chat-tools,dialog,.mobile-controls'))return;setHomeConversation(false);$('#private-message')?.blur();},{capture:true});
 document.addEventListener('scroll',e=>{if(e.target.matches?.('.visit-content'))requestAnimationFrame(syncWorldAnchor);},true);
 window.addEventListener('scroll',()=>{if($('#sheet').open)positionSheet();},{passive:true});
 window.addEventListener('storage',e=>{

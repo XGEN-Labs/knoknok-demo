@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T08:00:33.151679+00:00",
+  "createdAt": "2026-10-28T08:40:52.714173+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147050592,
+  "payloadBytes": 147057463,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 131214,
-      "sha256": "47445247172a144d982993a03a4a39a0749c30ab5b83e4114a5e2e4d611fe9a7"
+      "bytes": 131097,
+      "sha256": "e1043172051f94ace57d8d41960be47e5b5c116311ef42b1ed48231a0c27edc8"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1562,14 +1562,14 @@
     {
       "source": "chat-header-v41.css",
       "path": "chat-header-v41.css",
-      "bytes": 8925,
-      "sha256": "66a8e10a3a6bf2b0c0714230c8e8006d32ac84a7d30e7ad75672047821919de6"
+      "bytes": 9243,
+      "sha256": "d40029d3d6b140d4e84c03d958728ceb0d1c4ca55523b3bdb73d8762ea2624bf"
     },
     {
       "source": "communication-mode.mjs",
       "path": "communication-mode.mjs",
-      "bytes": 19348,
-      "sha256": "7d9389340e32c30d36e0db97261ae61656920b5a513378dab0dcaa99f4966616"
+      "bytes": 19350,
+      "sha256": "1ce13bba4ad63151ebd608f23eb55450eeb14e5de8cf7b6bbdb7f276ad972699"
     },
     {
       "source": "companion-animation.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11306,
-      "sha256": "e31a5d7e9b1fbbf2b2ab5b60041c49a8c4e95eec88b37d81cc98eb7e03988eef"
+      "bytes": 11338,
+      "sha256": "41d48b9b665f9ac313205103946c586030cfb47884a99e9c0e9966754eb07a3f"
     },
     {
       "source": "journey-experience.css",
@@ -1844,8 +1844,8 @@
     {
       "source": "landing-flow.css",
       "path": "landing-flow.css",
-      "bytes": 4398,
-      "sha256": "a88c932d3341543996fe757691f7ad68b53e59c94f2ca5cbc57ffdc1b4eed142"
+      "bytes": 4990,
+      "sha256": "8796948c1f8276d5e51dec7d7e397f2a8e76768bf2d12b86cd4ad04c74527cef"
     },
     {
       "source": "landing-glass.css",
@@ -1856,8 +1856,8 @@
     {
       "source": "landing-glass.mjs",
       "path": "landing-glass.mjs",
-      "bytes": 11608,
-      "sha256": "ce8a752ad1e8cf14585071673525704b83a89c078261e9615e7f915b76091057"
+      "bytes": 11588,
+      "sha256": "94d6f0d4245ad79de4b00137c016a57d59c5da683b7a164c1cf28aa5de6853f6"
     },
     {
       "source": "landing-held-frame.mjs",
@@ -1880,8 +1880,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 13602,
-      "sha256": "f3fdb59c940f26190faa9cadaad5a792aeb7269deea1899b950e44fd7f515c2b"
+      "bytes": 13609,
+      "sha256": "b1a00a6cdcd51b2959f62c12527c2dc9ec4c39d09c47e46366c2f0bac73f184d"
     },
     {
       "source": "landing-video.css",
@@ -1982,8 +1982,8 @@
     {
       "source": "portal-glass.css",
       "path": "portal-glass.css",
-      "bytes": 12807,
-      "sha256": "a0fa7b322b08e941de7a06ee15c657516fb9b96710add68a8095f14cdc24ca44"
+      "bytes": 12548,
+      "sha256": "2772a4b8c3dfee18cfb096ffe2089aa4c40bace20d024e5a48ba8805078e4e2f"
     },
     {
       "source": "portal-social-v24.css",
@@ -2084,8 +2084,8 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 14048,
-      "sha256": "2ff459ee5a0a3783f47e6a3a030b5a9c84d49185876ce9d491b309eeef29011e"
+      "bytes": 14028,
+      "sha256": "bcc050a2aacb529bbd147332b3f7fd8ae5b788fac78931229b07f947a1283679"
     },
     {
       "source": "scene-experience.css",
@@ -2126,14 +2126,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 13135,
-      "sha256": "35a04a3e386efc099a35b39dc7d72b99bfb174521f42e45ed90e02b386e6d842"
+      "bytes": 16791,
+      "sha256": "7b87e7a5aa21751f7e89ffc0e4349a49c50d11a14e299a618dc59ac576508bbe"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
-      "bytes": 15598,
-      "sha256": "b8dbb7f3b8e26d0276c8a0f5d920b21a7bbff50b69e84e66d3f31bd5da7ef070"
+      "bytes": 17535,
+      "sha256": "04e15b4561177dbf7395f032256c1cbdeedb0fa961e434b383686ac518a5dfe3"
     },
     {
       "source": "social-tags.mjs",
@@ -2198,8 +2198,8 @@
     {
       "source": "ui-icons.mjs",
       "path": "ui-icons.mjs",
-      "bytes": 5115,
-      "sha256": "bee87ea88905136358f87c1ed336e86abb69da2185e6d7b3e8984216799fde86"
+      "bytes": 5700,
+      "sha256": "1b154985e8e127ed70729ab4cfa658b0dd9b21b4d5d14b07e8cde0ee71613011"
     },
     {
       "source": "ui-inputs-v31.css",
@@ -2294,8 +2294,8 @@
     {
       "source": "shared-room-v61.css",
       "path": "shared-room-v61.css",
-      "bytes": 3679,
-      "sha256": "7ac8a7764baf54770ce755a3f9cefd0d2c4e3e8387e74e7ac962a2353326ba19"
+      "bytes": 4138,
+      "sha256": "067f5c0709ad07f9eee8b429e7371d05cfa880c4faa13038a976d33588ef6c8e"
     },
     {
       "source": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
@@ -2372,8 +2372,8 @@
     {
       "source": "shared-chat-polish-v62.css",
       "path": "shared-chat-polish-v62.css",
-      "bytes": 566,
-      "sha256": "84405bf81079d071ff5df4420428a0ebd2ed1e929bc73d852b54e208168502de"
+      "bytes": 265,
+      "sha256": "a49cc03fb7d7ad35fcdd80ebf31dd10301a0fca93037d71796e604f3b5890cfb"
     },
     {
       "source": "assets/klin-alive-room-20261028-v02/idle.mp4",

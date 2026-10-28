@@ -7,6 +7,14 @@
 .phone.landing-video-active .onboarding-reading{padding:22px 24px}
 .phone.landing-video-active .onboarding-reading h3{font-size:19px;margin:12px 0 6px}
 .phone.landing-video-active .onboarding-reading p{font-size:15px;line-height:1.7;margin:0}
+/* The long day-master reading is a paper card; its surrounding controls keep glass. */
+.phone#phone.landing-video-active #app .page.conversation-onboarding .onboarding-reading{
+ background:#faf7ef url('assets/card-paper-20261027/ivory-cotton.jpg') center/420px 420px repeat!important;
+ border:1px solid rgba(145,128,100,.22)!important;
+ box-shadow:0 8px 24px rgba(48,38,24,.1),inset 0 1px 0 rgba(255,255,255,.75)!important;
+ -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+.phone#phone.landing-video-active #app .page.conversation-onboarding .onboarding-reading>p{color:rgba(0,0,0,.8)}
 .phone .first-noking-choices{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0 0;pointer-events:auto}
 .phone .first-noking-choices button{padding:9px 14px;border-radius:24px;font:inherit;font-size:14px;cursor:pointer}
 @keyframes contract-light-breathe{0%,100%{opacity:.4;transform:scale(.92)}50%{opacity:1;transform:scale(1.08)}}

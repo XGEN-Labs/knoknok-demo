@@ -1,4 +1,4 @@
-import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261027-glass-61';
+import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261028-diary-paper-71b';
 
 // Ordinary image backgrounds are deliberately used instead of one composited
 // backdrop per capsule. WebKit can split a live backdrop even on a paint-only
@@ -26,7 +26,7 @@ export const SCENE_GLASS_TARGETS = [
   '#app .tag-chat-card select:not(.klin-native-select)','#app .tag-chat-card .klin-select-trigger',
   '#app .composer-row','#app .onboarding-input-row','#app .network-search',
   '#app .auth-panel','#app .conversation-message','#app .room-speech',
-  '#app .bubble:not(.failed)','#app .onboarding-message','#app .onboarding-reading',
+  '#app .bubble:not(.failed)','#app .onboarding-message',
   '#sheet','#sheet .sheet-title .icon-button',
   '#sheet .tag-history-entry','#sheet .tag-history-story',
   '#sheet .tag-history-options .tag-ui-button','#sheet .tag-diary-browser .tag-diary-list>button',
