@@ -10,9 +10,9 @@ try{
  const context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'});page=await context.newPage();page.setDefaultTimeout(15000);page.on('pageerror',error=>errors.push(error.message));
  await page.goto(fixture.url,{waitUntil:'domcontentloaded'});
  async function login(id){await page.locator('[data-action="login"]').click();await page.locator('#auth-username').fill('test'+id);await page.locator('#auth-form button[type="submit"]').click();await page.locator('#auth-password').fill('fixture-only');if(id===101)await page.locator('#auth-confirmPassword').fill('fixture-only');await page.locator('#auth-form button[type="submit"]').click();}
- async function logout(){if(await page.locator('[data-action="close-conversation"]').isVisible())await page.locator('[data-action="close-conversation"]').click();await page.locator('[data-action="settings-menu"]').click();await page.locator('[data-action="auth-exit"]').click();}
+ async function logout(){if(await page.locator('[data-action="close-conversation"]').isVisible())await page.locator('[data-action="close-conversation"]').click();await page.locator('[data-action="settings-menu"]').click();await page.locator('#sheet [data-action="account-menu"]').click();await page.locator('#sheet [data-action="logout"]').click();}
  await login(202);await page.locator('#private-message').waitFor();checks.push('existing account uses real auth adapter and skips Landing');
- await page.waitForFunction(()=>!document.querySelector('#conversation-log').textContent.includes('正在讀取聊天記錄'));
+ await page.waitForFunction(()=>!document.querySelector('.home-composer button[type=submit]').disabled);
  await page.locator('#private-message').fill('你好');await page.locator('#private-message').press('Enter');await page.locator('#conversation-log').getByText('真實協議回覆 202',{exact:true}).waitFor();checks.push('chat posts to same-origin real protocol');
  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#private-message').waitFor();await page.locator('#private-message').click();await page.locator('#conversation-log').getByText('真實協議回覆 202',{exact:true}).waitFor();checks.push('history restored from server after reload');
  await logout();await page.locator('[data-action="login"]').waitFor();await login(303);await page.locator('#private-message').waitFor();assert.ok(!(await page.locator('#conversation-log').textContent()).includes('202'));checks.push('logout and account switch do not leak prior history');
@@ -32,14 +32,31 @@ try{
  const handoff=fixture.calls.filter(c=>c.path==='/api/web/chat').at(-1).body.messages;assert.equal(handoff.length,1);for(const value of ['甲用户','甲伙伴','1995-03-10','上海','我喜欢周末看展'])assert.ok(handoff[0].content.includes(value));checks.push('Landing sends intake to native Agent before marking complete; failures preserve answers and accepted handoff is not resent');
  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#private-message').waitFor();assert.equal(fixture.calls.filter(c=>c.path==='/api/web/chat').length,before);checks.push('completed account skips Landing after reload');
 
- // Native panels share the same Cookie/owner boundary and never change identity in request bodies.
- await page.locator('.home-top [data-go="profile"]').click();await page.locator('[data-action="native-profile-edit"][data-key="preferredName"]').click();
- await page.locator('[data-form="native-profile"] input').fill('新的稱呼');await page.locator('[data-form="native-profile"] button[type="submit"]').click();await page.locator('#sheet').getByText('新的稱呼',{exact:true}).waitFor();assert.equal(fixture.profiles.get(101).fields.homeCity.value,'香港');
- await page.locator('[data-action="native-nickname-edit"]').click();await page.locator('[data-form="native-nickname"] input').fill('新的伙伴');await page.locator('[data-form="native-nickname"] button[type="submit"]').click();await page.locator('#sheet').getByText('新的伙伴',{exact:true}).waitFor();checks.push('native profile edits preserve unedited fields and nickname uses revision guard');
- await page.keyboard.press('Escape');
- assert.equal(await page.locator('[data-action="tag-diary"], [data-action="live-memory"], [data-action^="native-memory"]').count(),0);
- await page.locator('[data-action="settings-menu"]').click();assert.equal(await page.locator('#sheet').getByText('伙伴的記憶',{exact:true}).count(),0);assert.ok(!fixture.calls.some(c=>c.path.startsWith('/api/web/memories/')));checks.push('raw Memory panel and home/settings entries removed; no Memory requests');
- await page.keyboard.press('Escape');await page.locator('[data-go="relations"]').click();await page.locator('[data-action="native-room"]').click();await page.locator('[data-form="native-group"] textarea').fill('共享房間訊息');await page.locator('[data-form="native-group"] button[type="submit"]').click();await page.locator('#sheet').getByText('共享房間訊息',{exact:true}).waitFor();assert.equal(fixture.groupEvents.get(101).length,1);checks.push('existing shared room loads and posts using native protocol');
+ // Restore rongyu's original pages and interaction paths, not native DTO editors.
+ await page.locator('.home-top [data-go="profile"]').click();await page.locator('.profile-card-page').waitFor();
+ assert.equal(await page.locator('[data-native-panel]').count(),0);
+ await page.getByRole('button',{name:'編輯名片',exact:true}).click();await page.locator('#profile-name').fill('名片稱呼');await page.locator('#bio').fill('原設計的一句話介紹');
+ await page.locator('[data-action="manage-card-tags"]').click();await page.locator('[data-action="card-edit-return"]').click();
+ assert.equal(await page.locator('#bio').inputValue(),'原設計的一句話介紹');
+ await page.locator('[data-form="profile"] button[type="submit"]').click();await page.locator('.profile-card-page').getByText('名片稱呼',{exact:true}).first().waitFor();
+ await page.reload({waitUntil:'domcontentloaded'});await page.locator('#private-message').waitFor();await page.locator('.home-top [data-go="profile"]').click();await page.locator('.profile-card-page').waitFor();assert.ok((await page.locator('.profile-card-page').textContent()).includes('原設計的一句話介紹'));
+ checks.push('original card scene, editor, tag management and account-local data survive reload; no native profile replacement');
+ await context.grantPermissions(['clipboard-read','clipboard-write']);
+ await page.locator('[data-action="share-card"]').click();await page.locator('[data-action="copy-card-link"]').click();await page.locator('#card-share-status[data-feedback="success"]').waitFor();
+ const shareURL=await page.evaluate(()=>navigator.clipboard.readText());assert.ok(shareURL.includes('#card='));
+ await page.goto(shareURL,{waitUntil:'domcontentloaded'});await page.locator('.public-card-page').waitFor();assert.ok((await page.locator('.public-card-page').textContent()).includes('原設計的一句話介紹'));
+ await page.locator('.page-top [data-action="leave-card"]').click();await page.locator('#private-message').waitFor();
+ checks.push('original public card preview and share interaction restored');
+ await page.locator('.home-top [data-action="tag-diary"]').click();await page.locator('#sheet-title').getByText('Nok 日記',{exact:true}).waitFor();
+ assert.equal(await page.locator('[data-native-panel]').count(),0);await page.keyboard.press('Escape');
+ await page.locator('#private-message').click();assert.equal(await page.locator('[data-action="tag-end-session"]').count(),0);await page.locator('#conversation-log [data-action="tag-diary"]').click();await page.locator('#sheet-title').getByText('Nok 日記',{exact:true}).waitFor();await page.keyboard.press('Escape');
+ await page.locator('[data-action="close-conversation"]').click();
+ checks.push('original diary calendar and chat diary entry restored; rongyu removal of manual collection retained; no raw Memory');
+ await page.locator('[data-action="settings-menu"]').click();assert.equal(await page.locator('#sheet .settings-menu').count(),1);assert.equal(await page.locator('[data-action="live-history"]').count(),0);await page.keyboard.press('Escape');
+ await page.locator('.visit-entry[data-go="relations"]').click();await page.locator('#network-query').waitFor();assert.equal(await page.locator('[data-native-panel]').count(),0);
+ await page.locator('#network-query').fill('不存在的名字');await page.locator('.network-search-status').getByText('找到 0 位朋友',{exact:true}).waitFor();
+ checks.push('original settings and visiting/search scene restored, no replacement group list/chat panel');
+ assert.ok(!fixture.calls.some(c=>/^\/api\/web\/(memories|profile|agent|rooms|groups)/.test(c.path)));
  assert.ok(fixture.calls.filter(c=>c.path.startsWith('/api/web/')).every(c=>String(c.id)===c.owner));
  assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,scope:'Chrome + local synthetic BFF, not production',checks},null,2));
 }catch(error){console.error(JSON.stringify({checks,errors,diagnostics:await page.evaluate(()=>({phone:document.querySelector('#phone').dataset,video:[...document.querySelectorAll('video')].map(v=>({src:v.currentSrc,current:v.currentTime,duration:v.duration,ready:v.readyState,paused:v.paused,error:v.error?.code})),text:document.querySelector('#app').textContent}))}));throw error;}finally{await browser.close();await fixture.close();}
