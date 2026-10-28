@@ -8,8 +8,8 @@ function harness(chat=async()=>response){const calls=[],receipts=[];const contro
 test('full actual landing information is carried with unset choices, not initial demo defaults',()=>{
  assert.equal(landingInformation({users:{a:{name:'Frank',companionName:'Klin'}},onboarding:{}}),null);
  const answers={name:'小岚',companionName:'星舟',birthDate:'1995-03-10',birthTime:null,gender:'女生',birthPlace:'上海',response:'我喜欢周末去看展'};
- assert.deepEqual(landingInformation({onboarding:{conversation:{answers}}}),information);
- const prompt=landingPrompt(information);assert.ok(prompt.includes(JSON.stringify(information,null,2)));assert.match(prompt,/不用再提問/);assert.match(prompt,/不啟動其他任務/);assert.match(prompt,/私有資料規則/);
+ assert.deepEqual(landingInformation({onboarding:{conversation:{answers}}}),{userName:information.userName,agentName:information.agentName,response:information.response});
+ const prompt=landingPrompt(information);assert.ok(!prompt.includes(information.birthDate));assert.ok(!prompt.includes(information.birthPlace));assert.match(prompt,/不用再提問/);assert.match(prompt,/不啟動其他任務/);assert.match(prompt,/私有資料規則/);
 });
 test('one existing chat request contains the full handoff and its reply is only acknowledged, not inserted into later chat',async()=>{
  const h=harness();await h.controller.ensure(information);assert.equal(h.calls.length,1);assert.equal(h.calls[0][0].length,1);assert.equal(h.calls[0][0][0].role,'user');assert.equal(h.calls[0][0][0].content,landingPrompt(information));assert.equal(h.calls[0][1],'1');assert.equal(h.receipts.length,1);assert.equal(h.receipts[0].receipt.provider,'knok-agent');assert.equal('text' in h.receipts[0].receipt,false);

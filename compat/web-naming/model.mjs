@@ -323,7 +323,7 @@ export function reduce(previous, action = {}) {
       if (action.type === 'FINISH_CONVERSATION') {
         state.onboarding.status = 'ready'; state.onboarding.basicsComplete = true; state.onboarding.birthComplete = true;
         state.onboarding.initializedAt ||= state.now;
-        if (!state.users.a.cardTagsEdited) state.users.a.cardTags = suggestedCardTags(answers);
+        if (!state.users.a.cardTagsEdited) state.users.a.cardTags = state.onboarding.birthChart ? [state.onboarding.birthChart.labels.dayMaster,state.onboarding.birthChart.labels.zodiac] : suggestedCardTags(answers);
         if (state.users.a.bio === '喜歡發掘城市裡的小展覽。') {
           const tags = interestTags(/喜歡|喜欢|愛好|爱好/.test(answers.response || '') ? answers.response : '');
           state.users.a.bio = tags.length ? `喜歡${tags.join('、')}，想和新朋友慢慢聊聊。` : '想和新朋友，慢慢聊些喜歡的事。';
