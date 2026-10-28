@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T07:46:56.758728+00:00",
+  "createdAt": "2026-10-28T07:52:42.957659+00:00",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 124527533,
+  "payloadBytes": 147050090,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 130432,
-      "sha256": "d72281b84fe00e947607bc712376e41363610304b597c864066c9b20a1d1c40f"
+      "bytes": 131213,
+      "sha256": "07e68005464c2a8f03e94cd04770b15769140f6926dff246f506c0129250cc75"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1568,8 +1568,8 @@
     {
       "source": "communication-mode.mjs",
       "path": "communication-mode.mjs",
-      "bytes": 18976,
-      "sha256": "66125f083dbfb28241acf41efd027d485bd2e9d543c9727c71a900913ef11796"
+      "bytes": 19348,
+      "sha256": "7d9389340e32c30d36e0db97261ae61656920b5a513378dab0dcaa99f4966616"
     },
     {
       "source": "companion-animation.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11296,
-      "sha256": "efc4e748dafcd945537434869312060433702eee4b3aca58d96a9b7fca1b3a24"
+      "bytes": 11303,
+      "sha256": "a4e969397dc0692393b6bdd93150ea4e7b46c332e9c21c136daf4d24fef12958"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 17351,
-      "sha256": "7809a02589d1719b927ee1e4a85ee9e096bb3452ebd866ab792950e0687dcf9c"
+      "bytes": 17348,
+      "sha256": "927617702097dba1e0c2a69d61a4a9e4313b1ab3d42cd35a1a968669b6572066"
     },
     {
       "source": "klin-world-2d.css",
@@ -1820,14 +1820,14 @@
     {
       "source": "landing-audio-clips.mjs",
       "path": "landing-audio-clips.mjs",
-      "bytes": 3527,
-      "sha256": "857000fa5385609df6459c01b2da1429a4bbceca643ba3fd8b6573529ef559ec"
+      "bytes": 3524,
+      "sha256": "2bb38f09c6696668059d4440feef364e56054b4c3d5fb40c97c2ee87a5d0a409"
     },
     {
       "source": "landing-audio-engine.mjs",
       "path": "landing-audio-engine.mjs",
-      "bytes": 19477,
-      "sha256": "dc87dbcd576c5412c0c3ccf698e31141a5ac7df68f66a5b392b847104a99112f"
+      "bytes": 21861,
+      "sha256": "d03a80e566bf168b19d15a99f1a5e73ae3d17cdc374f9e993f6a0527cc86c4aa"
     },
     {
       "source": "landing-day-master-reading.mjs",
@@ -1874,14 +1874,14 @@
     {
       "source": "landing-video-player.mjs",
       "path": "landing-video-player.mjs",
-      "bytes": 12862,
-      "sha256": "e1428465563578fe0d6f0e80c0c4897672cf673ae6d121267e88df67f5ba97ef"
+      "bytes": 14193,
+      "sha256": "919f5fde9dda7f94b99877ea719b8f34a4aa831385711acdb5a919e9d1a329fa"
     },
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 11795,
-      "sha256": "e31a31de8da94284521e7c6c0e6c6c9be034a6f22b7326376cb4e72b4239e4e3"
+      "bytes": 13602,
+      "sha256": "f3fdb59c940f26190faa9cadaad5a792aeb7269deea1899b950e44fd7f515c2b"
     },
     {
       "source": "landing-video.css",
@@ -1898,8 +1898,8 @@
     {
       "source": "loading-state.css",
       "path": "loading-state.css",
-      "bytes": 6066,
-      "sha256": "f3504a7c3a62a68ac573729986639deb7cb2edb9fa5ba739503181ec9cbbafb2"
+      "bytes": 6143,
+      "sha256": "c0423c6cc4f52b8f1f04e6ba59b4c6fd8665dad76090015edff405ea07b30971"
     },
     {
       "source": "loading-state.mjs",
@@ -2024,8 +2024,8 @@
     {
       "source": "refinement-v29.css",
       "path": "refinement-v29.css",
-      "bytes": 7634,
-      "sha256": "d63906c6d6101aa9a103fcc0bf9066996c6eaa7fb89a43270922adffa0bd5a9a"
+      "bytes": 7511,
+      "sha256": "a261587de9c1b67796db7f7373920ee11490c55c9a0617ad89177af71747809e"
     },
     {
       "source": "refinement-v8.css",
@@ -2096,8 +2096,8 @@
     {
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
-      "bytes": 251,
-      "sha256": "587c4cd7f421e9329b75d4c8f9e83fa5a4c9900b1289127fd25804343576eae3"
+      "bytes": 259,
+      "sha256": "a2190794b4387ec687f0c6cf3286a1f1aa4c3ed20367dc09258b9371042eb257"
     },
     {
       "source": "scenes-v41.css",
@@ -2396,8 +2396,32 @@
     {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 6983,
-      "sha256": "502dde81fca2e085983d75e4bcb55d340a5c82e16cd460107ba655d84cda4394"
+      "bytes": 7305,
+      "sha256": "abbf7f46506e5e904e326c6b4193a6a60abfc266cdf70005248a28a3d2bf0959"
+    },
+    {
+      "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
+      "path": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
+      "bytes": 17645982,
+      "sha256": "415e5049e28b1e114138abdad17792bb23e659bd85d2e656415fba64479f1633"
+    },
+    {
+      "source": "assets/landing-audio-20261028-67/background.m4a",
+      "path": "assets/landing-audio-20261028-67/background.m4a",
+      "bytes": 1155461,
+      "sha256": "d691db4b632abac51073d64ab8fe9dbf8fc58316ab528df9d584ee6229049d0f"
+    },
+    {
+      "source": "assets/landing-audio-20261028-67/dialogue-actions.m4a",
+      "path": "assets/landing-audio-20261028-67/dialogue-actions.m4a",
+      "bytes": 1669000,
+      "sha256": "387f563ce3888f5d981c48ca50708c0f70a1ec1cafc32659368a8d8534099fd9"
+    },
+    {
+      "source": "assets/landing-audio-20261028-69/background.m4a",
+      "path": "assets/landing-audio-20261028-69/background.m4a",
+      "bytes": 2045154,
+      "sha256": "73041a3cacba353d6b4b579a8931b3f26fd3d2962ac6d25be28f5bbc835ead02"
     },
     {
       "source": "deployment-mode.mjs",

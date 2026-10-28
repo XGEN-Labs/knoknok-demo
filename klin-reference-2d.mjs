@@ -1,7 +1,7 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
 import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261028-klin-alive-room-v02';
 import { createRoomVideo } from './room-video.mjs?v=20261027-room-motion-54';
-import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261028-klin-alive-room-v02';
+import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261028-opening-music-69';
 
 // Home/adult uses the approved room-and-character films. Original separate
 // artwork remains available for the avatar/card bridge and other scenes/ages.

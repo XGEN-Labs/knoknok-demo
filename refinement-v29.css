@@ -144,19 +144,19 @@
   line-height: var(--kn-navigation-size);
 }
 
-/* A short speech failure stays next to its input, without opening a panel.
-   Reserve space above the composer so the line cannot cover quick replies. */
-.phone #app .voice-input-status {
+/* Recovery appears in the empty input's placeholder. Keep its live region
+   outside flex layout even when the glass surface positions all children. */
+.phone#phone #app .voice-input-status {
   position: absolute;
   display: block;
-  left: 10px;
-  right: 10px;
-  top: auto;
-  bottom: calc(100% + 8px);
-  width: auto;
-  height: 20px;
-  min-height: 20px;
-  margin: 0;
+  left: 0;
+  right: auto;
+  top: 0;
+  bottom: auto;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  margin: -1px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -169,16 +169,13 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-  clip: auto;
-  clip-path: none;
-  text-shadow: 0 1px 3px #ffffffd9;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  text-shadow: none;
   pointer-events: none;
 }
 .phone #app .voice-input-status:empty {
   display: none;
-}
-.phone #app .home-chat-bottom:has(.voice-input-status:not(:empty)) .home-chat-actions {
-  margin-top: 28px;
 }
 
 /* One glass surface per input. No nested pseudo-backdrop or clipped sampler

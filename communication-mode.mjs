@@ -206,6 +206,7 @@ export function bindVoiceComposer({root,inputSelector='#private-message',window:
   if(!root)return {dispose(){},stop(){},getMode:()=> 'text',setMode(){}};
   const textarea=root.querySelector(inputSelector),capture=root.querySelector('[data-voice-capture]'),caption=root.querySelector('[data-voice-caption]'),status=root.querySelector('[data-voice-status]');
   const openButton=root.querySelector('[data-voice-open]'),stopButton=root.querySelector('[data-voice-stop]'),finishButton=root.querySelector('[data-voice-finish]');
+  const defaultPlaceholder=textarea?.placeholder??'';
   let disposed=false,baseDraft='';
   const syncDraft=()=>{root.dataset.hasDraft=String(Boolean(textarea?.value?.trim()));};
   function paint(state){
@@ -217,7 +218,10 @@ export function bindVoiceComposer({root,inputSelector='#private-message',window:
     if(stopButton)stopButton.disabled=processing||state.status==='starting';
     if(finishButton){finishButton.disabled=processing||state.status==='starting';finishButton.setAttribute('aria-busy',String(processing));}
     if(status)status.textContent=failed?state.message:'';
-    if(openButton)openButton.setAttribute('aria-label',failed?'重試語音輸入':'開始語音輸入');
+    // An empty draft presents recovery inside its existing input. The live
+    // status remains available to assistive technology without occupying space.
+    if(textarea)textarea.placeholder=failed&&!textarea.value.trim()?state.message:defaultPlaceholder;
+    if(openButton){openButton.setAttribute('aria-label',failed?'重試語音輸入':'開始語音輸入');openButton.setAttribute('title',failed?state.message:'');}
     syncDraft();onStatus(state);
   }
   const voice=createVoiceInput({window:host,lang,startTimeout,inactivityTimeout,finishTimeout,onState:paint,onResult:text=>{
