@@ -9,8 +9,8 @@ import { mountCosmosBackground } from './cosmos-background.mjs?v=20261027-cosmos
 let cosmosBackground=null;
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
 import { renderFriendNetwork } from './friend-network.mjs?v=20261027-shared-61';
-import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261027-shared-61';
-import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261027-shared-61';
+import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261028-seated-62';
+import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-62';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
 import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261027-shared-61&glass=61';
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';

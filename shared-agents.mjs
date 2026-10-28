@@ -1,4 +1,4 @@
-import { SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261027-shared-61';
+import { SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-62';
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
 
 const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
