@@ -4,6 +4,7 @@ export const CARD_WIDTH=600, CARD_HEIGHT=650, CARD_BOTTOM_PADDING=32;
 export const CARD_PAPER_TEXTURE='assets/card-paper-20261027/ivory-cotton.jpg';
 export const CARD_PAPER_OPACITY=.92;
 export const CARD_PAPER_SCALE=1.4;
+const CARD_DETAIL_INK='#5d4033';
 export const DEFAULT_CARD_AVATAR = 'assets/klin-20261014/adult.png';
 export const CARD_FONTS={
  sans:'Helvetica Neue,PingFang TC,PingFang SC,Arial,sans-serif',
@@ -62,7 +63,7 @@ export function cardArtwork(data){
  // Align visible logo ink, biography and sticker rows with the avatar ring.
  // The selected 2172px PNG's alpha>=32 ink starts at x76; its size stays unchanged.
  const logoScale=1646/2045,logoWidth=184*logoScale;
- items.push({type:'logo',x:contentLeft-logoWidth*76/2172,y:24+(184/3)*(371.5-363.5*logoScale)/724,w:logoWidth,h:logoWidth/3,color:'#66705b'});
+ items.push({type:'logo',x:contentLeft-logoWidth*76/2172,y:24+(184/3)*(371.5-363.5*logoScale)/724,w:logoWidth,h:logoWidth/3,color:CARD_DETAIL_INK});
  items.push({type:'rect',x:portrait.x-8,y:portrait.y-8,w:portrait.w+16,h:portrait.h+16,fill:'#e5eace',r:portrait.w/2+8});
  items.push({type:'avatar',...portrait,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f4f1e7',pad:data.avatar?0:10});
  txt('name',data.name,sparse?54:230,sparse?316:136,sparse?492:318,sparse?92:116,48,{weight:500,family:'name',align:sparse?'center':'left',maxLines:2,lineHeight:1.2});
@@ -76,7 +77,7 @@ export function cardArtwork(data){
  const identityBottom=metaItem?metaItem.y+metaItem.lines.length*metaItem.size*metaItem.lineHeight:nameBottom;
  const bio=String(data.bio||'').trim();
  const bioY=Math.max(sparse?430:306,identityBottom+24);
- txt('bio',bio,contentLeft,bioY,contentWidth,sparse?104:78,sparse?27:28,{color:'#727680',align:'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
+ txt('bio',bio,contentLeft,bioY,contentWidth,sparse?104:78,sparse?27:28,{color:CARD_DETAIL_INK,align:'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
  const rows=[[]],gap=14,size=30,padX=20,padY=21,iconSize=32,iconSpace=42;
  for(const entry of tags){
   const text=typeof entry==='string'?entry:entry.label||entry.text||'';
