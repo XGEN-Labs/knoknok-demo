@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T02:45:28.854776Z",
+  "createdAt": "2026-10-28T02:57:22.621903Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 116867606,
+  "payloadBytes": 118401051,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
       "bytes": 122853,
-      "sha256": "01cf17f493960f980497529fd6a082380ebc884207a8b08b6d75476730495adf"
+      "sha256": "e91c3312d1a5a53aa3a80e6bd747773e9db4452e0c5c4ec54eab578aee81fb62"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1779,7 +1779,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 10658,
-      "sha256": "ae2a2ce524bbd7464a5a216d3515f188b585412cdff3682b0d21bef68d466f75"
+      "sha256": "54aa76e10559788ff5741173bf572e1a649490605a463bfdc32a68ad644be12d"
     },
     {
       "source": "journey-experience.css",
@@ -2109,7 +2109,7 @@
       "source": "shared-agents.mjs",
       "path": "shared-agents.mjs",
       "bytes": 1588,
-      "sha256": "d08ee631b6a0eba717f6c2b7a5dec6d2c0cb6d605a2fd15084b1872407a3fd5d"
+      "sha256": "c56a41d6dc3069644a2e0a3d82b4a3f19b2d7482b8aa109d6e2aa69a12e77e68"
     },
     {
       "source": "sheet-dismiss.mjs",
@@ -2288,8 +2288,8 @@
     {
       "source": "friend-room.mjs",
       "path": "friend-room.mjs",
-      "bytes": 771,
-      "sha256": "a773f6c9cf4867215531c4c38168ecbda4feef682a359404fd5acf260ec07b94"
+      "bytes": 777,
+      "sha256": "2b0278c3e58596c8604e55620e8af9cebce3b383299145deb46abe2b57d207c8"
     },
     {
       "source": "shared-room-v61.css",
@@ -2344,6 +2344,12 @@
       "path": "assets/shared-room-20261027-61/klin-seated-v3.png",
       "bytes": 1420830,
       "sha256": "602656585c287f47f7e6ac6395b38740a6fd50b1edf5205b0a69cc8610072a4e"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/klin-seated-selected.png",
+      "path": "assets/shared-room-20261027-61/klin-seated-selected.png",
+      "bytes": 1533439,
+      "sha256": "18b3fff19d0d1bd829abfa359b2d7ee0ce0bae139ef826a0fa794c7dec8e1b62"
     }
   ],
   "runtimeDependencies": [
