@@ -2,7 +2,8 @@ import { resolveCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { socialTagStyle } from './tag-stickers.mjs?v=20261027-tags-50';
 export const CARD_WIDTH=600, CARD_HEIGHT=650, CARD_BOTTOM_PADDING=32;
 export const CARD_PAPER_TEXTURE='assets/card-paper-20261027/ivory-cotton.jpg';
-export const CARD_PAPER_OPACITY=.58;
+export const CARD_PAPER_OPACITY=.92;
+export const CARD_PAPER_SCALE=1.4;
 export const DEFAULT_CARD_AVATAR = 'assets/klin-20261014/adult.png';
 export const CARD_FONTS={
  sans:'Helvetica Neue,PingFang TC,PingFang SC,Arial,sans-serif',
@@ -71,8 +72,9 @@ export function cardArtwork(data){
  txt('meta',meta,sparse?60:230,nameBottom+12,sparse?480:318,58,22,{family:'hand',color:'#737568',align:sparse?'center':'left',maxLines:2,lineHeight:1.25});
  const metaItem=items.find(item=>item.kind==='meta');
  const identityBottom=metaItem?metaItem.y+metaItem.lines.length*metaItem.size*metaItem.lineHeight:nameBottom;
+ const bio=String(data.bio||'').trim();
  const bioY=Math.max(sparse?430:306,identityBottom+24);
- txt('bio',data.bio,sparse?60:54,bioY,sparse?480:492,sparse?104:78,sparse?27:28,{color:'#727680',align:sparse?'center':'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
+ txt('bio',bio,sparse?60:54,bioY,sparse?480:492,sparse?104:78,sparse?27:28,{color:'#727680',align:sparse?'center':'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
  const rows=[[]],gap=14,size=30,padX=20,padY=21,iconSize=32,iconSpace=42;
  for(const entry of tags){
   const text=typeof entry==='string'?entry:entry.label||entry.text||'';
@@ -85,7 +87,9 @@ export function cardArtwork(data){
   if(row.length&&row.reduce((n,tag)=>n+tag.w,0)+gap*row.length+width>492){row=[];rows.push(row);}
   row.push({type:'tag',text,label:text,lines,w:width,h:height,size,weight:400,family:'hand',align:'left',color:visual.ink,fill:visual.fill,stroke:visual.outline||visual.ink,shape:visual.shape,icon:visual.icon,category:visual.category,r:0,padX,padY,iconSize,iconSpace,lineHeight:1.14});
  }
- let tagY=bioY+104;
+ // An omitted introduction has no reserved text block. Keep a clear gap after
+ // whichever identity element extends lowest, including a wrapped name or city.
+ let tagY=bio?bioY+104:Math.max(portrait.y+portrait.h+8,identityBottom)+32;
  rows.forEach(row=>{
   let x=(CARD_WIDTH-row.reduce((n,tag)=>n+tag.w,0)-gap*Math.max(0,row.length-1))/2;
   const height=Math.max(0,...row.map(tag=>tag.h));
@@ -96,5 +100,5 @@ export function cardArtwork(data){
  // Trim after the last visible line or sticker; the same height drives DOM and PNG.
  const contentBottom=Math.max(...items.map(item=>item.y+(item.type==='text'?item.lines.length*item.size*item.lineHeight:item.h)));
  const height=Math.ceil(contentBottom+CARD_BOTTOM_PADDING);
- return {width:CARD_WIDTH,height,paper,ink,paperTexture:CARD_PAPER_TEXTURE,paperOpacity:CARD_PAPER_OPACITY,layout:0,radius:32,items};
+ return {width:CARD_WIDTH,height,paper,ink,paperTexture:CARD_PAPER_TEXTURE,paperOpacity:CARD_PAPER_OPACITY,paperScale:CARD_PAPER_SCALE,layout:0,radius:32,items};
 }
