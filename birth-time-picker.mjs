@@ -4,13 +4,14 @@ const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '
 const validClock = value => typeof value === 'string' && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
 const minutes = value => Number(value.slice(0, 2)) * 60 + Number(value.slice(3));
 export const BIRTH_TIME_WHEEL_OPTIONS = Object.freeze([
-  Object.freeze({ label: '不知道', range: '', value: null }),
   ...BIRTH_TIME_OPTIONS.map(option => Object.freeze({ ...option, label: option.label.replace(/时/g, '時') })),
+  Object.freeze({ label: '不知道', range: '', value: null }),
 ]);
+const UNKNOWN_TIME_INDEX = BIRTH_TIME_WHEEL_OPTIONS.length - 1;
 
 /** Preserve a valid saved clock, including exact minutes, until the wheel is changed. */
 export function birthTimeWheelSelection(value) {
-  if (!validClock(value)) return { index: 0, value: null };
+  if (!validClock(value)) return { index: UNKNOWN_TIME_INDEX, value: null };
   const clock = minutes(value);
   const index = BIRTH_TIME_WHEEL_OPTIONS.findIndex(option => {
     if (option.value === null) return false;
@@ -19,7 +20,7 @@ export function birthTimeWheelSelection(value) {
     const start = minutes(range[1]), end = minutes(range[2]);
     return start <= end ? clock >= start && clock <= end : clock >= start || clock <= end;
   });
-  return { index: index < 0 ? 0 : index, value: index < 0 ? null : value };
+  return { index: index < 0 ? UNKNOWN_TIME_INDEX : index, value: index < 0 ? null : value };
 }
 
 export function birthTimeWheelKeyIndex(key, index, length = BIRTH_TIME_WHEEL_OPTIONS.length) {

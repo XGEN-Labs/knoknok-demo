@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-29T11:01:44.635484Z",
+  "createdAt": "2026-10-29T11:12:27.135357Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 154378515,
+  "payloadBytes": 154378668,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 128755,
-      "sha256": "5f38f18cb99678d2bad0296e069412a745c61a91b1d7a267a4970454a138d840"
+      "bytes": 128810,
+      "sha256": "8137df3b2707d6c95e9236fa57d2331fbc8739cf7d3f28efbd371983c03c0ca2"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1496,8 +1496,8 @@
     {
       "source": "birth-time-picker.mjs",
       "path": "birth-time-picker.mjs",
-      "bytes": 10027,
-      "sha256": "371d6312d3010a8ce1586147f18b2fa9918034c7dccb3ad31f2679d0f3a0e502"
+      "bytes": 10125,
+      "sha256": "f82a71f3a71ae8df7ad1cb55e5b9a9b4aeeffb2083018ca76ba3865481e01090"
     },
     {
       "source": "brand-v41.css",
@@ -1779,7 +1779,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 11453,
-      "sha256": "939ad633717bcec3021a0524ab25e6010f844e0708306a305e7fb1510a32e8c6"
+      "sha256": "b9f3b1fe8b21001f4fabc3549afe539291c235051f2c557b899f15424936b2f1"
     },
     {
       "source": "journey-experience.css",

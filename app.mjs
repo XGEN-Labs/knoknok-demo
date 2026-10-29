@@ -28,7 +28,7 @@ import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261023-experience-34d'
 import { showCompanionContract } from './contract-story.mjs?v=20261028-shared-composer-74b';
 import { prepareAvatar } from './avatar-upload.mjs?v=20261023-experience-34d';
 import { initFormControls } from './form-controls.mjs?v=20261028-brand-glass-62b';
-import { birthTimePickerMarkup, mountBirthTimePicker } from './birth-time-picker.mjs?v=20261026-answers-47d';
+import { birthTimePickerMarkup, mountBirthTimePicker } from './birth-time-picker.mjs?v=20261029-birth-time-84';
 import { getLandingReading } from './landing-day-master-reading.mjs?v=20261026-answers-47d';
 import { initDatePickers } from './date-picker.mjs?v=20261027-clarity-51e';
 import { initTypography } from './typography.mjs?v=20261023-experience-34d';
@@ -261,7 +261,7 @@ function landing(){
  const contractStep=['name','companionName','complete'].includes(turn.key),draft=ui.onboardingDraft??turn.value??'';
  const prompt=['where','contractLight','response'].includes(turn.key)||contractStep?'':`<div class="onboarding-message is-klin"><p>${esc(turn.prompt)}</p></div>`;
  const input=calendar?`<div class="field"><label for="onboarding-calendar">出生日期</label><input id="onboarding-calendar" name="answer" type="date" data-date-purpose="birthday" autocomplete="bday" value="${esc(draft)}" required></div>`:`<textarea id="onboarding-answer" name="answer" rows="1" maxlength="240" placeholder="${esc(turn.placeholder||'告訴我吧…')}" aria-label="${esc(turn.prompt)}">${esc(draft)}</textarea>`;
- const choices=hours?birthTimePickerMarkup({id:'onboarding-hour-picker',value:draft||null,confirmLabel:'選好了'}):'';
+ const choices=hours?birthTimePickerMarkup({id:'onboarding-hour-picker',value:draft||(ui.onboardingDraft===''||turn.unknownValue?null:'00:00'),confirmLabel:'選好了'}):'';
  const genderChoices=gender?turn.replies.map((r,i)=>`<button type="button" class="onboarding-gender-option" data-action="onboarding-reply" data-text="${esc(r.text)}" aria-pressed="${draft===(i===0?'男性':'女性')||draft===r.text}"><span class="gender-symbol gender-symbol-${i===0?'male':'female'}" aria-hidden="true">${uiIcon(i===0?'male':'female')}</span>${esc(r.label)}</button>`).join(''):'';
  const replies=hours||contractStep?'':gender?genderChoices:(turn.key==='birthPlace'?'<button type="button" data-action="onboarding-reply" data-text="香港">香港</button>':'')+turn.replies.map(r=>`<button type="button" data-action="onboarding-reply" data-text="${esc(r.text)}">${esc(r.label)}</button>`).join('')+(turn.canSkip&&!turn.replies.length?'<button type="button" data-action="onboarding-skip">記不清了，先跳過</button>':'');
  const ending=contractStep?btn(state.onboarding?.contract?.signedAt?'一起回家':'打開相遇契約',state.onboarding?.contract?.signedAt?'finish-conversation':'open-contract'):'';
