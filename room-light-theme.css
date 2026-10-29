@@ -1,0 +1,3 @@
+.phone > .room-lamp-switch[hidden] { display: none !important; }
+.phone > .room-lamp-switch:focus-visible { outline: 2px solid var(--kn-glass-ink, #26242c); outline-offset: 3px; }
+.phone > .room-lamp-switch:disabled { cursor: default; }

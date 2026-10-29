@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-29T11:12:27.135357Z",
+  "createdAt": "2026-10-29T12:41:18.418558Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 154378668,
+  "payloadBytes": 164117915,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 128810,
-      "sha256": "8137df3b2707d6c95e9236fa57d2331fbc8739cf7d3f28efbd371983c03c0ca2"
+      "bytes": 129129,
+      "sha256": "6559ea28020055bc3c302147ec5bb647d0361ade843e3f30534ea428fa6e56c7"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1604,8 +1604,8 @@
     {
       "source": "conversation-avatar-motion.mjs",
       "path": "conversation-avatar-motion.mjs",
-      "bytes": 4590,
-      "sha256": "289a9f217c29d49408bbfb8ac7d525f56d31f82a713551a65485cf61c6cd0aa8"
+      "bytes": 4834,
+      "sha256": "b61fa400f6ccc4a3de7cf16debe18a7b780a9f9cbded3c88c3142ac9fea37390"
     },
     {
       "source": "conversation-entry-motion.css",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11453,
-      "sha256": "b9f3b1fe8b21001f4fabc3549afe539291c235051f2c557b899f15424936b2f1"
+      "bytes": 11532,
+      "sha256": "e47c98d961dcc63c8ac3d1d662200baab29694cedad526cc32b7fa02d7943e89"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 17672,
-      "sha256": "928f5210ba5445b40a78a4368d3aaabfcdb6056f2db5681ab2f09350e9fa7a9c"
+      "bytes": 25461,
+      "sha256": "0fa4c13ccdcc3a92ffa9054efb7220e9d4f27be7f06fa44fcc358b9f0750f69a"
     },
     {
       "source": "klin-world-2d.css",
@@ -2042,8 +2042,8 @@
     {
       "source": "room-video.mjs",
       "path": "room-video.mjs",
-      "bytes": 2471,
-      "sha256": "550815b11c5a66419b7a005f3931b1eefdf909f397389736a244386231e216a2"
+      "bytes": 3033,
+      "sha256": "0dd62cbc5be3505e8eca57b396bafd4313b80ed73430c01dfce0f8cafa9f47a9"
     },
     {
       "source": "room-voice-clips.mjs",
@@ -2073,7 +2073,7 @@
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
       "bytes": 864,
-      "sha256": "cf7742b48524184bd2749640bf8dc132845993a25f7386b42573593cf49230d7"
+      "sha256": "ea639ef15b9134271fe77c2c3610dc216049f367e820d70b32deb2ce792ffdd7"
     },
     {
       "source": "scene-control-glass.css",
@@ -2396,8 +2396,8 @@
     {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 7965,
-      "sha256": "35a5b1fb512999aa58ff4a7b42f8c20b352e1f01a7ccd25827e6fae3842a902c"
+      "bytes": 9359,
+      "sha256": "fe514ad17b52d1141cd36a7c4379144c0bac0303d3c8923d5718b043da42f2dc"
     },
     {
       "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
@@ -2500,6 +2500,90 @@
       "path": "assets/klin-room-motion-20261029-v09/room-only.png",
       "bytes": 690423,
       "sha256": "8e00aa7fa618fc76a463be7f9a88c120f5804d91bd00f1a4f100807faa5df13d"
+    },
+    {
+      "source": "assets/klin-avatar-20261029-v10/avatar.png",
+      "path": "assets/klin-avatar-20261029-v10/avatar.png",
+      "bytes": 1426664,
+      "sha256": "f13c18ff8cff4787db14dbd3013e60c4d84c5f52d0557f901b52c050544f7fba"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/idle-daylight.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/idle-daylight.mp4",
+      "bytes": 1479835,
+      "sha256": "fdf8ab429ab5cfe3dab34d5ace2e745e01937ce9dac1c7c71bb041e07ecbe94d"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/idle.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/idle.mp4",
+      "bytes": 1548399,
+      "sha256": "65717c514442666d9d245be000a4b192a1e3a10c3f7df8dce919ee56add68606"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/poster-daylight.png",
+      "path": "assets/klin-room-motion-20261029-v10/poster-daylight.png",
+      "bytes": 604240,
+      "sha256": "b856195f201ce1ea7417d593883ca48675631bdadd3a26fad4b8ff1fca958781"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/poster.png",
+      "path": "assets/klin-room-motion-20261029-v10/poster.png",
+      "bytes": 680900,
+      "sha256": "2bab9c29a4bfc62d7a630459c7de2669105c5d150b2c569f53c17e985c6d1f81"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/react-daylight.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/react-daylight.mp4",
+      "bytes": 1114711,
+      "sha256": "9e7eae920ae03b1645585afdd0e0d696bbde810641114aa5f2e69a36c456bf20"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/react.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/react.mp4",
+      "bytes": 1175317,
+      "sha256": "2e66cd752ae72c841afc865d9d655856c4e80f05a175008bec64ad240cb0fea5"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-loop-daylight.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/room-loop-daylight.mp4",
+      "bytes": 180760,
+      "sha256": "0f010110a28425f123a49afa4d5a21b0fde50bd0261dd314d662d602ab15ad08"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-loop.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/room-loop.mp4",
+      "bytes": 170934,
+      "sha256": "f640e15f698696925f1df9d7ad6c7a8e1c0e24bea06c3d938dbbdcb8b59ce60e"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-only-daylight.png",
+      "path": "assets/klin-room-motion-20261029-v10/room-only-daylight.png",
+      "bytes": 646149,
+      "sha256": "125adbbf10aacc280e9ef898c65a3206f5ddc9640b981dcee1cb961ef5e9bce0"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-only.png",
+      "path": "assets/klin-room-motion-20261029-v10/room-only.png",
+      "bytes": 690423,
+      "sha256": "8e00aa7fa618fc76a463be7f9a88c120f5804d91bd00f1a4f100807faa5df13d"
+    },
+    {
+      "source": "room-light-assets.mjs",
+      "path": "room-light-assets.mjs",
+      "bytes": 1216,
+      "sha256": "cd4072419597f7bc1fd58f56f7847bee06fd107a71821451aa70a450619315a8"
+    },
+    {
+      "source": "room-light-theme.css",
+      "path": "room-light-theme.css",
+      "bytes": 237,
+      "sha256": "a800fc420d600c8bb28a5d6acd844c1b995f5fc2293af3d6bfd657049ada70c8"
+    },
+    {
+      "source": "room-light-theme.mjs",
+      "path": "room-light-theme.mjs",
+      "bytes": 9075,
+      "sha256": "6ae900e27b41e36c0ae1896180a7a567708640b8057177b6e5589ed792d5e5cf"
     }
   ],
   "runtimeDependencies": [
@@ -3341,6 +3425,26 @@
     {
       "from": "friend-world.mjs",
       "to": "friend-world-fluid.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "demo.html",
+      "to": "room-light-theme.css",
+      "kind": "resource"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "room-light-assets.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "room-light-theme.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "room-light-assets.mjs",
+      "to": "scene-assets.mjs",
       "kind": "module"
     }
   ],

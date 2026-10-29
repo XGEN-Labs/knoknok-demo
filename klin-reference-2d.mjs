@@ -1,7 +1,9 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261029-klin-room-v09';
-import { createRoomVideo } from './room-video.mjs?v=20261027-room-motion-54';
-import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261028-diary-profile-72b';
+import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261029-klin-room-v10';
+import {ROOM_LIGHT_THEMES} from './room-light-assets.mjs?v=20261029-klin-room-v10';
+import {roomThemeReady, readRoomLightPreference, writeRoomLightPreference, createRoomLightSwitch, captureRoomFade, prepareRoomFilm, seekRoomFilm} from './room-light-theme.mjs?v=20261029-klin-room-v10';
+import { createRoomVideo } from './room-video.mjs?v=20261029-klin-room-v10';
+import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261029-klin-room-v10';
 
 // Home/adult uses the approved room-and-character films. Original separate
 // artwork remains available for the avatar/card bridge and other scenes/ages.
@@ -44,7 +46,7 @@ export function illustratedCardFrame(progress, layout, width, height) {
   };
 }
 
-export function createKlinWorld({host, reducedMotion = false} = {}) {
+export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_LIGHT_THEMES, roomThemeStorage} = {}) {
   if (!host) throw new TypeError('createKlinWorld requires a host element.');
   const doc = host.ownerDocument;
   const win = doc.defaultView || globalThis;
@@ -67,10 +69,20 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   host.classList.add('klin-illustrated-world'); host.dataset.world = 'loading'; host.dataset.rendering = 'illustrated-2d'; host.dataset.model = 'original-adult-illustration';
   host.parentElement?.setAttribute('data-character-renderer', 'illustrated-2d');
   const state = {page: 'home', stage: 'adult', layout: getIllustratedLayout('home'), reduced: !!reducedMotion, active: true, disposed: false, action: null, frame: 0, conversation: false, participants: [], lounge: {}, realm: {}, portal: 'idle'};
-  const roomVideo = createRoomVideo({container: room, src: new URL(HOME_SCENE_VIDEO_ASSET, import.meta.url).href, poster: new URL(HOME_SCENE_ASSET, import.meta.url).href, reducedMotion});
+  let themeStorage = roomThemeStorage;
+  if (themeStorage === undefined) {try {themeStorage = win.localStorage;} catch {}}
+  const preferredTheme = readRoomLightPreference(themeStorage);
+  let roomTheme = roomThemeReady(roomThemes[preferredTheme]) ? preferredTheme : 'warm';
+  let themeRequest = 0, swappingTheme = false, themeFade = null, lightSwitch = null, pendingThemePreparation = null, themeSeekHeld = 0;
+  const assetURL = asset => asset ? new URL(asset, import.meta.url).href : null;
+  const themeConfig = () => roomThemes[roomTheme];
+  const makeRoomVideo = (theme, startTime = 0, videoElement) => createRoomVideo({container: room, src: assetURL(theme.roomLoop), poster: assetURL(theme.roomPoster), startTime, videoElement, reducedMotion: state.reduced});
+  let roomVideo = makeRoomVideo(themeConfig());
+  plates.home.src = assetURL(themeConfig().roomPoster);
   let renderedLayout = state.layout;
   let projectedProxy = false, hitTarget = null;
-  const personalRoom = createPersonalRoomVideo({container: room, idleSrc: new URL(HOME_CHARACTER_IDLE_ASSET, import.meta.url).href, reactSrc: new URL(HOME_CHARACTER_REACT_ASSET, import.meta.url).href, poster: new URL(HOME_CHARACTER_SCENE_ASSET, import.meta.url).href, reducedMotion, onChange: applyMediaOwnership});
+  const makePersonalRoom = (theme, posterElement, initialPlayback, films = {}) => createPersonalRoomVideo({container: room, idleSrc: assetURL(theme.idle), reactSrc: assetURL(theme.react), poster: assetURL(theme.poster), posterElement, idleElement: films.idle, reactElement: films.react, initialPlayback, reducedMotion: state.reduced, onChange: applyMediaOwnership});
+  let personalRoom = makePersonalRoom(themeConfig());
   const dimensions = () => ({width: host.clientWidth || host.getBoundingClientRect().width || 402, height: host.clientHeight || host.getBoundingClientRect().height || 874});
   const stop = () => { if (state.frame) cancelFrame(state.frame); state.frame = 0; state.action = null; host.dataset.transitionPhase = 'idle'; primary.artwork.style.transform = ''; };
 
@@ -78,7 +90,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     return state.page === 'home' && layout.world === 'home' && state.stage === 'adult' && layout.character !== false && !layout.shared && !state.conversation && state.action?.kind !== 'transition' && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true';
   }
   function applyMediaOwnership() {
-    if (state.disposed) return;
+    if (state.disposed || swappingTheme) return;
     const owns = personalRoom.visible;
     // Visibility preserves the original image's measurable geometry for the
     // existing room-to-header flight. character:false retains normal hiding.
@@ -94,6 +106,81 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     roomVideo.update({active: state.active && renderedLayout.world === 'home' && !owns, reducedMotion: state.reduced});
     host.dataset.personalRoom = owns ? personalRoom.status.mode : 'off';
     host.dataset.personalRoomHeld = String(personalRoom.status.held === true);
+    lightSwitch?.update();
+  }
+  const prepareThemeImage = (src, signal) => new Promise((resolve, reject) => {
+    const image = node('img', 'klin-illustrated-plate'); image.alt = ''; image.draggable = false;
+    let settled = false;
+    const clear = () => {clearTimeout(timer); image.removeEventListener('load', loaded); image.removeEventListener('error', failed); signal?.removeEventListener('abort', aborted);};
+    const finish = error => {if (settled) return; settled = true; clear(); if (error) reject(error); else resolve(image);};
+    const loaded = () => finish(image.naturalWidth ? null : new Error('Room image unavailable'));
+    const failed = () => finish(new Error('Room image unavailable'));
+    const aborted = () => finish(new Error('Room image preparation cancelled'));
+    const timer = setTimeout(() => finish(new Error('Room image preparation timed out')), 10000);
+    image.addEventListener('load', loaded); image.addEventListener('error', failed); signal?.addEventListener('abort', aborted, {once: true});
+    if (signal?.aborted) {aborted(); return;}
+    image.src = assetURL(src);
+    if (image.complete && image.naturalWidth) loaded();
+  });
+  async function setRoomTheme(next) {
+    const request = ++themeRequest;
+    pendingThemePreparation?.abort();
+    if (state.disposed || !roomThemeReady(roomThemes[next])) return false;
+    if (next === roomTheme) return true;
+    const preparation = new AbortController(); pendingThemePreparation = preparation;
+    const films = {}, prepared = [], diagnostics = []; let committed = false, heldForSeek = false;
+    const diagnose = data => {diagnostics.push({at: now(), docHidden: !!doc.hidden, ...data}); if (diagnostics.length > 60) diagnostics.shift(); host.dataset.roomThemePhase = data.phase; host.dataset.roomThemeEvents = JSON.stringify(diagnostics);};
+    diagnose({phase: 'images'});
+    const valid = () => !preparation.signal.aborted && !state.disposed && request === themeRequest && state.page === 'home' && state.active && !state.action && !doc.hidden && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true';
+    try {
+      const target = roomThemes[next];
+      const [posterImage, roomImage] = await Promise.all([prepareThemeImage(target.poster, preparation.signal), prepareThemeImage(target.roomPoster, preparation.signal)]);
+      if (!valid()) return false;
+      if (!state.reduced) {
+        await Promise.all(['idle', 'react', 'roomLoop'].map(async kind => {
+          const video = await prepareRoomFilm({doc, src: assetURL(target[kind]), signal: preparation.signal, onState: data => diagnose({phase: 'decode', kind, ...data})});
+          if (video) {films[kind] = video; prepared.push(video);}
+        }));
+      }
+      if (!valid()) return false;
+      const source = personalRoom.visible ? (personalRoom.status.mode === 'react' ? personalRoom.react : personalRoom.status.mode === 'idle' ? personalRoom.idle : personalRoom.poster) : (!roomVideo.video?.hidden && roomVideo.video?.readyState >= 2 ? roomVideo.video : plates.home);
+      const outgoingPlayback = {mode: personalRoom.status.mode, time: Number(source?.currentTime) || 0, primed: false};
+      // Only the short final seek holds the old actor. Network/decode loading
+      // above leaves the current scene playing and owned until it can transfer.
+      const incoming = personalRoom.visible ? films[outgoingPlayback.mode] : films.roomLoop;
+      if (incoming) {
+        if (personalRoom.visible) {themeSeekHeld = request; personalRoom.update({active: true, holdFrame: true}); heldForSeek = true;}
+        await seekRoomFilm(incoming, outgoingPlayback.time, {signal: preparation.signal, onState: data => diagnose({phase: 'seek', targetTime: outgoingPlayback.time, ...data})});
+        outgoingPlayback.primed = true;
+      }
+      if (!valid()) return false;
+      themeFade?.dispose(); themeFade = null;
+      if (!state.reduced) themeFade = captureRoomFade({container: room, source, ...dimensions()});
+      if (themeSeekHeld === request) themeSeekHeld = 0;
+      swappingTheme = true;
+      personalRoom.dispose(); roomVideo.dispose(); roomTheme = next;
+      roomImage.dataset.scene = 'home'; roomImage.hidden = renderedLayout.world !== 'home';
+      if (plates.home.replaceWith) {plates.home.replaceWith(roomImage); plates.home = roomImage;}
+      else plates.home.src = assetURL(themeConfig().roomPoster);
+      roomVideo = makeRoomVideo(themeConfig(), outgoingPlayback.time, films.roomLoop);
+      personalRoom = makePersonalRoom(themeConfig(), posterImage, outgoingPlayback, films);
+      swappingTheme = false; committed = true;
+      host.dataset.roomLight = roomTheme;
+      host.parentElement?.style?.setProperty?.('--kn-room-scene-image', `url("${assetURL(themeConfig().roomPoster)}")`);
+      writeRoomLightPreference(themeStorage, roomTheme);
+      syncMedia(); themeFade?.start();
+      diagnose({phase: 'committed', theme: next});
+      return true;
+    } catch (error) {diagnose({phase: 'failed', error: String(error)}); preparation.abort(); return false;}
+    finally {
+      if (themeSeekHeld === request) themeSeekHeld = 0;
+      if (!committed) {
+        preparation.abort();
+        for (const video of prepared) {video.pause(); video.removeAttribute('src'); video.load();}
+        if (heldForSeek && !state.disposed) syncMedia();
+      }
+      if (pendingThemePreparation === preparation) pendingThemePreparation = null;
+    }
   }
   function positionActors(layout, owns) {
     const {width, height} = dimensions(), size = Math.min(height * layout.height, width * .78);
@@ -117,9 +204,10 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   }
   function syncMedia(layout = renderedLayout) {
     renderedLayout = layout;
+    if (!state.active || state.page !== 'home' || host.parentElement?.dataset?.conversationAvatarMotion || state.reduced) {themeFade?.dispose(); themeFade = null;}
     const holdFrame = state.active && layout.world === 'home' && state.stage === 'adult' && !state.conversation
       && !host.parentElement?.dataset?.conversationAvatarMotion
-      && (isCard(state.page) || host.parentElement?.dataset?.sceneOverlay === 'true');
+      && (themeSeekHeld !== 0 || isCard(state.page) || host.parentElement?.dataset?.sceneOverlay === 'true');
     personalRoom.update({active: state.active && personalSceneEligible(layout), holdFrame, reducedMotion: state.reduced});
     applyMediaOwnership();
   }
@@ -189,6 +277,7 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
   function setConversationMode(value = false) {
     if (state.page !== 'home') return;
     const enabled = !!value;
+    if (state.conversation !== enabled) {themeFade?.dispose(); themeFade = null;}
     // A reduced-motion page reset can retain a hidden layout while resetting
     // the mode flag. Reconcile both, so the next exit always restores the room.
     if (state.conversation === enabled && state.layout.character === !enabled) return;
@@ -217,11 +306,14 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
       resume();
     }
   }
-  const visibility = () => {if (doc.hidden) pause(); else resume();};
+  const visibility = () => {if (doc.hidden) {pendingThemePreparation?.abort(); pause();} else resume();};
   doc.addEventListener('visibilitychange', visibility);
   const observer = new win.ResizeObserver(() => draw()); observer.observe(host);
   const bridgeObserver = typeof win.MutationObserver === 'function' ? new win.MutationObserver(() => syncMedia()) : null;
   if (host.parentElement) bridgeObserver?.observe(host.parentElement, {attributes: true, attributeFilter: ['data-conversation-avatar-motion', 'data-scene-overlay']});
+  if (host.parentElement) lightSwitch = createRoomLightSwitch({phone: host.parentElement, getState: () => ({...dimensions(), id: roomTheme, theme: themeConfig(), targetReady: roomThemeReady(roomThemes[roomTheme === 'warm' ? 'bright' : 'warm']), active: state.active && state.page === 'home' && renderedLayout.world === 'home' && !state.action && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true'}), onToggle: () => setRoomTheme(roomTheme === 'warm' ? 'bright' : 'warm')});
+  host.dataset.roomLight = roomTheme;
+  host.parentElement?.style?.setProperty?.('--kn-room-scene-image', `url("${assetURL(themeConfig().roomPoster)}")`);
   draw();
   const imageReady = image => image.complete && image.naturalWidth ? Promise.resolve() : new Promise((resolve, reject) => {
     const clear = () => {image.removeEventListener('load', loaded); image.removeEventListener('error', failed);};
@@ -237,14 +329,15 @@ export function createKlinWorld({host, reducedMotion = false} = {}) {
     if (state.disposed) return false; host.dataset.world = 'ready'; return true;
   }).catch(() => { host.dataset.world = 'fallback'; return false; });
   const ready = Promise.race([loadedReady, disposedReady]);
-  function dispose() {if (state.disposed) return; stop(); state.disposed = true; if (hitTarget) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = ''; personalRoom.dispose(); roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); bridgeObserver?.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
+  function dispose() {if (state.disposed) return; stop(); state.disposed = true; themeRequest++; pendingThemePreparation?.abort(); themeFade?.dispose(); lightSwitch?.dispose(); if (hitTarget) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = ''; personalRoom.dispose(); roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); bridgeObserver?.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
   const completeWithoutGrowth = options => { let cancelled = false; queueMicrotask(() => {if (!cancelled && !state.disposed) {options?.onSigned?.(); options?.onComplete?.();}}); return () => {cancelled = true;}; };
   return {
-    supported: true, ready, setPage, setStage, setLayout, transition, interact, setConversationMode, setActive, setReducedMotion, resize: draw, dispose,
+    get roomSceneAsset() {return themeConfig().roomPoster;},
+    supported: true, ready, setPage, setStage, setLayout, transition, interact, setConversationMode, setRoomTheme, setActive, setReducedMotion, resize: draw, dispose,
     setSharedScene(src) {const url=new URL(src,import.meta.url).href;if(plates.shared.src!==url)plates.shared.src=url;},
     setCardPreview() {}, setParticipants: participants => {state.participants = participants || [];},
     setPortalState: value => {state.portal = value;}, setLoungeState: value => {state.lounge = {...state.lounge, ...value};}, setRealmState: value => {state.realm = {...state.realm, ...value};},
     grow: completeWithoutGrowth, signContract: completeWithoutGrowth,
-    get status() {return {page: state.page, stage: state.stage, action: state.action?.kind || (personalRoom.status.responding ? 'wave' : 'idle'), world: state.layout.world, rendering: 'illustrated-2d', model: host.dataset.model, nativeReady: false, conversation: state.conversation, personalRoom: personalRoom.status, transitionPhase: host.dataset.transitionPhase || 'idle', participants: state.participants.map(person => person.id), lounge: {...state.lounge}, realm: {...state.realm}, portal: state.portal, particleSamples: 0};},
+    get status() {return {page: state.page, stage: state.stage, action: state.action?.kind || (personalRoom.status.responding ? 'wave' : 'idle'), world: state.layout.world, rendering: 'illustrated-2d', model: host.dataset.model, nativeReady: false, conversation: state.conversation, roomLight: roomTheme, personalRoom: personalRoom.status, transitionPhase: host.dataset.transitionPhase || 'idle', participants: state.participants.map(person => person.id), lounge: {...state.lounge}, realm: {...state.realm}, portal: state.portal, particleSamples: 0};},
   };
 }

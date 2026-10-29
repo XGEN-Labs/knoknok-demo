@@ -17,7 +17,7 @@ import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-roo
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
 import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261029-compositor-blur-79';
 import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261028-shared-composer-74b&glass=61';
-import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
+import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261029-klin-room-v10';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261028-diary-paper-71b';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
@@ -37,9 +37,9 @@ import { landingComplete, onboardingDestination, applyAccountOnboarding } from '
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261028-card-ink-74';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-reference-2d.mjs?v=20261029-klin-room-v09';
+import { createKlinWorld } from './klin-reference-2d.mjs?v=20261029-klin-room-v10';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';
-import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261029-klin-room-v09';
+import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261029-klin-room-v10';
 import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-original-room-character-39';
 import { getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261026-answers-47d';
 import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
@@ -49,6 +49,8 @@ import { captureCompanion, transitionScene, prefersStillness } from './motion.mj
 import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261027-first-landing';
 
 const $ = (query, root=document) => root.querySelector(query);
+// Personal-room identity only; uploaded/public card avatars retain their own sources.
+const HOME_CHARACTER_AVATAR = 'assets/klin-avatar-20261029-v10/avatar.png';
 const homeGreeting = createHomeGreeting();
 const sceneSound = createSceneSound();
 let cleanFormControls,cleanSheetControls,cleanDatePickers,cleanSheetDates,birthTimePicker,cleanCommunication,voiceRefreshPending=false;
@@ -388,7 +390,7 @@ function setHomeConversation(active){
   const next=Boolean(active)&&ui.route==='home';
   if(next===conversationActive)return;
   const phone=$('#phone'),reducedMotion=prefersStillness(ui.motion);
-  conversationAvatarMotion ||= createConversationAvatarMotion(phone);
+  conversationAvatarMotion ||= createConversationAvatarMotion(phone,{imageSrc:HOME_CHARACTER_AVATAR});
   conversationAvatarMotion.move(next,{reducedMotion,mutate(){
     conversationActive=next;phone.dataset.conversation=String(next);
     if(next&&!reducedMotion)phone.dataset.conversationEntering='true';else delete phone.dataset.conversationEntering;
@@ -412,7 +414,7 @@ function home(){
  const space=privateSpace(),messages=LIVE_WEB?liveView.messages:space.companionMessages,turn=getCompanionTurn(state);
  const ledger=socialTagState(space,me()),pending=ledger.candidates.filter(candidate=>candidate.status==='pending'&&Array.isArray(candidate.sourceIds)&&candidate.sourceIds.some(id=>ledger.diary.some(entry=>entry.id===id&&entry.allowPublic===true)));
  const invitation=pending.length?`<div class="room-dialogue" aria-live="polite" aria-hidden="${conversationActive}" ${conversationActive?'hidden':''}><div class="room-speech">有 ${pending.length} 枚新的社交標籤，想一起看看嗎？</div><div class="first-noking-choices"><button type="button" class="kn-glass-control" data-action="tag-open-chat">一起看看</button></div></div>`:'';
- return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="close-conversation" aria-label="回到首頁" ${conversationActive?'':'hidden'}>${backIcon}</button><button type="button" class="scene-icon" data-action="tag-diary" aria-label="Nok 的日記本" ${conversationActive?'hidden':''}>${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="我的名片" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${DEFAULT_CARD_AVATAR}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end" ${conversationActive?'hidden':''}>${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div>${invitation}<button type="button" class="home-companion" data-action="boop" aria-label="輕觸 Klin" ${conversationActive?'hidden':''}>${spiritImage('成年態 Klin','','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}</div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}<span>串門</span></button></div></div>`,'home-page room-chat-page');
+ return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="close-conversation" aria-label="回到首頁" ${conversationActive?'':'hidden'}>${backIcon}</button><button type="button" class="scene-icon" data-action="tag-diary" aria-label="Nok 的日記本" ${conversationActive?'hidden':''}>${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="我的名片" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${HOME_CHARACTER_AVATAR}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end" ${conversationActive?'hidden':''}>${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div>${invitation}<button type="button" class="home-companion" data-action="boop" aria-label="輕觸 Klin" ${conversationActive?'hidden':''}>${spiritImage('成年態 Klin','','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}</div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}<span>串門</span></button></div></div>`,'home-page room-chat-page');
 }
 function companion(){const space=privateSpace();const messages=space.companionMessages.map((m,i)=>`<div class="message ${m.role==='user'?'own':''}" ${companionTyping&&i===space.companionMessages.length-1?'hidden':''}>${m.role==='user'?avatar(actor(),true):spiritAvatar()}<div class="message-content"><div class="bubble">${esc(m.text)}</div></div></div>`).join('');return shell(top(companionName())+`<div class="content messages" id="message-scroll">${messages}${companionTyping?`<div class="message">${spiritAvatar()}<div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>`:''}${space.pendingDemandSuggestion&&!companionTyping?`<div class="glass-card"><h4>找個人一起去？</h4><p class="small-note">先確認，再開始尋找。</p>${btn('整理需求','new-demand','compact')}${btn('先聊聊','dismiss-demand','ghost')}</div>`:''}${space.companionMessages.length<3?`<div class="suggestions"><button type="button" data-say="最近想認識一起看展的朋友">找人看展</button><button type="button" data-say="最近工作有點累，想慢慢聊聊">放鬆一下</button></div>`:''}</div><form class="chat-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和我聊聊…" aria-label="私人訊息" maxlength="1000"></textarea><button class="send-button" type="submit" aria-label="發送給伙伴" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form>`,'companion-page');}
 function memories(){const items=privateSpace().memory.filter(m=>m.status!=='deleted');return shell(top('記憶','每一點了解，都可以由你修正')+content(`<p class="body-copy">這些是我目前了解到的你。<br>用來陪伴你，不會直接分享給別人。</p>${items.length?items.map(m=>`<article class="glass-card memory-card"><div class="tag-row">${tag(m.status==='pending'?'等你確認':'你已確認',m.status==='pending'?'':'green')}${tag('私人','quiet')}</div><p>${esc(m.text)}</p><div class="memory-source">來自：${esc(m.source)}</div><div class="memory-actions" style="margin-top:14px">${m.status==='pending'?tiny('是這樣的','confirm-memory',m.id):''}${tiny('修正','edit-memory',m.id)}${tiny('移除','delete-memory',m.id,'danger')}</div></article>`).join(''):empty('我們可以慢慢認識','聊聊你喜歡的事，我會把新的理解交給你確認。',btn('和伙伴聊聊','companion','compact'))}`,'with-nav')+nav('memory'));}
@@ -600,7 +602,8 @@ function syncAudioControls(){
 }
 function syncExperience(){
  ensureExperience();sceneLoading.setReducedMotion(prefersStillness(ui.motion));syncAudioControls();
- $('#phone').style.setProperty('--kn-room-scene-image',`url("${HOME_SCENE_ASSET}")`);
+ const homeSceneAsset=klinWorld?.roomSceneAsset||HOME_SCENE_ASSET;
+ $('#phone').style.setProperty('--kn-room-scene-image',`url("${homeSceneAsset}")`);
  $('#phone').style.setProperty('--kn-welcome-scene-image',`url("${WELCOME_SCENE_ASSET}")`);
  $('#phone').style.setProperty('--kn-visit-scene-image',`url("${VISIT_SCENE_ASSET}")`);
  const sharedRel=latestRelationship(),sharedHost=sharedRel&&state.users[sharedRel.members.find(id=>id!==actor())],sharedScene=friendRoomScene(sharedHost);
@@ -608,9 +611,10 @@ function syncExperience(){
  klinWorld?.setSharedScene?.(sharedScene);
  const opening=['welcome','login','register','verify'].includes(ui.route),landing=ui.route==='landing';
  const scene=landing?'landing':opening?'welcome':'room';
- const images=landing?[]:[opening?LOGIN_VIDEO_POSTER:ui.route==='relations'?VISIT_SCENE_ASSET:HOME_SCENE_ASSET];
+ const images=landing?[]:[opening?LOGIN_VIDEO_POSTER:ui.route==='relations'?VISIT_SCENE_ASSET:homeSceneAsset];
  if(opening)images.push('assets/brand-20261028-noknok/noknok-selected-white.png');
  else if(!landing)images.push(klinAssets.adult);
+ if(ui.route==='home')images.push(HOME_CHARACTER_AVATAR);
  if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
  if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261028-noknok/noknok-selected-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
  if(['chat','connected'].includes(ui.route)){const rel=latestRelationship(),host=rel&&state.users[rel.members.find(id=>id!==actor())];images.push(friendRoomScene(host),SEATED_KLIN_ASSET);}

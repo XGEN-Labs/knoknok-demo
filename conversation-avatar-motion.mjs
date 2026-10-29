@@ -20,7 +20,7 @@ export function avatarImageRect(image, phone) {
   return {x:(x - bounds.left) / scale - (phone.clientLeft || 0), y:(y - bounds.top) / scale - (phone.clientTop || 0), width:width / scale, height:height / scale};
 }
 
-export function createConversationAvatarMotion(phone, {duration = 620} = {}) {
+export function createConversationAvatarMotion(phone, {duration = 620, imageSrc = ''} = {}) {
   const doc = phone.ownerDocument, win = doc.defaultView;
   let flight = null, animation = null, complete = null, entering = false, started = 0;
   const roomImage = () => phone.querySelector('.klin-illustrated-actor.is-primary .klin-illustrated-art') || phone.querySelector('.home-companion img');
@@ -46,7 +46,10 @@ export function createConversationAvatarMotion(phone, {duration = 620} = {}) {
   }
   function move(value, {reducedMotion = false, mutate, onComplete} = {}) {
     const sourceImage = flight || (value ? roomImage() : avatar());
-    const source = avatarImageRect(sourceImage, phone), src = sourceImage?.currentSrc || sourceImage?.src;
+    const source = avatarImageRect(sourceImage, phone);
+    // Keep a reversal on its currently visible image; a fresh HOME flight can
+    // use the film-matched avatar without changing cards or other scene actors.
+    const src = flight ? (flight.currentSrc || flight.src) : (imageSrc || sourceImage?.currentSrc || sourceImage?.src);
     // A reversal starts at the currently displayed frame, never at an endpoint.
     finish(); entering = !!value; complete = onComplete;
     mutate?.();
