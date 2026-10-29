@@ -7,11 +7,11 @@ import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-st
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
 import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261028-diary-header-73';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
-import { mountFriendWorld } from './friend-world.mjs?v=20261027-glass-52g';
-import { mountCosmosBackground } from './cosmos-background.mjs?v=20261027-cosmos-55c';
+import { mountFriendWorld } from './friend-world.mjs?v=20261029-visit-82c';
+import { mountCosmosBackground } from './cosmos-background.mjs?v=20261029-visit-82c';
 let cosmosBackground=null;
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
-import { renderFriendNetwork } from './friend-network.mjs?v=20261027-shared-61';
+import { renderFriendNetwork } from './friend-network.mjs?v=20261029-visit-82c';
 import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261028-seated-63';
 import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-63';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
@@ -198,6 +198,7 @@ function go(route,options={}){
   if(state.session.authenticated&&actor()==='a'&&!landingComplete(state)&&!publicRoutes.includes(route))route='landing';
   if(options.replace!==true&&ui.route!==route)ui.history.push(ui.route);
   if(['login','register','verify'].includes(ui.route)&&!['login','register','verify'].includes(route)){authFormDraft.password='';authFormDraft.confirmPassword='';authPasswordVisible=false;}
+  if(ui.route!==route&&(ui.route==='relations'||route==='relations')){ui.networkQuery='';friendWorldOrientation={yaw:0,pitch:0};}
   ui.route=route;
   if(route==='home'&&!pixelVariant){
     const next=reduce(state,{type:'ENTER_COMPANION_HOME'});
@@ -427,8 +428,9 @@ function relations(){
  return shell(`<div class="network-scene-source" aria-hidden="true"><img src="assets/visit-cosmos-20261027-55/quiet-cosmos.svg" alt="" draggable="false"><canvas class="cosmos-canvas" hidden></canvas></div>`+top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:state.users,query})}`,'friends-lounge');
 }
 function filterNetwork(value){
- ui.networkQuery=value;save();friendWorld?.setQuery(value);const query=value.trim().toLocaleLowerCase();let count=0;
+ ui.networkQuery=value;save();const query=value.trim().toLocaleLowerCase();let count=0;
  document.querySelectorAll('.network-friend').forEach(node=>{const match=!query||node.dataset.search.includes(query);node.hidden=!match;if(match)count++;});
+ friendWorld?.setQuery(value);
  const status=$('.network-search-status');if(status)status.textContent=query?`找到 ${count} 位朋友`:'';
  const empty=$('.network-empty');if(empty)empty.hidden=count>0;const clear=$('[data-action="clear-network-search"]');if(clear)clear.hidden=!query;
 }

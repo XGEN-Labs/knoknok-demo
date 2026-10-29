@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-29T09:17:24.904213Z",
+  "createdAt": "2026-10-29T09:50:11.756038Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147062928,
+  "payloadBytes": 149591256,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 128630,
-      "sha256": "2324c2dd58f2ca7ba411348ea6a3a67d3d71ff6427b3414630c329f9395a7943"
+      "bytes": 128761,
+      "sha256": "a7057f16105e52177f3e9c998819186c5df266383dc72bff38bc136a803c1c49"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1712,14 +1712,14 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 11406,
-      "sha256": "9c27a3df55f4ec5574612086700900a317e38ff105a9a087008c0d14140fead5"
+      "bytes": 9212,
+      "sha256": "5675b7d6e170eae91a14e313553ea1b4dc4815b047cd82017554df59fac7b841"
     },
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2808,
-      "sha256": "0a3e6495be7861fe5d0029d6628c6dbd15bf432d382a62869541ef68b07f2a53"
+      "bytes": 2762,
+      "sha256": "6a822654cb24d79a6627efff093f574e66f61fd44138a7b17468d0eea480b75b"
     },
     {
       "source": "friend-world-loading.mjs",
@@ -1731,13 +1731,13 @@
       "source": "friend-world-math.mjs",
       "path": "friend-world-math.mjs",
       "bytes": 865,
-      "sha256": "bc11c75e1b7e3b526c136953ef2f237bd85d10e10a24dd0fb0f2484d06524910"
+      "sha256": "894974f00c1e1b8db443299a102706a53421b1a4fde066fe5f0904c192d2471b"
     },
     {
       "source": "friend-world.mjs",
       "path": "friend-world.mjs",
-      "bytes": 9916,
-      "sha256": "8e12f99e71a4ae278bbf50a1afa3c09eaad7653585c39d32f27a16df0a9b967e"
+      "bytes": 11011,
+      "sha256": "f6267e002b435a0b0f253a374ed2b191882b458637a451110deda433220f3872"
     },
     {
       "source": "glass-contract.css",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11449,
-      "sha256": "68ee39cf7102b07dd67a9b25d59774c16e854c99f50a7fa98df75f23dcb7d691"
+      "bytes": 11456,
+      "sha256": "cf3d131d120cfa79437692c6b7aec6a775705f63fc42e0d20c12bfd31a8aa9b2"
     },
     {
       "source": "journey-experience.css",
@@ -2282,8 +2282,8 @@
     {
       "source": "cosmos-background.mjs",
       "path": "cosmos-background.mjs",
-      "bytes": 4129,
-      "sha256": "65dfbc48c4c92501dcf68ede63b56154dc634d2afe29a0df2bcbda58b3e78395"
+      "bytes": 10831,
+      "sha256": "9b599d0549dc368fd820923b013bc2d0b1f14df1544e58addded6d2cde88ef80"
     },
     {
       "source": "friend-room.mjs",
@@ -2452,6 +2452,24 @@
       "path": "conversation-edge-blur.mjs",
       "bytes": 17293,
       "sha256": "d3248eff9aca378b8110520a33223cb93b61468bda527bda90e189ab39d7153f"
+    },
+    {
+      "source": "friend-world-fluid.mjs",
+      "path": "friend-world-fluid.mjs",
+      "bytes": 6108,
+      "sha256": "fb963749fafa4429620d696805f184f6f9fbc4edf912aaf9373803b2442ebcf3"
+    },
+    {
+      "source": "assets/visit-fluid-20261029-80/fluid-pearl.png",
+      "path": "assets/visit-fluid-20261029-80/fluid-pearl.png",
+      "bytes": 1561863,
+      "sha256": "16f40ec754d2d8057c5a0529ed0efb23ad907473da23b4077d5f44e2ac3b491d"
+    },
+    {
+      "source": "assets/visit-fluid-20261029-80/distant-planets.png",
+      "path": "assets/visit-fluid-20261029-80/distant-planets.png",
+      "bytes": 954662,
+      "sha256": "1758b5f101623ad985ea9d1e8b0ca03c1456076b81c302088c5de4634a6bd5c0"
     }
   ],
   "runtimeDependencies": [
@@ -3288,6 +3306,11 @@
     {
       "from": "card-artwork.mjs",
       "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "friend-world.mjs",
+      "to": "friend-world-fluid.mjs",
       "kind": "module"
     }
   ],
