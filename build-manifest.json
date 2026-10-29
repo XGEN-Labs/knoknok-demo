@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-29T10:51:56.455606Z",
+  "createdAt": "2026-10-29T11:01:44.635484Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 149583347,
+  "payloadBytes": 154378515,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 128765,
-      "sha256": "624e2011af01f6335a7258efc7083a6a1c5e869f17e39fb26005633bb31e9a2b"
+      "bytes": 128755,
+      "sha256": "5f38f18cb99678d2bad0296e069412a745c61a91b1d7a267a4970454a138d840"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11458,
-      "sha256": "70efd46ae5985d1915159fde4fe718d06b9d6aab30fd86b3f57ef53df28ad938"
+      "bytes": 11453,
+      "sha256": "939ad633717bcec3021a0524ab25e6010f844e0708306a305e7fb1510a32e8c6"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 17731,
-      "sha256": "34bb855b245c5d99a09c507ae56db71fb5368b210cdef17091cd7a4b170f8da5"
+      "bytes": 17672,
+      "sha256": "928f5210ba5445b40a78a4368d3aaabfcdb6056f2db5681ab2f09350e9fa7a9c"
     },
     {
       "source": "klin-world-2d.css",
@@ -2072,8 +2072,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 879,
-      "sha256": "3530d595512018ad9ef220b67d134a16b0bb7b89b1be725f7aad4d2a46a07b55"
+      "bytes": 864,
+      "sha256": "cf7742b48524184bd2749640bf8dc132845993a25f7386b42573593cf49230d7"
     },
     {
       "source": "scene-control-glass.css",
@@ -2470,6 +2470,36 @@
       "path": "assets/visit-fluid-20261029-80/distant-planets.png",
       "bytes": 954662,
       "sha256": "1758b5f101623ad985ea9d1e8b0ca03c1456076b81c302088c5de4634a6bd5c0"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/idle.mp4",
+      "path": "assets/klin-room-motion-20261029-v09/idle.mp4",
+      "bytes": 1232625,
+      "sha256": "22a2344142d7b1932974fc211d57d90124da44197c53cb6c96533f09f133fa89"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/poster.png",
+      "path": "assets/klin-room-motion-20261029-v09/poster.png",
+      "bytes": 686730,
+      "sha256": "c3a31a53d835621ae6f8f7b6158a1060ea6c275eaa40dcb1dad9ecabdf15c531"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/react.mp4",
+      "path": "assets/klin-room-motion-20261029-v09/react.mp4",
+      "bytes": 1264359,
+      "sha256": "7f8c86859c2e8c516b12937766e6c27f6b9f15ebe1b9eba911063f305c64d254"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/room-loop.mp4",
+      "path": "assets/klin-room-motion-20261029-v09/room-loop.mp4",
+      "bytes": 921120,
+      "sha256": "a181f123d2e6c6c90d325d28223c14ec5ff411cda3857ee7f999d062a114e1c4"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/room-only.png",
+      "path": "assets/klin-room-motion-20261029-v09/room-only.png",
+      "bytes": 690423,
+      "sha256": "8e00aa7fa618fc76a463be7f9a88c120f5804d91bd00f1a4f100807faa5df13d"
     }
   ],
   "runtimeDependencies": [

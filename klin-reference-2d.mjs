@@ -1,5 +1,5 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261028-klin-alive-room-v02';
+import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261029-klin-room-v09';
 import { createRoomVideo } from './room-video.mjs?v=20261027-room-motion-54';
 import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261028-diary-profile-72b';
 
@@ -23,12 +23,12 @@ export function getIllustratedLayout(page) {
   return {x: .5, footY: .68, height: .31, world: 'home'};
 }
 
-// The generated 496×864 scene inherits this actor box from the 720×1280
-// reference. Project through the exact cover crop used by the full-scene film.
+// v09 native 496×864 film: a square proxy aligns the legacy transparent
+// artwork's eyes and feet with the filmed actor and covers its response hands.
 export function personalRoomCharacterFrame(width, height) {
   const scale = Math.max(width / 496, height / 864);
   const filmWidth = 496 * scale, filmHeight = 864 * scale;
-  return {x: filmWidth * (162 / 720) - (filmWidth - width) / 2, y: filmHeight * (521 / 1280) - (filmHeight - height) / 2, width: filmWidth * (397 / 720), height: filmHeight * (397 / 1280)};
+  return {x: 133 * scale - (filmWidth - width) / 2, y: 436 * scale - (filmHeight - height) / 2, width: 216 * scale, height: 216 * scale};
 }
 
 // Keep the same DOM card anchored to the illustration's raised paw before it
