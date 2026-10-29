@@ -1,16 +1,31 @@
 // Only message pixels enter this effect. The visual copies live in a shadow
 // tree so glass samplers, message queries and delegated actions never see them.
 const MASKS = ['mask-image', '-webkit-mask-image'];
-const BLUR = 6, BLEED = BLUR * 3;
+const BLURS = [0, 3, 8, 16, 24], BLEED = BLURS.at(-1) * 3;
 const cleanNumber = value => Math.round(value * 100) / 100;
+const cleanAlpha = value => Math.round(value * 1e6) / 1e6;
 
-export function conversationEdgeMask({top, viewportHeight, topBand, bottomBand, blurred = false}) {
+export function conversationEdgeWeights(progress) {
+  const p = Math.max(0, Math.min(1, progress));
+  const fade = Math.max(0, (p - .5) * 2);
+  const envelope = 1 - fade * fade * (3 - 2 * fade);
+  const stage = Math.min(BLURS.length - 1, p * 5), low = Math.floor(stage);
+  const weights = BLURS.map(() => 0);
+  weights[low] = (1 - (stage - low)) * envelope;
+  if (low + 1 < weights.length) weights[low + 1] = (stage - low) * envelope;
+  return weights;
+}
+
+export function conversationEdgeMask({top, viewportHeight, topBand, bottomBand, level = 0}) {
   const upper = Math.min(Math.max(0, topBand), viewportHeight / 2);
   const lower = Math.min(Math.max(0, bottomBand), viewportHeight / 2);
-  const stops = [[0, 1], [upper * .28, 1], [upper, 0],
-    [viewportHeight - lower, 0], [viewportHeight - lower * .34, 1], [viewportHeight, 1]];
-  return `linear-gradient(to bottom,${stops.map(([y, alpha]) =>
-    `rgba(0,0,0,${blurred ? alpha : 1 - alpha}) ${cleanNumber(y - top)}px`).join(',')})`;
+  const samples = [0, .2, .4, .45, .5, .55, .6, .65, .7, .75, .8, .85, .9, .95, 1];
+  const stops = [
+    ...(upper ? [...samples].reverse().map(p => [upper * (1 - p), p]) : [[0, 0]]),
+    ...(lower ? samples.map(p => [viewportHeight - lower * (1 - p), p]) : [[viewportHeight, 0]])
+  ];
+  return `linear-gradient(to bottom,${stops.map(([y, progress]) =>
+    `rgba(0,0,0,${cleanAlpha(conversationEdgeWeights(progress)[level])}) ${cleanNumber(y - top)}px`).join(',')})`;
 }
 
 export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
@@ -55,9 +70,8 @@ export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
   }
   function attach(nextPage, nextLog) {
     page = nextPage; log = nextLog;
-    // Isolate only the scroll content and its copies. Additive composition of
-    // complementary alpha masks preserves the original glass opacity; the
-    // room stays outside this group and cannot be brightened by the blend.
+    // Isolate only the scroll content and its copies. Adjacent blur levels
+    // sum to one until the outer fade; the room stays outside this group.
     group = doc.createElement('div'); group.className = 'kn-conversation-edge-group';
     const {scrollTop, scrollLeft} = log;
     log.parentElement.insertBefore(group, log); group.append(log);
@@ -97,10 +111,9 @@ export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
       visual.style.setProperty('pointer-events', 'none');
       if ('disabled' in visual) visual.disabled = true;
     });
-    for (const [name, value] of Object.entries({position:'absolute', left:`${BLEED}px`, top:`${BLEED}px`,
+    for (const [name, value] of Object.entries({position:'absolute',
       right:'auto', bottom:'auto', margin:'0', transform:'none', opacity:'1',
-      'box-sizing':'border-box', 'min-width':'0', 'max-width':'none', 'min-height':'0', 'max-height':'none',
-      filter:`blur(${BLUR}px)`})) copy.style.setProperty(name, value);
+      'box-sizing':'border-box', 'min-width':'0', 'max-width':'none', 'min-height':'0', 'max-height':'none'})) copy.style.setProperty(name, value);
     return copy;
   }
   function paint() {
@@ -119,6 +132,9 @@ export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
       const sx = viewport.width / log.clientWidth, sy = viewport.height / log.clientHeight;
       if (!sx || !sy) return;
       const height = log.clientHeight;
+      // Read the existing extent before painting. It only limits the copies;
+      // never feed it into the zero-height paint host or extend the scroll range.
+      const contentHeight = Math.max(height, log.scrollHeight);
       const topBand = parseFloat(computed(probes[0]).height) || 0;
       const bottomBand = parseFloat(computed(probes[1]).height) || 0;
       const nodes = [...log.querySelectorAll('.conversation-message,.message .bubble')];
@@ -132,30 +148,54 @@ export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
           opacity *= Number(computed(ancestor).opacity);
           if (!reducedMotion && ancestor.getAnimations?.().some(animation => animation.playState === 'running')) animating = true;
         }
-        if (!width || !nodeHeight || top + nodeHeight <= 0 || top >= height ||
+        if (!width || !nodeHeight || top + nodeHeight + BLEED <= 0 || top - BLEED >= height ||
           (top >= topBand && top + nodeHeight <= height - bottomBand)) continue;
         active.add(node);
         let record = records.get(node);
         if (!record) {
           const wrapper = doc.createElement('div');
-          wrapper.style.cssText = 'position:absolute;pointer-events:none;overflow:visible;';
-          record = {wrapper, copy:null, masks:MASKS.map(name => [node.style.getPropertyValue(name), node.style.getPropertyPriority(name)])};
+          wrapper.style.cssText = 'position:absolute;pointer-events:none;overflow:hidden;isolation:isolate;';
+          const layers = BLURS.slice(1).map(blur => {
+            const surface = doc.createElement('div');
+            surface.style.cssText = 'position:absolute;inset:0;pointer-events:none;mix-blend-mode:plus-lighter;';
+            wrapper.append(surface); return {surface, blur, copy:null};
+          });
+          record = {wrapper, layers, masks:MASKS.map(name => [node.style.getPropertyValue(name), node.style.getPropertyPriority(name)])};
           records.set(node, record); shadow.append(wrapper);
         }
-        if (!record.copy || dirty) { record.copy = snapshot(node); record.wrapper.replaceChildren(record.copy); }
+        if (!record.layers[0].copy || dirty) {
+          const template = snapshot(node);
+          for (const layer of record.layers) {
+            layer.copy = template.cloneNode(true);
+            layer.copy.style.setProperty('filter', `blur(${layer.blur}px)`);
+            layer.surface.replaceChildren(layer.copy);
+          }
+        }
+        const contentLeft = (rect.left - viewport.left) / sx + log.scrollLeft;
+        const contentTop = top + log.scrollTop;
+        const left = Math.max(log.scrollLeft, contentLeft - BLEED);
+        const right = Math.min(log.scrollLeft + log.clientWidth, contentLeft + width + BLEED);
+        const start = Math.max(0, contentTop - BLEED);
+        const end = Math.min(contentHeight, contentTop + nodeHeight + BLEED);
         const geometry = {top, viewportHeight:height, topBand, bottomBand};
         for (const name of MASKS) {
           set(node.style, name, conversationEdgeMask(geometry), 'important');
-          set(record.wrapper.style, name, conversationEdgeMask({...geometry, top:top - BLEED, blurred:true}));
+          record.layers.forEach((layer, index) => set(layer.surface.style, name,
+            conversationEdgeMask({...geometry, top:start - log.scrollTop, level:index + 1})));
         }
         // Positions belong to scroll content; only the masks use viewport
         // coordinates. Between JS frames both surfaces move together natively.
-        set(record.wrapper.style, 'left', `${cleanNumber((rect.left - viewport.left) / sx + log.scrollLeft - BLEED)}px`);
-        set(record.wrapper.style, 'top', `${cleanNumber(top + log.scrollTop - BLEED)}px`);
-        set(record.wrapper.style, 'width', `${cleanNumber(width + BLEED * 2)}px`);
-        set(record.wrapper.style, 'height', `${cleanNumber(nodeHeight + BLEED * 2)}px`);
+        set(record.wrapper.style, 'left', `${cleanNumber(left)}px`);
+        set(record.wrapper.style, 'top', `${cleanNumber(start)}px`);
+        set(record.wrapper.style, 'width', `${cleanNumber(Math.max(0, right - left))}px`);
+        set(record.wrapper.style, 'height', `${cleanNumber(Math.max(0, end - start))}px`);
         set(record.wrapper.style, 'opacity', String(opacity));
-        set(record.copy.style, 'width', `${cleanNumber(width)}px`); set(record.copy.style, 'height', `${cleanNumber(nodeHeight)}px`);
+        for (const layer of record.layers) {
+          set(layer.copy.style, 'left', `${cleanNumber(contentLeft - left)}px`);
+          set(layer.copy.style, 'top', `${cleanNumber(contentTop - start)}px`);
+          set(layer.copy.style, 'width', `${cleanNumber(width)}px`);
+          set(layer.copy.style, 'height', `${cleanNumber(nodeHeight)}px`);
+        }
       }
       for (const [node, record] of records) if (!active.has(node)) restore(node, record);
       dirty = false;

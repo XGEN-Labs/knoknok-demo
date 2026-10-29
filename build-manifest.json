@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-29T07:42:05.197016Z",
+  "createdAt": "2026-10-29T08:23:41.234377Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 147056264,
+  "payloadBytes": 147058274,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 128633,
-      "sha256": "2cfa4550774354e624bcb9334019b9d1425bdd692f3e0be56fab38852cd81d3d"
+      "bytes": 128636,
+      "sha256": "b72c1fd7795b15f13a590cff7bf1367a2a2702bdbda55780c6a25552ae1375ee"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11449,
-      "sha256": "d0950df5b2f5a2c5834e2f5653bc8316f515510a10372731fb13b01bea92ae15"
+      "bytes": 11455,
+      "sha256": "9caf9a5739a554955535a6196a8c9f4cbded28cc428d209aa78626df1e26e7c2"
     },
     {
       "source": "journey-experience.css",
@@ -2444,14 +2444,14 @@
     {
       "source": "chat-edge-blur.css",
       "path": "chat-edge-blur.css",
-      "bytes": 1959,
-      "sha256": "9025fc9aa5be50dce7b6509a553b4be2fe1d70702b21b1cb513b8750784707cf"
+      "bytes": 1964,
+      "sha256": "5bae5fb7f506db09597fe4dde6d0fd5072506b43a664c7c2d78e2956eee1d645"
     },
     {
       "source": "conversation-edge-blur.mjs",
       "path": "conversation-edge-blur.mjs",
-      "bytes": 10631,
-      "sha256": "5b2912ccf239e48a8a6e8b18aad4df747554a6ad81f796e14a309213905df047"
+      "bytes": 12627,
+      "sha256": "1bef1e3f88efbce89691aa76372896025b398d4865a5b76cbb8a65650e4088e1"
     }
   ],
   "runtimeDependencies": [

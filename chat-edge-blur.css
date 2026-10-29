@@ -7,8 +7,8 @@
 .phone#phone[data-conversation="true"] #app .room-chat-page:has(.conversation-replies:not([hidden]):not(:empty)) {
   --kn-chat-edge-bottom:calc(var(--app-safe-bottom) + 158px);
 }
-/* This transparent layer contains only masked, blurred message copies in a
-   shadow tree. Room pixels are never captured or blurred by the edge effect. */
+/* Adjacent 0/3/8/16/24px message layers share one fade envelope. Their
+   isolated additive blend never samples or brightens the room behind them. */
 .phone#phone #app .kn-conversation-edge-group {
   position:absolute;
   inset:0;
@@ -32,9 +32,9 @@
   margin:0;
   mix-blend-mode:plus-lighter;
 }
-/* Keep the scroll clip at the phone edges, not at the message rail. The
-   24px gutters contain the 18px blur bleed without clipping bubble corners.
-   A zero-height paint host never sizes itself from scrollHeight. */
+/* Keep the scroll clip at the phone edges, not at the message rail. Wider
+   blur paint is clamped inside this viewport and the existing vertical extent;
+   24px content gutters and the zero-height host keep layout unchanged. */
 .phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log,
 .phone#phone #app .page.shared-chat-page .shared-messages {
   left:0!important;

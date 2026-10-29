@@ -15,7 +15,7 @@ import { renderFriendNetwork } from './friend-network.mjs?v=20261027-shared-61';
 import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261028-seated-63';
 import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-63';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
-import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261029-chat-edge-sync-76';
+import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261029-progressive-blur-77b';
 import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261028-shared-composer-74b&glass=61';
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261026-experience-42';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
