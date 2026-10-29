@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-29T10:14:15.036644Z",
+  "createdAt": "2026-10-29T10:51:56.455606Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 149583342,
+  "payloadBytes": 149583347,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
       "bytes": 128765,
-      "sha256": "db3a022f7eb105c5add714972f294be98d67dafedcfb41fd6af152ab90ce6e42"
+      "sha256": "624e2011af01f6335a7258efc7083a6a1c5e869f17e39fb26005633bb31e9a2b"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1737,7 +1737,7 @@
       "source": "friend-world.mjs",
       "path": "friend-world.mjs",
       "bytes": 11011,
-      "sha256": "f6267e002b435a0b0f253a374ed2b191882b458637a451110deda433220f3872"
+      "sha256": "74f634e1b20fce22f25c44efa049ed6ca8343a5876ab3295011ae1fa8312be60"
     },
     {
       "source": "glass-contract.css",
@@ -1779,7 +1779,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 11458,
-      "sha256": "6e954362f3dcf6863559b101018b1cb9f10610ac07cb1eea0436a65d966a8012"
+      "sha256": "70efd46ae5985d1915159fde4fe718d06b9d6aab30fd86b3f57ef53df28ad938"
     },
     {
       "source": "journey-experience.css",
@@ -2456,8 +2456,8 @@
     {
       "source": "friend-world-fluid.mjs",
       "path": "friend-world-fluid.mjs",
-      "bytes": 6108,
-      "sha256": "fb963749fafa4429620d696805f184f6f9fbc4edf912aaf9373803b2442ebcf3"
+      "bytes": 6113,
+      "sha256": "16efea750e6aa23bf14b272826c7b53677f95291c45e8026bb9800a73399f10e"
     },
     {
       "source": "assets/visit-fluid-20261029-80/fluid-pearl.png",

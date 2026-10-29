@@ -1,7 +1,7 @@
 import * as THREE from './vendor/three/three.module.js';
 import { globePoint,worldMetrics,dragRotation,shouldSuppressKnock,clampPitch } from './friend-world-math.mjs?v=20261029-visit-82c';
 import { createFriendWorldLoadGate } from './friend-world-loading.mjs?v=20261026-social-tags-45';
-import { createFluidPlanet } from './friend-world-fluid.mjs?v=20261029-visit-82c';
+import { createFluidPlanet } from './friend-world-fluid.mjs?v=20261029-visit-83e';
 export function friendSearchOrientation(longitude,latitude){
  return {yaw:-(Number(longitude)||0)*Math.PI/180,pitch:clampPitch((Number(latitude)||0)*Math.PI/180)};
 }

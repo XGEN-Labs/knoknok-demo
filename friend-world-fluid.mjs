@@ -52,11 +52,11 @@ const fragmentShader=/* glsl */`
   float field=tide(p,time);
   vec2 flow=vec2(sin(p.y*2.8+p.z*1.7+time*.21),cos(p.x*2.2-p.z*1.9-time*.17));
   vec2 warped=vFluidUV+flow*.075+vec2(time*.006,field*.035);
-  float broad=smoothstep(-.65,.7,field);
-  vec3 base=mix(vec3(.008,.16,.42),vec3(.006,.43,.30),broad);
+  float broad=smoothstep(-.65,.7,field)*.55;
+  vec3 base=mix(vec3(.003,.135,.50),vec3(.006,.43,.30),broad);
   // Compress the old pale plate into deep water colour. Most of the depth is
   // volumetric-looking 3D flow; the reference plate contributes fine detail.
-  if(uHasTexture)base=mix(base,fluidPaint(warped)*vec3(.20,.64,.86),.42);
+  if(uHasTexture)base=mix(base,fluidPaint(warped)*vec3(.14,.59,.90),.42);
   float light=max(0.0,dot(n,normalize(vec3(-.45,.62,.72))));
   float facing=clamp(abs(dot(n,view)),0.0,1.0);
   float fresnel=pow(1.0-facing,2.3);
@@ -69,7 +69,7 @@ const fragmentShader=/* glsl */`
   color+=vec3(.008,.18,.20)*ribbon*(.3+.7*smoothstep(-.5,.6,undertow));
   color+=vec3(.09,.24,.27)*pearl*.48;
   vec3 rim=mix(vec3(.20,.95,.79),vec3(.38,.68,1.0),smoothstep(-.7,.7,p.x));
-  color+=rim*fresnel*(1.12+.16*sin(field*3.0+time*.18));
+  color+=rim*fresnel*(1.25+.16*sin(field*3.0+time*.18));
   gl_FragColor=vec4(color,1.0);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>
