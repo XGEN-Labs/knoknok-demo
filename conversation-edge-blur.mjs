@@ -72,7 +72,9 @@ export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
       probe.style.cssText = `position:absolute;visibility:hidden;pointer-events:none;width:0;height:var(--kn-chat-edge-${edge});`;
       shadow.append(probe); return probe;
     });
-    group.append(host); log.addEventListener('scroll', schedule, {passive:true});
+    // Share the browser's native scroll translation with the real messages.
+    // A viewport sibling driven by scroll/rAF can lag compositor scrolling.
+    log.append(host); log.addEventListener('scroll', schedule, {passive:true});
     resize?.observe(log); resize?.observe(page); observe(); dirty = true;
   }
   function snapshot(source) {
@@ -113,13 +115,10 @@ export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
         host.hidden = true; return;
       }
       host.hidden = false;
-      const viewport = log.getBoundingClientRect(), bounds = page.getBoundingClientRect();
+      const viewport = log.getBoundingClientRect();
       const sx = viewport.width / log.clientWidth, sy = viewport.height / log.clientHeight;
       if (!sx || !sy) return;
       const height = log.clientHeight;
-      set(host.style, 'left', `${cleanNumber((viewport.left - bounds.left) / sx)}px`);
-      set(host.style, 'top', `${cleanNumber((viewport.top - bounds.top) / sy)}px`);
-      set(host.style, 'width', `${log.clientWidth}px`); set(host.style, 'height', `${height}px`);
       const topBand = parseFloat(computed(probes[0]).height) || 0;
       const bottomBand = parseFloat(computed(probes[1]).height) || 0;
       const nodes = [...log.querySelectorAll('.conversation-message,.message .bubble')];
@@ -149,8 +148,10 @@ export function createConversationEdgeBlur(phone, {environment = {}} = {}) {
           set(node.style, name, conversationEdgeMask(geometry), 'important');
           set(record.wrapper.style, name, conversationEdgeMask({...geometry, top:top - BLEED, blurred:true}));
         }
-        set(record.wrapper.style, 'left', `${cleanNumber((rect.left - viewport.left) / sx - BLEED)}px`);
-        set(record.wrapper.style, 'top', `${cleanNumber(top - BLEED)}px`);
+        // Positions belong to scroll content; only the masks use viewport
+        // coordinates. Between JS frames both surfaces move together natively.
+        set(record.wrapper.style, 'left', `${cleanNumber((rect.left - viewport.left) / sx + log.scrollLeft - BLEED)}px`);
+        set(record.wrapper.style, 'top', `${cleanNumber(top + log.scrollTop - BLEED)}px`);
         set(record.wrapper.style, 'width', `${cleanNumber(width + BLEED * 2)}px`);
         set(record.wrapper.style, 'height', `${cleanNumber(nodeHeight + BLEED * 2)}px`);
         set(record.wrapper.style, 'opacity', String(opacity));

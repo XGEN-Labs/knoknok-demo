@@ -19,14 +19,27 @@
 .phone#phone #app .kn-conversation-edge-group > :is(.conversation-log,.shared-messages) {pointer-events:auto;}
 .phone#phone #app .kn-conversation-edge-layer {
   position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+  height:0;
   z-index:2;
-  overflow:hidden;
+  overflow:visible;
   pointer-events:none;
   background:none;
   border:0;
   padding:0;
   margin:0;
   mix-blend-mode:plus-lighter;
+}
+/* Keep the scroll clip at the phone edges, not at the message rail. The
+   24px gutters contain the 18px blur bleed without clipping bubble corners.
+   A zero-height paint host never sizes itself from scrollHeight. */
+.phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log,
+.phone#phone #app .page.shared-chat-page .shared-messages {
+  left:0!important;
+  right:0!important;
+  padding-inline:24px;
 }
 .phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log {z-index:2;}
 .phone#phone #app .page.shared-chat-page .shared-composer {z-index:5;}
