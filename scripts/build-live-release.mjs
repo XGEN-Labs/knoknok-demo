@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 const root=fileURLToPath(new URL('..',import.meta.url)), output=path.join(root,'dist/web-live');
 const manifest=JSON.parse(await readFile(path.join(root,'build-manifest.json'),'utf8'));
 const files=new Set(manifest.files.map(entry=>entry.path));
-for(const file of ['deployment-mode.mjs','live-session.mjs','compat/web-naming/landing-handoff.mjs'])files.add(file);
+for(const file of ['deployment-mode.mjs','live-session.mjs','landing-creation.mjs','landing-family-videos.mjs','family-presentation.mjs','studio-family-data.mjs','assets/studio-family-artwork.svg','compat/web-naming/landing-handoff.mjs'])files.add(file);
 await rm(output,{recursive:true,force:true});await mkdir(output,{recursive:true});
 const entries=[];
 for(const name of [...files].sort()){

@@ -46,7 +46,7 @@ export function illustratedCardFrame(progress, layout, width, height) {
   };
 }
 
-export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_LIGHT_THEMES, roomThemeStorage} = {}) {
+export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_LIGHT_THEMES, roomThemeStorage, characterAssets = klinAssets, characterFilm = true} = {}) {
   if (!host) throw new TypeError('createKlinWorld requires a host element.');
   const doc = host.ownerDocument;
   const win = doc.defaultView || globalThis;
@@ -61,7 +61,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   }));
   const makeActor = className => {
     const anchor = node('div', `klin-illustrated-actor ${className}`), shadow = node('span', 'klin-illustrated-shadow'), artwork = node('img', 'klin-illustrated-art');
-    artwork.alt = ''; artwork.draggable = false; artwork.src = new URL(klinAssets.adult, import.meta.url).href;
+    artwork.alt = ''; artwork.draggable = false; artwork.src = new URL(characterAssets.adult, import.meta.url).href;
     anchor.append(shadow, artwork); host.append(anchor); return {anchor, artwork};
   };
   host.append(room);
@@ -87,7 +87,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   const stop = () => { if (state.frame) cancelFrame(state.frame); state.frame = 0; state.action = null; host.dataset.transitionPhase = 'idle'; primary.artwork.style.transform = ''; };
 
   function personalSceneEligible(layout = renderedLayout) {
-    return state.page === 'home' && layout.world === 'home' && state.stage === 'adult' && layout.character !== false && !layout.shared && !state.conversation && state.action?.kind !== 'transition' && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true';
+    return characterFilm && state.page === 'home' && layout.world === 'home' && state.stage === 'adult' && layout.character !== false && !layout.shared && !state.conversation && state.action?.kind !== 'transition' && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true';
   }
   function applyMediaOwnership() {
     if (state.disposed || swappingTheme) return;
@@ -204,7 +204,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   }
   function prepareConversationReturn() {
     conversationReturn?.cancel();
-    if (state.disposed || state.page !== 'home' || state.conversation || !personalRoom.prepareReturn) return null;
+    if (!characterFilm || state.disposed || state.page !== 'home' || state.conversation || !personalRoom.prepareReturn) return null;
     const owner = personalRoom, preparation = owner.prepareReturn();
     const valid = () => !state.disposed && conversationReturn === ticket && personalRoom === owner && state.page === 'home' && !state.conversation;
     const ticket = {
@@ -229,7 +229,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   function syncMedia(layout = renderedLayout) {
     renderedLayout = layout;
     if (!state.active || state.page !== 'home' || host.parentElement?.dataset?.conversationAvatarMotion || state.reduced) {themeFade?.dispose(); themeFade = null;}
-    const holdFrame = state.active && layout.world === 'home' && state.stage === 'adult' && !state.conversation
+    const holdFrame = characterFilm && state.active && layout.world === 'home' && state.stage === 'adult' && !state.conversation
       && (conversationReturn?.revealed || (!host.parentElement?.dataset?.conversationAvatarMotion
       && (themeSeekHeld !== 0 || isCard(state.page) || host.parentElement?.dataset?.sceneOverlay === 'true')));
     personalRoom.update({active: state.active && personalSceneEligible(layout), holdFrame, reducedMotion: state.reduced});
@@ -247,7 +247,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   }
   function setStage(stage) {
     state.stage = stage === 'juvenile' ? 'juvenile' : 'adult';
-    const src = new URL(klinAssets[state.stage], import.meta.url).href;
+    const src = new URL(characterAssets[state.stage], import.meta.url).href;
     for (const actor of [primary, secondary]) if (actor.artwork.src !== src) actor.artwork.src = src;
     syncMedia();
   }

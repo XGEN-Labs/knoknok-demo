@@ -3,8 +3,8 @@ import {mkdtemp,readFile,writeFile,mkdir,rm} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {tmpdir} from 'node:os';
 import {join,dirname} from 'node:path';
-import {fileURLToPath} from 'node:url';
-import {chromium} from 'playwright';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE?pathToFileURL(process.env.PLAYWRIGHT_MODULE).href:'playwright');
 import {liveBrowserFixture} from '../test/fixtures/live-browser.mjs';
 
 // Exercise actual app/auth/storage code without claiming visual/media verification.

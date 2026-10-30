@@ -1,0 +1,60 @@
+import assert from 'node:assert/strict';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+import {join} from 'node:path';
+import {mkdir} from 'node:fs/promises';
+import {liveBrowserFixture} from '../test/fixtures/live-browser.mjs';
+const root=fileURLToPath(new URL('..',import.meta.url));
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE?pathToFileURL(process.env.PLAYWRIGHT_MODULE).href:'playwright');
+const fixture=await liveBrowserFixture(join(root,'dist/web-live'),{landingCreation:true});
+const browser=await chromium.launch({channel:'chrome',headless:true}),errors=[],checks=[];
+try{
+ const context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'}),page=await context.newPage();
+ page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(fixture.url,{waitUntil:'domcontentloaded'});
+ await page.locator('[data-action="login"]').click();await page.locator('#auth-username').fill('test101');await page.locator('#auth-form button[type="submit"]').click();
+ await page.locator('#auth-password').fill('fixture-only');await page.locator('#auth-confirmPassword').fill('fixture-only');await page.locator('#auth-form button[type="submit"]').click();
+ await page.locator('[data-screen="landing"]').waitFor();
+ assert.equal(fixture.calls.some(c=>c.path.startsWith('/api/web/chat')),false);
+ assert.equal(fixture.calls.some(c=>c.path.endsWith('/agent-initialization/landing')),false);
+ checks.push('new authenticated unbound account enters original Landing without chat/history/create');
+ // Developer fixture: stage a complete signed questionnaire to isolate the
+ // creation transition. This is not PM black-box acceptance of the film/forms.
+ await page.evaluate(()=>{
+  const key='knokknok-prototype-v1-web-live-v1-account-rooms',rows=JSON.parse(localStorage.getItem(key)),row=rows.find(r=>r[0]==='101'),s=JSON.parse(row[1]);
+  const answers={where:'我在哪兒',birthDate:'2000-01-07',birthTime:null,gender:null,birthPlace:null,response:'想慢慢認識你',contractLight:'打開我們的契約',name:'测试新朋友',companionName:'小芽'};
+  Object.assign(s.onboarding,{contract:{version:1,signedAt:Date.now(),userName:answers.name,companionName:answers.companionName},conversation:{version:3,step:'complete',complete:false,messages:[],answers}});
+  row[1]=JSON.stringify(s);localStorage.setItem(key,JSON.stringify(rows));
+ });
+ await page.reload({waitUntil:'domcontentloaded'});await page.locator('[data-action="finish-conversation"]').waitFor();
+ if(await page.locator('.landing-video-skip').isVisible())await page.locator('.landing-video-skip').click();
+ await page.locator('[data-action="finish-conversation"]').click();await page.locator('[data-action="auth-bootstrap"]').waitFor();
+ assert.equal(fixture.calls.filter(c=>c.path.endsWith('/agent-initialization/landing')).length,1);
+ assert.equal(fixture.calls.some(c=>c.path.startsWith('/api/web/chat')),false);
+ assert.equal(fixture.calls.some(c=>c.path.endsWith('/onboarding/complete')),false);
+ assert.equal(fixture.controls.creation.input.birthTime,null);assert.ok(fixture.controls.creation.input.contract.signedAt>0);
+ checks.push('signed intake persisted before creation; pending keeps original preparation page; no premature handoff');
+ await page.locator('[data-action="auth-bootstrap"]').click();
+ assert.equal(fixture.calls.filter(c=>c.path.endsWith('/agent-initialization/landing')).length,1);
+ fixture.controls.creationBound=true;
+ await page.locator('[data-action="auth-bootstrap"]').click();await page.locator('[data-action="finish-conversation"]').waitFor();
+ if(await page.locator('.landing-video-skip').isVisible())await page.locator('.landing-video-skip').click();
+ await page.locator('[data-action="finish-conversation"]').click();await page.locator('#private-message').waitFor();
+ assert.equal(fixture.status.get(101),'completed');
+ const actor=page.locator('.klin-illustrated-actor.is-primary .klin-illustrated-art');await actor.waitFor();
+ await page.waitForFunction(()=>document.querySelector('.klin-illustrated-actor.is-primary .klin-illustrated-art')?.complete);
+ assert.match(await actor.getAttribute('src'),/#wood-adult$/);
+ assert.equal(await page.locator('.klin-world-host').getAttribute('data-personal-room'),'off');
+ assert.match(await page.locator('.home-chat-avatar img').getAttribute('src'),/#wood-head$/);
+ await mkdir(join(root,'dist/landing-creation-evidence'),{recursive:true});await page.screenshot({path:join(root,'dist/landing-creation-evidence/wood-room.png')});
+ checks.push('bound server family uses Studio wood crop and avatar, with no embedded Klin film');
+ const handoffs=fixture.calls.filter(c=>c.path==='/api/web/chat');assert.equal(handoffs.length,1);assert.match(handoffs[0].body.messages[0].content,/小芽/);
+ await page.reload({waitUntil:'domcontentloaded'});await page.locator('#private-message').waitFor();
+ assert.equal(fixture.calls.filter(c=>c.path.endsWith('/agent-initialization/landing')).length,1);
+ assert.equal(fixture.calls.filter(c=>c.path==='/api/web/chat').length,1);
+ checks.push('completed new account reload reuses binding without recreation or repeated intake');
+ const legacy=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'}),old=await legacy.newPage();old.on('pageerror',e=>errors.push(e.message));
+ await legacy.addCookies([{name:'livefixture',value:'202',url:fixture.url}]);await old.goto(fixture.url);await old.locator('#private-message').waitFor();
+ assert.match(await old.locator('.home-chat-avatar img').getAttribute('src'),/klin-avatar/);assert.equal(await old.locator('[data-screen="landing"]').count(),0);
+ checks.push('existing account retains original avatar and skips Landing');
+ assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks,scope:'local synthetic protocol fixture; no production account writes; existing Klin encounter film reused per explicit user decision'},null,2));
+}finally{await browser.close();await fixture.close();}

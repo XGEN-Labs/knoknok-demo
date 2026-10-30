@@ -3,6 +3,8 @@ import { createLiveSession } from './live-session.mjs';
 import { createLandingHandoff, landingInformation } from './compat/web-naming/landing-handoff.mjs';
 import { createAuthEntry, createDemoAuthAdapter, createApiAuthAdapter } from './auth-entry.mjs?v=20261027-first-landing';
 import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261028-auth-logo-62';
+import {isLandingCreation,prepareLandingSubmission,restoreLandingSubmission,creationHandoffInformation} from './landing-creation.mjs';
+import {assignedFamily,familyArtwork,familyMarkup} from './family-presentation.mjs';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
 import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261030-text-ink-87';
@@ -147,7 +149,9 @@ const btn = (text, action, cls='', attrs='') => `<button type="button" class="bt
 const tiny = (text, action, id='', cls='') => `<button type="button" class="tiny-btn ${cls}" data-action="${action}" data-id="${esc(id)}">${text}</button>`;
 const avatar = (id,small=false) => `<span class="avatar ${id==='b'?'person-b':''} ${small?'small':''}" aria-hidden="true">${normalizeCardAvatar(state.users[id]?.cardAvatar)?`<img src="${esc(state.users[id].cardAvatar)}" alt="">`:esc(state.users[id]?.name?.slice(0,1)||'K')}</span>`;
 const currentCompanionStage = () => ['welcome','login','register','verify','landing','onboard'].includes(ui.route) ? 'juvenile' : companionProfile(state).stage;
-const spiritImage = (label='Klin 伙伴', attrs='', stage=currentCompanionStage()) => pixelVariant ? pixelCompanionMarkup(label, attrs) : klinMarkup({stage,label,attrs});
+const currentFamily=()=>LIVE_WEB?assignedFamily(authView.bootstrap):null;
+const currentAvatar=()=>currentFamily()?familyArtwork(currentFamily().id,'adult','head'):HOME_CHARACTER_AVATAR;
+const spiritImage = (label='Klin 伙伴', attrs='', stage=currentCompanionStage()) => currentFamily()?familyMarkup(currentFamily().id,{stage,label,attrs}):pixelVariant ? pixelCompanionMarkup(label, attrs) : klinMarkup({stage,label,attrs});
 const companionName = () => me().companionName || 'Klin';
 const logoImage = `<img class="brand-logo" src="assets/brand-20261028-noknok/noknok-selected-white.png" alt="NokNok" width="2172" height="724">`;
 const spiritAvatar = () => `<span class="avatar small">${spiritImage(`${companionName()} 伙伴`)}</span>`;
@@ -231,21 +235,28 @@ function syncAuthCountdown(){clearInterval(authResendTimer);authResendTimer=null
 function clearAuthDraft(){clearInterval(authResendTimer);authResendTimer=null;authFormDraft.password='';authFormDraft.confirmPassword='';authPasswordVisible=false;}
 function applyAuthenticatedRoom(view){
  const id=String(view.user.id),username=view.user.username;
- const same=state.session.localAuthUserId===id&&(!LIVE_WEB||liveSession.getState().owner===id);
+ const same=state.session.localAuthUserId===id;
+ const bound=view.bootstrap.agent.status==='bound';
  const legacyFixture=!state.session.localAuthUserId&&view.bootstrap.demoAccountKind==='fixture'&&landingComplete(state);
  if(!same&&!legacyFixture)state=LIVE_WEB?cachedLiveRoom(id):(accountRooms.load(id)||(view.bootstrap.demoAccountKind==='fixture'?initialState():freshDemoAccountState(initialState())));
  if(LIVE_WEB){state.session={authenticated:true,activeUserId:'a',provider:'account'};}else state=reduce(state,{type:'DEMO_LOGIN',provider:'demo'});
  Object.assign(state.session,{localAuthUserId:id,localAuthUsername:username,localAgentId:view.bootstrap.agent.agentId,localRoomId:view.bootstrap.agent.roomId});
  applyAccountOnboarding(state,view.bootstrap.onboarding);
+ restoreLandingSubmission(state,view.bootstrap);
  if(LIVE_WEB&&ui.setupBirthOwner!==id){delete ui.setupBirth;delete ui.setupBirthOwner;}
- if(LIVE_WEB&&!same){ui.companionDrafts={};conversationActive=false;liveSendPending=null;birthProfileSnapshot=null;birthProfileLoad=null;liveSession.activate(id);liveHandoff.activate(id,view.bootstrap.agent);state.private.a.companionMessages=[];void liveSession.history({full:true});}
+ if(LIVE_WEB&&bound&&liveSession.getState().owner!==id){ui.companionDrafts={};conversationActive=false;liveSendPending=null;birthProfileSnapshot=null;birthProfileLoad=null;liveSession.activate(id);liveHandoff.activate(id,view.bootstrap.agent);state.private.a.companionMessages=[];void liveSession.history({full:true});}
+ if(LIVE_WEB&&!bound){liveSendPending=null;birthProfileSnapshot=null;birthProfileLoad=null;liveSession.activate(null);liveHandoff.clear();}
  clearAuthDraft();save();
  if(!sharedCard&&['welcome','login','register','verify'].includes(ui.route)){go(setupRoute(),{replace:true});if(ui.route==='landing')revealOnboarding();render(false);}
 }
 function onAuthChange(next){
- const changed=next.step!==authView.step||next.username!==authView.username;authView=next;
+ const previous=authView,changed=next.step!==authView.step||next.username!==authView.username;authView=next;
+ if(assignedFamily(previous.bootstrap)?.id!==assignedFamily(next.bootstrap)?.id&&klinWorld){conversationAvatarMotion?.dispose();conversationAvatarMotion=null;klinWorld.dispose();klinWorld=null;worldReady=false;worldFailed=false;$('#phone .klin-world-host')?.remove();}
  if(changed){clearAuthDraft();authFormDraft.username=next.username||authFormDraft.username;}
- if(next.step==='ready'){applyAuthenticatedRoom(next);return;}
+ if(['ready','landing'].includes(next.step)){applyAuthenticatedRoom(next);if(next.error)toast(next.error);return;}
+ if(LIVE_WEB&&isLandingCreation(next.bootstrap)&&next.step==='setup'&&ui.route==='landing'){save();go('login',{replace:true});return;}
+ if(LIVE_WEB&&next.step==='bootstrap'&&!next.busy&&next.error&&ui.route==='landing'){save();go('login',{replace:true});return;}
+ if(LIVE_WEB&&isLandingCreation(previous.bootstrap)&&!next.authenticated&&ui.route==='landing'){save();state.session.authenticated=false;liveSession.activate(null);liveHandoff.clear();go('login',{replace:true});return;}
  if(['login','register','verify'].includes(ui.route))render(false);
 }
 function initializeAuth(){authController?.dispose();authController=createAuthEntry({adapter:LIVE_WEB?createApiAuthAdapter({logoutPath:'/api/auth/logout'}):createDemoAuthAdapter({initialSession:state.session.authenticated?{authenticated:true,id:state.session.localAuthUserId,username:state.session.localAuthUsername,agentId:state.session.localAgentId,roomId:state.session.localRoomId,onboarding:{status:state.session.onboardingStatus||(landingComplete(state)?'completed':'not_required')}}:null}),onChange:onAuthChange});authView=authController.getState();}
@@ -274,7 +285,7 @@ function landing(){
  const reflection=turn.key==='response'?getLandingReading(state.onboarding.conversation.answers):null;
  const reading=reflection?`<article class="onboarding-reading" data-day-master="${esc(reflection.dayMaster)}"><small>彼之境 · 第一段回響</small><h3>${esc(reflection.title)}</h3><p>${esc(reflection.paragraphs[0])}</p><h3>${esc(reflection.companion)} 想對你說</h3><p>${esc(reflection.paragraphs[1])}</p></article>`:'';
  const light=turn.key==='contractLight'?`<button type="button" class="contract-light-hotspot" data-action="onboarding-reply" data-text="打開我們的契約" aria-label="輕觸亮起的光塊，打開我們的契約"><span aria-hidden="true"></span></button>`:'';
- const back=turn.canBack?`<button type="button" class="onboarding-answer-back" data-action="onboarding-back" aria-label="返回上一個回答">${backIcon}<span>上一步</span></button>`:'';
+ const back=turn.canBack&&authView.bootstrap?.landingCreation?.state!=='submitted'?`<button type="button" class="onboarding-answer-back" data-action="onboarding-back" aria-label="返回上一個回答">${backIcon}<span>上一步</span></button>`:'';
  return shell(`${light}<div class="onboarding-thread"><div class="onboarding-messages" role="log" aria-live="polite">${prompt}${reading}</div>${choices}</div><form class="onboarding-composer" data-form="onboarding" novalidate><div class="quick-replies${gender?' gender-replies':''}">${replies}</div>${hours||gender||turn.inputMode==='none'?'':ending||`<div class="onboarding-input-row">${calendar?'':voiceComposerMarkup()}${input}<button class="onboarding-send" type="submit" aria-label="回覆 Nok">${sendArrow}</button></div>`}${back}<p class="sr-only" role="alert">${esc(state.error||'')}</p></form>`,'conversation-onboarding'+(hours?' is-birth-time':'')+(gender?' is-gender':'')+(reflection?' is-reading':'')+(contractStep?' is-final-turn':'')+(turn.key==='contractLight'?' is-contract-light':''));
 }
 
@@ -326,7 +337,7 @@ function answerOnboarding(text,skip=false){
  render(false);const thread=$('.onboarding-thread');if(thread)thread.scrollTop=0;
 }
 function backOnboarding(drafts){
- if(ui.route!=='landing'||!getOnboardingTurn(state).canBack)return;
+ if(ui.route!=='landing'||!getOnboardingTurn(state).canBack||authView.bootstrap?.landingCreation?.state==='submitted'||landingHandoffBusy)return;
  sceneSound.stopSpeech();cleanCommunication?.stop?.();clearTimeout(landingHelloTimer);
  const draft=$('#onboarding-answer')?.value??$('#onboarding-calendar')?.value??(getOnboardingTurn(state).key==='birthTime'?birthTimePicker?.value:undefined);
  landingReveal=null;landingReaction='';pendingContractDeparture=false;ui.onboardingCoda=0;delete ui.onboardingDraft;
@@ -335,16 +346,25 @@ function backOnboarding(drafts){
 async function departToHome(){
  if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt||authView.busy||landingHandoffBusy)return;
  sceneSound.stopSpeech();
- const originUI=ui,who=actor(),signature=state.onboarding.contract.signedAt;
+ const originUI=ui,who=actor(),owner=state.session.localAuthUserId,signature=state.onboarding.contract.signedAt;
  if(LIVE_WEB){
   landingHandoffBusy=true;
-  try{if(!await liveHandoff.ensure(landingInformation(state),state.onboarding.agentHandoff))return;}
+  try{
+   if(isLandingCreation(authView.bootstrap)&&authView.bootstrap.landingCreation.state==='awaiting_input'){
+    const submission=prepareLandingSubmission(state);if(!submission){toast('請先完成初次見面的資料與約定。');return;}
+    save();const created=await authController.submitLanding(submission);
+    if(created.error){toast(created.error);return;}
+    if(created.step!=='ready')return;
+   }
+   if(state.session.localAuthUserId!==owner||authView.step!=='ready')return;
+   if(!await liveHandoff.ensure(creationHandoffInformation(authView.bootstrap,state),state.onboarding.agentHandoff))return;
+  }
   catch(error){toast(error.message);return;}
   finally{landingHandoffBusy=false;}
  }
  const result=await authController.completeOnboarding();
  if(result.error||result.bootstrap?.onboarding?.status!=='completed'){if(result.error)toast(result.error);return;}
- if(ui!==originUI||ui.route!=='landing')return;
+ if(ui!==originUI||ui.route!=='landing'||state.session.localAuthUserId!==owner)return;
  clearTimeout(landingHelloTimer);
  const arrive=()=>{
   if(ui!==originUI||ui.route!=='landing'||!state.session.authenticated||actor()!==who||state.onboarding?.contract?.signedAt!==signature)return;
@@ -412,7 +432,7 @@ function setHomeConversation(active){
   const next=Boolean(active)&&ui.route==='home';
   if(next===conversationActive)return;
   const phone=$('#phone'),reducedMotion=prefersStillness(ui.motion);
-  conversationAvatarMotion ||= createConversationAvatarMotion(phone,{imageSrc:HOME_CHARACTER_AVATAR});
+  conversationAvatarMotion ||= createConversationAvatarMotion(phone,{imageSrc:currentAvatar()});
   conversationAvatarMotion.move(next,{reducedMotion,prepareReturn:()=>klinWorld?.prepareConversationReturn?.(),mutate(){
     conversationActive=next;phone.dataset.conversation=String(next);
     if(next&&!reducedMotion)phone.dataset.conversationEntering='true';else delete phone.dataset.conversationEntering;
@@ -436,7 +456,7 @@ function home(){
  const space=privateSpace(),messages=LIVE_WEB?liveView.messages:space.companionMessages,turn=getCompanionTurn(state);
  const ledger=socialTagState(space,me()),pending=ledger.candidates.filter(candidate=>candidate.status==='pending'&&Array.isArray(candidate.sourceIds)&&candidate.sourceIds.some(id=>ledger.diary.some(entry=>entry.id===id&&entry.allowPublic===true)));
  const invitation=pending.length?`<div class="room-dialogue" aria-live="polite" aria-hidden="${conversationActive}" ${conversationActive?'hidden':''}><div class="room-speech">有 ${pending.length} 枚新的社交標籤，想一起看看嗎？</div><div class="first-noking-choices"><button type="button" class="kn-glass-control" data-action="tag-open-chat">一起看看</button></div></div>`:'';
- return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="close-conversation" aria-label="回到首頁" ${conversationActive?'':'hidden'}>${backIcon}</button><button type="button" class="scene-icon" data-action="tag-diary" aria-label="Nok 的日記本" ${conversationActive?'hidden':''}>${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="我的名片" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${HOME_CHARACTER_AVATAR}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end" ${conversationActive?'hidden':''}>${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div>${invitation}<button type="button" class="home-companion" data-action="boop" aria-label="輕觸 Klin" ${conversationActive?'hidden':''}>${spiritImage('成年態 Klin','','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}</div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}</button></div></div>`,'home-page room-chat-page');
+ return shell(`<div class="home-top"><div class="home-top-start"><button type="button" class="scene-icon" data-action="close-conversation" aria-label="回到首頁" ${conversationActive?'':'hidden'}>${backIcon}</button><button type="button" class="scene-icon" data-action="tag-diary" aria-label="Nok 的日記本" ${conversationActive?'hidden':''}>${uiIcon('diary')}</button><button class="scene-icon" type="button" data-go="profile" aria-label="我的名片" ${conversationActive?'hidden':''}>${restoredControlIcon('profile')}</button></div><div class="home-chat-identity" ${conversationActive?'':'hidden'}><span class="home-chat-avatar" aria-hidden="true"><img src="${currentAvatar()}" alt="" width="36" height="36" draggable="false"></span><span class="home-chat-name">${esc(companionName())}</span></div><div class="home-top-end" ${conversationActive?'hidden':''}>${volumeButton()}<button type="button" class="scene-icon" data-action="settings-menu" aria-label="設定">${uiIcon('settings')}</button></div></div>${invitation}<button type="button" class="home-companion" data-action="boop" aria-label="輕觸 ${esc(companionName())}" ${conversationActive?'hidden':''}>${spiritImage(`成年態 ${companionName()}`,'','adult')}</button><div id="conversation-log" class="conversation-log" role="log" aria-label="你和 ${esc(companionName())} 的私人對話" aria-live="polite" ${conversationActive?'':'hidden'}>${conversationMarkup(messages)}${companionTyping?'':tagChatMarkup(space,me(),{editingId:ui.editingTagId})}</div><div class="home-chat-bottom">${!companionTyping?`<div class="conversation-replies" ${conversationActive?'':'hidden'}>${turn.replies.map(r=>`<button type="button" data-say="${esc(r.text)}">${esc(r.label)}</button>`).join('')}${turn.status==='matched'?'<button type="button" data-go="relations">去串門看看 ↗</button>':''}</div>`:''}<div class="home-chat-actions"><form class="home-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和 ${esc(companionName())} 聊聊…" aria-label="和 ${esc(companionName())} 聊聊" maxlength="1000">${esc(ui.companionDrafts?.[actor()]||'')}</textarea><button class="send-button" type="submit" aria-label="發送給 ${esc(companionName())}" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form><button type="button" class="visit-entry" data-go="relations" aria-label="串門">${restoredControlIcon('visit')}</button></div></div>`,'home-page room-chat-page');
 }
 function companion(){const space=privateSpace();const messages=space.companionMessages.map((m,i)=>`<div class="message ${m.role==='user'?'own':''}" ${companionTyping&&i===space.companionMessages.length-1?'hidden':''}>${m.role==='user'?avatar(actor(),true):spiritAvatar()}<div class="message-content"><div class="bubble">${esc(m.text)}</div></div></div>`).join('');return shell(top(companionName())+`<div class="content messages" id="message-scroll">${messages}${companionTyping?`<div class="message">${spiritAvatar()}<div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>`:''}${space.pendingDemandSuggestion&&!companionTyping?`<div class="glass-card"><h4>找個人一起去？</h4><p class="small-note">先確認，再開始尋找。</p>${btn('整理需求','new-demand','compact')}${btn('先聊聊','dismiss-demand','ghost')}</div>`:''}${space.companionMessages.length<3?`<div class="suggestions"><button type="button" data-say="最近想認識一起看展的朋友">找人看展</button><button type="button" data-say="最近工作有點累，想慢慢聊聊">放鬆一下</button></div>`:''}</div><form class="chat-composer" data-form="companion"><div class="composer-row">${voiceComposerMarkup()}<textarea name="message" id="private-message" rows="1" placeholder="和我聊聊…" aria-label="私人訊息" maxlength="1000"></textarea><button class="send-button" type="submit" aria-label="發送給伙伴" ${companionTyping||(LIVE_WEB&&liveView.historyBusy)?'disabled':''}>${sendArrow}</button></div></form>`,'companion-page');}
 function memories(){const items=privateSpace().memory.filter(m=>m.status!=='deleted');return shell(top('記憶','每一點了解，都可以由你修正')+content(`<p class="body-copy">這些是我目前了解到的你。<br>用來陪伴你，不會直接分享給別人。</p>${items.length?items.map(m=>`<article class="glass-card memory-card"><div class="tag-row">${tag(m.status==='pending'?'等你確認':'你已確認',m.status==='pending'?'':'green')}${tag('私人','quiet')}</div><p>${esc(m.text)}</p><div class="memory-source">來自：${esc(m.source)}</div><div class="memory-actions" style="margin-top:14px">${m.status==='pending'?tiny('是這樣的','confirm-memory',m.id):''}${tiny('修正','edit-memory',m.id)}${tiny('移除','delete-memory',m.id,'danger')}</div></article>`).join(''):empty('我們可以慢慢認識','聊聊你喜歡的事，我會把新的理解交給你確認。',btn('和伙伴聊聊','companion','compact'))}`,'with-nav')+nav('memory'));}
@@ -592,11 +612,11 @@ function focusLandingComposer(){
  focusedLandingInputs.add(input);input.focus({preventScroll:true});
 }
 function syncLandingVideo(){
- if(ui.route==='landing'&&!landingVideoScene)landingVideoScene=createLandingVideoScene({phone:$('#phone'),
+ if(ui.route==='landing'&&!landingVideoScene)landingVideoScene=createLandingVideoScene({phone:$('#phone'),familyId:currentFamily()?.id,
   onPresentation:next=>{setScenePending('landing-video',ui.route==='landing'&&next.needsLoading,'landing');queueMicrotask(()=>{syncNarration();focusLandingComposer();maybeShowLandingContract();continueSignedDeparture();});},
   onMediaChange:next=>{filmAudioState=next;sceneSound.syncFilm(next);}
  });
- landingVideoScene?.update({active:ui.route==='landing',key:getOnboardingTurn(state).key,reducedMotion:prefersStillness(ui.motion)});
+ landingVideoScene?.update({active:ui.route==='landing',familyId:currentFamily()?.id,key:getOnboardingTurn(state).key,reducedMotion:prefersStillness(ui.motion)});
 }
 function ensureExperience(){
  if(sceneLoading)return;
@@ -636,8 +656,8 @@ function syncExperience(){
  const scene=landing?'landing':opening?'welcome':'room';
  const images=landing?[]:[opening?LOGIN_VIDEO_POSTER:ui.route==='relations'?VISIT_SCENE_ASSET:homeSceneAsset];
  if(opening)images.push('assets/brand-20261028-noknok/noknok-selected-white.png');
- else if(!landing)images.push(klinAssets.adult);
- if(ui.route==='home')images.push(HOME_CHARACTER_AVATAR);
+ else if(!landing)images.push(currentFamily()?familyArtwork(currentFamily().id):klinAssets.adult);
+ if(ui.route==='home')images.push(currentAvatar());
  if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
  if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261028-noknok/noknok-selected-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
  if(['chat','connected'].includes(ui.route)){const rel=latestRelationship(),host=rel&&state.users[rel.members.find(id=>id!==actor())];images.push(friendRoomScene(host),SEATED_KLIN_ASSET);}
@@ -687,9 +707,12 @@ function initWorld({prewarm=false}={}) {
   host.addEventListener('klinworldready',()=>{worldReady=true;worldFailed=false;setKlinLoadingState($('#phone'),'ready');placeWorld();setScenePending('world',false,'room');});
   $('#phone').prepend(host);
   try {
-    klinWorld=createKlinWorld({host,reducedMotion:prefersStillness(ui.motion)});
+    const family=currentFamily();
+    klinWorld=createKlinWorld({host,reducedMotion:prefersStillness(ui.motion),...(family?{characterAssets:{adult:familyArtwork(family.id),juvenile:familyArtwork(family.id,'juvenile')},characterFilm:false}:{})});
+    const createdWorld=klinWorld;
     placeWorld();
     Promise.resolve(klinWorld?.ready).then(ok=>{
+      if(klinWorld!==createdWorld)return;
       if(ok===false||!klinWorld){worldFailed=true;klinWorld=null;host.remove();setKlinLoadingState($('#phone'),'fallback');setScenePending('world',false,'room');return;}
       worldReady=true;worldFailed=false;setKlinLoadingState($('#phone'),'ready');placeWorld();setScenePending('world',false,'room');
     }).catch(()=>{worldReady=false;worldFailed=true;setKlinLoadingState($('#phone'),'fallback');setScenePending('world',false,'room');});
@@ -987,7 +1010,7 @@ async function sendCompanion(text){if(LIVE_WEB){if(liveSendPending||companionTyp
 document.addEventListener('submit',e=>{const form=e.target.closest('form[data-form]');if(!form)return;e.preventDefault();const data=new FormData(form);switch(form.dataset.form){case 'auth-entry-flow':{
  if(authView.busy)return;
  authFormDraft.username=String(data.get('username')||'');authFormDraft.password=String(data.get('password')||'');authFormDraft.confirmPassword=String(data.get('confirmPassword')||'');
- return Promise.resolve(submitAuthEntryForm(authController,authFormDraft,{onUsernameCheck(username){clearAuthDraft();authFormDraft.username=username;}})).then(result=>{if(LIVE_WEB&&result?.step==='ready')announceLiveSession();return result;});
+ return Promise.resolve(submitAuthEntryForm(authController,authFormDraft,{onUsernameCheck(username){clearAuthDraft();authFormDraft.username=username;}})).then(result=>{if(LIVE_WEB&&['ready','landing'].includes(result?.step))announceLiveSession();return result;});
 }
 case 'setup-basics':{const patch=basicsFormPatch(),errors=validateBasics(patch);if(Object.keys(errors).length){$('#basics-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#basics-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BASICS',patch},false)){if(state.onboarding.status!=='ready'&&!state.demand)dispatch({type:'UPDATE_DRAFT',patch:{language:patch.language}},false);ui.setupBasics=null;go('setup-birth');}return;}
 case 'setup-birth':{const patch=birthFormPatch(),errors=validateBirth(patch,state.now);if(Object.keys(errors).length){$('#birth-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#birth-error').scrollIntoView({block:'nearest'});return;}return saveBirthForm(patch);}

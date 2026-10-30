@@ -4,9 +4,9 @@ import {join,extname} from 'node:path';
 import {createServer} from 'node:http';
 import {once} from 'node:events';
 // Local protocol fixtures only. All identities, replies and native DTOs are synthetic.
-export async function liveBrowserFixture(webRoot){
+export async function liveBrowserFixture(webRoot,{landingCreation=false}={}){
  const manifest=JSON.parse(await readFile(join(webRoot,'build-manifest.json'),'utf8')),allowed=new Set(manifest.files.map(f=>f.path)),calls=[],status=new Map([[101,'required'],[202,'not_required'],[303,'completed']]),histories=new Map(),profiles=new Map();
- const controls={failHandoff:false,failCompletion:false,failBirthProfile:false};
+ const controls={failHandoff:false,failCompletion:false,creationBound:false,creation:null,failBirthProfile:false};
  const json=(res,code,value)=>{res.writeHead(code,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify(value));};
  const session=id=>({user:{id,username:`test${id}`},onboarding:{status:status.get(id)||'required'}});
  const server=createServer(async(req,res)=>{try{
@@ -27,8 +27,16 @@ export async function liveBrowserFixture(webRoot){
   }
   if(url.pathname==='/api/auth/logout'){res.setHeader('set-cookie','livefixture=; Path=/; Max-Age=0');return json(res,200,{ok:true});}
   if(!id)return json(res,401,{error:'unauthenticated'});
-  if(url.pathname==='/api/auth/bootstrap')return json(res,200,{...session(id),accountStatus:'registered',nextAction:'open_chat',agent:{status:'bound',agentId:`agent-${id}`,roomId:`room-${id}`},memory:{status:'not_loaded'}});
+  if(url.pathname==='/api/auth/bootstrap'){
+   const newer=landingCreation&&id===101,bound=!newer||controls.creationBound;
+   return json(res,200,{...session(id),accountStatus:'registered',nextAction:bound?'open_chat':'setup_agent',agent:bound?{status:'bound',agentId:`agent-${id}`,roomId:`room-${id}`}:{status:'setup_required',initialization:{state:'pending'}},memory:{status:'not_loaded'},...(newer?{landingCreation:controls.creation||{flow:'landing-v1',state:'awaiting_input'}}:{})});
+  }
   if(req.headers['x-knok-user-id']!==String(id))return json(res,409,{error:'SESSION_CHANGED',code:'SESSION_CHANGED'});
+  if(url.pathname==='/api/auth/agent-initialization/landing'){
+   if(!landingCreation||id!==101)return json(res,409,{error:'legacy_account'});
+   if(!controls.creation)controls.creation={flow:'landing-v1',state:'submitted',...body,selection:{ruleVersion:'rongyu-day-master-v1',dayMaster:'甲木',element:'wood',familyId:'wood',personaSpecId:'nok-wood-1',personaVersion:'8.0.0'}};
+   return json(res,200,{landingCreation:controls.creation,initialization:{state:'pending'}});
+  }
   if(url.pathname==='/api/web/birth-profile'){
    const current=profiles.get(id)||{agentId:`agent-${id}`,roomId:`room-${id}`,version:0,profile:null,profileConsent:false,updatedAt:null};
    if(req.method==='GET')return json(res,200,current);

@@ -1,0 +1,11 @@
+{
+  "sourceRepository": "XGEN-Labs/nok-character-studio",
+  "sourceCommit": "b04749a7b4af2c25bf475356f903d321e3bf8b9c",
+  "sourceFiles": [
+    "public/studio/family-data.js",
+    "public/studio/appearance.js",
+    "public/studio/assets/nok-family-reference.jpg"
+  ],
+  "imageSha256": "873c2a86ce36e94411925ac07ec7d747a7a6e170544937c95eff9ecd7a4deb8a",
+  "use": "Unchanged source JPEG embedded in SVG; named views use original Studio crop rectangles. No prompt or private document copied."
+}
