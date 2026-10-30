@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T04:07:51.770302Z",
+  "createdAt": "2026-10-30T04:47:16.644363Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 164126530,
+  "payloadBytes": 167967983,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 129193,
-      "sha256": "b92d11fbf8a7d510412c1f4a98f05406d161859061e891634f8ee2cdcff35d2f"
+      "bytes": 129190,
+      "sha256": "aba27de00787a98d2af91a92c48b66b2091c49cbfc5014703b8771ba8dddafef"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11534,
-      "sha256": "12068a650966e316db3882d28b2dbe6a261ecffd3ca9014302178db1aae2b963"
+      "bytes": 11531,
+      "sha256": "aa5e78a47950e9e566f7b81550f8f1eec7a1dd084b9f01f1f5f69d5a6fd77f28"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 26558,
-      "sha256": "91f3aa60679e16bbf125efd1936f5d9b217da27c418246efe99b988b54d74000"
+      "bytes": 26598,
+      "sha256": "1815dbb98676dd456d1a88147c1655a036247c8f529b80227a27f8e4e745b28f"
     },
     {
       "source": "klin-world-2d.css",
@@ -2073,7 +2073,7 @@
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
       "bytes": 864,
-      "sha256": "ea639ef15b9134271fe77c2c3610dc216049f367e820d70b32deb2ce792ffdd7"
+      "sha256": "232217509c7da7fb16babcf8c93c2f0d7d6ac93edd4768da3d03587daba83c59"
     },
     {
       "source": "scene-control-glass.css",
@@ -2396,8 +2396,8 @@
     {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 12575,
-      "sha256": "dce999df214d4ed9e41330202c4dca054cb6307e602f2346583498a35678d8cd"
+      "bytes": 15355,
+      "sha256": "c52ef21da5c43f884d583cf9d37bcf967b3e6696e900daaa3a56009ffe1e477f"
     },
     {
       "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
@@ -2571,7 +2571,7 @@
       "source": "room-light-assets.mjs",
       "path": "room-light-assets.mjs",
       "bytes": 1216,
-      "sha256": "cd4072419597f7bc1fd58f56f7847bee06fd107a71821451aa70a450619315a8"
+      "sha256": "4f827747f16ab8a9dd19443c576f7c0c07632e6f19898591176752b687d81ab4"
     },
     {
       "source": "room-light-theme.css",
@@ -2584,6 +2584,42 @@
       "path": "room-light-theme.mjs",
       "bytes": 9075,
       "sha256": "6ae900e27b41e36c0ae1896180a7a567708640b8057177b6e5589ed792d5e5cf"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
+      "bytes": 857322,
+      "sha256": "b59e237ae127b4f8eb7c07daa35740960e787eef782d8720343c2169794dc351"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/poster-daylight.png",
+      "path": "assets/klin-room-motion-20261030-v11/poster-daylight.png",
+      "bytes": 501161,
+      "sha256": "83de55f46fbe281c6a4013a0b92ca6ecc30f01ae4a7e4a96a70a229c4ebbe612"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/react-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/react-daylight.mp4",
+      "bytes": 628734,
+      "sha256": "a46a7a00cabf0263a95855b12fef1d8d6a427386af6c8005d59e15449af104d6"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/react.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/react.mp4",
+      "bytes": 822573,
+      "sha256": "3cbc19247ac9c060d42b5b78e5e829a34d29bea36dfdfb0dd14fa30f7d6dfcc8"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/room-loop-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/room-loop-daylight.mp4",
+      "bytes": 147813,
+      "sha256": "4bf9ff833155bc220a6252d40fb3c229dd60ba22ec46588f78536263cf680f09"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/room-only-daylight.png",
+      "path": "assets/klin-room-motion-20261030-v11/room-only-daylight.png",
+      "bytes": 881036,
+      "sha256": "b6d40aa5b012d889b371a8c708a95cbcf6e80a0c5ff0d2fe8c0e6316724b609a"
     }
   ],
   "runtimeDependencies": [

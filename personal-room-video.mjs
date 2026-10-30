@@ -1,7 +1,7 @@
 // These films already contain both Klin and the room. One layer owns the whole
 // scene, including its still fallback; the old actor must never be composited
 // over a visible frame from this layer.
-export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, posterElement, idleElement, reactElement, initialPlayback, reducedMotion = false, onChange} = {}) {
+export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, posterElement, idleElement, reactElement, initialPlayback, reactStartTime = 0, reducedMotion = false, onChange, onResponseFeedback} = {}) {
   const doc = container?.ownerDocument;
   if (!doc) throw new TypeError('A personal-room container is required.');
   const idle = idleElement || doc.createElement('video');
@@ -31,6 +31,10 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
   let active = false, held = false, reduced = !!reducedMotion, disposed = false, failed = false, blocked = false;
   let posterReady = false, desired = 'idle', showing = null, pending = null, attempt = 0, response = 0;
   let reported = '', returnPreparation = null;
+  let responseRequestedAt = null, responseRevealedAt = null;
+  const clock = () => doc.defaultView?.performance?.now?.() ?? Date.now();
+  const responseEntry = () => {const configured = Number(reactStartTime), time = Number.isFinite(configured) ? Math.max(0, configured) : 0, duration = Number(react.duration); return Number.isFinite(duration) && duration > 0 ? Math.min(time, Math.max(0, duration - 1 / 48)) : time;};
+  const responsePrimed = () => react.readyState >= 2 && !react.seeking && Math.abs(react.currentTime - responseEntry()) < 1 / 48;
   const metadataSeeks = new Map();
   const clearSeeks = () => {for (const [video, callback] of metadataSeeks) video.removeEventListener('loadedmetadata', callback); metadataSeeks.clear();};
   const shouldPlay = () => !!idleSrc && active && !held && !reduced && !doc.hidden && !disposed && !failed && !blocked;
@@ -38,7 +42,11 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
   const notify = () => {
     layer.hidden = !ownsScene();
     layer.dataset.mode = showing || 'poster';
-    const signature = `${layer.hidden}|${layer.dataset.mode}|${desired === 'react'}|${held}`;
+    layer.dataset.responsePrimed = String(responsePrimed());
+    layer.dataset.responseRequestedAt = responseRequestedAt === null ? '' : String(responseRequestedAt);
+    layer.dataset.responseRevealedAt = responseRevealedAt === null ? '' : String(responseRevealedAt);
+    layer.dataset.responseStartTime = String(responseEntry());
+    const signature = `${layer.hidden}|${layer.dataset.mode}|${desired === 'react'}|${held}|${response}`;
     if (signature !== reported) {reported = signature; onChange?.();}
   };
   const pauseFilms = ({preserveFrame = false} = {}) => {
@@ -51,11 +59,22 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
   function reveal(kind) {
     if (!shouldPlay() || desired !== kind) {films[kind].pause(); return;}
     showing = kind;
+    if (kind === 'react' && responseRequestedAt !== null && responseRevealedAt === null) responseRevealedAt = clock();
     for (const [name, video] of Object.entries(films)) {
       video.hidden = name !== kind;
       if (name !== kind) video.pause();
     }
     notify();
+    if (kind === 'idle') primeResponse();
+  }
+  function primeResponse() {
+    if (!reactSrc || !shouldPlay() || desired === 'react' || showing === 'react') return;
+    if (!react.getAttribute('src')) {react.src = reactSrc; react.preload = 'auto'; react.load();}
+    // Prepare the configured real video frame while it is hidden and paused.
+    // New clips default to zero; an explicitly reviewed lead-in cut is optional.
+    const entry = responseEntry(), ranges = react.seekable;
+    const seekable = entry === 0 || !ranges || Array.from({length: ranges.length}, (_, i) => [ranges.start(i), ranges.end(i)]).some(([start, end]) => start <= entry && end >= entry);
+    if (seekable && react.readyState >= 1 && !react.seeking && Math.abs(react.currentTime - entry) >= 1 / 48) {try {react.currentTime = entry;} catch {}}
   }
   function sync({restart = false, startTime = 0} = {}) {
     if (!shouldPlay()) {pauseFilms({preserveFrame: held}); return;}
@@ -161,6 +180,9 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
     video.addEventListener('error', decodeError);
   }
   react.addEventListener('ended', ended);
+  react.addEventListener('loadeddata', primeResponse);
+  react.addEventListener('canplay', primeResponse);
+  react.addEventListener('progress', primeResponse);
   still.addEventListener('load', loaded);
   still.addEventListener('error', posterError);
   doc.addEventListener('visibilitychange', visibility);
@@ -181,7 +203,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
       if (held) {if (!wasHeld) {desired = showing || 'idle'; response++;} pauseFilms({preserveFrame: true}); return;}
       // Warm the short response while idle plays, so the first click does not
       // have to begin its network request. No offscreen response is played.
-      if (shouldPlay() && reactSrc && !react.getAttribute('src')) {react.src = reactSrc; react.preload = 'auto'; react.load();}
+      if (initialPlayback?.mode !== 'react') primeResponse();
       if (wasHeld && active) sync();
       else if (changed || wasHeld) {
         reset();
@@ -202,11 +224,18 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
       if (!reactSrc || disposed || !active || held || reduced || doc.hidden || failed) return () => {};
       blocked = false;
       const token = ++response;
+      responseRequestedAt = clock(); responseRevealedAt = null;
+      // Optional host tactile/UI confirmation, deliberately unwired by default.
+      try {onResponseFeedback?.({sequence: token, requestedAt: responseRequestedAt});} catch {}
+      const primed = react.paused && responsePrimed();
       desired = 'react';
       notify();
       // Every tap takes ownership immediately, including during the previous
       // response or its pending play promise. Keep the same visible film layer.
-      sync({restart: true});
+      // The already decoded real response frame can own the scene within the
+      // click; do not wait for a play() promise or seek to that same frame again.
+      if (primed) reveal('react');
+      sync({restart: !primed, startTime: responseEntry()});
       return () => {if (!disposed && token === response && desired === 'react') {desired = 'idle'; response++; sync({restart: true});}};
     },
     dispose() {
@@ -217,10 +246,13 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
         video.removeAttribute('src'); video.load();
       }
       react.removeEventListener('ended', ended);
+      react.removeEventListener('loadeddata', primeResponse);
+      react.removeEventListener('canplay', primeResponse);
+      react.removeEventListener('progress', primeResponse);
       still.removeEventListener('load', loaded); still.removeEventListener('error', posterError);
       doc.removeEventListener('visibilitychange', visibility);
       layer.remove();
     },
-    get status() {return {active, held, visible: ownsScene(), mode: !active && !held ? 'off' : showing || 'poster', responding: active && !held && desired === 'react', failed, reduced};},
+    get status() {return {active, held, visible: ownsScene(), mode: !active && !held ? 'off' : showing || 'poster', responding: active && !held && desired === 'react', responsePrimed: responsePrimed(), responseStartTime: responseEntry(), responseRequestedAt, responseRevealedAt, failed, reduced};},
   };
 }
