@@ -9,11 +9,11 @@ import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-st
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
 import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261030-text-ink-87';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-text-ink-87';
-import { mountFriendWorld } from './friend-world.mjs?v=20261030-visit-85';
+import { mountFriendWorld } from './friend-world.mjs?v=20261030-visit-fur-public96';
 import { mountCosmosBackground } from './cosmos-background.mjs?v=20261029-visit-82c';
 let cosmosBackground=null;
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
-import { renderFriendNetwork } from './friend-network.mjs?v=20261030-shared-elements-88';
+import { renderFriendNetwork } from './friend-network.mjs?v=20261030-visit-fur-public96';
 import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261030-shared-elements-88';
 import { sharedMessageMarkup } from './shared-message-identity.mjs?v=20261030-shared-elements-88';
 import { friendRoomKind, friendRoomScene } from './friend-room.mjs?v=20261030-shared-elements-88';
@@ -491,15 +491,15 @@ function filterNetwork(value){
  const empty=$('.network-empty');if(empty)empty.hidden=count>0;const clear=$('[data-action="clear-network-search"]');if(clear)clear.hidden=!query;
 }
 
-function sharedPeople(){const rel=latestRelationship(),host=rel&&state.users[rel.members.find(id=>id!==actor())];return host?`<div class="shared-people"><span class="shared-person">${avatar(host.id,true)}<strong>${esc(host.name)}的小屋</strong></span></div>`:'';}
+function sharedPeople(){return `<div class="shared-people"><span class="shared-person"><strong>公共空間</strong></span></div>`;}
 function connected(){return chat();}
 function invitePage(){return relations();}
 
 function chat(){
- const rel=latestRelationship();if(!rel)return shell(top('共同空間')+content(empty('等你們都願意','互相接受邀約，就能一起坐坐。',btn('查看邀約','invite'))));
+ const rel=latestRelationship();if(!rel)return shell(top('公共空間')+content(empty('等你們都願意','互相接受邀約，就能一起坐坐。',btn('查看邀約','invite'))));
  const other=state.users[rel.members.find(x=>x!==actor())],msgs=publicMessages(state,rel.id);
  const participants=rel.members.map(id=>({...state.users[id],chatAvatar:friendAvatarSource({id},state.users[id]),companion:companionWithArtwork(displayedCompanion(id))})),messageContext={participants,activeId:actor()},host=participants.find(person=>person.id===other.id);
- return shell(top(esc(other.name),'',`<button type="button" class="scene-icon" data-action="relationship-options" aria-label="管理這段聯繫">${uiIcon('more')}</button>`)+sharedPeople()+`<div class="shared-room-scene" data-room-owner="${esc(other.id)}" data-room-kind="${friendRoomKind(host)}"><div class="shared-room-plate"><img class="shared-room-backdrop" src="${friendRoomScene(host)}" alt="" draggable="false">${sharedAgentsMarkup(participants,actor())}</div></div><div class="shared-messages" id="message-scroll" role="log" aria-label="共同對話">${msgs.map(m=>sharedMessageMarkup(m,messageContext)).join('')}${!msgs.length?`<div class="shared-first-hello"><p>坐近一點，從一句你好開始。</p><button type="button" class="tiny-btn" data-public-say="嗨，很高興認識你！">嗨，很高興認識你！ ↗</button></div>`:''}</div><form class="chat-composer shared-composer" data-form="public-message">${rel.status==='active'?`<button type="button" class="private-entry" data-action="private-help">私下問問 ${esc(companionName())}</button><div class="composer-row"><textarea id="public-message" name="message" rows="1" placeholder="和 ${esc(other.name)} 說句話…" aria-label="發送給 ${esc(other.name)} 的訊息" maxlength="1000">${esc(privateSpace().publicDraft)}</textarea><button class="send-button" type="submit" aria-label="發送給朋友">${sendArrow}</button></div>`:`<p class="scene-hint">這段聯繫已結束。</p>${btn('回到房間','home')}`}</form>`,'shared-space shared-chat-page');
+ return shell(top('公共空間','',`<button type="button" class="scene-icon" data-action="relationship-options" aria-label="管理這段聯繫">${uiIcon('more')}</button>`)+sharedPeople()+`<div class="shared-room-scene" data-space-id="${esc(rel.id)}" data-room-kind="${friendRoomKind(host)}"><div class="shared-room-plate"><img class="shared-room-backdrop" src="${friendRoomScene(host)}" alt="" draggable="false">${sharedAgentsMarkup(participants,actor())}</div></div><div class="shared-messages" id="message-scroll" role="log" aria-label="共同對話">${msgs.map(m=>sharedMessageMarkup(m,messageContext)).join('')}${!msgs.length?`<div class="shared-first-hello"><p>坐近一點，從一句你好開始。</p><button type="button" class="tiny-btn" data-public-say="嗨，很高興認識你！">嗨，很高興認識你！ ↗</button></div>`:''}</div><form class="chat-composer shared-composer" data-form="public-message">${rel.status==='active'?`<button type="button" class="private-entry" data-action="private-help">私下問問 ${esc(companionName())}</button><div class="composer-row"><textarea id="public-message" name="message" rows="1" placeholder="和 ${esc(other.name)} 說句話…" aria-label="發送給 ${esc(other.name)} 的訊息" maxlength="1000">${esc(privateSpace().publicDraft)}</textarea><button class="send-button" type="submit" aria-label="發送給朋友">${sendArrow}</button></div>`:`<p class="scene-hint">這段聯繫已結束。</p>${btn('回到房間','home')}`}</form>`,'shared-space shared-chat-page');
 }
 function roomMemories(){
  const moments=state.relationships.filter(rel=>rel.members.includes(actor())&&rel.sharedMoment?.completedAt);

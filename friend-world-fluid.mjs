@@ -9,6 +9,13 @@ const number=value=>Number(value).toFixed(12);
 const vector=value=>`vec3(${value.map(number).join(',')})`;
 // The surface and CPU contact anchors share this radial field.
 const waveGLSL=`float fluidRadius(vec3 n,float time){float radius=1.0;\n${WAVES.map(w=>`radius+=${number(w.amplitude)}*sin(dot(n,${vector(w.direction)})*${number(w.frequency)}+time*${number(w.speed)}+${number(w.phase)});`).join('\n')}\nreturn radius;}\nvec3 fluidGradient(vec3 n,float time){vec3 gradient=vec3(0.0);\n${WAVES.map(w=>`gradient+=${vector(w.direction)}*${number(w.amplitude*w.frequency)}*cos(dot(n,${vector(w.direction)})*${number(w.frequency)}+time*${number(w.speed)}+${number(w.phase)});`).join('\n')}\nreturn gradient;}`;
+// Shared by the plush renderer so a material change cannot drop globe motion.
+export {MAX_DEVIATION as FLUID_MAX_DEVIATION,waveGLSL as FLUID_WAVE_GLSL};
+export function fluidRadiusAt(x,y,z,time=0){
+ const length=Math.hypot(x,y,z)||1,n=[x/length,y/length,z/length],t=Number.isFinite(time)?time:0;
+ let radius=1;for(const wave of WAVES)radius+=wave.amplitude*Math.sin((n[0]*wave.direction[0]+n[1]*wave.direction[1]+n[2]*wave.direction[2])*wave.frequency+t*wave.speed+wave.phase);
+ return radius;
+}
 const vertexShader=/* glsl */`
  uniform float uTime;
  varying vec2 vFluidUV;
@@ -90,7 +97,7 @@ export function createFluidPlanet(THREE,{texture=null,reducedMotion=false}={}){
  const mesh=new THREE.Mesh(geometry,material);mesh.name='blue-green-fluid-surface';mesh.castShadow=false;mesh.receiveShadow=false;group.add(mesh);
  let time=0,requestedTime=0,disposed=false;
  const clock=seconds=>reducedMotion?0:Number.isFinite(seconds)?seconds:0;
- function radiusAt(x,y,z,seconds=time){const length=Math.hypot(x,y,z)||1,n=[x/length,y/length,z/length],t=clock(seconds);let radius=1;for(const wave of WAVES)radius+=wave.amplitude*Math.sin((n[0]*wave.direction[0]+n[1]*wave.direction[1]+n[2]*wave.direction[2])*wave.frequency+t*wave.speed+wave.phase);return radius;}
+ function radiusAt(x,y,z,seconds=time){return fluidRadiusAt(x,y,z,clock(seconds));}
  const stats=Object.freeze({drawCalls:1,geometries:1,materials:1,triangles:geometry.index.count/3,maxRadialDeviation:MAX_DEVIATION,externalTextures:texture?1:0,animationOwner:'caller'});
  return {group,mesh,stats,radiusAt,update(seconds){if(disposed)return;requestedTime=Number.isFinite(seconds)?seconds:0;time=clock(requestedTime);uniforms.uTime.value=time;},setReducedMotion(value){if(disposed)return;reducedMotion=!!value;time=clock(requestedTime);uniforms.uTime.value=time;},dispose(){if(disposed)return;disposed=true;group.removeFromParent();group.clear();geometry.dispose();material.dispose();}};
 }

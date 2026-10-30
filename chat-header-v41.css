@@ -280,3 +280,6 @@
 @media (prefers-reduced-motion:reduce) {
   .phone#phone #app .page.shared-chat-page .shared-agent-art img {animation:none;}
 }
+
+/* Public space title has no participant avatar or icon. */
+.phone#phone #app .page.shared-chat-page .shared-people > .shared-person:only-child { max-width:100%; }
