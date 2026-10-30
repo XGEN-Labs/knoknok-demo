@@ -7,7 +7,7 @@ import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-st
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
 import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261028-diary-header-73';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261027-tags-50';
-import { mountFriendWorld } from './friend-world.mjs?v=20261029-visit-83e';
+import { mountFriendWorld } from './friend-world.mjs?v=20261030-visit-85';
 import { mountCosmosBackground } from './cosmos-background.mjs?v=20261029-visit-82c';
 let cosmosBackground=null;
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};

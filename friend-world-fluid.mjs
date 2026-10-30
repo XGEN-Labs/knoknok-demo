@@ -1,8 +1,8 @@
 /** Soft blue-green fluid globe. Time is supplied by the caller; no private RAF. */
 const WAVES=Object.freeze([
- Object.freeze({direction:[.82,.48,.31],frequency:4.05,speed:.42,phase:0,amplitude:.022}),
- Object.freeze({direction:[-.36,.86,.37],frequency:3.55,speed:-.31,phase:1.4,amplitude:.015}),
- Object.freeze({direction:[.29,-.31,.91],frequency:5.10,speed:.27,phase:2.2,amplitude:.008}),
+ Object.freeze({direction:[.82,.48,.31],frequency:4.05,speed:.42,phase:0,amplitude:.011}),
+ Object.freeze({direction:[-.36,.86,.37],frequency:3.55,speed:-.31,phase:1.4,amplitude:.0075}),
+ Object.freeze({direction:[.29,-.31,.91],frequency:5.10,speed:.27,phase:2.2,amplitude:.004}),
 ]);
 const MAX_DEVIATION=WAVES.reduce((sum,wave)=>sum+wave.amplitude,0);
 const number=value=>Number(value).toFixed(12);
@@ -53,23 +53,23 @@ const fragmentShader=/* glsl */`
   vec2 flow=vec2(sin(p.y*2.8+p.z*1.7+time*.21),cos(p.x*2.2-p.z*1.9-time*.17));
   vec2 warped=vFluidUV+flow*.075+vec2(time*.006,field*.035);
   float broad=smoothstep(-.65,.7,field)*.55;
-  vec3 base=mix(vec3(.003,.135,.50),vec3(.006,.43,.30),broad);
+  vec3 base=mix(vec3(.003,.10,.64),vec3(.006,.43,.30),broad);
   // Compress the old pale plate into deep water colour. Most of the depth is
   // volumetric-looking 3D flow; the reference plate contributes fine detail.
-  if(uHasTexture)base=mix(base,fluidPaint(warped)*vec3(.14,.59,.90),.42);
+  if(uHasTexture)base=mix(base,fluidPaint(warped)*vec3(.045,.46,1.05),.35);
   float light=max(0.0,dot(n,normalize(vec3(-.45,.62,.72))));
   float facing=clamp(abs(dot(n,view)),0.0,1.0);
-  float fresnel=pow(1.0-facing,2.3);
+  float fresnel=pow(1.0-facing,2.05);
   // A broad satin reflection slides over the changing normals. Keep the core
   // saturated; emission belongs to the rim rather than a white body wash.
-  float pearl=pow(max(0.0,dot(n,normalize(vec3(-.42,.68,.58)))),18.0);
+  float pearl=pow(max(0.0,dot(n,normalize(vec3(-.42,.68,.58)))),12.0);
   float ribbon=exp(-pow((field-.10)*7.0,2.0));
   float undertow=tide(p*1.25+vec3(.4,-.3,.6),time-3.0);
   vec3 color=base*(.78+.28*light);
   color+=vec3(.008,.18,.20)*ribbon*(.3+.7*smoothstep(-.5,.6,undertow));
-  color+=vec3(.09,.24,.27)*pearl*.48;
-  vec3 rim=mix(vec3(.20,.95,.79),vec3(.38,.68,1.0),smoothstep(-.7,.7,p.x));
-  color+=rim*fresnel*(1.25+.16*sin(field*3.0+time*.18));
+  color+=vec3(.12,.38,.66)*pearl*.62;
+  vec3 rim=mix(vec3(.14,.85,1.0),vec3(.30,.62,1.0),smoothstep(-.7,.7,p.x));
+  color+=rim*fresnel*(1.45+.16*sin(field*3.0+time*.18));
   gl_FragColor=vec4(color,1.0);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>
