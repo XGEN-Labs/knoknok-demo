@@ -57,8 +57,8 @@ export function cardArtwork(data){
   const lines=linesFor(text,actual,w,maxLines,weight,family);
   items.push({type:'text',kind,text,lines,x,y,w,h,size:actual,weight,family,color,align,lineHeight});
  };
- const tags=Array.isArray(data.tags)?data.tags:[],sparse=tags.length===0;
- const portrait=sparse?{x:210,y:108,w:180,h:180}:{x:52,y:118,w:152,h:152};
+ const tags=Array.isArray(data.tags)?data.tags:[];
+ const portrait={x:52,y:118,w:152,h:152};
  const contentLeft=portrait.x-8,contentWidth=Math.min(492,CARD_WIDTH-contentLeft-44);
  // Align visible logo ink, biography and sticker rows with the avatar ring.
  // The selected 2172px PNG's alpha>=32 ink starts at x76; its size stays unchanged.
@@ -66,18 +66,18 @@ export function cardArtwork(data){
  items.push({type:'logo',x:contentLeft-logoWidth*76/2172,y:24+(184/3)*(371.5-363.5*logoScale)/724,w:logoWidth,h:logoWidth/3,color:CARD_DETAIL_INK});
  items.push({type:'rect',x:portrait.x-8,y:portrait.y-8,w:portrait.w+16,h:portrait.h+16,fill:'#e5eace',r:portrait.w/2+8});
  items.push({type:'avatar',...portrait,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f4f1e7',pad:data.avatar?0:10});
- txt('name',data.name,sparse?54:230,sparse?316:136,sparse?492:318,sparse?92:116,48,{weight:500,family:'name',align:sparse?'center':'left',maxLines:2,lineHeight:1.2});
+ txt('name',data.name,230,136,318,116,48,{weight:500,family:'name',align:'left',maxLines:2,lineHeight:1.2});
  const nameItem=items.find(item=>item.kind==='name');
- const nameBottom=nameItem?nameItem.y+nameItem.lines.length*nameItem.size*nameItem.lineHeight:(sparse?408:252);
+ const nameBottom=nameItem?nameItem.y+nameItem.lines.length*nameItem.size*nameItem.lineHeight:252;
  // Region and language belong to the identity block, directly below the name.
  // Measure their actual height so long names and bilingual metadata never collide.
  const meta=[data.region,data.language].filter(Boolean).join(' · ');
- txt('meta',meta,sparse?60:230,nameBottom+12,sparse?480:318,58,22,{family:'hand',color:'#737568',align:sparse?'center':'left',maxLines:2,lineHeight:1.25});
+ txt('meta',meta,230,nameBottom+12,318,58,22,{family:'hand',color:'#737568',align:'left',maxLines:2,lineHeight:1.25});
  const metaItem=items.find(item=>item.kind==='meta');
  const identityBottom=metaItem?metaItem.y+metaItem.lines.length*metaItem.size*metaItem.lineHeight:nameBottom;
  const bio=String(data.bio||'').trim();
- const bioY=Math.max(sparse?430:306,identityBottom+24);
- txt('bio',bio,contentLeft,bioY,contentWidth,sparse?104:78,sparse?27:28,{color:CARD_DETAIL_INK,align:'left',maxLines:sparse?3:2,lineHeight:sparse?1.32:1.35});
+ const bioY=Math.max(306,identityBottom+24);
+ txt('bio',bio,contentLeft,bioY,contentWidth,78,28,{color:CARD_DETAIL_INK,align:'left',maxLines:2,lineHeight:1.35});
  const rows=[[]],gap=14,size=30,padX=20,padY=21,iconSize=32,iconSpace=42;
  for(const entry of tags){
   const text=typeof entry==='string'?entry:entry.label||entry.text||'';

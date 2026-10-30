@@ -3,13 +3,13 @@
   "createdAt": "2026-10-29T12:41:18.418558Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 164117915,
+  "payloadBytes": 164117702,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 129129,
-      "sha256": "6559ea28020055bc3c302147ec5bb647d0361ade843e3f30534ea428fa6e56c7"
+      "bytes": 129131,
+      "sha256": "3a290aa164767d525c6447790e40dddc889b029f5f53d24383cbaf8abb9f3cef"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1514,8 +1514,8 @@
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 7663,
-      "sha256": "fc7112bb807067d624d0f433d6ab5f5f3adb3d2eb40344fefd8fcea3acdbd71e"
+      "bytes": 7446,
+      "sha256": "df6da90bec7fc5792b68eed89be785ffbc51658ebb73db79cea199c9ce0eee7c"
     },
     {
       "source": "card-design.mjs",
@@ -1779,7 +1779,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 11532,
-      "sha256": "e47c98d961dcc63c8ac3d1d662200baab29694cedad526cc32b7fa02d7943e89"
+      "sha256": "e7af018060601e58352b1ff54b6ba4b470b5e5cd9328be3bf549a164bc372471"
     },
     {
       "source": "journey-experience.css",
@@ -2000,8 +2000,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 15952,
-      "sha256": "4b94c15b52f37601a9b3756745aae07280d573177ec6551124f28753ee54d754"
+      "bytes": 15954,
+      "sha256": "212dc69e5e151ccdabdc715fe35efe62db7afeee75a1cea5976eaf8496d9f770"
     },
     {
       "source": "realm-scene.css",
