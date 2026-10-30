@@ -1,8 +1,9 @@
 # New accounts: Landing before Agent creation
 
-Development status: the protocol and bound-family presentation are implemented on
-`codex/landing-before-agent`. New-account first-encounter film treatment still
-awaits the user's design decision. This is not a release or production receipt.
+The user confirmed on 2026-10-30 that all families temporarily use the existing
+Klin first-encounter film. This exception applies only to that film; actual
+family selection, published persona creation and bound-family presentation stay
+account-specific. No static replacement of the first-encounter film is made.
 
 ## Scope and original design
 
@@ -91,9 +92,10 @@ selected Studio character, so the embedded Klin actor in the original room film
 cannot override the real assignment. Existing controls and page layout remain.
 
 The current first-encounter film has Klin baked into its images and voice.
-Studio supplies the verified static dual-form art; replacing that film in the
-new flow requires the pending user choice. Do not ship a misleading non-metal
-assignment with that film or claim that five-family films have been verified.
+Studio supplies the verified static dual-form art for bound-family presentation.
+The user explicitly approved temporarily sharing the existing Klin encounter film
+across all families; the film does not determine the account's real family. No
+five-family encounter films or replacement encounter design are claimed.
 
 ## Compatibility and checks
 
@@ -116,4 +118,4 @@ Returning to an old Web can strand new accounts on the setup page; it must not
 cause Auth to fall back to default-earth provisioning. Do not downgrade Auth to
 an implementation that loses the new input/plan marker, and never restore an
 old account snapshot over newer data. Final fixed versions and release contents
-are to be recorded only after the remaining design decision and verification.
+are recorded in the fixed release manifest and deployment receipt.

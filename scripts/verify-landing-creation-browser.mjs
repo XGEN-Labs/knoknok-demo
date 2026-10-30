@@ -56,5 +56,5 @@ try{
  await legacy.addCookies([{name:'livefixture',value:'202',url:fixture.url}]);await old.goto(fixture.url);await old.locator('#private-message').waitFor();
  assert.match(await old.locator('.home-chat-avatar img').getAttribute('src'),/klin-avatar/);assert.equal(await old.locator('[data-screen="landing"]').count(),0);
  checks.push('existing account retains original avatar and skips Landing');
- assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks,scope:'local synthetic protocol fixture; no production account writes; Landing film acceptance pending'},null,2));
+ assert.deepEqual(errors,[]);console.log(JSON.stringify({passed:true,checks,scope:'local synthetic protocol fixture; no production account writes; existing Klin encounter film reused per explicit user decision'},null,2));
 }finally{await browser.close();await fixture.close();}
