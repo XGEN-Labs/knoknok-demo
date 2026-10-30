@@ -1,11 +1,81 @@
-export const ROOM_LIGHT_STORAGE_KEY = 'knoknok-room-light-v1';
+export const ROOM_LIGHT_STORAGE_KEY = 'knoknok-room-light-v2';
 export const roomThemeReady = theme => Boolean(theme?.poster && theme?.roomPoster);
-export function readRoomLightPreference(storage) {
-  try {return storage?.getItem(ROOM_LIGHT_STORAGE_KEY) === 'bright' ? 'bright' : 'warm';} catch {return 'warm';}
+const isRoomTheme = value => value === 'bright' || value === 'warm';
+
+// Device-local wall time is intentional: birth time, server time and UTC do not
+// choose the user's present room. A night belongs to the day on which it began.
+export function roomLightPeriod(date = new Date()) {
+  const local = new Date(date);
+  if (!Number.isFinite(local.getTime())) return {theme: 'bright', key: 'invalid', valid: false};
+  const hour = local.getHours(), day = hour >= 7 && hour < 19;
+  if (hour < 7) local.setDate(local.getDate() - 1);
+  const calendar = [local.getFullYear(), String(local.getMonth() + 1).padStart(2, '0'), String(local.getDate()).padStart(2, '0')].join('-');
+  return {theme: day ? 'bright' : 'warm', key: `${calendar}:${day ? 'day' : 'night'}`, valid: true};
 }
-export function writeRoomLightPreference(storage, value) {
-  try {storage?.setItem(ROOM_LIGHT_STORAGE_KEY, value === 'bright' ? 'bright' : 'warm');} catch {}
+function readRoomOverride(storage) {
+  try {
+    const record = JSON.parse(storage?.getItem(ROOM_LIGHT_STORAGE_KEY) || 'null');
+    return isRoomTheme(record?.theme) && typeof record?.period === 'string' ? {theme: record.theme, period: record.period} : null;
+  } catch {return null;}
 }
+export function readRoomLightPreference(storage, date = new Date()) {
+  const period = roomLightPeriod(date), record = readRoomOverride(storage);
+  return period.valid && record?.period === period.key ? record.theme : period.theme;
+}
+export function writeRoomLightPreference(storage, value, date = new Date()) {
+  const period = roomLightPeriod(date);
+  if (!isRoomTheme(value) || !period.valid) return null;
+  const record = {theme: value, period: period.key};
+  try {storage?.setItem(ROOM_LIGHT_STORAGE_KEY, JSON.stringify(record));} catch {}
+  return record;
+}
+
+// Automatic changes wait for an idle, unobstructed home. One preparation at a
+// time preserves the decoded film; failed loads retry on a later clock event.
+export function createRoomLightClock({storage, now = () => new Date(), doc, win = doc?.defaultView, getTheme, applyTheme, canApply = () => true, isBusy = () => false, onChange} = {}) {
+  let override = readRoomOverride(storage), pending = null, disposed = false;
+  const selection = () => {
+    const period = roomLightPeriod(now()), manual = period.valid && override?.period === period.key;
+    return {theme: manual ? override.theme : period.theme, mode: manual ? 'manual' : 'auto', period: period.key};
+  };
+  const announce = () => {const value = selection(); onChange?.(value); return value;};
+  function refresh() {
+    if (disposed) return Promise.resolve(false);
+    const value = announce();
+    if (doc?.hidden || !canApply() || isBusy()) return Promise.resolve(false);
+    if (value.theme === getTheme()) return Promise.resolve(true);
+    if (pending) return pending;
+    const task = Promise.resolve().then(() => {
+      if (disposed || doc?.hidden || !canApply() || isBusy() || selection().theme !== value.theme) return false;
+      return applyTheme(value.theme, {manual: false, isCurrent: () => !disposed && !doc?.hidden && canApply() && selection().theme === value.theme});
+    }).catch(() => false).finally(() => {if (pending === task) pending = null;});
+    pending = task;
+    return task;
+  }
+  function remember(theme, requestedPeriod = roomLightPeriod(now()).key) {
+    if (disposed || !isRoomTheme(theme)) return;
+    const current = roomLightPeriod(now());
+    // A click that finishes after 07/19 must not silently extend yesterday's
+    // manual choice across the new automatic period.
+    if (current.valid && requestedPeriod === current.key) override = writeRoomLightPreference(storage, theme, now());
+    else override = null;
+    announce();
+  }
+  const visibility = () => {if (!doc?.hidden) void refresh();};
+  const focus = () => {void refresh();};
+  doc?.addEventListener?.('visibilitychange', visibility);
+  win?.addEventListener?.('focus', focus);
+  const timer = win?.setInterval?.(focus, 60000);
+  announce();
+  return {selection, remember, refresh, dispose() {
+    if (disposed) return;
+    disposed = true;
+    if (timer !== undefined) win?.clearInterval?.(timer);
+    doc?.removeEventListener?.('visibilitychange', visibility);
+    win?.removeEventListener?.('focus', focus);
+  }};
+}
+
 export function projectRoomLamp(width, height, theme) {
   if (!(width > 0 && height > 0 && theme?.width > 0 && theme?.height > 0 && theme?.lamp)) return null;
   const s = Math.max(width / theme.width, height / theme.height);
@@ -43,8 +113,8 @@ export function createRoomLightSwitch({phone, getState, onToggle} = {}) {
     button.hidden = !state.active || !rect || blocked;
     button.disabled = busy || !state.targetReady;
     button.setAttribute('aria-pressed', String(state.id === 'bright'));
-    button.setAttribute('aria-label', state.targetReady ? `切換為${state.id === 'bright' ? '暖光' : '明亮'}房間` : '明亮房間素材準備中');
-    button.title = state.targetReady ? `點燈切換為${state.id === 'bright' ? '暖光' : '明亮'}房間` : '明亮房間素材準備中';
+    button.setAttribute('aria-label', state.targetReady ? `切換為${state.id === 'bright' ? '夜晚' : '白天'}場景` : `${state.id === 'bright' ? '夜晚' : '白天'}場景素材準備中`);
+    button.title = state.targetReady ? `點燈切換為${state.id === 'bright' ? '夜晚' : '白天'}場景` : `${state.id === 'bright' ? '夜晚' : '白天'}場景素材準備中`;
     if (rect) Object.assign(button.style, {left:`${rect.x}px`, top:`${rect.y}px`, width:`${rect.width}px`, height:`${rect.height}px`});
   }
   const click = event => {

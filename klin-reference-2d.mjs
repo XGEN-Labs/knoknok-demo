@@ -1,7 +1,7 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261030-klin-room-v11';
-import {ROOM_LIGHT_THEMES} from './room-light-assets.mjs?v=20261030-klin-room-v11';
-import {roomThemeReady, readRoomLightPreference, writeRoomLightPreference, createRoomLightSwitch, captureRoomFade, prepareRoomFilm, seekRoomFilm} from './room-light-theme.mjs?v=20261029-klin-room-v10';
+import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261030-klin-room-daynight-v12';
+import {ROOM_LIGHT_THEMES} from './room-light-assets.mjs?v=20261030-klin-room-daynight-v12';
+import {roomThemeReady, readRoomLightPreference, roomLightPeriod, createRoomLightClock, createRoomLightSwitch, captureRoomFade, prepareRoomFilm, seekRoomFilm} from './room-light-theme.mjs?v=20261030-klin-room-daynight-v12';
 import { createRoomVideo } from './room-video.mjs?v=20261029-klin-room-v10';
 import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261030-klin-room-v11';
 
@@ -46,7 +46,7 @@ export function illustratedCardFrame(progress, layout, width, height) {
   };
 }
 
-export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_LIGHT_THEMES, roomThemeStorage, characterAssets = klinAssets, characterFilm = true} = {}) {
+export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_LIGHT_THEMES, roomThemeStorage, roomThemeNow = () => new Date(), characterAssets = klinAssets, characterFilm = true} = {}) {
   if (!host) throw new TypeError('createKlinWorld requires a host element.');
   const doc = host.ownerDocument;
   const win = doc.defaultView || globalThis;
@@ -71,8 +71,9 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   const state = {page: 'home', stage: 'adult', layout: getIllustratedLayout('home'), reduced: !!reducedMotion, active: true, disposed: false, action: null, frame: 0, conversation: false, participants: [], lounge: {}, realm: {}, portal: 'idle'};
   let themeStorage = roomThemeStorage;
   if (themeStorage === undefined) {try {themeStorage = win.localStorage;} catch {}}
-  const preferredTheme = readRoomLightPreference(themeStorage);
+  const preferredTheme = readRoomLightPreference(themeStorage, roomThemeNow());
   let roomTheme = roomThemeReady(roomThemes[preferredTheme]) ? preferredTheme : 'warm';
+  let roomClock = null;
   let themeRequest = 0, swappingTheme = false, themeFade = null, lightSwitch = null, pendingThemePreparation = null, themeSeekHeld = 0;
   const assetURL = asset => asset ? new URL(asset, import.meta.url).href : null;
   const themeConfig = () => roomThemes[roomTheme];
@@ -107,6 +108,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
     host.dataset.personalRoom = owns ? personalRoom.status.mode : 'off';
     host.dataset.personalRoomHeld = String(personalRoom.status.held === true);
     lightSwitch?.update();
+    void roomClock?.refresh();
   }
   const prepareThemeImage = (src, signal) => new Promise((resolve, reject) => {
     const image = node('img', 'klin-illustrated-plate'); image.alt = ''; image.draggable = false;
@@ -122,7 +124,8 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
     image.src = assetURL(src);
     if (image.complete && image.naturalWidth) loaded();
   });
-  async function setRoomTheme(next) {
+  async function setRoomTheme(next, {manual = true, isCurrent = () => true} = {}) {
+    const requestedPeriod = roomLightPeriod(roomThemeNow()).key;
     const request = ++themeRequest;
     pendingThemePreparation?.abort();
     if (state.disposed || !roomThemeReady(roomThemes[next])) return false;
@@ -131,7 +134,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
     const films = {}, prepared = [], diagnostics = []; let committed = false, heldForSeek = false;
     const diagnose = data => {diagnostics.push({at: now(), docHidden: !!doc.hidden, ...data}); if (diagnostics.length > 60) diagnostics.shift(); host.dataset.roomThemePhase = data.phase; host.dataset.roomThemeEvents = JSON.stringify(diagnostics);};
     diagnose({phase: 'images'});
-    const valid = () => !preparation.signal.aborted && !state.disposed && request === themeRequest && state.page === 'home' && state.active && !state.action && !doc.hidden && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true';
+    const valid = () => isCurrent() && !preparation.signal.aborted && !state.disposed && request === themeRequest && state.page === 'home' && state.active && !state.action && !doc.hidden && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true';
     try {
       const target = roomThemes[next];
       const [posterImage, roomImage] = await Promise.all([prepareThemeImage(target.poster, preparation.signal), prepareThemeImage(target.roomPoster, preparation.signal)]);
@@ -167,7 +170,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
       swappingTheme = false; committed = true;
       host.dataset.roomLight = roomTheme;
       host.parentElement?.style?.setProperty?.('--kn-room-scene-image', `url("${assetURL(themeConfig().roomPoster)}")`);
-      writeRoomLightPreference(themeStorage, roomTheme);
+      if (manual) roomClock?.remember(roomTheme, requestedPeriod);
       syncMedia(); themeFade?.start();
       diagnose({phase: 'committed', theme: next});
       return true;
@@ -330,6 +333,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
       resume();
     }
   }
+  roomClock = createRoomLightClock({storage: themeStorage, now: roomThemeNow, doc, win, getTheme: () => roomTheme, applyTheme: setRoomTheme, isBusy: () => !!pendingThemePreparation, canApply: () => !state.disposed && state.active && state.page === 'home' && renderedLayout.world === 'home' && !state.action && !personalRoom.status.responding && !host.parentElement?.dataset?.conversationAvatarMotion && host.parentElement?.dataset?.sceneOverlay !== 'true', onChange: value => {host.dataset.roomLightMode = value.mode; host.dataset.roomLightPeriod = value.period;}});
   const visibility = () => {if (doc.hidden) {pendingThemePreparation?.abort(); pause();} else resume();};
   doc.addEventListener('visibilitychange', visibility);
   const observer = new win.ResizeObserver(() => draw()); observer.observe(host);
@@ -353,7 +357,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
     if (state.disposed) return false; host.dataset.world = 'ready'; return true;
   }).catch(() => { host.dataset.world = 'fallback'; return false; });
   const ready = Promise.race([loadedReady, disposedReady]);
-  function dispose() {if (state.disposed) return; conversationReturn?.cancel(); stop(); state.disposed = true; themeRequest++; pendingThemePreparation?.abort(); themeFade?.dispose(); lightSwitch?.dispose(); if (hitTarget) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = ''; personalRoom.dispose(); roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); bridgeObserver?.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
+  function dispose() {if (state.disposed) return; conversationReturn?.cancel(); stop(); state.disposed = true; roomClock?.dispose(); themeRequest++; pendingThemePreparation?.abort(); themeFade?.dispose(); lightSwitch?.dispose(); if (hitTarget) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = ''; personalRoom.dispose(); roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); bridgeObserver?.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
   const completeWithoutGrowth = options => { let cancelled = false; queueMicrotask(() => {if (!cancelled && !state.disposed) {options?.onSigned?.(); options?.onComplete?.();}}); return () => {cancelled = true;}; };
   return {
     get roomSceneAsset() {return themeConfig().roomPoster;},

@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T08:43:19.503178Z",
+  "createdAt": "2026-10-30T10:37:49.420057Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 182109910,
+  "payloadBytes": 187413051,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 135219,
-      "sha256": "0631a79bb1ca385fe101b011816954672069514c356d3298967aba7f64864b5f"
+      "bytes": 135237,
+      "sha256": "8347a4a396f6dda3c83187d597399d9cabf069634e8064b1674f59ea269c36e5"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1472,8 +1472,8 @@
     {
       "source": "auth-entry.mjs",
       "path": "auth-entry.mjs",
-      "bytes": 21049,
-      "sha256": "737e5c2559a6cc942f1c584935e13767c3bee389eb3ad6f42dc68dab0bfc799c"
+      "bytes": 21661,
+      "sha256": "9b7d5ebe656ad8292778c675f75f58383c8545c72266a4fa96cf8a3c96b55365"
     },
     {
       "source": "auth-hours-polish.css",
@@ -1598,8 +1598,8 @@
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 15587,
-      "sha256": "153279228088d3226235d1665cdec32cafd03ac36d6ab507be6dcbac27fb235a"
+      "bytes": 15720,
+      "sha256": "f894220e0de15c7e24e8a2077b71979ee96a8d1ed6f1e52ac2614dac8e1f13ea"
     },
     {
       "source": "conversation-avatar-motion.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11767,
-      "sha256": "d8f12981c6fa5fb5e059f01079a710e57a02789616f3510bcc28db9204c7d43e"
+      "bytes": 11775,
+      "sha256": "66432a7f43d1b0f1186796b4d0d9e8be10dfbd2c4b20d3a98676600b60e68a0c"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 26712,
-      "sha256": "cb787d42f4aae90291de830318eb91222027778ae7dc4be8add1a1ecffdea44a"
+      "bytes": 27581,
+      "sha256": "95d10c16fb01407d652bed3b2a388e2f06215c647be7244f3e8a8d4694f8495b"
     },
     {
       "source": "klin-world-2d.css",
@@ -2072,8 +2072,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 864,
-      "sha256": "232217509c7da7fb16babcf8c93c2f0d7d6ac93edd4768da3d03587daba83c59"
+      "bytes": 859,
+      "sha256": "05e43852222a1c289527cf358b754ecb96a3492a1635247f279f0ca6c5360d87"
     },
     {
       "source": "scene-control-glass.css",
@@ -2432,14 +2432,14 @@
     {
       "source": "live-session.mjs",
       "path": "live-session.mjs",
-      "bytes": 7439,
-      "sha256": "79cfcfcb8bef029f8a75ad24297c3a8b58f0269d31bd0150346f429d5e477bef"
+      "bytes": 7899,
+      "sha256": "47ac528c23dc48cb5e53f8dc2f392b8b265f7944d865a03b53f55aa1bef75af5"
     },
     {
       "source": "compat/web-naming/landing-handoff.mjs",
       "path": "compat/web-naming/landing-handoff.mjs",
-      "bytes": 9786,
-      "sha256": "a8324e1ab918cd99c9048eb9b35af721fb8ffb8fd7d7abacbca156d1f075d772"
+      "bytes": 9818,
+      "sha256": "ad59aae0c0d94151a434a00d2b940709a8bc37d33dcacdbba8463ae82cfc7514"
     },
     {
       "source": "chat-edge-blur.css",
@@ -2570,8 +2570,8 @@
     {
       "source": "room-light-assets.mjs",
       "path": "room-light-assets.mjs",
-      "bytes": 1216,
-      "sha256": "4f827747f16ab8a9dd19443c576f7c0c07632e6f19898591176752b687d81ab4"
+      "bytes": 1225,
+      "sha256": "80f7df1b65e0f9128a69a5ee9157767a636f9d2d7a95b91613595ebe35b46a1a"
     },
     {
       "source": "room-light-theme.css",
@@ -2582,8 +2582,8 @@
     {
       "source": "room-light-theme.mjs",
       "path": "room-light-theme.mjs",
-      "bytes": 9075,
-      "sha256": "6ae900e27b41e36c0ae1896180a7a567708640b8057177b6e5589ed792d5e5cf"
+      "bytes": 12937,
+      "sha256": "61b7a9ced546466bff9f030a1963fe4ac5a6c8f7b1d81c088077fd8367d9a3f4"
     },
     {
       "source": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
@@ -2690,8 +2690,8 @@
     {
       "source": "assets/studio-family-artwork.svg",
       "path": "assets/studio-family-artwork.svg",
-      "bytes": 1041828,
-      "sha256": "d4814cf7a3c3522690d76d97adb0e1b79a9a6b1b66c0e7e14a4ed0e86f61fa11"
+      "bytes": 2091121,
+      "sha256": "89637eb758bd6b1427b70d7e0ed6b9f3c43a5b7055734b1eb648c9866cc1d4f9"
     },
     {
       "source": "family-presentation.mjs",
@@ -2702,8 +2702,8 @@
     {
       "source": "landing-creation.mjs",
       "path": "landing-creation.mjs",
-      "bytes": 3602,
-      "sha256": "a9d5930a9439c1538addedbdcae91b4c0fb077ca2fc0ac5f0d9463fcf584bab7"
+      "bytes": 4116,
+      "sha256": "c84447011ab149dadc0fba3506594e03c13e07c73b748b1ee3f8e5eb33ae91f1"
     },
     {
       "source": "landing-family-videos.mjs",
@@ -2716,6 +2716,36 @@
       "path": "studio-family-data.mjs",
       "bytes": 1647,
       "sha256": "7fbf6ea72ff9da34e98727c79bc09f8d6e093d675b51c4e02d73bd33c5a3b02c"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/idle.mp4",
+      "path": "assets/klin-room-night-20261030-v12/idle.mp4",
+      "bytes": 1705223,
+      "sha256": "d7ddad336361dd3b449cc8443404f49fb7f8498a6176491b47189ce5790587e9"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/poster.png",
+      "path": "assets/klin-room-night-20261030-v12/poster.png",
+      "bytes": 578111,
+      "sha256": "7d4730bf996b3c410e999170730c8dc76715881ba8c75c1048fd155e4fa3b430"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/react.mp4",
+      "path": "assets/klin-room-night-20261030-v12/react.mp4",
+      "bytes": 832156,
+      "sha256": "106199ae6cf7a86aca4cbeec22341dd7a2d6f42b477404788cadc7fafd8eca8d"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/room-loop.mp4",
+      "path": "assets/klin-room-night-20261030-v12/room-loop.mp4",
+      "bytes": 519977,
+      "sha256": "99e5cf8d3ee8c5d182766b2fa9433a8977a94c7415b4b44ee6d2d0d95e87991e"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/room-only.png",
+      "path": "assets/klin-room-night-20261030-v12/room-only.png",
+      "bytes": 611869,
+      "sha256": "30900208e6a13c39ea5bae9f43f45326178c7e804efd44702db4a77435d737b3"
     }
   ],
   "runtimeDependencies": [
