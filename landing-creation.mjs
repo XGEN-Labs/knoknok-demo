@@ -21,9 +21,20 @@ export function prepareLandingSubmission(state,{randomUUID=()=>globalThis.crypto
 // This is a server-held receipt for this new-flow account, not a local selector.
 // Restore only the intake fields, retaining history, card edits and other data.
 export function restoreLandingSubmission(state,bootstrap){
- if(!isLandingCreation(bootstrap)||bootstrap.landingCreation.state!=='submitted'||bootstrap.onboarding?.status!=='required')return false;
+ if(!isLandingCreation(bootstrap)||bootstrap.landingCreation.state!=='submitted')return false;
  const receipt=bootstrap.landingCreation,input=receipt.input,contract=input?.contract;
  if(!input||fields.some(key=>!Object.hasOwn(input,key))||contract?.version!==1||!Number.isFinite(contract.signedAt)||contract.signedAt<=0||contract.userName!==input.userName||contract.companionName!==input.agentName)return false;
+ if(bootstrap.onboarding?.status==='completed'){
+  // A fresh browser has no local nickname. Restore only the default display
+  // name from the signed receipt, preserving later local edits and onboarding.
+  if(!state.users.a.companionName||state.users.a.companionName==='Klin'){
+   const savedName=state.private.a.companion.name;
+   const name=savedName&&savedName!=='Klin'?savedName:input.agentName;
+   state.users.a.companionName=name;state.private.a.companion.name=name;
+  }
+  return true;
+ }
+ if(bootstrap.onboarding?.status!=='required')return false;
  const answers={where:'我在哪兒',...Object.fromEntries(fields.map(key=>[key,input[key]])),contractLight:'打開我們的契約',name:input.userName,companionName:input.agentName};
  const conversation=normalizeOnboardingConversation({version:3,answers,messages:[],complete:false,migration:{implicitInteractions:['where','contractLight']}},Math.max(state.now,Date.now()));
  if(conversation.step!=='complete')return false;

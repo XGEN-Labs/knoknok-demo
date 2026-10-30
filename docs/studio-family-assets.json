@@ -1,11 +1,132 @@
 {
-  "sourceRepository": "XGEN-Labs/nok-character-studio",
-  "sourceCommit": "b04749a7b4af2c25bf475356f903d321e3bf8b9c",
+  "sourceRepository": "XGEN-Labs/knoknok-demo",
+  "sourceCommit": "0b5750196bc73d940a412e5576f4f7b430954e82",
   "sourceFiles": [
-    "public/studio/family-data.js",
-    "public/studio/appearance.js",
-    "public/studio/assets/nok-family-reference.jpg"
+    "assets/shared-elements-20261030-88/characters.png",
+    "element-character-art.mjs"
   ],
-  "imageSha256": "873c2a86ce36e94411925ac07ec7d747a7a6e170544937c95eff9ecd7a4deb8a",
-  "use": "Unchanged source JPEG embedded in SVG; named views use original Studio crop rectangles. No prompt or private document copied."
+  "imageSha256": "31ae98db62fd659425c21dcca9b31e6decf53ae53feda4d457f31d9cb3f7ec65",
+  "use": "Unchanged rongyu transparent PNG embedded in existing SVG URL and view IDs. Full-body crops isolate each family; heads use rongyu frames. No pixel alteration, new character, room/layout or identity change. Family text remains from existing Studio data.",
+  "views": {
+    "metal-adult": [
+      0,
+      285,
+      310,
+      335
+    ],
+    "metal-baby": [
+      0,
+      645,
+      310,
+      325
+    ],
+    "metal-head": [
+      51,
+      300,
+      240,
+      240
+    ],
+    "metal-babyHead": [
+      0,
+      645,
+      310,
+      325
+    ],
+    "wood-adult": [
+      310,
+      175,
+      294,
+      445
+    ],
+    "wood-baby": [
+      310,
+      645,
+      294,
+      325
+    ],
+    "wood-head": [
+      337,
+      283,
+      240,
+      240
+    ],
+    "wood-babyHead": [
+      310,
+      645,
+      294,
+      325
+    ],
+    "water-adult": [
+      604,
+      285,
+      296,
+      335
+    ],
+    "water-baby": [
+      604,
+      645,
+      296,
+      325
+    ],
+    "water-head": [
+      630,
+      299,
+      240,
+      240
+    ],
+    "water-babyHead": [
+      604,
+      645,
+      296,
+      325
+    ],
+    "fire-adult": [
+      900,
+      100,
+      299,
+      520
+    ],
+    "fire-baby": [
+      900,
+      645,
+      299,
+      325
+    ],
+    "fire-head": [
+      927,
+      295,
+      240,
+      240
+    ],
+    "fire-babyHead": [
+      900,
+      645,
+      299,
+      325
+    ],
+    "earth-adult": [
+      1199,
+      285,
+      300,
+      335
+    ],
+    "earth-baby": [
+      1199,
+      645,
+      300,
+      325
+    ],
+    "earth-head": [
+      1223,
+      300,
+      240,
+      240
+    ],
+    "earth-babyHead": [
+      1199,
+      645,
+      300,
+      325
+    ]
+  }
 }
