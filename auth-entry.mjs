@@ -57,6 +57,7 @@ export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin =
     signIn:(username,password,{signal}={})=>request('/api/auth/sign-in',{body:{username,password},signal}),
     register:(username,password,{signal}={})=>request('/api/auth/register',{body:{username,password},signal}),
     bootstrap:({signal}={})=>request('/api/auth/bootstrap',{method:'GET',signal}),
+    submitLanding:(owner,submission,{signal}={})=>request('/api/auth/agent-initialization/landing',{body:submission,owner,signal}),
     completeOnboarding:(owner,{signal}={})=>request('/api/auth/onboarding/complete',{body:{},owner,signal}),
     logout:({signal}={})=>{
       if (!logoutPath) throw new AuthEntryError('尚未設定服務端登出介面，請稍後再試。',{status:501,code:'logout_unavailable'});
@@ -136,7 +137,14 @@ function cleanBootstrap(value) {
   const bound = value.nextAction === 'open_chat' && value.agent.status === 'bound' && nonempty(value.agent.agentId) && nonempty(value.agent.roomId);
   const setup = value.nextAction === 'setup_agent' && value.agent.status === 'setup_required';
   if (!bound && !setup) throw protocolError();
-  return {user:clone(value.user),onboarding:cleanOnboarding(value.onboarding),accountStatus:'registered',nextAction:value.nextAction,agent:clone(value.agent),memory:plain(value.memory)?clone(value.memory):{status:'not_loaded'},...(value.chat?{chat:clone(value.chat)}:{}),...(value.demo===true?{demo:true,demoAccountKind:value.demoAccountKind}: {})};
+  const creation=value.landingCreation;
+  if(creation!==undefined&&(!plain(creation)||creation.flow!=='landing-v1'||!['awaiting_input','submitted'].includes(creation.state)))throw protocolError();
+  if(creation?.state==='awaiting_input'&&(!setup||value.onboarding?.status!=='required'))throw protocolError();
+  if(creation?.state==='submitted'){
+    const selection=creation.selection,input=creation.input,contract=input?.contract;
+    if(!nonempty(creation.requestId)||!plain(input)||!nonempty(input.userName)||!nonempty(input.agentName)||!nonempty(input.birthDate)||!nonempty(input.response)||!['birthTime','gender','birthPlace'].every(key=>input[key]===null||typeof input[key]==='string')||contract?.version!==1||!Number.isFinite(contract.signedAt)||contract.signedAt<=0||contract.userName!==input.userName||contract.companionName!==input.agentName||!plain(selection)||!['metal','wood','water','fire','earth'].includes(selection.familyId)||!nonempty(selection.personaSpecId)||!nonempty(selection.personaVersion)||!nonempty(selection.ruleVersion))throw protocolError();
+  }
+  return {user:clone(value.user),onboarding:cleanOnboarding(value.onboarding),accountStatus:'registered',nextAction:value.nextAction,agent:clone(value.agent),memory:plain(value.memory)?clone(value.memory):{status:'not_loaded'},...(creation?{landingCreation:clone(creation)}:{}),...(value.chat?{chat:clone(value.chat)}:{}),...(value.demo===true?{demo:true,demoAccountKind:value.demoAccountKind}: {})};
 }
 export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = () => {}, now = Date.now} = {}) {
   let state={step:'entry',username:'',passwordMode:null,busy:false,error:'',errorCode:'',retryAt:0,authenticated:false,bootstrap:null,user:null,adapterKind:adapter.kind||'api'};
@@ -152,7 +160,7 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
   function problem(error,token,patch={}) {
     if (!current(token) || error?.name==='AbortError') return snapshot();
     const status=Number(error?.status)||0,code=error?.code||'network_error';
-    const recovery=patch.step==='bootstrap'||['setup','bootstrap'].includes(state.step);
+    const recovery=patch.step==='bootstrap'||['setup','bootstrap','landing'].includes(state.step);
     const message=status===429?'操作有點頻繁，請稍等後再試。':status===503?'服務暫時不可用，請稍後重試。':status===401?'帳號或密碼不正確，或帳號暫不可用。':code==='invalid_response'?'服務回覆不完整，請重試。':status===0?'連線暫時中斷，請重試。':recovery?'暫時無法確認帳號或伙伴狀態，請稍後重新載入。':error?.message||'暫時無法完成，請重試。';
     return emit({busy:false,error:message,errorCode:code,retryAt:status===429?(error.retryAt||now()+30000):0,...patch});
   }
@@ -160,13 +168,13 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
     if (!plain(result) || !nonempty(result.username) || !['login','register'].includes(result.nextAction) || (result.nextAction==='register'&&!['set_password','assigned_password'].includes(result.passwordMode))) throw protocolError();
     emit({step:result.nextAction,username:result.username,passwordMode:result.nextAction==='register'?result.passwordMode:null,busy:false,error:'',errorCode:'',retryAt:0});
   }
-  async function restore(token,{recoveryUsername=null}={}) {
+  async function restore(token,{recoveryUsername=null,recoveryOwner=null}={}) {
     try {
       const result=cleanBootstrap(await adapter.bootstrap({signal:token.signal}));if (!current(token)) return snapshot();
-      if (recoveryUsername && result.user.username!==recoveryUsername) {
+      if ((recoveryUsername && result.user.username!==recoveryUsername)||(recoveryOwner!==null&&String(result.user.id)!==String(recoveryOwner))) {
         return emit({step:'bootstrap',busy:false,authenticated:true,bootstrap:null,user:result.user,error:'目前登入的帳號與剛才不同，請先退出後重新檢查帳號。',errorCode:'session_mismatch'});
       }
-      return emit({step:result.agent.status==='bound'?'ready':'setup',username:result.user.username,authenticated:true,user:result.user,bootstrap:result,busy:false,error:'',errorCode:'',retryAt:0,passwordMode:null});
+      return emit({step:result.agent.status==='bound'?'ready':result.landingCreation?.state==='awaiting_input'?'landing':'setup',username:result.user.username,authenticated:true,user:result.user,bootstrap:result,busy:false,error:'',errorCode:'',retryAt:0,passwordMode:null});
     } catch(error) {
       if (!current(token)) return snapshot();
       if (error.status===401) return emit({step:'entry',authenticated:false,user:null,bootstrap:null,passwordMode:null,busy:false,error:'',errorCode:'',retryAt:0});
@@ -221,6 +229,22 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
       return emit({step:'entry',username:typeof username==='string'?username:state.username,passwordMode:null,busy:false,error:'',errorCode:'',authenticated:false,user:null,bootstrap:null});
     },
     async bootstrap() {if(waiting()||state.busy)return snapshot();return restore(begin({step:'bootstrap'}));},
+    async submitLanding(submission) {
+      if(waiting()||state.busy||!state.authenticated||state.step!=='landing'||state.bootstrap?.landingCreation?.flow!=='landing-v1'||state.bootstrap.landingCreation.state!=='awaiting_input')return snapshot();
+      if(!plain(submission)||!nonempty(submission.requestId)||!plain(submission.input))return emit({error:'請先完成初次見面的資料。',errorCode:'invalid_landing'});
+      const owner=state.user.id,username=state.user.username,token=begin();
+      try{
+        await adapter.submitLanding(owner,clone(submission),{signal:token.signal});
+        if(!current(token))return snapshot();
+        return restore(token,{recoveryUsername:username,recoveryOwner:owner});
+      }catch(error){
+        if(!current(token)||error?.name==='AbortError')return snapshot();
+        // A lost response may already have frozen the plan. Read it before any
+        // explicit retry; never create or choose a second companion blindly.
+        if(!error.status||error.code==='invalid_response'||error.status===409)return restore(token,{recoveryUsername:username,recoveryOwner:owner});
+        return problem(error,token);
+      }
+    },
     async completeOnboarding() {
       if(waiting()||state.busy||!state.authenticated||state.step!=='ready')return snapshot();
       const owner=state.user.id,token=begin();
