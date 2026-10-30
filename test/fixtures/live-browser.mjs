@@ -5,8 +5,8 @@ import {createServer} from 'node:http';
 import {once} from 'node:events';
 // Local protocol fixtures only. All identities, replies and native DTOs are synthetic.
 export async function liveBrowserFixture(webRoot){
- const manifest=JSON.parse(await readFile(join(webRoot,'build-manifest.json'),'utf8')),allowed=new Set(manifest.files.map(f=>f.path)),calls=[],status=new Map([[101,'required'],[202,'not_required'],[303,'completed']]),histories=new Map();
- const controls={failHandoff:false,failCompletion:false};
+ const manifest=JSON.parse(await readFile(join(webRoot,'build-manifest.json'),'utf8')),allowed=new Set(manifest.files.map(f=>f.path)),calls=[],status=new Map([[101,'required'],[202,'not_required'],[303,'completed']]),histories=new Map(),profiles=new Map();
+ const controls={failHandoff:false,failCompletion:false,failBirthProfile:false};
  const json=(res,code,value)=>{res.writeHead(code,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify(value));};
  const session=id=>({user:{id,username:`test${id}`},onboarding:{status:status.get(id)||'required'}});
  const server=createServer(async(req,res)=>{try{
@@ -19,7 +19,7 @@ export async function liveBrowserFixture(webRoot){
    headers['content-length']=end-start+1;res.writeHead(range?206:200,headers);const stream=createReadStream(file,{start,end});stream.on('error',()=>res.destroy());res.on('close',()=>stream.destroy());stream.pipe(res);return;
   }
   let body={};if(req.method!=='GET'){const parts=[];for await(const part of req)parts.push(part);body=JSON.parse(Buffer.concat(parts).toString()||'{}');}
-  calls.push({path:url.pathname,body,id,owner:req.headers['x-knok-user-id']});
+  calls.push({path:url.pathname,method:req.method,body,id,owner:req.headers['x-knok-user-id']});
   if(url.pathname==='/api/auth/entry')return json(res,200,{username:body.username,nextAction:body.username==='test101'?'register':'login',passwordMode:'set_password'});
   if(['/api/auth/sign-in','/api/auth/register'].includes(url.pathname)){
    const uid=Number(body.username.replace('test',''));if(![101,202,303].includes(uid)||body.password!=='fixture-only')return json(res,401,{code:'invalid_credentials'});
@@ -29,6 +29,13 @@ export async function liveBrowserFixture(webRoot){
   if(!id)return json(res,401,{error:'unauthenticated'});
   if(url.pathname==='/api/auth/bootstrap')return json(res,200,{...session(id),accountStatus:'registered',nextAction:'open_chat',agent:{status:'bound',agentId:`agent-${id}`,roomId:`room-${id}`},memory:{status:'not_loaded'}});
   if(req.headers['x-knok-user-id']!==String(id))return json(res,409,{error:'SESSION_CHANGED',code:'SESSION_CHANGED'});
+  if(url.pathname==='/api/web/birth-profile'){
+   const current=profiles.get(id)||{agentId:`agent-${id}`,roomId:`room-${id}`,version:0,profile:null,profileConsent:false,updatedAt:null};
+   if(req.method==='GET')return json(res,200,current);
+   if(controls.failBirthProfile)return json(res,503,{code:'profile_unavailable'});
+   if(body.expectedVersion!==current.version)return json(res,409,{code:'BIRTH_PROFILE_VERSION_CONFLICT'});
+   const saved={...current,version:current.version+1,profile:body.profile,profileConsent:body.profileConsent,updatedAt:'2026-10-30T00:00:00Z'};profiles.set(id,saved);return json(res,200,saved);
+  }
   if(url.pathname==='/api/auth/onboarding/complete'){if(controls.failCompletion)return json(res,503,{error:'completion_unavailable'});status.set(id,'completed');return json(res,200,{onboarding:{status:'completed'}});}
   if(url.pathname==='/api/web/chat/history')return json(res,200,{user:session(id).user,items:histories.get(id)||[],order:'asc',hasMore:false,nextCursor:null,resumeCursor:'fixture-cursor'});
   if(url.pathname==='/api/web/chat'){
@@ -39,5 +46,5 @@ export async function liveBrowserFixture(webRoot){
   }
   return json(res,404,{error:'missing'});
  }catch(error){json(res,500,{error:error.message});}});
- server.listen(0,'127.0.0.1');await once(server,'listening');return{url:`http://127.0.0.1:${server.address().port}`,calls,controls,status,histories,close:async()=>{const done=new Promise(r=>server.close(r));server.closeAllConnections();await done;}};
+ server.listen(0,'127.0.0.1');await once(server,'listening');return{url:`http://127.0.0.1:${server.address().port}`,calls,controls,status,histories,profiles,close:async()=>{const done=new Promise(r=>server.close(r));server.closeAllConnections();await done;}};
 }
