@@ -148,7 +148,7 @@ export function createLandingHandoff({ chat, accepted, request, cryptoImpl = glo
         if (request) await storeLanding(session, snapshot, alreadyAccepted);
         check(session);
         if (alreadyAccepted) return true;
-        const response = await chat([{ role: 'user', content: landingPrompt(snapshot) }], session.owner, session.abort.signal);
+        const response = await chat([{ role: 'user', content: landingPrompt(snapshot) }], session.owner, session.abort.signal, { purpose: 'landing_handoff' });
         check(session);
         // Gemini fallback cannot confirm that the native Agent/Memory path received
         // the intake. Retain the form and allow an explicit retry instead.

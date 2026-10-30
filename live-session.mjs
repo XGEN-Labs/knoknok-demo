@@ -6,7 +6,9 @@ export function createLiveSession({fetchImpl = globalThis.fetch, onChange = () =
   let items = new Map(), transient = [], cursor = null, historyReady = false, historyBusy = false, sending = false, error = '';
   const deleted = new Set();
   const snapshot = () => ({owner, historyReady, historyBusy, sending, error,
-    messages:[...items.values()].filter(m => m.kind === 'message').sort((a,b) => a.seq-b.seq).map(m => ({
+    // Keep authoritative events/cursors intact; only server-confirmed internal
+    // handoffs are omitted from the user transcript and later chat context.
+    messages:[...items.values()].filter(m => m.kind === 'message' && m.presentation !== 'landing_handoff').sort((a,b) => a.seq-b.seq).map(m => ({
       id:m.eventId, seq:m.seq, messageId:m.messageId, role:m.role || 'system', text:m.content ?? (m.status === 'scrubbed' ? '這則訊息已清除。' : '這則訊息已撤回。'),
       status:m.status, createdAt:m.at, source:'model', provider:'knok-agent',
     })).concat(transient)});
@@ -78,10 +80,11 @@ export function createLiveSession({fetchImpl = globalThis.fetch, onChange = () =
   return {
     getState:snapshot,request,history,
     activate(id) { abort.abort();abort=new AbortController();epoch++;owner=id==null?null:String(id);items=new Map();deleted.clear();transient=[];cursor=null;historyReady=false;historyBusy=false;sending=false;error='';return emit(); },
-    async chat(messages, expectedOwner, signal) {
+    async chat(messages, expectedOwner, signal, {purpose} = {}) {
       if(String(expectedOwner)!==owner || signal?.aborted)throw Object.assign(Error('session_changed'),{name:'AbortError'});
-      const result=await request('/api/web/chat',{method:'POST',body:{messages},timeout:70000});
+      const result=await request('/api/web/chat',{method:'POST',body:{messages,...(purpose==='landing_handoff'?{purpose}:{})},timeout:70000});
       if(typeof result?.text!=='string'||!result.text.trim()||result.source!=='model'||!['knok-agent','gemini'].includes(result.provider))throw new LiveRequestError('回覆尚未確認。');
+      if(purpose==='landing_handoff'&&(result.provider!=='knok-agent'||result.presentation!=='landing_handoff'))throw new LiveRequestError('伙伴暫時沒有完成資料交接，請再試一次。');
       return result;
     },
     async send(text) {
