@@ -1,5 +1,6 @@
+import { landingVideoSource } from './landing-family-videos.mjs';
 import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261028-opening-audio-68';
-import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261027-polish-48a';
+import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261030-avatar-return-85';
 import { createLandingGlass } from './landing-glass.mjs?v=20261028-diary-paper-71b';
 import { createLandingDeparture } from './landing-departure.mjs?v=20261023-experience-34d';
 import { LOADING_CHARACTER_MARKUP } from './loading-state.mjs?v=20261023-experience-34d';
@@ -16,13 +17,13 @@ export function landingVideoPresentation(next, held, departing = false, hadVisib
     gated: ['error','blocked'].includes(state) || (!hasFrame && ['loading','settling','audio-waiting'].includes(state))};
 }
 
-export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChange=()=>{}}={}) {
+export function createLandingVideoScene({phone,familyId=null,onPresentation=()=>{},onMediaChange=()=>{}}={}) {
   if(!phone)throw new TypeError('A phone host is required.');
   const host=document.createElement('div');host.className='landing-video-scene';host.hidden=true;
   const video=document.createElement('video');video.className='landing-video-plate';
   video.setAttribute('aria-hidden','true');video.setAttribute('playsinline','');video.setAttribute('webkit-playsinline','');
   video.muted=true;video.defaultMuted=true;video.playsInline=true;video.preload='auto';video.disablePictureInPicture=true;
-  video.src='assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4';
+  let source=landingVideoSource(familyId);video.src=source;
   const still=document.createElement('canvas');still.className='landing-video-still landing-video-plate';still.setAttribute('aria-hidden','true');
   const subtitle=document.createElement('p');subtitle.className='landing-video-subtitle';subtitle.hidden=true;
   const noking=document.createElement('div');noking.className='landing-video-noking kn-glass-control';noking.hidden=true;
@@ -146,8 +147,13 @@ export function createLandingVideoScene({phone,onPresentation=()=>{},onMediaChan
   resume.addEventListener('click',()=>{const restore=lastState.state==='waiting';heldFrame.release();player.retry({restore});applyState(player.getDiagnostics());});
   skip.addEventListener('click',()=>{if(player.skip())status.textContent=departure.pending?'我們回家了。':'影片已跳過，請回答這一題。';});
   return {
-    update({active:enabled=false,key='where',reducedMotion:stillness=false,restore=false}={}) {
+    update({active:enabled=false,key='where',familyId:selectedFamily=familyId,reducedMotion:stillness=false,restore=false}={}) {
       if(disposed)return;
+      const nextSource=landingVideoSource(selectedFamily);
+      if(nextSource!==source){
+        cancelOpeningAudio({restore:false});departure.cancel();player.update({active:false});heldFrame.release();
+        hasVisibleFrame=false;retainedCapture=false;source=nextSource;video.src=source;video.load();restore=true;
+      }
       if(!enabled||key!=='where'||restore||stillness){openingAudioAllowed=false;cancelOpeningAudio({restore:false});}
       reducedMotion=stillness;
       active=enabled;host.hidden=!active;if(!active){departure.cancel();gate.hidden=true;resume.hidden=true;skip.hidden=true;landingGlass.update({active:false});heldFrame.release();host.classList.remove('has-held-frame','is-resuming');presentedState='inactive';presentedReady=false;}phone.classList.toggle('landing-video-active',active);

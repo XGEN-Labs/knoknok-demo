@@ -1,9 +1,9 @@
 import { klinAssets } from './klin-companion.mjs?v=20261023-original-room-character-39';
-import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261029-klin-room-v10';
-import {ROOM_LIGHT_THEMES} from './room-light-assets.mjs?v=20261029-klin-room-v10';
+import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261030-klin-room-v11';
+import {ROOM_LIGHT_THEMES} from './room-light-assets.mjs?v=20261030-klin-room-v11';
 import {roomThemeReady, readRoomLightPreference, writeRoomLightPreference, createRoomLightSwitch, captureRoomFade, prepareRoomFilm, seekRoomFilm} from './room-light-theme.mjs?v=20261029-klin-room-v10';
 import { createRoomVideo } from './room-video.mjs?v=20261029-klin-room-v10';
-import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261029-klin-room-v10';
+import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261030-klin-room-v11';
 
 // Home/adult uses the approved room-and-character films. Original separate
 // artwork remains available for the avatar/card bridge and other scenes/ages.
@@ -80,8 +80,8 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   let roomVideo = makeRoomVideo(themeConfig());
   plates.home.src = assetURL(themeConfig().roomPoster);
   let renderedLayout = state.layout;
-  let projectedProxy = false, hitTarget = null;
-  const makePersonalRoom = (theme, posterElement, initialPlayback, films = {}) => createPersonalRoomVideo({container: room, idleSrc: assetURL(theme.idle), reactSrc: assetURL(theme.react), poster: assetURL(theme.poster), posterElement, idleElement: films.idle, reactElement: films.react, initialPlayback, reducedMotion: state.reduced, onChange: applyMediaOwnership});
+  let projectedProxy = false, hitTarget = null, conversationReturn = null;
+  const makePersonalRoom = (theme, posterElement, initialPlayback, films = {}) => createPersonalRoomVideo({container: room, idleSrc: assetURL(theme.idle), reactSrc: assetURL(theme.react), poster: assetURL(theme.poster), posterElement, idleElement: films.idle, reactElement: films.react, initialPlayback, reactStartTime: theme.reactStartTime ?? 0, reducedMotion: state.reduced, onChange: applyMediaOwnership});
   let personalRoom = makePersonalRoom(themeConfig());
   const dimensions = () => ({width: host.clientWidth || host.getBoundingClientRect().width || 402, height: host.clientHeight || host.getBoundingClientRect().height || 874});
   const stop = () => { if (state.frame) cancelFrame(state.frame); state.frame = 0; state.action = null; host.dataset.transitionPhase = 'idle'; primary.artwork.style.transform = ''; };
@@ -202,12 +202,36 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
       primary.artwork.style.objectFit = '';
     }
   }
+  function prepareConversationReturn() {
+    conversationReturn?.cancel();
+    if (!characterFilm || state.disposed || state.page !== 'home' || state.conversation || !personalRoom.prepareReturn) return null;
+    const owner = personalRoom, preparation = owner.prepareReturn();
+    const valid = () => !state.disposed && conversationReturn === ticket && personalRoom === owner && state.page === 'home' && !state.conversation;
+    const ticket = {
+      revealed: false,
+      ready: preparation.ready,
+      reveal(options) {
+        if (!valid()) return false;
+        ticket.revealed = preparation.reveal(options); return ticket.revealed;
+      },
+      complete() {
+        if (!valid()) {preparation.cancel(); return;}
+        conversationReturn = null; preparation.complete(); syncMedia();
+      },
+      cancel() {
+        if (conversationReturn === ticket) conversationReturn = null;
+        preparation.cancel();
+      },
+    };
+    conversationReturn = ticket;
+    return ticket;
+  }
   function syncMedia(layout = renderedLayout) {
     renderedLayout = layout;
     if (!state.active || state.page !== 'home' || host.parentElement?.dataset?.conversationAvatarMotion || state.reduced) {themeFade?.dispose(); themeFade = null;}
     const holdFrame = characterFilm && state.active && layout.world === 'home' && state.stage === 'adult' && !state.conversation
-      && !host.parentElement?.dataset?.conversationAvatarMotion
-      && (themeSeekHeld !== 0 || isCard(state.page) || host.parentElement?.dataset?.sceneOverlay === 'true');
+      && (conversationReturn?.revealed || (!host.parentElement?.dataset?.conversationAvatarMotion
+      && (themeSeekHeld !== 0 || isCard(state.page) || host.parentElement?.dataset?.sceneOverlay === 'true')));
     personalRoom.update({active: state.active && personalSceneEligible(layout), holdFrame, reducedMotion: state.reduced});
     applyMediaOwnership();
   }
@@ -329,11 +353,11 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
     if (state.disposed) return false; host.dataset.world = 'ready'; return true;
   }).catch(() => { host.dataset.world = 'fallback'; return false; });
   const ready = Promise.race([loadedReady, disposedReady]);
-  function dispose() {if (state.disposed) return; stop(); state.disposed = true; themeRequest++; pendingThemePreparation?.abort(); themeFade?.dispose(); lightSwitch?.dispose(); if (hitTarget) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = ''; personalRoom.dispose(); roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); bridgeObserver?.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
+  function dispose() {if (state.disposed) return; conversationReturn?.cancel(); stop(); state.disposed = true; themeRequest++; pendingThemePreparation?.abort(); themeFade?.dispose(); lightSwitch?.dispose(); if (hitTarget) for (const property of ['left', 'top', 'width', 'height', 'bottom', 'transform']) hitTarget.style[property] = ''; personalRoom.dispose(); roomVideo.dispose(); releaseDisposed(false); observer.disconnect(); bridgeObserver?.disconnect(); doc.removeEventListener('visibilitychange', visibility); host.replaceChildren();}
   const completeWithoutGrowth = options => { let cancelled = false; queueMicrotask(() => {if (!cancelled && !state.disposed) {options?.onSigned?.(); options?.onComplete?.();}}); return () => {cancelled = true;}; };
   return {
     get roomSceneAsset() {return themeConfig().roomPoster;},
-    supported: true, ready, setPage, setStage, setLayout, transition, interact, setConversationMode, setRoomTheme, setActive, setReducedMotion, resize: draw, dispose,
+    supported: true, ready, setPage, setStage, setLayout, transition, interact, setConversationMode, prepareConversationReturn, setRoomTheme, setActive, setReducedMotion, resize: draw, dispose,
     setSharedScene(src) {const url=new URL(src,import.meta.url).href;if(plates.shared.src!==url)plates.shared.src=url;},
     setCardPreview() {}, setParticipants: participants => {state.participants = participants || [];},
     setPortalState: value => {state.portal = value;}, setLoungeState: value => {state.lounge = {...state.lounge, ...value};}, setRealmState: value => {state.realm = {...state.realm, ...value};},

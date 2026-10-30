@@ -5,6 +5,6 @@ export const HOME_SCENE_VIDEO_ASSET = 'assets/klin-room-motion-20261029-v10/room
 // The personal room includes Klin in every frame; other scenes keep their own actors.
 export const HOME_CHARACTER_SCENE_ASSET = 'assets/klin-room-motion-20261029-v10/poster.png';
 export const HOME_CHARACTER_IDLE_ASSET = 'assets/klin-room-motion-20261029-v10/idle.mp4';
-export const HOME_CHARACTER_REACT_ASSET = 'assets/klin-room-motion-20261029-v10/react.mp4';
+export const HOME_CHARACTER_REACT_ASSET = 'assets/klin-room-motion-20261030-v11/react.mp4';
 export const VISIT_SCENE_ASSET = 'assets/scenes-20261026-41/network-calm.svg';
 export const SHARED_SCENE_ASSET = 'assets/scenes-20261026-41/shared.webp';

@@ -1,5 +1,5 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261030-card-empty-84';
-import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261027-tags-50';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261030-text-ink-87';
+import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261030-text-ink-87';
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
 export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
@@ -122,7 +122,7 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
   if(item.type==='tag'){
    const textY=(item.h-item.lines.length*item.size*item.lineHeight)/2;
    const style=`${box}${font}padding:0;text-align:${item.align||'left'};`;
-   const inner=`${stickerSurfaceMarkup(item,item.w,item.h)}<svg class="bc-sticker-icon" viewBox="0 0 24 24" aria-hidden="true" style="left:${cqw(item.padX)}cqw;top:${cqw((item.h-item.iconSize)/2)}cqw;width:${cqw(item.iconSize)}cqw;height:${cqw(item.iconSize)}cqw"><path d="${STICKER_ICONS[item.icon]}"/></svg><span class="bc-sticker-label" style="left:${cqw(item.padX+item.iconSpace)}cqw;top:${cqw(textY)}cqw;line-height:${item.lineHeight}">${item.lines.map(escape).join('<br>')}</span>`;
+   const inner=`${stickerSurfaceMarkup(item,item.w,item.h)}<svg class="bc-sticker-icon" viewBox="0 0 24 24" aria-hidden="true" style="left:${cqw(item.padX)}cqw;top:${cqw((item.h-item.iconSize)/2)}cqw;width:${cqw(item.iconSize)}cqw;height:${cqw(item.iconSize)}cqw"><path d="${STICKER_ICONS[item.icon]}"/></svg><span class="bc-sticker-label" style="color:${item.textColor||item.color};left:${cqw(item.padX+item.iconSpace)}cqw;top:${cqw(textY)}cqw;line-height:${item.lineHeight}">${item.lines.map(escape).join('<br>')}</span>`;
    return interactive?`<button class="bc-art bc-tag" type="button" data-action="view-card-tags" data-label="${escape(item.text)}" aria-label="查看全部標籤：${escape(item.text)}" title="${escape(item.text)}" style="${style}">${inner}</button>`:`<span class="bc-art bc-tag" title="${escape(item.text)}" style="${style}">${inner}</span>`;
   }
   const tag=item.kind==='name'?'h2':'p';
@@ -195,7 +195,7 @@ export async function renderCardImage(value) {
    if(item.type==='tag'){
     paintStickerSurface(ctx,item,item.w,item.h);ctx.strokeStyle=item.color;ctx.lineJoin='round';ctx.lineCap='round';
     ctx.save();ctx.translate(item.padX,(item.h-item.iconSize)/2);ctx.scale(item.iconSize/24,item.iconSize/24);ctx.lineWidth=2;traceStickerIcon(ctx,item.icon);ctx.stroke();ctx.restore();
-    ctx.fillStyle=item.color;ctx.textAlign='left';
+    ctx.fillStyle=item.textColor||item.color;ctx.textAlign='left';
     const textY=(item.h-item.lines.length*item.size*item.lineHeight)/2;
     item.lines.forEach((line,index)=>ctx.fillText(line,item.padX+item.iconSpace,textY+index*item.size*item.lineHeight));
    }else{ctx.textAlign=item.align;item.lines.forEach((line,i)=>ctx.fillText(line,item.align==='right'?item.w:item.align==='center'?item.w/2:0,i*item.size*item.lineHeight));}

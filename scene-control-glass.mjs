@@ -38,7 +38,7 @@ const SOURCES=[
   '#app .shared-chat-page .shared-room-backdrop',
   '#app .friends-lounge .network-scene-source canvas:not([hidden])',
   '#app .friends-lounge .network-scene-source img',
-  '.landing-video-scene.has-held-frame:not(.is-resuming):not([hidden]) .landing-video-still',
+  '.landing-video-scene.has-held-frame:not([hidden]) .landing-video-still',
   '.landing-video-scene:not([hidden]) video',
   '.login-video-scene[data-video-ready="true"]:not([hidden]) video',
   '.login-video-scene:not([hidden]) .login-video-poster',
@@ -96,7 +96,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
         return false;
       }
       const {node:media}=selected,mediaRect=media.getBoundingClientRect();
-      const next=JSON.stringify([selected.width,selected.height,width,height,media.currentSrc||media.src||'',media.matches('canvas')?(media.dataset.cosmosFrame||phone.dataset.landingCue):'',video?Math.floor((video.currentTime||0)*4):'',mediaRect.left-rect.left,mediaRect.top-rect.top,mediaRect.width,mediaRect.height]);
+      const next=JSON.stringify([selected.width,selected.height,width,height,media.currentSrc||media.src||'',media.matches('canvas')?(media.dataset.cosmosFrame||media.dataset.landingFrameRevision||phone.dataset.landingCue):'',video?Math.floor((video.currentTime||0)*4):'',mediaRect.left-rect.left,mediaRect.top-rect.top,mediaRect.width,mediaRect.height]);
       if(media!==source||next!==signature){textures.clear();signature=next;source=media;}
       let snapshot=null;
       const materials=new Map(),surfaces=[];
@@ -129,10 +129,16 @@ export function createSceneControlGlass({phone,environment={}}={}){
     finally{refreshing=false;}
   }
   resize?.observe(phone);
-  mutation?.observe(phone,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','hidden','src','data-active','data-video-ready','data-landing-glass','data-landing-cue']});
-  const events=['kn-cosmos-frame','scroll','load','loadeddata','playing','pause','seeked','transitionend','animationend','pointerover','focusin'];
+  mutation?.observe(phone,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','hidden','src','data-active','data-video-ready','data-landing-glass','data-landing-cue','data-landing-frame-revision']});
+  // A seek/decode may replace pixels without advancing the 250ms sample bucket.
+  // Invalidate only the currently sampled landing video; while its captured still
+  // is displayed above it, that still remains the paint owner until handoff.
+  const mediaReady=event=>{if(event.target===source&&event.target.matches('video')&&event.target.closest('.landing-video-scene'))signature='';refresh();};
+  const mediaEvents=['loadeddata','playing','seeked'];
+  const events=['kn-cosmos-frame','scroll','load','pause','transitionend','animationend','pointerover','focusin'];
   events.forEach(event=>phone.addEventListener(event,refresh,true));
+  mediaEvents.forEach(event=>phone.addEventListener(event,mediaReady,true));
   win.addEventListener('resize',refresh);win.visualViewport?.addEventListener('resize',refresh);win.visualViewport?.addEventListener('scroll',refresh);doc.addEventListener('visibilitychange',refresh);doc.fonts?.addEventListener('loadingdone',refresh);
   refresh();
-  return {refresh,getDiagnostics:()=>({surfaces:touched.size,renders,frameRenders,source:source?.className||'',materials:[...textures.values()].map(t=>({kind:t.material.kind,fill:t.material.fill,method:t.method})),error}),dispose(){if(disposed)return;disposed=true;if(timer!==null)cancel(timer);timer=null;if(resizeFrame!==null)cancelFrame(resizeFrame);resizeFrame=null;for(const [node,prior]of touched)restore(node,prior);textures.clear();resize?.disconnect();mutation?.disconnect();events.forEach(event=>phone.removeEventListener(event,refresh,true));win.removeEventListener('resize',refresh);win.visualViewport?.removeEventListener('resize',refresh);win.visualViewport?.removeEventListener('scroll',refresh);doc.removeEventListener('visibilitychange',refresh);doc.fonts?.removeEventListener('loadingdone',refresh);}};
+  return {refresh,getDiagnostics:()=>({surfaces:touched.size,renders,frameRenders,source:source?.className||'',materials:[...textures.values()].map(t=>({kind:t.material.kind,fill:t.material.fill,method:t.method})),error}),dispose(){if(disposed)return;disposed=true;if(timer!==null)cancel(timer);timer=null;if(resizeFrame!==null)cancelFrame(resizeFrame);resizeFrame=null;for(const [node,prior]of touched)restore(node,prior);textures.clear();resize?.disconnect();mutation?.disconnect();events.forEach(event=>phone.removeEventListener(event,refresh,true));mediaEvents.forEach(event=>phone.removeEventListener(event,mediaReady,true));win.removeEventListener('resize',refresh);win.visualViewport?.removeEventListener('resize',refresh);win.visualViewport?.removeEventListener('scroll',refresh);doc.removeEventListener('visibilitychange',refresh);doc.fonts?.removeEventListener('loadingdone',refresh);}};
 }

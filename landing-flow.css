@@ -36,5 +36,5 @@ body.reduced-motion .contract-light-hotspot span{animation:none}
 .phone.landing-video-active #app .is-birth-time .onboarding-composer>.quick-replies:empty{display:none}
 .phone.landing-video-active #app .onboarding-reading{max-height:min(54dvh,440px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#a1ada455 transparent;text-align:left}
 .phone.landing-video-active #app .onboarding-reading h3:first-of-type{margin-top:12px}.phone.landing-video-active #app .onboarding-reading h3+p{margin-bottom:12px}
-.phone.landing-video-active #app .onboarding-reading small{color:var(--kn-text-hint,#87918c)}
+.phone.landing-video-active #app .onboarding-reading small{color:var(--kn-ui-color-text-hint)}
 @media(max-height:700px){.phone.landing-video-active #app .onboarding-reading{max-height:42dvh;padding:18px 20px}.phone.landing-video-active #app .onboarding-reading p{font-size:14px;line-height:1.65}.phone.landing-video-active #app .onboarding-composer .onboarding-answer-back{margin-top:8px}}

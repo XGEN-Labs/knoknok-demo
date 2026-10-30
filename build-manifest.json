@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-29T12:41:18.418558Z",
+  "createdAt": "2026-10-30T07:10:11.828844Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 164117702,
+  "payloadBytes": 167974823,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 129131,
-      "sha256": "3a290aa164767d525c6447790e40dddc889b029f5f53d24383cbaf8abb9f3cef"
+      "bytes": 129319,
+      "sha256": "f0500aa97da7366793dd483604045119df1a6313126275204f8bd90229a93794"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1460,20 +1460,20 @@
     {
       "source": "auth-entry-ui.mjs",
       "path": "auth-entry-ui.mjs",
-      "bytes": 4120,
-      "sha256": "82b44075873bedcc84f7def32434b1c4e87b07549474fba5f61106922553cd08"
+      "bytes": 5124,
+      "sha256": "5f02e91268286f77adc50023e86f9b645ddb4d7ed431ce166c944be67a553750"
     },
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 4483,
-      "sha256": "eba3878699a4ea6ed51fb9d4f55c5e4a7f34e19cc5f5e4641ca7df3662185683"
+      "bytes": 4589,
+      "sha256": "838d260c6768e124ab220deddbe5e444ad391e488d0a39b124c500cec5754588"
     },
     {
       "source": "auth-entry.mjs",
       "path": "auth-entry.mjs",
-      "bytes": 18288,
-      "sha256": "64164597d8a2abc0652820e13cd5941aef7d484a988783ded86dc7d92357e42c"
+      "bytes": 18455,
+      "sha256": "5b2fc5544dee7c590fa4fa2a4c4dff2a9805bb5febf8dbf89e13ecb4cb41f4a1"
     },
     {
       "source": "auth-hours-polish.css",
@@ -1508,14 +1508,14 @@
     {
       "source": "business-card.css",
       "path": "business-card.css",
-      "bytes": 8610,
-      "sha256": "5beec1b78c5ab99e7c3822650ac06a00e687d821d08b9fb6c6bb5b82823027f8"
+      "bytes": 8645,
+      "sha256": "2489b19d7fb45eae3611151c3d42b1932c06b4d3e83443e14c2e48cfcb185f66"
     },
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 7446,
-      "sha256": "df6da90bec7fc5792b68eed89be785ffbc51658ebb73db79cea199c9ce0eee7c"
+      "bytes": 7475,
+      "sha256": "659fd891b4ffb40cbc8467ad8c20c4c88fad8436f7b4de15c0ab3b548ed372dd"
     },
     {
       "source": "card-design.mjs",
@@ -1604,8 +1604,8 @@
     {
       "source": "conversation-avatar-motion.mjs",
       "path": "conversation-avatar-motion.mjs",
-      "bytes": 4834,
-      "sha256": "b61fa400f6ccc4a3de7cf16debe18a7b780a9f9cbded3c88c3142ac9fea37390"
+      "bytes": 7241,
+      "sha256": "1ed8cdc4f4e801830a20b8120045aeeaba434250c94d90f129bcc367bee5fa41"
     },
     {
       "source": "conversation-entry-motion.css",
@@ -1622,8 +1622,8 @@
     {
       "source": "conversation-experience.css",
       "path": "conversation-experience.css",
-      "bytes": 22189,
-      "sha256": "4780e928ff0bbd4ce71fd3633f85883ec9e0525d73092ba78d073df621cfc13d"
+      "bytes": 22478,
+      "sha256": "b1b097eda3fa6e4d39136b4965c8daf8f74b290bd23416e1566dc2f2344e0f0a"
     },
     {
       "source": "conversation-onboarding.mjs",
@@ -1658,8 +1658,8 @@
     {
       "source": "demo.css",
       "path": "demo.css",
-      "bytes": 823,
-      "sha256": "dc31cb60dd51eaebd53a81df837c8b2f1deee1c4f8146ba69331a4137b1d345e"
+      "bytes": 860,
+      "sha256": "1c7a023dc585e864b2d173c09a4e949820e40c4f8303f1939aeb9af9cbd28e2d"
     },
     {
       "source": "energy-experience.css",
@@ -1670,8 +1670,8 @@
     {
       "source": "experience-v33.css",
       "path": "experience-v33.css",
-      "bytes": 2018,
-      "sha256": "c403e6c6f4bdc6ad17985755f381f593ae8dfe4ac2938d88eec32df3e8f4cbad"
+      "bytes": 2034,
+      "sha256": "73f99c6712482880958ee82d2ecd9335a1511ea7032db41c8d22b40241f23ee6"
     },
     {
       "source": "experience-v34.css",
@@ -1712,8 +1712,8 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 9212,
-      "sha256": "5675b7d6e170eae91a14e313553ea1b4dc4815b047cd82017554df59fac7b841"
+      "bytes": 9234,
+      "sha256": "20257dce1a04ea2c9d518ad0ef7673043c8bc3574c102f42e51d45b6569f0372"
     },
     {
       "source": "friend-network.mjs",
@@ -1736,8 +1736,8 @@
     {
       "source": "friend-world.mjs",
       "path": "friend-world.mjs",
-      "bytes": 11011,
-      "sha256": "74f634e1b20fce22f25c44efa049ed6ca8343a5876ab3295011ae1fa8312be60"
+      "bytes": 11010,
+      "sha256": "ea73da66aa87b5e02078a9af857d3b400449e04747af967a779c488a1434075b"
     },
     {
       "source": "glass-contract.css",
@@ -1760,8 +1760,8 @@
     {
       "source": "home-controls-v24.css",
       "path": "home-controls-v24.css",
-      "bytes": 7924,
-      "sha256": "2e811f0028ff57966d446a017d88178bfcafd7c54a006c26bdd5def5f507efe0"
+      "bytes": 7962,
+      "sha256": "355cc152193cd280cf3fd021610c089e483335aedee45dbaf050a23f5421b078"
     },
     {
       "source": "home-greeting.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11532,
-      "sha256": "e7af018060601e58352b1ff54b6ba4b470b5e5cd9328be3bf549a164bc372471"
+      "bytes": 11646,
+      "sha256": "a2afc0672a5b815d857a94a072cff33b28034c64eec7ea220bd6a3377348b154"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 25461,
-      "sha256": "0fa4c13ccdcc3a92ffa9054efb7220e9d4f27be7f06fa44fcc358b9f0750f69a"
+      "bytes": 26598,
+      "sha256": "1815dbb98676dd456d1a88147c1655a036247c8f529b80227a27f8e4e745b28f"
     },
     {
       "source": "klin-world-2d.css",
@@ -1844,8 +1844,8 @@
     {
       "source": "landing-flow.css",
       "path": "landing-flow.css",
-      "bytes": 4990,
-      "sha256": "8796948c1f8276d5e51dec7d7e397f2a8e76768bf2d12b86cd4ad04c74527cef"
+      "bytes": 4991,
+      "sha256": "dc26fd103ea29a42cd5aef8c8fcc10e7098e2c8ad28987bdb5df7c0f1587bfb7"
     },
     {
       "source": "landing-glass.css",
@@ -1862,8 +1862,8 @@
     {
       "source": "landing-held-frame.mjs",
       "path": "landing-held-frame.mjs",
-      "bytes": 8006,
-      "sha256": "8e771f498d493eeabda3cede1e3930eef02bdfd9ead1cb427d0e96a01695a05a"
+      "bytes": 8249,
+      "sha256": "cca6edd60844c5060f0076cf4f596cd71f1479473bb66b94d76dc2fece697a7a"
     },
     {
       "source": "landing-video-cues.mjs",
@@ -1880,8 +1880,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 13609,
-      "sha256": "b1a00a6cdcd51b2959f62c12527c2dc9ec4c39d09c47e46366c2f0bac73f184d"
+      "bytes": 13615,
+      "sha256": "36c9220456a5d73f27cebc5e77747d73094c523260417fef8483349f97f14c26"
     },
     {
       "source": "landing-video.css",
@@ -2000,8 +2000,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 15954,
-      "sha256": "212dc69e5e151ccdabdc715fe35efe62db7afeee75a1cea5976eaf8496d9f770"
+      "bytes": 16008,
+      "sha256": "e70b332379378b25362e8c8b3bca339e1811120f069c169a7e566469f4fc0d80"
     },
     {
       "source": "realm-scene.css",
@@ -2073,7 +2073,7 @@
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
       "bytes": 864,
-      "sha256": "ea639ef15b9134271fe77c2c3610dc216049f367e820d70b32deb2ce792ffdd7"
+      "sha256": "232217509c7da7fb16babcf8c93c2f0d7d6ac93edd4768da3d03587daba83c59"
     },
     {
       "source": "scene-control-glass.css",
@@ -2084,14 +2084,14 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 14106,
-      "sha256": "062bf33976e35cba01105c646ee7eb8e355dfb2bd7f78e59dc048f159016b95b"
+      "bytes": 14728,
+      "sha256": "6781478136f5722b52cd11041aad53a010a0355ec73926136520a8b8ecc05c08"
     },
     {
       "source": "scene-experience.css",
       "path": "scene-experience.css",
-      "bytes": 18784,
-      "sha256": "a99a232753c9840b0a30054b8c8b6aba25ff2d6c7b9dfbee5ca63967dba7fea4"
+      "bytes": 19273,
+      "sha256": "c49f8e36a9fe8893f58e079658cb7d6c29ecbdb10627afa93f2f6f68425b4721"
     },
     {
       "source": "scene-sound.mjs",
@@ -2108,8 +2108,8 @@
     {
       "source": "shared-agents.mjs",
       "path": "shared-agents.mjs",
-      "bytes": 1588,
-      "sha256": "c56a41d6dc3069644a2e0a3d82b4a3f19b2d7482b8aa109d6e2aa69a12e77e68"
+      "bytes": 1898,
+      "sha256": "fbb2aef27e9d478f9fbc1ec6f909c58618542dac54df078edf7ec9038b314d4c"
     },
     {
       "source": "sheet-dismiss.mjs",
@@ -2126,14 +2126,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 17638,
-      "sha256": "734f8331cdffededfe76ce623863758114fce69e865d04ab55aadb8e5bd5d11a"
+      "bytes": 17642,
+      "sha256": "def11e251ebcb89e0e34ae7cca8ae4e2d8b6d29099858c5c7807042783563272"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
-      "bytes": 18525,
-      "sha256": "f6db221d85545fed78e383f262eb37ab5bf71b35830885c42964e392ff6a1c63"
+      "bytes": 18800,
+      "sha256": "e7b05dd7b75f019a4c1c504a17d2ad774dd6a53c05a0bde750b8ae6db5d7ce91"
     },
     {
       "source": "social-tags.mjs",
@@ -2150,14 +2150,14 @@
     {
       "source": "styles.css",
       "path": "styles.css",
-      "bytes": 28407,
-      "sha256": "b932a55a68ef1398efb1e4a978605751bc10b69acad788879c646f0abe6215b2"
+      "bytes": 28439,
+      "sha256": "76afcf631cdb179f5442e1b4e109cd3afbb6305b461d417634b6a48e2022441a"
     },
     {
       "source": "tag-stickers.mjs",
       "path": "tag-stickers.mjs",
-      "bytes": 18931,
-      "sha256": "5178f81e8da330ac0655f4fe9b7c53526e9a106506c3f546f525e03fe2525e36"
+      "bytes": 19266,
+      "sha256": "4662930b5bfba6b6fda1630f257ff140307b6dbeacd544add2ab1618c55884b6"
     },
     {
       "source": "theme-black.css",
@@ -2228,8 +2228,8 @@
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 7536,
-      "sha256": "251cbbc2ea6ff86d1dd43d000a899e79a4da3af3c50cf593d2803ac0137ff12a"
+      "bytes": 7573,
+      "sha256": "e822a1652b04b799f64bf2fcaaa5005c62ea18fbff39280500f75ca141ffaae6"
     },
     {
       "source": "universe-experience.css",
@@ -2396,8 +2396,8 @@
     {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 9359,
-      "sha256": "fe514ad17b52d1141cd36a7c4379144c0bac0303d3c8923d5718b043da42f2dc"
+      "bytes": 15355,
+      "sha256": "c52ef21da5c43f884d583cf9d37bcf967b3e6696e900daaa3a56009ffe1e477f"
     },
     {
       "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
@@ -2456,8 +2456,8 @@
     {
       "source": "friend-world-fluid.mjs",
       "path": "friend-world-fluid.mjs",
-      "bytes": 6113,
-      "sha256": "16efea750e6aa23bf14b272826c7b53677f95291c45e8026bb9800a73399f10e"
+      "bytes": 6116,
+      "sha256": "ac338c91a1af4d243d540f0d14293e016724394a5502e09ab58edfa58841b050"
     },
     {
       "source": "assets/visit-fluid-20261029-80/fluid-pearl.png",
@@ -2571,7 +2571,7 @@
       "source": "room-light-assets.mjs",
       "path": "room-light-assets.mjs",
       "bytes": 1216,
-      "sha256": "cd4072419597f7bc1fd58f56f7847bee06fd107a71821451aa70a450619315a8"
+      "sha256": "4f827747f16ab8a9dd19443c576f7c0c07632e6f19898591176752b687d81ab4"
     },
     {
       "source": "room-light-theme.css",
@@ -2584,6 +2584,54 @@
       "path": "room-light-theme.mjs",
       "bytes": 9075,
       "sha256": "6ae900e27b41e36c0ae1896180a7a567708640b8057177b6e5589ed792d5e5cf"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
+      "bytes": 857322,
+      "sha256": "b59e237ae127b4f8eb7c07daa35740960e787eef782d8720343c2169794dc351"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/poster-daylight.png",
+      "path": "assets/klin-room-motion-20261030-v11/poster-daylight.png",
+      "bytes": 501161,
+      "sha256": "83de55f46fbe281c6a4013a0b92ca6ecc30f01ae4a7e4a96a70a229c4ebbe612"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/react-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/react-daylight.mp4",
+      "bytes": 628734,
+      "sha256": "a46a7a00cabf0263a95855b12fef1d8d6a427386af6c8005d59e15449af104d6"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/react.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/react.mp4",
+      "bytes": 822573,
+      "sha256": "3cbc19247ac9c060d42b5b78e5e829a34d29bea36dfdfb0dd14fa30f7d6dfcc8"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/room-loop-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/room-loop-daylight.mp4",
+      "bytes": 147813,
+      "sha256": "4bf9ff833155bc220a6252d40fb3c229dd60ba22ec46588f78536263cf680f09"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/room-only-daylight.png",
+      "path": "assets/klin-room-motion-20261030-v11/room-only-daylight.png",
+      "bytes": 881036,
+      "sha256": "b6d40aa5b012d889b371a8c708a95cbcf6e80a0c5ff0d2fe8c0e6316724b609a"
+    },
+    {
+      "source": "shared-message-identity.mjs",
+      "path": "shared-message-identity.mjs",
+      "bytes": 1995,
+      "sha256": "0b4e7fafeced1eed187d0199ca505d25595fff33eb27ad2807a3fef849517d7d"
+    },
+    {
+      "source": "chat-identity-v87.css",
+      "path": "chat-identity-v87.css",
+      "bytes": 2492,
+      "sha256": "169ded72ad154da289bea34b127e072cde4d8135cf4e701a0191b95fe763c28a"
     }
   ],
   "runtimeDependencies": [

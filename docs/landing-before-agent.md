@@ -119,3 +119,29 @@ cause Auth to fall back to default-earth provisioning. Do not downgrade Auth to
 an implementation that loses the new input/plan marker, and never restore an
 old account snapshot over newer data. Final fixed versions and release contents
 are recorded in the fixed release manifest and deployment receipt.
+
+
+## Combined K02/K12 release (2026-10-30)
+
+This release supersedes the earlier limited-overlay plan. Use the complete live
+build of main, including rongyu's changes through 66bc7d3 and the birth-profile
+integration in e1de79c. `npm run build` now produces `dist/web-live`; the historical
+fixed-page compatibility builder is explicitly `npm run build:compat`.
+
+Five independent encounter-video slots are in `landing-family-videos.mjs`.
+All currently point to the approved existing Klin video; the server's family and
+persona selection remains authoritative. Before assignment the original opening
+film is retained, without inventing an identity. No extra page or asset editor.
+
+The complete release requires Auth's K12 contract AND GET/PATCH
+`/api/web/birth-profile` (see LANDING-HANDOFF.md); Auth 09dccc9e alone is insufficient.
+Operations must use the backend owner's new fixed compatible release, preserve
+current Agent/chat fixes and existing bindings/data, and leave F05 disabled.
+No database migration is performed by this Web package. Rollback may switch Web
+static files only; preserve new accounts and server writes. Rolling back to a Web
+version without landing-v1 handling cannot serve still-unbound new accounts, so
+that fallback is not a complete K12 recovery path.
+
+The existing card/diary/social/visit prototype flows retain rongyu's design and
+local semantics (see LIVE-WEB.md); this release does not invent their backend
+contracts, expose raw Memory, or claim those flows have real server persistence.

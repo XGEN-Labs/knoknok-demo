@@ -27,7 +27,7 @@
   /* existing | refinement-v27.css */
   --kn-ui-color-error: #824b48;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
-  --kn-ui-color-success: #526b59;
+  --kn-ui-color-success: var(--kn-ui-color-text);
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
   --kn-ui-color-focus: #56647f;
   /* adopted | 2026-10-27 brighter white glass feedback; glass-material.css v1.8 */
@@ -105,7 +105,7 @@
   /* existing | home-controls-v24.css */
   --kn-ui-motion-ease: cubic-bezier(.22,.61,.24,1);
   /* adopted | ui-states-v31.css; UI v1 disabled state */
-  --kn-ui-color-disabled-text: #7d8279;
+  --kn-ui-color-disabled-text: var(--kn-ui-color-text-hint);
   /* adopted | ui-states-v31.css; UI v1 disabled state */
   --kn-ui-color-disabled-surface: #eff1eb;
   /* adopted | ui-states-v31.css; UI v1 disabled state */

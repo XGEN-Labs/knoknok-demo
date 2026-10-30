@@ -95,3 +95,11 @@ test('a changed account during creation recovery cannot receive the old account 
  await auth.bootstrap();await auth.submitLanding({requestId:'request-1',input});
  assert.equal(auth.getState().errorCode,'session_mismatch');assert.equal(auth.getState().bootstrap,null);auth.dispose();
 });
+
+// Each family can replace its media independently without altering server identity.
+test('five independent encounter slots retain the approved shared film',async()=>{
+ const {LANDING_FAMILY_VIDEOS,landingVideoSource}=await import('../landing-family-videos.mjs');
+ assert.deepEqual(Object.keys(LANDING_FAMILY_VIDEOS).sort(),['earth','fire','metal','water','wood']);
+ for(const family of Object.keys(LANDING_FAMILY_VIDEOS))assert.equal(landingVideoSource(family),LANDING_FAMILY_VIDEOS.metal);
+ assert.equal(landingVideoSource(null),LANDING_FAMILY_VIDEOS.metal);
+});
