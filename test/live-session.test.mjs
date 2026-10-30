@@ -33,3 +33,22 @@ test('invalid identity fails closed; missing backend is an error rather than emp
 test('long native history cannot exceed the existing chat request size or per-message contract',async()=>{
  let sent;const session=createLiveSession({fetchImpl:async(url,init)=>{if(init.method==='POST'){sent=init.body;return Response.json({text:'answer',source:'model',provider:'knok-agent'});}return Response.json(page(Array.from({length:15},(_,i)=>message('e'+i,i+1,'字'.repeat(5000)))));}});session.activate(1);await session.history();await session.send('hello');assert.ok(Buffer.byteLength(sent)<16000);assert.ok(JSON.parse(sent).messages.every(m=>m.content.length<=4000));assert.equal(JSON.parse(sent).messages.at(-1).content,'hello');
 });
+
+test('only explicit handoff presentation is omitted from display and subsequent chat context',async()=>{
+ const rows=[message('intake',1,'private intake',{role:'user',presentation:'landing_handoff'}),message('ack',2,'received',{presentation:'landing_handoff'}),message('human',3,'landing JSON is my normal question',{role:'user'}),message('mixed',4,'reply covering both intake and a real question')];let sent;
+ const session=createLiveSession({fetchImpl:async(url,init)=>{if(init.method==='POST'){sent=JSON.parse(init.body);return Response.json({text:'normal reply',source:'model',provider:'knok-agent'});}return Response.json(page(rows));}});session.activate(1);await session.history();
+ assert.deepEqual(session.getState().messages.map(m=>m.id),['human','mixed']);
+ await session.send('next question');assert.deepEqual(sent,{messages:[{role:'user',content:rows[2].content},{role:'assistant',content:rows[3].content},{role:'user',content:'next question'}]});
+ session.activate(2);assert.deepEqual(session.getState().messages,[]);
+});
+test('dedicated handoff purpose is optional and never added to normal chat',async()=>{
+ const bodies=[];const session=createLiveSession({fetchImpl:async(url,init)=>{bodies.push(JSON.parse(init.body));return Response.json({text:'received',source:'model',provider:'knok-agent',presentation:'landing_handoff'});}});session.activate(1);
+ await session.chat([{role:'user',content:'intake'}],1,undefined,{purpose:'landing_handoff'});
+ await session.chat([{role:'user',content:'ordinary'}],1);
+ assert.equal(bodies[0].purpose,'landing_handoff');assert.deepEqual(bodies[1],{messages:[{role:'user',content:'ordinary'}]});
+});
+
+test('old backend response without a registered handoff acknowledgement cannot confirm purpose delivery',async()=>{
+ const session=createLiveSession({fetchImpl:async()=>Response.json({text:'received',source:'model',provider:'knok-agent'})});session.activate(1);
+ await assert.rejects(session.chat([{role:'user',content:'intake'}],1,undefined,{purpose:'landing_handoff'}),/沒有完成資料交接/);
+});
