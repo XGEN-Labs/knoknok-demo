@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T07:10:11.828844Z",
+  "createdAt": "2026-10-30T07:35:18.614446Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 167974823,
+  "payloadBytes": 167974995,
   "files": [
     {
       "source": "app.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11646,
-      "sha256": "a2afc0672a5b815d857a94a072cff33b28034c64eec7ea220bd6a3377348b154"
+      "bytes": 11653,
+      "sha256": "96cac60395cdf4443a565d703ad85a8d2a0ef5cdeb4f443424bd8e484c94af14"
     },
     {
       "source": "journey-experience.css",
@@ -2210,8 +2210,8 @@
     {
       "source": "ui-refinements-v48.css",
       "path": "ui-refinements-v48.css",
-      "bytes": 3739,
-      "sha256": "c34824893a8125564884429e97757304ea204bb3c17ac2b66eecb6b1b86ac275"
+      "bytes": 3904,
+      "sha256": "4fd08bf06f0c020b36fcba49a3988e975ef2fbd11ca87d1b03e9c3500a260bfd"
     },
     {
       "source": "ui-states-v31.css",

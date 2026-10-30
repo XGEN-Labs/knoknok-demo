@@ -36,7 +36,13 @@
   backdrop-filter: blur(var(--kn-glass-panel-blur)) saturate(var(--kn-glass-saturation));
 }
 .phone#phone #sheet :is(#sheet-content, .sheet-inner) { background: transparent; }
-.phone#phone #sheet .sheet-title h3 { font-weight: 500; }
+.phone#phone #sheet .sheet-title > h3,
+.phone#phone .kn-date-picker header > h2,
+.phone#phone .kn-date-picker[data-date-purpose="birthday"] header > h2 {
+  font-size:16px;
+  line-height:24px;
+  font-weight:500!important;
+}
 .phone#phone #sheet .btn {
   min-height: 52px;
   border-radius: 26px;
