@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T06:21:03.458556Z",
+  "createdAt": "2026-10-30T06:31:52.686947Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 167968001,
+  "payloadBytes": 167973092,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 129171,
-      "sha256": "6006f90dd8201def61af3c20345ba81223d30e073062eb97386474ff50109c79"
+      "bytes": 129321,
+      "sha256": "a3be6c108f9547ee8a7d0ed5a6346f5df59c061db6f1c5822472bd3ef2d4eebe"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11530,
-      "sha256": "33d55444a222c274198f258c7ca7db69422b8d1593594969fcd56930dcde7903"
+      "bytes": 11674,
+      "sha256": "fbf97c60561c9ded144569c6a2d5da4d878c16a72d75b45be46290cb9d71ccb4"
     },
     {
       "source": "journey-experience.css",
@@ -2108,8 +2108,8 @@
     {
       "source": "shared-agents.mjs",
       "path": "shared-agents.mjs",
-      "bytes": 1588,
-      "sha256": "c56a41d6dc3069644a2e0a3d82b4a3f19b2d7482b8aa109d6e2aa69a12e77e68"
+      "bytes": 1898,
+      "sha256": "fbb2aef27e9d478f9fbc1ec6f909c58618542dac54df078edf7ec9038b314d4c"
     },
     {
       "source": "sheet-dismiss.mjs",
@@ -2620,6 +2620,18 @@
       "path": "assets/klin-room-motion-20261030-v11/room-only-daylight.png",
       "bytes": 881036,
       "sha256": "b6d40aa5b012d889b371a8c708a95cbcf6e80a0c5ff0d2fe8c0e6316724b609a"
+    },
+    {
+      "source": "shared-message-identity.mjs",
+      "path": "shared-message-identity.mjs",
+      "bytes": 1995,
+      "sha256": "0b4e7fafeced1eed187d0199ca505d25595fff33eb27ad2807a3fef849517d7d"
+    },
+    {
+      "source": "chat-identity-v87.css",
+      "path": "chat-identity-v87.css",
+      "bytes": 2492,
+      "sha256": "169ded72ad154da289bea34b127e072cde4d8135cf4e701a0191b95fe763c28a"
     }
   ],
   "runtimeDependencies": [

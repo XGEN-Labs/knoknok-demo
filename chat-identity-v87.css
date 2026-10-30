@@ -1,0 +1,65 @@
+/* Identity sits inside the already approved message glass, so the room image
+   cannot reduce name contrast. Body typography and all glass tokens stay put. */
+.phone#phone #app .page.shared-chat-page .shared-messages .bubble .message-label {
+  display:flex;
+  align-items:baseline;
+  flex-wrap:wrap;
+  gap:4px 8px;
+  width:auto;
+  max-width:100%;
+  margin:0 0 5px;
+  padding:0;
+  color:var(--kn-glass-ink,#26242c)!important;
+  font:600 14px/20px var(--kn-ui-font-ui,-apple-system,BlinkMacSystemFont,"PingFang TC",system-ui,sans-serif)!important;
+  letter-spacing:0;
+  opacity:1;
+  -webkit-backdrop-filter:none!important;
+}
+.phone#phone #app .page.shared-chat-page .shared-message-name {
+  color:var(--kn-glass-ink,#26242c);
+  font:inherit;
+  overflow-wrap:anywhere;
+}
+.phone#phone #app .page.shared-chat-page .shared-message-role {
+  color:#424c58;
+  white-space:nowrap;
+}
+.phone#phone #app .page.shared-chat-page .message.own .message-label {justify-content:flex-end;}
+.phone#phone #app .page.shared-chat-page .message.own .shared-message-role {color:#244b68;}
+.phone#phone #app .page.shared-chat-page .message[data-speaker-kind="agent"] .shared-message-role {color:#544864;}
+.phone#phone #app .page.shared-chat-page .shared-message-text {overflow-wrap:anywhere;}
+
+/* The two companions retain their seat coordinates. Only the formerly hidden
+   captions return, with an owner label even when both companions are Klin. */
+.phone#phone #app .page.shared-chat-page .shared-agent {position:relative;}
+.phone#phone #app .page.shared-chat-page .shared-agent figcaption {
+  position:absolute;
+  top:calc(100% + 4px);
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+  width:calc(100% - 4px);
+  min-width:0;
+  max-width:calc(100% - 4px);
+  height:auto;
+  margin:0;
+  padding:4px 7px;
+  overflow:hidden;
+  clip-path:none;
+  border-radius:14px;
+  color:var(--kn-glass-ink,#26242c);
+  font:600 13px/18px var(--kn-ui-font-ui,-apple-system,BlinkMacSystemFont,"PingFang TC",system-ui,sans-serif);
+  text-align:center;
+  white-space:nowrap;
+}
+.phone#phone #app .page.shared-chat-page .shared-agent figcaption > * {
+  display:block;
+  max-width:100%;
+  overflow-wrap:anywhere;
+  white-space:normal;
+}
+.phone#phone #app .page.shared-chat-page .shared-agent-name {font:600 13px/18px var(--kn-ui-font-ui,system-ui,sans-serif);}
+.phone#phone #app .page.shared-chat-page .shared-agent[data-agent-side="own"] .shared-agent-owner {color:#244b68;}
