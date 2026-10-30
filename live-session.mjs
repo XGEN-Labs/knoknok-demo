@@ -13,6 +13,7 @@ export function createLiveSession({fetchImpl = globalThis.fetch, onChange = () =
       status:m.status, createdAt:m.at, source:'model', provider:'knok-agent',
     })).concat(transient)});
   const emit = () => { const value = snapshot(); onChange(value); return value; };
+  function activate(id) {abort.abort();abort=new AbortController();epoch++;owner=id==null?null:String(id);items=new Map();deleted.clear();transient=[];cursor=null;historyReady=false;historyBusy=false;sending=false;error='';return emit();}
   async function request(path, {method = 'GET', body, timeout = 20000} = {}) {
     if (!owner) throw new LiveRequestError('請先登入。', 401);
     const version = epoch, currentOwner = owner;
@@ -30,7 +31,7 @@ export function createLiveSession({fetchImpl = globalThis.fetch, onChange = () =
     if (version !== epoch) throw Object.assign(Error('session_changed'),{name:'AbortError'});
     if (!response.ok) {
       const code=data?.code || data?.error?.code || (typeof data?.error==='string'?data.error:'');
-      if (response.status===401 || ['SESSION_CHANGED','HISTORY_SESSION_CHANGED'].includes(code)) onSessionLost();
+      if (response.status===401 || ['SESSION_CHANGED','HISTORY_SESSION_CHANGED'].includes(code)) onSessionLost({code});
       throw new LiveRequestError(response.status===503?'這項服務暫時不可用，請稍後重新讀取。':response.status===409?'狀態已變更，請重新讀取後核對。':'操作未完成，請稍後再試。',response.status,code);
     }
     return data;
@@ -64,7 +65,8 @@ export function createLiveSession({fetchImpl = globalThis.fetch, onChange = () =
           throw failure;
         }
         if(version!==epoch)return snapshot();
-        if(String(page.user?.id)!==owner || page.order!=='asc' || !Array.isArray(page.items) || typeof page.hasMore!=='boolean')throw new LiveRequestError('聊天歷史身份或格式不符。');
+        if(String(page.user?.id)!==owner){activate(null);onSessionLost({code:'HISTORY_SESSION_CHANGED'});throw new LiveRequestError('登入狀態已變更，請重新確認帳號。',409,'HISTORY_SESSION_CHANGED');}
+        if(page.order!=='asc' || !Array.isArray(page.items) || typeof page.hasMore!=='boolean')throw new LiveRequestError('聊天歷史格式不符。');
         if(page.items.some(item=>item.kind==='redaction'&&item.requiresReload) && next && !reloaded){
           reloaded=true;next=null;items.clear();deleted.clear();cursor=null;historyReady=false;emit();continue;
         }
@@ -79,7 +81,7 @@ export function createLiveSession({fetchImpl = globalThis.fetch, onChange = () =
   }
   return {
     getState:snapshot,request,history,
-    activate(id) { abort.abort();abort=new AbortController();epoch++;owner=id==null?null:String(id);items=new Map();deleted.clear();transient=[];cursor=null;historyReady=false;historyBusy=false;sending=false;error='';return emit(); },
+    activate,
     async chat(messages, expectedOwner, signal, {purpose} = {}) {
       if(String(expectedOwner)!==owner || signal?.aborted)throw Object.assign(Error('session_changed'),{name:'AbortError'});
       const result=await request('/api/web/chat',{method:'POST',body:{messages,...(purpose==='landing_handoff'?{purpose}:{})},timeout:70000});

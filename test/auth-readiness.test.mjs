@@ -59,3 +59,29 @@ test('changing username aborts the old check without a timeout error in the new 
  const pending=auth.entry('old-user');auth.changeUsername('new-user');await pending;
  assert.equal(auth.getState().username,'new-user');assert.equal(auth.getState().busy,false);assert.equal(auth.getState().error,'');auth.dispose();
 });
+
+const subjectBootstrap=user=>({user,accountStatus:'registered',nextAction:'open_chat',agent:{status:'bound',agentId:'synthetic-agent',roomId:'synthetic-room'},onboarding:{status:'not_required'}});
+test('sign-in refuses a response for a username different from the checked account',async()=>{
+ let bootstraps=0;const wrong={id:1,username:'knoknok01'};
+ const auth=createAuthEntry({adapter:{entry:async username=>({username,nextAction:'login'}),signIn:async()=>({user:wrong,nextAction:'bootstrap'}),bootstrap:async()=>{bootstraps++;return subjectBootstrap(wrong);}}});
+ await auth.entry('knoknok22');await auth.signIn('synthetic-only');
+ assert.notEqual(auth.getState().step,'ready');assert.equal(auth.getState().errorCode,'session_mismatch');assert.equal(auth.getState().authenticated,false);assert.equal(bootstraps,0);auth.dispose();
+});
+test('post-sign-in bootstrap must preserve the authenticated subject ID as well as username',async()=>{
+ const expected={id:24,username:'knoknok22'},other={id:1,username:'knoknok22'};
+ const auth=createAuthEntry({adapter:{entry:async username=>({username,nextAction:'login'}),signIn:async()=>({user:expected,nextAction:'bootstrap'}),bootstrap:async()=>subjectBootstrap(other)}});
+ await auth.entry(expected.username);await auth.signIn('synthetic-only');
+ assert.notEqual(auth.getState().step,'ready');assert.equal(auth.getState().errorCode,'session_mismatch');assert.equal(auth.getState().bootstrap,null);auth.dispose();
+});
+
+test('subject checks use entry canonical username rather than the originally typed case',async()=>{
+ const user={id:24,username:'knoknok22'};
+ const auth=createAuthEntry({adapter:{entry:async()=>({username:user.username,nextAction:'login'}),signIn:async()=>({user,nextAction:'bootstrap'}),bootstrap:async()=>subjectBootstrap({...user,id:'24'})}});
+ await auth.entry('KNOKNOK22');await auth.signIn('synthetic-only');assert.equal(auth.getState().step,'ready');auth.dispose();
+});
+test('invalidating one page clears its authentication without logging out any server session or auto-reading',async()=>{
+ const user={id:24,username:'knoknok22'};let reads=0,logouts=0;
+ const auth=createAuthEntry({adapter:{entry:async()=>({username:user.username,nextAction:'login'}),signIn:async()=>({user,nextAction:'bootstrap'}),bootstrap:async()=>{reads++;return subjectBootstrap(user);},logout:async()=>{logouts++;}}});
+ await auth.entry(user.username);await auth.signIn('synthetic-only');auth.invalidateSession();
+ assert.equal(auth.getState().authenticated,false);assert.equal(auth.getState().step,'entry');assert.equal(auth.getState().username,user.username);assert.equal(auth.getState().bootstrap,null);assert.equal(reads,1);assert.equal(logouts,0);auth.dispose();
+});

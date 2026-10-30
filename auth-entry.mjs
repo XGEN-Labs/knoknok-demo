@@ -181,7 +181,7 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
     try {
       const result=cleanBootstrap(await adapter.bootstrap({signal:token.signal}));if (!current(token)) return snapshot();
       if ((recoveryUsername && result.user.username!==recoveryUsername)||(recoveryOwner!==null&&String(result.user.id)!==String(recoveryOwner))) {
-        return emit({step:'bootstrap',busy:false,authenticated:true,bootstrap:null,user:result.user,error:'目前登入的帳號與剛才不同，請先退出後重新檢查帳號。',errorCode:'session_mismatch'});
+        return emit({step:'bootstrap',busy:false,authenticated:false,bootstrap:null,error:'登入狀態已變更，請重新確認帳號。',errorCode:'session_mismatch'});
       }
       return emit({step:result.agent.status==='bound'?'ready':result.landingCreation?.state==='awaiting_input'?'landing':'setup',username:result.user.username,authenticated:true,user:result.user,bootstrap:result,busy:false,error:'',errorCode:'',retryAt:0,passwordMode:null});
     } catch(error) {
@@ -209,8 +209,9 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
       const result=await adapter[kind==='login'?'signIn':'register'](username,password,{signal:token.signal});
       if (!current(token)) return snapshot();
       if (!plain(result) || !userValid(result.user) || result.nextAction!=='bootstrap') throw protocolError();
+      if(result.user.username!==username)throw new AuthEntryError('登入狀態已變更，請重新確認帳號。',{status:409,code:'session_mismatch'});
       emit({step:'bootstrap',authenticated:true,user:clone(result.user),bootstrap:null});
-      return restore(token,{recoveryUsername:result.user.username});
+      return restore(token,{recoveryUsername:username,recoveryOwner:result.user.id});
     } catch(error) {
       if (!current(token)) return snapshot();
       if (error?.name==='AbortError') return snapshot();
@@ -222,6 +223,10 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
   }
   return {
     getState:snapshot,
+    invalidateSession() {
+      if(disposed)return snapshot();requestController?.abort();sequence++;
+      return emit({step:'entry',busy:false,authenticated:false,user:null,bootstrap:null,passwordMode:null,retryAt:0,error:'登入狀態已變更，請重新確認帳號。',errorCode:'session_mismatch'});
+    },
     async entry(username) {
       if (waiting()) return snapshot();
       if (state.authenticated) return emit({error:'請先退出目前帳號，再切換帳號。',errorCode:'logout_required'});
@@ -237,7 +242,11 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
       if (state.authenticated) return emit({busy:false,error:'請先退出目前帳號，再切換帳號。',errorCode:'logout_required'});
       return emit({step:'entry',username:typeof username==='string'?username:state.username,passwordMode:null,busy:false,error:'',errorCode:'',authenticated:false,user:null,bootstrap:null});
     },
-    async bootstrap() {if(waiting()||state.busy)return snapshot();return restore(begin({step:'bootstrap'}));},
+    async bootstrap() {
+      if(waiting()||state.busy)return snapshot();
+      const expected=state.user?{recoveryUsername:state.user.username,recoveryOwner:state.user.id}:state.errorCode==='session_mismatch'?{recoveryUsername:state.username}:{};
+      return restore(begin({step:'bootstrap'}),expected);
+    },
     async submitLanding(submission) {
       if(waiting()||state.busy||!state.authenticated||state.step!=='landing'||state.bootstrap?.landingCreation?.flow!=='landing-v1'||state.bootstrap.landingCreation.state!=='awaiting_input')return snapshot();
       if(!plain(submission)||!nonempty(submission.requestId)||!plain(submission.input))return emit({error:'請先完成初次見面的資料。',errorCode:'invalid_landing'});
