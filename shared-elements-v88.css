@@ -1,0 +1,21 @@
+/* The scene and both participant sprites share the image's seat coordinates. */
+.phone#phone #app .page.shared-chat-page {
+ --shared-seat-y:calc(50cqh + var(--shared-plate-height)*.145);
+}
+.phone#phone #app .page.shared-chat-page .shared-agents {
+ left:27%;right:27%;bottom:35.5%;gap:0;height:auto;
+}
+.phone#phone #app .page.shared-chat-page .shared-agent {flex:0 0 50%;width:50%;max-width:50%;}
+.phone#phone #app .page.shared-chat-page .shared-agent-art {width:100%;aspect-ratio:300/520;}
+.phone#phone #app .page.shared-chat-page .element-character-sprite {position:relative;display:block;width:100%;height:100%;overflow:hidden;}
+.phone#phone #app .page.shared-chat-page .shared-agent[data-agent-stage="juvenile"] .shared-agent-art {width:78%;aspect-ratio:300/325;}
+.phone#phone #app .page.shared-chat-page .shared-agent-shadow {bottom:1%;left:10%;width:80%;height:3.5%;background:#3f281f42;filter:blur(4px);}
+.phone#phone #app .page.shared-chat-page .shared-agent figcaption {display:none!important;}
+.phone#phone #app .shared-room-scene[data-room-kind="metal"] .shared-agents {bottom:35.8%;}
+.phone#phone #app .shared-room-scene[data-room-kind="water"] .shared-agents {bottom:35.2%;}
+.phone#phone #app .shared-room-scene[data-room-kind="fire"] .shared-agents {bottom:35.6%;}
+.phone#phone #app .shared-room-scene[data-room-kind="earth"] .shared-agents {bottom:35.8%;}
+/* Leave space for the tallest flame or sprout without resizing its body. */
+.phone#phone #app .page.shared-chat-page .shared-messages {
+ --shared-message-rest-edge:max(calc(var(--app-safe-top) + 146px),calc(var(--shared-seat-y) - var(--shared-plate-width)*.38 - 12px));
+}

@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T08:04:54.539640Z",
+  "createdAt": "2026-10-30T08:43:19.503178Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 167979966,
+  "payloadBytes": 182109910,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 134396,
-      "sha256": "09e76223e9eda2d9aa9919f92a34ec8a4bb35fc552d00a135f2bdeea5a4548de"
+      "bytes": 135219,
+      "sha256": "0631a79bb1ca385fe101b011816954672069514c356d3298967aba7f64864b5f"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1472,8 +1472,8 @@
     {
       "source": "auth-entry.mjs",
       "path": "auth-entry.mjs",
-      "bytes": 18455,
-      "sha256": "5b2fc5544dee7c590fa4fa2a4c4dff2a9805bb5febf8dbf89e13ecb4cb41f4a1"
+      "bytes": 21049,
+      "sha256": "737e5c2559a6cc942f1c584935e13767c3bee389eb3ad6f42dc68dab0bfc799c"
     },
     {
       "source": "auth-hours-polish.css",
@@ -1718,8 +1718,8 @@
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2762,
-      "sha256": "6a822654cb24d79a6627efff093f574e66f61fd44138a7b17468d0eea480b75b"
+      "bytes": 2771,
+      "sha256": "2fc2d9b2dffd5d57a9d1a2552ff5c9126024f93a70c06435fa95ea245dae0ede"
     },
     {
       "source": "friend-world-loading.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11656,
-      "sha256": "873462ce38af889208444559cf9a76fc76194341a0f6ed8b44ba82217b9b72b6"
+      "bytes": 11767,
+      "sha256": "d8f12981c6fa5fb5e059f01079a710e57a02789616f3510bcc28db9204c7d43e"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 26598,
-      "sha256": "1815dbb98676dd456d1a88147c1655a036247c8f529b80227a27f8e4e745b28f"
+      "bytes": 26712,
+      "sha256": "cb787d42f4aae90291de830318eb91222027778ae7dc4be8add1a1ecffdea44a"
     },
     {
       "source": "klin-world-2d.css",
@@ -1880,8 +1880,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 13615,
-      "sha256": "36c9220456a5d73f27cebc5e77747d73094c523260417fef8483349f97f14c26"
+      "bytes": 14034,
+      "sha256": "5966a9cdb3446b8920a5ab24ebb90a673f87943e3151bc57bb17e9a5e2c9ce36"
     },
     {
       "source": "landing-video.css",
@@ -1952,8 +1952,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 61128,
-      "sha256": "8dceb6834fdd8d59f6855bc628ef997b2f30959d398234fad53bb8a7fff3acfa"
+      "bytes": 63598,
+      "sha256": "92acfbdab3e197c83420db87bbde89f12b525ccde1e3845790be53c68912f887"
     },
     {
       "source": "motion.css",
@@ -2108,8 +2108,8 @@
     {
       "source": "shared-agents.mjs",
       "path": "shared-agents.mjs",
-      "bytes": 1898,
-      "sha256": "fbb2aef27e9d478f9fbc1ec6f909c58618542dac54df078edf7ec9038b314d4c"
+      "bytes": 1531,
+      "sha256": "33c44d77adc2d9d86ecc2ff8daac5fcfd9b01f320e6cedcafef3a74aba91258a"
     },
     {
       "source": "sheet-dismiss.mjs",
@@ -2288,8 +2288,8 @@
     {
       "source": "friend-room.mjs",
       "path": "friend-room.mjs",
-      "bytes": 777,
-      "sha256": "2b0278c3e58596c8604e55620e8af9cebce3b383299145deb46abe2b57d207c8"
+      "bytes": 976,
+      "sha256": "00fe2cde5c55144794e7cc3ad66adb87455567e01e4206f3af6748b0666fe4a3"
     },
     {
       "source": "shared-room-v61.css",
@@ -2438,8 +2438,8 @@
     {
       "source": "compat/web-naming/landing-handoff.mjs",
       "path": "compat/web-naming/landing-handoff.mjs",
-      "bytes": 4549,
-      "sha256": "47ff4213bf941f13eb9f422c695b10e648cab49152b259c22fbfa844b65a1ce7"
+      "bytes": 9786,
+      "sha256": "a8324e1ab918cd99c9048eb9b35af721fb8ffb8fd7d7abacbca156d1f075d772"
     },
     {
       "source": "chat-edge-blur.css",
@@ -2624,14 +2624,98 @@
     {
       "source": "shared-message-identity.mjs",
       "path": "shared-message-identity.mjs",
-      "bytes": 1995,
-      "sha256": "0b4e7fafeced1eed187d0199ca505d25595fff33eb27ad2807a3fef849517d7d"
+      "bytes": 5408,
+      "sha256": "234dc4568d61bac072f27b8a8bc46b75194a933a92423a354589c9ab84f85f12"
     },
     {
       "source": "chat-identity-v87.css",
       "path": "chat-identity-v87.css",
-      "bytes": 2492,
-      "sha256": "169ded72ad154da289bea34b127e072cde4d8135cf4e701a0191b95fe763c28a"
+      "bytes": 3334,
+      "sha256": "0f4d74f292c89d1fd5e9f681fbf8e6872fdd47f8a2cc40f59d49d7fb51bc5d0a"
+    },
+    {
+      "source": "companion-elements.mjs",
+      "path": "companion-elements.mjs",
+      "bytes": 1115,
+      "sha256": "57a16f9837732b436b408ba658332abe1064ea133bad17e873cfde82ee3ccd9e"
+    },
+    {
+      "source": "element-character-art.mjs",
+      "path": "element-character-art.mjs",
+      "bytes": 1195,
+      "sha256": "40716bd4983aa28d0cb902377e66f543bfa7b5e926d0f902d93cc5196a189e1a"
+    },
+    {
+      "source": "shared-elements-v88.css",
+      "path": "shared-elements-v88.css",
+      "bytes": 1644,
+      "sha256": "958910ecdc69db804719f47a58acb3fd9bff4b05cc6ef924d941816d16d30154"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/characters.png",
+      "path": "assets/shared-elements-20261030-88/characters.png",
+      "bytes": 1565119,
+      "sha256": "31ae98db62fd659425c21dcca9b31e6decf53ae53feda4d457f31d9cb3f7ec65"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/metal-room.png",
+      "path": "assets/shared-elements-20261030-88/metal-room.png",
+      "bytes": 2307988,
+      "sha256": "d79e8f3d74cd01af3d1e317c8237c65def7fa9cda7fa6cdb223777fcce89ae1c"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/wood-room.png",
+      "path": "assets/shared-elements-20261030-88/wood-room.png",
+      "bytes": 2615360,
+      "sha256": "59287aacec2d4f722ab328d652b4f1f8327ec6a87921c172556a7a90cd0a138c"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/water-room.png",
+      "path": "assets/shared-elements-20261030-88/water-room.png",
+      "bytes": 2149830,
+      "sha256": "a506457ce1cc6d58dddc7addd152d213536514fc80234e7ae883012634406bd3"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/fire-room.png",
+      "path": "assets/shared-elements-20261030-88/fire-room.png",
+      "bytes": 2208995,
+      "sha256": "f117c30376b838c523fcec93ae17e4a9de0c13e3339f88a5a933c31d32206626"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/earth-room.png",
+      "path": "assets/shared-elements-20261030-88/earth-room.png",
+      "bytes": 2213974,
+      "sha256": "83d99f24f95d8d8bb9a02a53416293ba383f0f36c22cab602de563219b81f0b5"
+    },
+    {
+      "source": "assets/studio-family-artwork.svg",
+      "path": "assets/studio-family-artwork.svg",
+      "bytes": 1041828,
+      "sha256": "d4814cf7a3c3522690d76d97adb0e1b79a9a6b1b66c0e7e14a4ed0e86f61fa11"
+    },
+    {
+      "source": "family-presentation.mjs",
+      "path": "family-presentation.mjs",
+      "bytes": 1128,
+      "sha256": "56bd9dff138297222e11c1cb31d56d1e54ad02cf7b608b92bb317a9df6b9f394"
+    },
+    {
+      "source": "landing-creation.mjs",
+      "path": "landing-creation.mjs",
+      "bytes": 3602,
+      "sha256": "a9d5930a9439c1538addedbdcae91b4c0fb077ca2fc0ac5f0d9463fcf584bab7"
+    },
+    {
+      "source": "landing-family-videos.mjs",
+      "path": "landing-family-videos.mjs",
+      "bytes": 655,
+      "sha256": "d0116e6b9069c33dea95b782c1e66a0bd73d04cf2d450e32772848139da6e8fd"
+    },
+    {
+      "source": "studio-family-data.mjs",
+      "path": "studio-family-data.mjs",
+      "bytes": 1647,
+      "sha256": "7fbf6ea72ff9da34e98727c79bc09f8d6e093d675b51c4e02d73bd33c5a3b02c"
     }
   ],
   "runtimeDependencies": [
@@ -3011,6 +3095,51 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "shared-room-v61.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "shared-chat-polish-v62.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "chat-edge-blur.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "room-light-theme.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "chat-identity-v87.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "shared-elements-v88.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "deployment-mode.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "live-session.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "compat/web-naming/landing-handoff.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "auth-entry.mjs",
       "kind": "module"
@@ -3018,6 +3147,16 @@
     {
       "from": "app.mjs",
       "to": "auth-entry-ui.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "landing-creation.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "family-presentation.mjs",
       "kind": "module"
     },
     {
@@ -3047,6 +3186,11 @@
     },
     {
       "from": "app.mjs",
+      "to": "cosmos-background.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "friend-network.mjs",
       "kind": "module"
     },
@@ -3057,7 +3201,37 @@
     },
     {
       "from": "app.mjs",
+      "to": "shared-message-identity.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "friend-room.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "element-character-art.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "friend-avatars.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "conversation-entry-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "conversation-edge-blur.mjs",
       "kind": "module"
     },
     {
@@ -3068,11 +3242,6 @@
     {
       "from": "app.mjs",
       "to": "conversation-avatar-motion.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "app.mjs",
-      "to": "conversation-scroll.mjs",
       "kind": "module"
     },
     {
@@ -3221,6 +3390,21 @@
       "kind": "resource"
     },
     {
+      "from": "landing-creation.mjs",
+      "to": "compat/web-naming/landing-handoff.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-creation.mjs",
+      "to": "conversation-onboarding.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "family-presentation.mjs",
+      "to": "studio-family-data.mjs",
+      "kind": "module"
+    },
+    {
       "from": "social-tags-ui.mjs",
       "to": "social-tags.mjs",
       "kind": "module"
@@ -3256,6 +3440,11 @@
       "kind": "module"
     },
     {
+      "from": "friend-world.mjs",
+      "to": "friend-world-fluid.mjs",
+      "kind": "module"
+    },
+    {
       "from": "friend-network.mjs",
       "to": "friend-avatars.mjs",
       "kind": "module"
@@ -3271,13 +3460,48 @@
       "kind": "module"
     },
     {
+      "from": "friend-network.mjs",
+      "to": "friend-room.mjs",
+      "kind": "module"
+    },
+    {
       "from": "shared-agents.mjs",
-      "to": "klin-companion.mjs",
+      "to": "element-character-art.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-agents.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-message-identity.mjs",
+      "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "friend-room.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "element-character-art.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "friend-avatars.mjs",
+      "to": "card-labels.mjs",
       "kind": "module"
     },
     {
       "from": "scene-control-glass.mjs",
       "to": "landing-glass.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-family-videos.mjs",
       "kind": "module"
     },
     {
@@ -3387,7 +3611,22 @@
     },
     {
       "from": "klin-reference-2d.mjs",
+      "to": "room-light-assets.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "room-light-theme.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
       "to": "room-video.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "personal-room-video.mjs",
       "kind": "module"
     },
     {
@@ -3403,6 +3642,11 @@
     {
       "from": "model.mjs",
       "to": "card-design.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "model.mjs",
+      "to": "companion-elements.mjs",
       "kind": "module"
     },
     {
@@ -3441,11 +3685,6 @@
       "kind": "module"
     },
     {
-      "from": "friend-avatars.mjs",
-      "to": "card-labels.mjs",
-      "kind": "module"
-    },
-    {
       "from": "landing-audio-engine.mjs",
       "to": "landing-audio-clips.mjs",
       "kind": "module"
@@ -3468,26 +3707,6 @@
     {
       "from": "card-artwork.mjs",
       "to": "tag-stickers.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "friend-world.mjs",
-      "to": "friend-world-fluid.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "demo.html",
-      "to": "room-light-theme.css",
-      "kind": "resource"
-    },
-    {
-      "from": "klin-reference-2d.mjs",
-      "to": "room-light-assets.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "klin-reference-2d.mjs",
-      "to": "room-light-theme.mjs",
       "kind": "module"
     },
     {

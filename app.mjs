@@ -13,10 +13,13 @@ import { mountFriendWorld } from './friend-world.mjs?v=20261030-visit-85';
 import { mountCosmosBackground } from './cosmos-background.mjs?v=20261029-visit-82c';
 let cosmosBackground=null;
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
-import { renderFriendNetwork } from './friend-network.mjs?v=20261029-visit-82c';
-import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261030-chat-identity-87';
-import { sharedMessageMarkup } from './shared-message-identity.mjs?v=20261030-chat-identity-87';
-import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-63';
+import { renderFriendNetwork } from './friend-network.mjs?v=20261030-shared-elements-88';
+import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261030-shared-elements-88';
+import { sharedMessageMarkup } from './shared-message-identity.mjs?v=20261030-shared-elements-88';
+import { friendRoomKind, friendRoomScene } from './friend-room.mjs?v=20261030-shared-elements-88';
+import { companionWithArtwork, ELEMENT_CHARACTER_ATLAS } from './element-character-art.mjs?v=20261030-shared-elements-88';
+import { companionDisplayProfile } from './companion-elements.mjs?v=20261030-shared-elements-88';
+import { friendAvatarSource } from './friend-avatars.mjs';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
 import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261029-compositor-blur-79';
 import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261030-avatar-return-85&glass=61';
@@ -49,7 +52,7 @@ import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261023-experience-34d';
 import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261023-experience-34d';
 import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261023-actions-38';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261027-first-landing';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261030-shared-elements-88';
 
 const $ = (query, root=document) => root.querySelector(query);
 // Personal-room identity only; uploaded/public card avatars retain their own sources.
@@ -153,6 +156,7 @@ const currentFamily=()=>LIVE_WEB?assignedFamily(authView.bootstrap):null;
 const currentAvatar=()=>currentFamily()?familyArtwork(currentFamily().id,'adult','head'):HOME_CHARACTER_AVATAR;
 const spiritImage = (label='Klin 伙伴', attrs='', stage=currentCompanionStage()) => currentFamily()?familyMarkup(currentFamily().id,{stage,label,attrs}):pixelVariant ? pixelCompanionMarkup(label, attrs) : klinMarkup({stage,label,attrs});
 const companionName = () => me().companionName || 'Klin';
+const displayedCompanion = id => companionDisplayProfile(companionProfile(state,id),{ownerId:id,activeId:actor(),family:LIVE_WEB?currentFamily():null});
 const logoImage = `<img class="brand-logo" src="assets/brand-20261028-noknok/noknok-selected-white.png" alt="NokNok" width="2172" height="724">`;
 const spiritAvatar = () => `<span class="avatar small">${spiritImage(`${companionName()} 伙伴`)}</span>`;
 const empty = (title,copy,action='') => `<div class="blank-state">${spiritImage(`${companionName()} 伙伴`)}<h3>${title}</h3><p>${copy}</p>${action}</div>`;
@@ -469,7 +473,7 @@ function friendsSheet(){
 function relations(){
  const friends=getDemoFriends(state),query=String(ui.networkQuery||'').trim().toLocaleLowerCase();
  const matches=friend=>!query||`${friend.name} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase().includes(query),visibleCount=friends.filter(matches).length;
- return shell(`<div class="network-scene-source" aria-hidden="true"><img src="assets/visit-cosmos-20261027-55/quiet-cosmos.svg" alt="" draggable="false"><canvas class="cosmos-canvas" hidden></canvas></div>`+top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:state.users,query})}`,'friends-lounge');
+ return shell(`<div class="network-scene-source" aria-hidden="true"><img src="assets/visit-cosmos-20261027-55/quiet-cosmos.svg" alt="" draggable="false"><canvas class="cosmos-canvas" hidden></canvas></div>`+top('串門')+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:Object.fromEntries(friends.map(friend=>[friend.id,{...state.users[friend.id],companion:displayedCompanion(friend.id)}])),query})}`,'friends-lounge');
 }
 function filterNetwork(value){
  ui.networkQuery=value;save();const query=value.trim().toLocaleLowerCase();let count=0;
@@ -486,8 +490,8 @@ function invitePage(){return relations();}
 function chat(){
  const rel=latestRelationship();if(!rel)return shell(top('共同空間')+content(empty('等你們都願意','互相接受邀約，就能一起坐坐。',btn('查看邀約','invite'))));
  const other=state.users[rel.members.find(x=>x!==actor())],msgs=publicMessages(state,rel.id);
- const participants=rel.members.map(id=>({...state.users[id],companion:companionProfile(state,id)})),messageContext={participants,activeId:actor()};
- return shell(top(esc(other.name),'',`<button type="button" class="scene-icon" data-action="relationship-options" aria-label="管理這段聯繫">${uiIcon('more')}</button>`)+sharedPeople()+`<div class="shared-room-scene" data-room-owner="${esc(other.id)}" data-room-kind="${friendRoomKind(other)}"><div class="shared-room-plate"><img class="shared-room-backdrop" src="${friendRoomScene(other)}" alt="" draggable="false">${sharedAgentsMarkup(participants,actor())}</div></div><div class="shared-messages" id="message-scroll" role="log" aria-label="共同對話">${msgs.map(m=>sharedMessageMarkup(m,messageContext)).join('')}${!msgs.length?`<div class="shared-first-hello"><p>坐近一點，從一句你好開始。</p><button type="button" class="tiny-btn" data-public-say="嗨，很高興認識你！">嗨，很高興認識你！ ↗</button></div>`:''}</div><form class="chat-composer shared-composer" data-form="public-message">${rel.status==='active'?`<button type="button" class="private-entry" data-action="private-help">私下問問 ${esc(companionName())}</button><div class="composer-row"><textarea id="public-message" name="message" rows="1" placeholder="和 ${esc(other.name)} 說句話…" aria-label="發送給 ${esc(other.name)} 的訊息" maxlength="1000">${esc(privateSpace().publicDraft)}</textarea><button class="send-button" type="submit" aria-label="發送給朋友">${sendArrow}</button></div>`:`<p class="scene-hint">這段聯繫已結束。</p>${btn('回到房間','home')}`}</form>`,'shared-space shared-chat-page');
+ const participants=rel.members.map(id=>({...state.users[id],chatAvatar:friendAvatarSource({id},state.users[id]),companion:companionWithArtwork(displayedCompanion(id))})),messageContext={participants,activeId:actor()},host=participants.find(person=>person.id===other.id);
+ return shell(top(esc(other.name),'',`<button type="button" class="scene-icon" data-action="relationship-options" aria-label="管理這段聯繫">${uiIcon('more')}</button>`)+sharedPeople()+`<div class="shared-room-scene" data-room-owner="${esc(other.id)}" data-room-kind="${friendRoomKind(host)}"><div class="shared-room-plate"><img class="shared-room-backdrop" src="${friendRoomScene(host)}" alt="" draggable="false">${sharedAgentsMarkup(participants,actor())}</div></div><div class="shared-messages" id="message-scroll" role="log" aria-label="共同對話">${msgs.map(m=>sharedMessageMarkup(m,messageContext)).join('')}${!msgs.length?`<div class="shared-first-hello"><p>坐近一點，從一句你好開始。</p><button type="button" class="tiny-btn" data-public-say="嗨，很高興認識你！">嗨，很高興認識你！ ↗</button></div>`:''}</div><form class="chat-composer shared-composer" data-form="public-message">${rel.status==='active'?`<button type="button" class="private-entry" data-action="private-help">私下問問 ${esc(companionName())}</button><div class="composer-row"><textarea id="public-message" name="message" rows="1" placeholder="和 ${esc(other.name)} 說句話…" aria-label="發送給 ${esc(other.name)} 的訊息" maxlength="1000">${esc(privateSpace().publicDraft)}</textarea><button class="send-button" type="submit" aria-label="發送給朋友">${sendArrow}</button></div>`:`<p class="scene-hint">這段聯繫已結束。</p>${btn('回到房間','home')}`}</form>`,'shared-space shared-chat-page');
 }
 function roomMemories(){
  const moments=state.relationships.filter(rel=>rel.members.includes(actor())&&rel.sharedMoment?.completedAt);
@@ -649,7 +653,7 @@ function syncExperience(){
  $('#phone').style.setProperty('--kn-room-scene-image',`url("${homeSceneAsset}")`);
  $('#phone').style.setProperty('--kn-welcome-scene-image',`url("${WELCOME_SCENE_ASSET}")`);
  $('#phone').style.setProperty('--kn-visit-scene-image',`url("${VISIT_SCENE_ASSET}")`);
- const sharedRel=latestRelationship(),sharedHost=sharedRel&&state.users[sharedRel.members.find(id=>id!==actor())],sharedScene=friendRoomScene(sharedHost);
+ const sharedRel=latestRelationship(),sharedHostId=sharedRel?.members.find(id=>id!==actor()),sharedHost=sharedHostId?{...state.users[sharedHostId],companion:displayedCompanion(sharedHostId)}:null,sharedScene=friendRoomScene(sharedHost);
  $('#phone').style.setProperty('--kn-shared-scene-image',`url("${sharedScene}")`);
  klinWorld?.setSharedScene?.(sharedScene);
  const opening=['welcome','login','register','verify'].includes(ui.route),landing=ui.route==='landing';
@@ -660,7 +664,7 @@ function syncExperience(){
  if(ui.route==='home')images.push(currentAvatar());
  if(ui.route==='relations')images.push(DEFAULT_CARD_AVATAR);
  if(['profile','public-card'].includes(ui.route))images.push('assets/brand-20261028-noknok/noknok-selected-white.png','assets/cloud-realm-20261019/arrival.webp',(ui.route==='public-card'&&sharedCard?sharedCard.avatar:me().cardAvatar)||DEFAULT_CARD_AVATAR);
- if(['chat','connected'].includes(ui.route)){const rel=latestRelationship(),host=rel&&state.users[rel.members.find(id=>id!==actor())];images.push(friendRoomScene(host),SEATED_KLIN_ASSET);}
+ if(['chat','connected'].includes(ui.route)){const rel=latestRelationship(),hostId=rel?.members.find(id=>id!==actor()),host=hostId?{...state.users[hostId],companion:displayedCompanion(hostId)}:null;images.push(friendRoomScene(host),ELEMENT_CHARACTER_ATLAS);}
  sceneImages.update({key:ui.route,urls:images,scene});
  setScenePending('world',!opening&&!landing&&!worldReady&&!worldFailed,'room');
  if(!landing){setScenePending('landing-video',false,'landing');sceneSound.syncFilm({active:false,playing:false,time:0});}
