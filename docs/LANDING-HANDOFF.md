@@ -1,25 +1,29 @@
-# Landing 信息交接修复
+# Landing 出生资料与信息交接
 
-正式 Web 的 landing 原来只在浏览器内保存用户输入。当前修复在用户完成 landing、进入首页之前，把整段流程的实际填写信息组成一次普通用户会话，调用现有 Cookie 认证的 `/api/web/chat`。现有 BFF 将这条完整用户消息交给该账号原有的 Agent，沿用它已有的会话与 Memory 链路。
+正式 live Web 在用户确认并签署 Landing 后，先通过 `/api/web/birth-profile` 保存结构化资料，再沿用 `/api/web/chat` 发送已有的一次信息交接，最后确认账号 onboarding 完成。资料保存失败时保留表单，不确认交接或进入首页。浏览页面、恢复会话和切换账号本身不会提交出生资料。
 
-Prompt 只交接用户称呼、给伙伴取的称呼、出生资料、性别、出生地和当时的自由回答。未填写保持 null，不从演示默认值推断；它明确要求按现有资料／记忆规则处理，不重新引导、不追问、不启动其他任务、不改变之后的流程。回复只作为交接确认，不写进 Web 首页聊天列表或其后续 `messages` 请求。
+## 结构化资料
 
-当前测试阶段，每次成功登录都会重置本次 landing 进度、签约状态及交接回执，从第一步重新填写；不会清除该账号已有聊天或其他资料。刷新页面或恢复已有登录会话仍继续当前进度，不重复重置。收到 `provider=knok-agent, source=model` 的成功响应后，浏览器在当前账号原有数据键下保存本次资料摘要回执；同一次登录内刷新及后续正常聊天复用回执。失败保留资料，留在当前步骤供用户重试；Gemini fallback 不能证明原生 Agent 已收到，因此不记录成功。对于上线时仍保持登录、且已在旧版完成 landing 的用户，在第一次正式聊天前补交一次，成功后正常发出原先那条聊天输入。账号切换取消等待并丢弃旧账号的迟到回执。
+GET `/api/web/birth-profile` 返回当前账号绑定的 `agentId`、`roomId`、`version`、`profile`、`profileConsent` 和 `updatedAt`。PATCH 只提交 `{ expectedVersion, profile, profileConsent }`。请求复用 `liveSession.request` 的同源 Cookie、`X-Knok-User-Id`、超时和账号切换取消；浏览器不接触原生凭据。
 
-这份回执仅证明聊天接口返回了原生 Agent 的确认，不等于 Memory 已完成异步提取。未增加 Memory 写入接口、绕过提取规则或修复 Memory 服务。本次按用户最终要求只交付该 Web bug，不部署 Agent 昵称热修、Memory、iOS 或统一账号改动。
+Landing 将实际填写的称呼映射为 `nickname`，生日、时刻、出生地分别映射为 `birthDate`、`birthTime`、`birthplace`；已知男/女选项映射为 `birthSex`。日期选择器使用公历，因此已填写生日的 `calendar` 为 `solar`。未填字段保持缺省，不将浏览器演示默认值、出生地或设备时区当作答案，不推断 `birthTimezone` 或 `birthTimezoneConfirmed`。签署后保存使用 `profileConsent: true`。
 
-## 构建与部署
+现有出生资料表单仍使用原界面。打开表单读取当前原生版本，提交时保留其他原生资料字段，并使用所读版本进行条件更新。用户明确保存成功后才更新本地资料和离开表单；冲突、失败或切换账号不将旧表单写入新账号。出生草稿明确记录当前账号归属；切换账号或重载后仅保留同一账号的草稿，无归属的旧 UI 缓存需重新读取当前账号资料。选择时区不会自动产生 `birthTimezoneConfirmed: true`。日期、时刻、地点或历法变化会清除旧确认；完全未改变的保存保留确认，并接受后端返回原版本。
 
-- 从最终 Web main 提交的完整 Git checkout 执行 `npm ci`（测试依赖）与 `npm run build`；生产构建本身只需 Node >=22.19、Git、tar，不需要运行 npm 安装。
-- 部署 `dist/web/`，不要部署 main 根目录静态文件。脚本 `scripts/build-naming-release.mjs` 固定当前实际页面基线 `9c28e0a9c0d3e1210ef3339ad28bc08ac3e0a45c`，验证原 manifest，再应用仓内 `compat/web-naming/` 文件；不会混入 main 后续其他页面变更。
-- 输出 `build-manifest.json` 记录 sourceCommit、dirty、页面基线和全部输出哈希。正式产物必须来自干净受检提交。Git checkout 须包含上述历史基线。
-- 只切换 Web 静态目录。沿用当前 `/api/auth/*`、`/api/web/chat` 路由、BFF `web-4946d6ec698d`、Agent `e0372956`、Cookie、账号和房间绑定，不新增服务、环境变量、凭据或数据库迁移。
-- 运维保留当前静态版本以便回退；回退仅切 Web 文件，不还原用户数据库或 Memory。
+## 旧账号补写与聊天兼容
 
-## 验证
+浏览器中已经完成 Landing 的用户，下次主动发送私聊时可补写结构化资料。只有原生 `profile` 为 `null` 且 `version` 为 `0` 才初始化；已有资料或非零版本的清空记录均保持不变。并发初始化冲突后只重新读取赢家，不覆盖它。未完成的本地草稿不自动同意保存。补写失败保留待发送文字，供用户主动重试；补写本身不调用模型，也不发送 Landing 聊天消息。
 
-`npm test`：9 项定向测试，覆盖完整资料、现有 API 契约、摘要去重、账号切换、并发点击、失败重试与 fallback 不冒充原生确认。
+原有聊天交接回执只证明聊天接口返回了原生 Agent 确认，不能证明结构化资料已存储。已有有效回执时仍可补齐缺失资料，但不会再次发送交接聊天；普通聊天只发送原来的用户输入。旧兼容构建未传入结构化请求能力，保持既有聊天行为。
 
-`npm run test:browser`：实际构建页面与 Chrome，使用明确标注的本地 BFF／模型替身，检查 landing 完成、失败留存、每次登录重新填写与交接、正常聊天不夹带交接 prompt、刷新续填和 A-B-A 重登重新开始。需要本机 Chrome；也可通过 `PLAYWRIGHT_MODULE` 指向工作区已安装的 Playwright。结果位于 `dist/landing-evidence/`，不放入公开 Web 目录。
+聊天确认仍要求 `provider=knok-agent, source=model`；fallback 不能充当确认。完整回答以用户消息沿用既有聊天协议，既不修改系统提示词，也不创建 Agent。此修复不增加通用 Memory 写入口，聊天回执也不代表异步 Memory 提取完成。
 
-浏览器替身测试不代表线上模型效果或 Memory 已生成记录。按本轮范围，不扩大到 Agent／Memory 的独立诊断或部署。
+## 验证与交付边界
+
+- `npm test`：覆盖资料映射、缺省值、存储失败、旧回执补写、已有/清空资料保护、并发版本冲突、账号切换、聊天去重和同源请求。
+- `node scripts/verify-birth-profile-browser.mjs`：真实 root app、认证、表单、资料和聊天代码运行于 Chrome，BFF 与影音/世界展示使用明确的本地替身；覆盖旧资料显式补写、失败文字保留、未完成草稿保护、Landing 完成顺序、回执重试、现有出生表单保存、跨标签账号切换，以及同账号/无归属草稿重载。该检查支持不含大型资产的源码 checkout，不证明正式影片、渲染资产或生产服务可用。
+- `npm run test:live-browser`：完整 live 构建与原始影音资产的已有检查继续保留，其 BFF fixture 现提供同一出生资料契约。
+
+正式发布需完整 checkout 执行 `npm run build:live`，并部署匹配的 Auth BFF/原生出生资料路由。本轮稀疏 checkout 不含根 `build-manifest.json`、`assets/` 和 `vendor/`；标准 live 构建因缺少 manifest 失败，不能据此生成或验收正式发布产物。页面、服务、数据库及生产环境部署均不在此前端提交内。
+
+2026-10-30 本地证据：基于 `66bc7d3` 的工作差异，在 macOS arm64 / Node v24.17.0 上 `npm test` 48/48 通过；专项 Chrome 检查 10 项通过。标准 `npm run build:live` 因稀疏 checkout 缺少根 manifest 失败，未将替身检查冒称为正式构建或生产验收。

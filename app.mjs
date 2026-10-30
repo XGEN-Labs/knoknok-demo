@@ -116,10 +116,10 @@ const liveSession=createLiveSession({onChange(value){
 },onSessionLost(){
  liveHandoff.clear();liveSession.activate(null);state.session.authenticated=false;state.private.a.companionMessages=[];closeSheet();ui.route='login';render(false);authController?.bootstrap();
 }});
-const liveHandoff=createLandingHandoff({chat:(...args)=>liveSession.chat(...args),accepted(receipt,owner){
+const liveHandoff=createLandingHandoff({request:(...args)=>liveSession.request(...args),chat:(...args)=>liveSession.chat(...args),accepted(receipt,owner){
  if(state.session.localAuthUserId===owner){state.onboarding.agentHandoff=receipt;save();}
 }});
-let landingHandoffBusy=false;
+let landingHandoffBusy=false,liveSendPending=null,birthProfileSnapshot=null,birthProfileLoad=null,birthProfileSaving=false;
 const LIVE_SESSION_EVENT='knoknok-auth-change';
 function announceLiveSession(){try{localStorage.setItem(LIVE_SESSION_EVENT,crypto.randomUUID());}catch{}}
 function cachedLiveRoom(id){
@@ -203,6 +203,7 @@ function go(route,options={}){
   if(['login','register','verify'].includes(ui.route)&&!['login','register','verify'].includes(route)){authFormDraft.password='';authFormDraft.confirmPassword='';authPasswordVisible=false;}
   if(ui.route!==route&&(ui.route==='relations'||route==='relations')){ui.networkQuery='';friendWorldOrientation={yaw:0,pitch:0};}
   ui.route=route;
+  if(LIVE_WEB&&route==='setup-birth')loadBirthProfile();
   if(route==='home'&&!pixelVariant){
     const next=reduce(state,{type:'ENTER_COMPANION_HOME'});
     if(next.error){ui.route=setupRoute();}else state=next;
@@ -236,7 +237,8 @@ function applyAuthenticatedRoom(view){
  if(LIVE_WEB){state.session={authenticated:true,activeUserId:'a',provider:'account'};}else state=reduce(state,{type:'DEMO_LOGIN',provider:'demo'});
  Object.assign(state.session,{localAuthUserId:id,localAuthUsername:username,localAgentId:view.bootstrap.agent.agentId,localRoomId:view.bootstrap.agent.roomId});
  applyAccountOnboarding(state,view.bootstrap.onboarding);
- if(LIVE_WEB&&!same){ui.companionDrafts={};conversationActive=false;liveSession.activate(id);liveHandoff.activate(id);state.private.a.companionMessages=[];void liveSession.history({full:true});}
+ if(LIVE_WEB&&ui.setupBirthOwner!==id){delete ui.setupBirth;delete ui.setupBirthOwner;}
+ if(LIVE_WEB&&!same){ui.companionDrafts={};conversationActive=false;liveSendPending=null;birthProfileSnapshot=null;birthProfileLoad=null;liveSession.activate(id);liveHandoff.activate(id,view.bootstrap.agent);state.private.a.companionMessages=[];void liveSession.history({full:true});}
  clearAuthDraft();save();
  if(!sharedCard&&['welcome','login','register','verify'].includes(ui.route)){go(setupRoute(),{replace:true});if(ui.route==='landing')revealOnboarding();render(false);}
 }
@@ -251,13 +253,14 @@ async function exitAuth(){
  closeSheet();
  if(LIVE_WEB){save();liveHandoff.clear();liveSession.activate(null);}
  if(!LIVE_WEB&&state.session.authenticated&&state.session.localAuthUserId)accountRooms.save(state.session.localAuthUserId,state);
- await authController.logout();if(authController.getState().authenticated){if(LIVE_WEB){const id=state.session.localAuthUserId;liveSession.activate(id);liveHandoff.activate(id);void liveSession.history({full:true});}return;}if(LIVE_WEB)announceLiveSession();
+ await authController.logout();if(authController.getState().authenticated){if(LIVE_WEB){const id=state.session.localAuthUserId;liveSession.activate(id);liveHandoff.activate(id,{agentId:state.session.localAgentId,roomId:state.session.localRoomId});void liveSession.history({full:true});}return;}if(LIVE_WEB)announceLiveSession();
  clearAuthDraft();resetSound();clearMatching();clearTimeout(timer);clearTimeout(landingHelloTimer);clearTimeout(visitTimer);visitAttempt++;homeGreeting.reset();landingVideoScene?.dispose();landingVideoScene=null;conversationActive=false;companionTyping=false;
  state=LIVE_WEB?freshDemoAccountState(initialState()):initialState();ui={route:'welcome',history:[],motion:ui.motion,matchResult:'found',failNext:false,soundOn:false};save();render(true);
 }
 function setupRoute(){return onboardingDestination(state);}
 function basicsDraft(){return {name:me().name,language:me().language||'粵語',region:me().region||'香港',...(ui.setupBasics||{})};}
-function birthDraft(){return {...privateSpace().birth,...(ui.setupBirth||{})};}
+function birthDraft(){return {...privateSpace().birth,...(!LIVE_WEB||ui.setupBirthOwner===state.session.localAuthUserId?ui.setupBirth||{}:{})};}
+function setBirthDraft(value){ui.setupBirth=value;if(LIVE_WEB){if(value)ui.setupBirthOwner=state.session.localAuthUserId;else delete ui.setupBirthOwner;}}
 function landingProgress(step){return `<div class="landing-progress" aria-label="初次見面，第 ${step} 步，共 4 步">${[1,2,3,4].map(n=>`<i class="${n<=step?'done':''}"></i>`).join('')}</div>`;}
 function landing(){
  const turn=getOnboardingTurn(state),calendar=turn.key==='birthDate',hours=turn.key==='birthTime',gender=turn.key==='gender';
@@ -364,6 +367,24 @@ function initializing(){const failed=state.onboarding?.status==='failed';return 
 function startInitialization(){clearTimeout(initializeTimer);if(state.onboarding?.status==='new'&&state.session.authenticated&&actor()==='a'&&state.onboarding.basicsComplete&&state.onboarding.birthComplete){if(!dispatch({type:'BEGIN_INITIALIZATION'},false))return;}if(state.onboarding?.status!=='preparing')return;initializeTimer=setTimeout(()=>{if(state.onboarding?.status!=='preparing'||!state.session.authenticated)return;const ok=dispatch({type:'FINISH_INITIALIZATION',fail:consumeFailure()},false);if(actor()==='a'&&state.session.authenticated&&ui.route==='initializing'){if(ok&&state.onboarding.status==='ready')go('onboard',{replace:true});else render(false);}},1900);}
 function basicsFormPatch(){const f=$('#setup-basics-form');if(!f)return basicsDraft();const d=new FormData(f);return {name:d.get('setup-name'),language:d.get('language'),region:d.get('setup-region')};}
 function birthFormPatch(){const f=$('#setup-birth-form');if(!f)return birthDraft();const d=new FormData(f);return {date:d.get('birth-date'),time:d.get('time')||'',unknownTime:d.has('unknownTime'),place:d.get('birth-place')||'',timezone:d.get('timezone')||''};}
+function loadBirthProfile(){
+ const owner=state.session.localAuthUserId,pending=liveHandoff.readBirthProfile();birthProfileSnapshot=null;birthProfileLoad=pending;
+ pending.then(value=>{
+  if(birthProfileLoad!==pending||state.session.localAuthUserId!==owner||ui.route!=='setup-birth')return;
+  birthProfileSnapshot=value;
+  if(!ui.setupBirth||ui.setupBirthOwner!==owner){const p=value.profile,a=state.onboarding.conversation?.answers||{};setBirthDraft(p?{date:p.birthDate||'',time:p.birthTime||'',unknownTime:!p.birthTime,place:p.birthplace||'',timezone:p.birthTimezone||''}:{date:a.birthDate||'',time:a.birthTime||'',unknownTime:!a.birthTime,place:a.birthPlace||'',timezone:''});save();render(false);}
+ }).catch(error=>{if(error.name!=='AbortError'&&state.session.localAuthUserId===owner)toast(error.message);});
+}
+async function saveBirthForm(patch){
+ if(birthProfileSaving)return;
+ const originUI=ui,owner=state.session.localAuthUserId;setBirthDraft(patch);save();birthProfileSaving=true;
+ try{
+  if(LIVE_WEB){const current=birthProfileSnapshot||await (birthProfileLoad||liveHandoff.readBirthProfile());await liveHandoff.saveBirthProfile(patch,current);}
+  if(ui!==originUI||state.session.localAuthUserId!==owner)return;
+  if(dispatch({type:'SAVE_BIRTH',patch},false)){setBirthDraft(null);if(state.onboarding.status==='ready'){go('profile');toast('資料已儲存。');}else if(dispatch({type:'BEGIN_INITIALIZATION'},false)){go('initializing');startInitialization();}}
+ }catch(error){if(error.name!=='AbortError'&&ui===originUI)toast(error.message);}
+ finally{birthProfileSaving=false;}
+}
 
 function homeScene(){return '<div class="home-scene" aria-hidden="true"></div>';}
 function syncHomeScene(){
@@ -723,7 +744,7 @@ function render(animate=false,motion={}){
   if(ui.route==='home')setHomeEntryControlsHidden(useTransition);
   cleanFormControls=initFormControls(app);cleanDatePickers=initDatePickers(app);initTypography(app);
   const hourPicker=app.querySelector('[data-birth-time-picker]');
-  if(hourPicker)birthTimePicker=mountBirthTimePicker(hourPicker,{onChange:value=>{if(ui.route==='landing'){ui.onboardingDraft=value??'';save();}else{const form=$('#setup-birth-form');if(form){form.querySelector('[name="time"]').value=value??'';form.querySelector('[name="unknownTime"]').disabled=value!==null;ui.setupBirth=birthFormPatch();save();}}},onConfirm:value=>{if(ui.route==='landing')answerOnboarding(value??'',value===null);}});
+  if(hourPicker)birthTimePicker=mountBirthTimePicker(hourPicker,{onChange:value=>{if(ui.route==='landing'){ui.onboardingDraft=value??'';save();}else{const form=$('#setup-birth-form');if(form){form.querySelector('[name="time"]').value=value??'';form.querySelector('[name="unknownTime"]').disabled=value!==null;setBirthDraft(birthFormPatch());save();}}},onConfirm:value=>{if(ui.route==='landing')answerOnboarding(value??'',value===null);}});
   if(['chat','connected'].includes(ui.route)){const rel=latestRelationship();klinWorld?.setParticipants?.((rel?.members||[]).map(id=>state.users[id]),{activeId:actor()});}
   if(ui.route==='home')cleanCommunication=bindVoiceComposer({root:$('#app>.home-page'),lang:()=>me().language,getDraft:()=>ui.companionDrafts?.[actor()]||'',onDraft:text=>{ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:text};save();},onConversationStart:()=>setHomeConversation(true),onStatus:flushVoiceRefresh});
   if(ui.route==='landing'&&$('#onboarding-answer'))cleanCommunication=bindVoiceComposer({root:$('#app>.conversation-onboarding'),inputSelector:'#onboarding-answer',lang:'zh-CN',getDraft:()=>ui.onboardingDraft??getOnboardingTurn(state).value??'',onDraft:text=>{ui.onboardingDraft=text;save();},onConversationStart:()=>sceneSound.stopSpeech(),onStatus:flushVoiceRefresh});
@@ -954,14 +975,22 @@ async function runAction(action,element){
 }
 
 document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!el)return;if(el.dataset.go){e.preventDefault();if(el.closest('.bottom-nav')&&el.dataset.go===ui.route)return;return go(el.dataset.go,{direction:el.dataset.direction});}if(el.dataset.action){e.preventDefault();return runAction(el.dataset.action,el);}if(el.dataset.topic){$('#topic').value=el.dataset.topic;return;}if(el.dataset.mode){dispatch({type:'UPDATE_DRAFT',patch:{...formPatch(),mode:el.dataset.mode}},false);return render(false);}if(el.dataset.invitation){ui.selectedInvite=el.dataset.invitation;return go('invite');}if(el.dataset.relationship){ui.selectedRelationship=el.dataset.relationship;return go('chat');}if(el.dataset.say){return sendCompanion(el.dataset.say);}if(el.dataset.publicSay){dispatch({type:'SET_PUBLIC_DRAFT',text:el.dataset.publicSay},false);render(false);$('#public-message')?.focus();return;}if(el.dataset.retry){dispatch({type:'RETRY_MESSAGE',messageId:el.dataset.retry,fail:consumeFailure()});return;}});
-function sendCompanion(text){if(LIVE_WEB){if(companionTyping||liveView.historyBusy||!text.trim())return;sceneSound.stopSpeech();const owner=liveSession.getState().owner;ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:''};delete ui.boopReply;sceneSound.cue('send');klinWorld?.interact('look');void liveSession.send(text).then(sent=>{if(sent&&liveSession.getState().owner===owner){sceneSound.cue('reply');klinWorld?.interact('wave');}});return;}if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
+async function sendCompanion(text){if(LIVE_WEB){if(liveSendPending||companionTyping||liveView.historyBusy||!text.trim())return;sceneSound.stopSpeech();const owner=liveSession.getState().owner,originUI=ui,pending={};liveSendPending=pending;
+ try{
+  await liveHandoff.repair(state.onboarding.conversation?.complete===true?landingInformation(state):null);
+  if(ui!==originUI||liveSession.getState().owner!==owner)return;
+  ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:''};delete ui.boopReply;sceneSound.cue('send');klinWorld?.interact('look');
+  const sent=await liveSession.send(text);if(sent&&liveSession.getState().owner===owner){sceneSound.cue('reply');klinWorld?.interact('wave');}
+ }catch(error){if(error.name!=='AbortError'&&ui===originUI)toast(error.message);}
+ finally{if(liveSendPending===pending)liveSendPending=null;}return;
+ }if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
 document.addEventListener('submit',e=>{const form=e.target.closest('form[data-form]');if(!form)return;e.preventDefault();const data=new FormData(form);switch(form.dataset.form){case 'auth-entry-flow':{
  if(authView.busy)return;
  authFormDraft.username=String(data.get('username')||'');authFormDraft.password=String(data.get('password')||'');authFormDraft.confirmPassword=String(data.get('confirmPassword')||'');
  return Promise.resolve(submitAuthEntryForm(authController,authFormDraft,{onUsernameCheck(username){clearAuthDraft();authFormDraft.username=username;}})).then(result=>{if(LIVE_WEB&&result?.step==='ready')announceLiveSession();return result;});
 }
 case 'setup-basics':{const patch=basicsFormPatch(),errors=validateBasics(patch);if(Object.keys(errors).length){$('#basics-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#basics-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BASICS',patch},false)){if(state.onboarding.status!=='ready'&&!state.demand)dispatch({type:'UPDATE_DRAFT',patch:{language:patch.language}},false);ui.setupBasics=null;go('setup-birth');}return;}
-case 'setup-birth':{const patch=birthFormPatch(),errors=validateBirth(patch,state.now);if(Object.keys(errors).length){$('#birth-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#birth-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BIRTH',patch},false)){ui.setupBirth=null;if(state.onboarding.status==='ready'){go('profile');toast('資料已儲存。');}else if(dispatch({type:'BEGIN_INITIALIZATION'},false)){go('initializing');startInitialization();}}return;}
+case 'setup-birth':{const patch=birthFormPatch(),errors=validateBirth(patch,state.now);if(Object.keys(errors).length){$('#birth-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#birth-error').scrollIntoView({block:'nearest'});return;}return saveBirthForm(patch);}
 case 'onboarding':return answerOnboarding(String(data.get('answer')||''));
 case 'companion':return sendCompanion(String(data.get('message')||''));
 case 'demand':{dispatch({type:'UPDATE_DRAFT',patch:formPatch()},false);const errors=validateDemand(state.draft,state.now);delete errors.intro;if(Object.keys(errors).length){if(errors.time||errors.area||errors.expiresAt){const options=$('.request-options');if(options)options.open=true;}$('#demand-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#demand-error').scrollIntoView({block:'nearest'});return;}return go('preview');}
@@ -975,8 +1004,8 @@ case 'public-message':{const rel=latestRelationship();if(!rel)return;const text=
 }});
 document.addEventListener('focusin',e=>{if(e.target.id==='private-message'&&ui.route==='home')setHomeConversation(true);});
 document.addEventListener('input',e=>{if(e.target.closest('[data-form="auth-entry-flow"]')){if(['username','password','confirmPassword'].includes(e.target.name))authFormDraft[e.target.name]=e.target.value;if(e.target.name==='username'&&authView.step!=='entry'){const position=e.target.selectionStart;clearAuthDraft();authController.changeUsername(authFormDraft.username);const input=$('#auth-username');input?.focus();input?.setSelectionRange(position,position);}updateAuthControls();return;}if(e.target.id==='network-query'){filterNetwork(e.target.value);return;}
-if(['onboarding-answer','onboarding-calendar'].includes(e.target.id)){ui.onboardingDraft=e.target.value;save();}if(e.target.closest('#setup-basics-form')){ui.setupBasics=basicsFormPatch();save();}if(e.target.closest('#setup-birth-form')){ui.setupBirth=birthFormPatch();save();}if(e.target.id==='private-message'){ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:e.target.value};save();}if(e.target.id==='public-message')dispatch({type:'SET_PUBLIC_DRAFT',text:e.target.value},false);if(e.target.id==='intro-preview')dispatch({type:'UPDATE_DRAFT',patch:{intro:e.target.value}},false);});
-document.addEventListener('change',e=>{if(e.target.id==='tag-diary-month'){showSocialDiaryRecords(e.target.value,'');return;}if(e.target.id==='social-tag-mode'){const choice=$('.tag-replace-choice');if(choice)choice.hidden=e.target.value!=='replace';return;}if(e.target.closest('#demand-form')){const summary=$('[data-request-option-summary]');if(summary){const data=new FormData($('#demand-form'));summary.textContent=`${data.get('time')?formatDate(String(data.get('time'))):'選個方便的時間'}${data.get('mode')==='offline'&&data.get('area')?` · ${data.get('area')}`:''} · 尋找 ${data.get('validDays')||7} 天`;}}if(e.target.id==='card-avatar-upload'){uploadCardAvatar(e.target.files?.[0]);return;}if(e.target.name==='unknownTime'){const input=$('#birth-time');input.disabled=e.target.checked;if(e.target.checked)input.value='';ui.setupBirth=birthFormPatch();save();}if(e.target.closest('#setup-basics-form')){ui.setupBasics=basicsFormPatch();save();}if(e.target.closest('#setup-birth-form')){ui.setupBirth=birthFormPatch();save();}});
+if(['onboarding-answer','onboarding-calendar'].includes(e.target.id)){ui.onboardingDraft=e.target.value;save();}if(e.target.closest('#setup-basics-form')){ui.setupBasics=basicsFormPatch();save();}if(e.target.closest('#setup-birth-form')){setBirthDraft(birthFormPatch());save();}if(e.target.id==='private-message'){ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:e.target.value};save();}if(e.target.id==='public-message')dispatch({type:'SET_PUBLIC_DRAFT',text:e.target.value},false);if(e.target.id==='intro-preview')dispatch({type:'UPDATE_DRAFT',patch:{intro:e.target.value}},false);});
+document.addEventListener('change',e=>{if(e.target.id==='tag-diary-month'){showSocialDiaryRecords(e.target.value,'');return;}if(e.target.id==='social-tag-mode'){const choice=$('.tag-replace-choice');if(choice)choice.hidden=e.target.value!=='replace';return;}if(e.target.closest('#demand-form')){const summary=$('[data-request-option-summary]');if(summary){const data=new FormData($('#demand-form'));summary.textContent=`${data.get('time')?formatDate(String(data.get('time'))):'選個方便的時間'}${data.get('mode')==='offline'&&data.get('area')?` · ${data.get('area')}`:''} · 尋找 ${data.get('validDays')||7} 天`;}}if(e.target.id==='card-avatar-upload'){uploadCardAvatar(e.target.files?.[0]);return;}if(e.target.name==='unknownTime'){const input=$('#birth-time');input.disabled=e.target.checked;if(e.target.checked)input.value='';setBirthDraft(birthFormPatch());save();}if(e.target.closest('#setup-basics-form')){ui.setupBasics=basicsFormPatch();save();}if(e.target.closest('#setup-birth-form')){setBirthDraft(birthFormPatch());save();}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&conversationActive&&!$('#sheet').open){e.preventDefault();setHomeConversation(false);$('#private-message')?.blur();$('.home-companion')?.focus({preventScroll:true});return;}if(e.target.matches('.visit-tab')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const find=e.key==='Home'||e.key!=='End'&&e.target.dataset.action==='visit-people';runAction(find?'visit-find':'visit-people',e.target);$(`.visit-tab[data-action="visit-${find?'find':'people'}"]`)?.focus();return;}if(e.key==='Enter'&&e.target.id==='onboarding-answer'&&!e.target.value.trim()){e.preventDefault();return;}if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&['public-message','private-message','onboarding-answer'].includes(e.target.id)){e.preventDefault();e.target.closest('form').requestSubmit();}});
 $('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet')){const r=$('#sheet').getBoundingClientRect();if(e.clientY<r.top||e.clientY>r.bottom||e.clientX<r.left||e.clientX>r.right)closeSheet();}});
 $('#reset-button').onclick=()=>runAction('reset');
