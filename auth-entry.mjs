@@ -24,7 +24,7 @@ const cleanOnboarding = value => {
 const abortError = () => Object.assign(new Error('Request cancelled'), {name:'AbortError'});
 const assertActive = signal => { if (signal?.aborted) throw abortError(); };
 
-export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin = globalThis.location?.origin, logoutPath = null, now = Date.now} = {}) {
+export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin = globalThis.location?.origin, logoutPath = null, now = Date.now, entryTimeoutMs = 15000} = {}) {
   if (typeof fetcher !== 'function') throw new TypeError('A fetch implementation is required');
   const base = new URL(origin || 'http://localhost');
   if (!['http:','https:'].includes(base.protocol)) throw new TypeError('Authentication requires an HTTP origin');
@@ -34,26 +34,35 @@ export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin =
     return url.href;
   }
   if (logoutPath !== null) endpoint(logoutPath);
-  async function request(path, {method='POST', body, signal, owner}={}) {
+  async function request(path, {method='POST', body, signal, owner, timeout=0}={}) {
     assertActive(signal);
-    const response = await fetcher(endpoint(path), {
-      method, credentials:'include', mode:'same-origin', redirect:'error', cache:'no-store', signal,
-      headers:{Accept:'application/json',...(body === undefined ? {} : {'Content-Type':'application/json'}),...(owner === undefined ? {} : {'X-Knok-User-Id':String(owner)})},
-      ...(body === undefined ? {} : {body:JSON.stringify(body)}),
-    });
-    assertActive(signal);
-    let data = null; try { data = await response.json(); } catch { if (response.ok && response.status !== 204) throw protocolError(); }
-    assertActive(signal);
-    if (!response.ok) {
-      const detail = plain(data?.error) ? data.error : data;
-      const message = typeof detail?.message === 'string' ? detail.message.slice(0,300) : '請稍後再試。';
-      throw new AuthEntryError(message,{status:response.status,code:detail?.code || (typeof data?.error==='string'?data.error:`http_${response.status}`),retryAt:response.status===429?authRetryAt(response.headers?.get('Retry-After'),now()):0});
+    const deadline=timeout>0?AbortSignal.timeout(timeout):null;
+    const requestSignal=deadline?(signal?AbortSignal.any([signal,deadline]):deadline):signal;
+    try {
+      const response = await fetcher(endpoint(path), {
+        method, credentials:'include', mode:'same-origin', redirect:'error', cache:'no-store', signal:requestSignal,
+        headers:{Accept:'application/json',...(body === undefined ? {} : {'Content-Type':'application/json'}),...(owner === undefined ? {} : {'X-Knok-User-Id':String(owner)})},
+        ...(body === undefined ? {} : {body:JSON.stringify(body)}),
+      });
+      assertActive(requestSignal);
+      let data = null; try { data = await response.json(); } catch { if (response.ok && response.status !== 204) throw protocolError(); }
+      assertActive(requestSignal);
+      if (!response.ok) {
+        const detail = plain(data?.error) ? data.error : data;
+        const message = typeof detail?.message === 'string' ? detail.message.slice(0,300) : '請稍後再試。';
+        throw new AuthEntryError(message,{status:response.status,code:detail?.code || (typeof data?.error==='string'?data.error:`http_${response.status}`),retryAt:response.status===429?authRetryAt(response.headers?.get('Retry-After'),now()):0});
+      }
+      return data;
+    } catch(error) {
+      // Account navigation/disposal stays cancellation, not a request failure.
+      assertActive(signal);
+      if(deadline?.aborted)throw new AuthEntryError('帳號檢查逾時，請重試。',{code:'request_timeout'});
+      throw error;
     }
-    return data;
   }
   return {
     kind:'api',
-    entry:(username,{signal}={})=>request('/api/auth/entry',{body:{username},signal}),
+    entry:(username,{signal}={})=>request('/api/auth/entry',{body:{username},signal,timeout:entryTimeoutMs}),
     signIn:(username,password,{signal}={})=>request('/api/auth/sign-in',{body:{username,password},signal}),
     register:(username,password,{signal}={})=>request('/api/auth/register',{body:{username,password},signal}),
     bootstrap:({signal}={})=>request('/api/auth/bootstrap',{method:'GET',signal}),
@@ -161,7 +170,7 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
     if (!current(token) || error?.name==='AbortError') return snapshot();
     const status=Number(error?.status)||0,code=error?.code||'network_error';
     const recovery=patch.step==='bootstrap'||['setup','bootstrap','landing'].includes(state.step);
-    const message=status===429?'操作有點頻繁，請稍等後再試。':status===503?'服務暫時不可用，請稍後重試。':status===401?'帳號或密碼不正確，或帳號暫不可用。':code==='invalid_response'?'服務回覆不完整，請重試。':status===0?'連線暫時中斷，請重試。':recovery?'暫時無法確認帳號或伙伴狀態，請稍後重新載入。':error?.message||'暫時無法完成，請重試。';
+    const message=code==='request_timeout'?'帳號檢查逾時，請重試。':status===429?'操作有點頻繁，請稍等後再試。':status===503?'服務暫時不可用，請稍後重試。':status===401?'帳號或密碼不正確，或帳號暫不可用。':code==='invalid_response'?'服務回覆不完整，請重試。':status===0?'連線暫時中斷，請重試。':recovery?'暫時無法確認帳號或伙伴狀態，請稍後重新載入。':error?.message||'暫時無法完成，請重試。';
     return emit({busy:false,error:message,errorCode:code,retryAt:status===429?(error.retryAt||now()+30000):0,...patch});
   }
   function applyEntry(result) {

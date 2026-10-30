@@ -42,3 +42,20 @@ test('failed logout on the setup page keeps the account and hides backend diagno
  const auth=createAuthEntry({adapter:{bootstrap:async()=>setup({state:'blocked'}),logout:async()=>{throw Object.assign(Error('Error /srv/private.ts INTERNAL_PRIVATE'),{status:500,code:'internal'});}}});
  await auth.bootstrap();await auth.logout();const view=auth.getState();assert.equal(view.step,'setup');assert.equal(view.authenticated,true);assert.equal(view.username,'registered-user');assert.doesNotMatch(authEntryPanel(view),/\/srv\/|INTERNAL_PRIVATE/);auth.dispose();
 });
+
+test('a stalled username check times out, releases busy and permits one explicit retry',async()=>{
+ let calls=0;const adapter=createApiAuthAdapter({origin:'https://example.test',entryTimeoutMs:20,fetch:async(url,{signal})=>{
+  calls++;if(calls>1)return Response.json({username:'existing-user',nextAction:'login'});
+  return new Promise((resolve,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));
+ }});const auth=createAuthEntry({adapter});
+ const pending=auth.entry('existing-user');assert.equal(auth.getState().busy,true);
+ await Promise.race([pending,new Promise(resolve=>setTimeout(resolve,80))]);
+ assert.equal(auth.getState().busy,false);assert.equal(auth.getState().errorCode,'request_timeout');assert.equal(auth.getState().step,'entry');assert.equal(auth.getState().username,'existing-user');
+ assert.doesNotMatch(authEntryPanel(auth.getState()),/正在檢查|disabled/);assert.match(auth.getState().error,/逾時/);assert.equal(calls,1);
+ await auth.entry('existing-user');assert.equal(calls,2);assert.equal(auth.getState().step,'login');auth.dispose();
+});
+test('changing username aborts the old check without a timeout error in the new input',async()=>{
+ const auth=createAuthEntry({adapter:createApiAuthAdapter({origin:'https://example.test',entryTimeoutMs:20,fetch:async(url,{signal})=>new Promise((resolve,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}))})});
+ const pending=auth.entry('old-user');auth.changeUsername('new-user');await pending;
+ assert.equal(auth.getState().username,'new-user');assert.equal(auth.getState().busy,false);assert.equal(auth.getState().error,'');auth.dispose();
+});
