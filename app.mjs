@@ -118,8 +118,10 @@ const liveSession=createLiveSession({onChange(value){
  companionTyping=value.sending;
  if(state.session.authenticated)state.private.a.companionMessages=value.messages;
  if(!liveRenderPending){liveRenderPending=true;queueMicrotask(()=>{liveRenderPending=false;if(state.session.authenticated&&ui.route==='home')render(false);});}
-},onSessionLost(){
- liveHandoff.clear();liveSession.activate(null);state.session.authenticated=false;state.private.a.companionMessages=[];closeSheet();ui.route='login';render(false);authController?.bootstrap();
+},onSessionLost(reason){
+ liveHandoff.clear();liveSession.activate(null);state.session.authenticated=false;state.private.a.companionMessages=[];closeSheet();ui.route='login';
+ if(['SESSION_CHANGED','HISTORY_SESSION_CHANGED'].includes(reason?.code)){authController?.invalidateSession();return;}
+ render(false);authController?.bootstrap();
 }});
 const liveHandoff=createLandingHandoff({request:(...args)=>liveSession.request(...args),chat:(...args)=>liveSession.chat(...args),accepted(receipt,owner){
  if(state.session.localAuthUserId===owner){state.onboarding.agentHandoff=receipt;save();}
@@ -255,9 +257,15 @@ function applyAuthenticatedRoom(view){
 }
 function onAuthChange(next){
  const previous=authView,changed=next.step!==authView.step||next.username!==authView.username;authView=next;
+ if(LIVE_WEB&&(next.errorCode==='session_mismatch'||previous.authenticated&&!next.authenticated)){
+  // Invalidate this page only. Never log out a different window's session.
+  liveHandoff.clear();liveSession.activate(null);liveSendPending=null;
+  state.session.authenticated=false;state.private.a.companionMessages=[];
+  conversationActive=false;ui.companionDrafts={};clearAuthDraft();closeSheet();ui.route='login';render(false);return;
+ }
  if(assignedFamily(previous.bootstrap)?.id!==assignedFamily(next.bootstrap)?.id&&klinWorld){conversationAvatarMotion?.dispose();conversationAvatarMotion=null;klinWorld.dispose();klinWorld=null;worldReady=false;worldFailed=false;$('#phone .klin-world-host')?.remove();}
  if(changed){clearAuthDraft();authFormDraft.username=next.username||authFormDraft.username;}
- if(['ready','landing'].includes(next.step)){applyAuthenticatedRoom(next);if(next.error)toast(next.error);return;}
+ if(['ready','landing'].includes(next.step)){if(!next.busy)applyAuthenticatedRoom(next);if(next.error)toast(next.error);return;}
  if(LIVE_WEB&&isLandingCreation(next.bootstrap)&&next.step==='setup'&&ui.route==='landing'){save();go('login',{replace:true});return;}
  if(LIVE_WEB&&next.step==='bootstrap'&&!next.busy&&next.error&&ui.route==='landing'){save();go('login',{replace:true});return;}
  if(LIVE_WEB&&isLandingCreation(previous.bootstrap)&&!next.authenticated&&ui.route==='landing'){save();state.session.authenticated=false;liveSession.activate(null);liveHandoff.clear();go('login',{replace:true});return;}

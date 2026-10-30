@@ -33,3 +33,10 @@ test('invalid identity fails closed; missing backend is an error rather than emp
 test('long native history cannot exceed the existing chat request size or per-message contract',async()=>{
  let sent;const session=createLiveSession({fetchImpl:async(url,init)=>{if(init.method==='POST'){sent=init.body;return Response.json({text:'answer',source:'model',provider:'knok-agent'});}return Response.json(page(Array.from({length:15},(_,i)=>message('e'+i,i+1,'字'.repeat(5000)))));}});session.activate(1);await session.history();await session.send('hello');assert.ok(Buffer.byteLength(sent)<16000);assert.ok(JSON.parse(sent).messages.every(m=>m.content.length<=4000));assert.equal(JSON.parse(sent).messages.at(-1).content,'hello');
 });
+
+test('a history subject mismatch clears the current view, invalidates pending requests and disables sends',async()=>{
+ let reads=0,lost=0,posts=0;
+ const session=createLiveSession({onSessionLost:()=>lost++,fetchImpl:async(url,init)=>{if(init.method==='POST')posts++;return Response.json(++reads===1?page([message('own',1)]):page([message('wrong',2,'other account')],{user:{id:2}}));}});
+ session.activate(1);await session.history();assert.equal(session.getState().messages.length,1);await session.history();
+ assert.equal(lost,1);assert.equal(session.getState().owner,null);assert.deepEqual(session.getState().messages,[]);assert.equal(await session.send('do not send'),false);assert.equal(posts,0);
+});
