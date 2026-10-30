@@ -103,3 +103,14 @@ test('five independent encounter slots retain the approved shared film',async()=
  for(const family of Object.keys(LANDING_FAMILY_VIDEOS))assert.equal(landingVideoSource(family),LANDING_FAMILY_VIDEOS.metal);
  assert.equal(landingVideoSource(null),LANDING_FAMILY_VIDEOS.metal);
 });
+
+test('completed account restores the signed companion name on a fresh browser without restarting Landing',()=>{
+ const state=initialState(),server={...bound(),onboarding:{status:'completed'}};
+ state.onboarding.status='ready';const before=structuredClone(state.onboarding),birth=structuredClone(state.private.a.birth);
+ state.private.a.companionMessages=[{id:'kept',text:'existing chat'}];
+ assert.equal(restoreLandingSubmission(state,server),true);
+ assert.equal(state.users.a.companionName,input.agentName);assert.equal(state.private.a.companion.name,input.agentName);
+ assert.deepEqual(state.onboarding,before);assert.deepEqual(state.private.a.birth,birth);assert.equal(state.private.a.companionMessages[0].id,'kept');
+ state.users.a.companionName='后来改的名字';state.private.a.companion.name='后来改的名字';
+ restoreLandingSubmission(state,server);assert.equal(state.users.a.companionName,'后来改的名字');assert.equal(state.private.a.companion.name,'后来改的名字');
+});
