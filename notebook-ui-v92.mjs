@@ -1,7 +1,7 @@
 // Read-only presentation: saved summaries/quotes are never synthesized from chat.
 import { socialTagState } from './social-tags.mjs?v=20261026-social-tags-45';
-import { diaryCalendarData } from './social-tags-ui.mjs?v=20261030-spirit-notebook-8';
-import { uiIcon } from './ui-icons.mjs?v=20261030-handdrawn-motion-92c';
+import { diaryCalendarData } from './social-tags-ui.mjs?v=20261031-product-sync';
+import { uiIcon } from './ui-icons.mjs?v=20261031-product-sync';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-spirit-notebook-8';
 import { families } from './studio-family-data.mjs';
 

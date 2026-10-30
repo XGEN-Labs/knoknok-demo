@@ -1,4 +1,4 @@
-import { validCompanionElement } from './companion-elements.mjs?v=20261030-elements-88';
+import { validCompanionElement } from './companion-elements.mjs?v=20261031-product-sync';
 export const FRIEND_ROOM_ASSETS = Object.freeze({
  metal:'assets/shared-elements-20261030-88/metal-room.png',
  wood:'assets/shared-elements-20261030-88/wood-room.png',

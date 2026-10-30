@@ -1,8 +1,9 @@
+import { DEFAULT_PROFILE_INTRODUCTION } from './profile-preferences-v92.mjs?v=20261031-product-sync';
 // Browser-local demonstration of an account-owned saved room. This is not an
 // authentication store: it contains no password, hash, token or cookie.
 export function freshDemoAccountState(initial){
  const state=JSON.parse(JSON.stringify(initial)),owner=state.users.a,space=state.private.a;
- Object.assign(owner,{name:'',bio:'',region:'',cardTags:[],cardLabels:{},cardAvatar:'',cardTagsEdited:false,shareRegion:false});
+ Object.assign(owner,{name:'',bio:DEFAULT_PROFILE_INTRODUCTION,bioDefaultVersion:1,region:'',cardTags:[],cardLabels:{},cardAvatar:'',cardTagsEdited:false,shareRegion:false});
  space.memory=[];space.companionMessages=[];delete space.socialTags;
  space.birth={date:'',time:'',unknownTime:true,place:'',timezone:''};
  return state;

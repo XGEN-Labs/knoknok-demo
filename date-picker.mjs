@@ -1,4 +1,4 @@
-import { uiIcon } from './ui-icons.mjs?v=20261026-experience-41c';
+import { uiIcon } from './ui-icons.mjs?v=20261031-product-sync';
 import { bindSheetDismiss } from './sheet-dismiss.mjs?v=20261021-refine-27c';
 /** Touch-first local calendar wheels. Named native inputs remain the form authority. */
 const pad=n=>String(n).padStart(2,'0');
@@ -83,7 +83,7 @@ function createWheel(element,{values,value,label,onChange}){
  return {update,align:()=>align(current),destroy:()=>{disposed=true;win.clearTimeout(settleTimer);win.cancelAnimationFrame(scrollFrame);win.cancelAnimationFrame(positionFrame);element.removeEventListener('scroll',onScroll);element.removeEventListener('scrollend',settle);element.removeEventListener('keydown',onKey);element.removeEventListener('pointerdown',onPointerDown);element.removeEventListener('pointermove',onPointerMove);element.removeEventListener('pointerup',onPointerEnd);element.removeEventListener('pointercancel',onPointerCancel);}};
 }
 
-export function initDatePickers(root=document){
+export function initDatePickers(root=document,{onConfirm}={}){
  const cleanups=[];let openPicker=null;
  root.querySelectorAll('input[type="date"],input[type="datetime-local"],input[type="time"]').forEach(input=>{
   if(input.dataset.knDateReady)return;input.dataset.knDateReady='true';
@@ -135,7 +135,7 @@ export function initDatePickers(root=document){
    clearDismiss=bindSheetDismiss(dialog,()=>close());
    dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close();}});
    dialog.querySelectorAll('[data-date-shortcut]').forEach(button=>button.addEventListener('click',()=>{const next=new Date(now);next.setDate(now.getDate()+(button.dataset.dateShortcut==='weekend'?((6-now.getDay()+7)%7||7):Number(button.dataset.dateShortcut)));y=next.getFullYear();m=next.getMonth()+1;d=next.getDate();assign(clampPickerValue(value(),type,limits));refresh();}));
-   dialog.querySelector('.kn-date-confirm').addEventListener('click',()=>{const result=value(),error=dialog.querySelector('.kn-date-error');if(clampPickerValue(result,type,limits)!==result){error.hidden=false;error.textContent=birthday?'生日不能晚於今天。':'請選擇有效範圍內的時間。';return;}input.value=result;sync();close();input.dispatchEvent(new win.Event('input',{bubbles:true}));input.dispatchEvent(new win.Event('change',{bubbles:true}));});
+   dialog.querySelector('.kn-date-confirm').addEventListener('click',()=>{if(!dialog.open)return;const result=value(),error=dialog.querySelector('.kn-date-error');if(clampPickerValue(result,type,limits)!==result){error.hidden=false;error.textContent=birthday?'生日不能晚於今天。':'請選擇有效範圍內的時間。';return;}input.value=result;sync();close();input.dispatchEvent(new win.Event('input',{bubbles:true}));input.dispatchEvent(new win.Event('change',{bubbles:true}));onConfirm?.(input);});
    phone.append(scrim,dialog);position();dialog.showModal();
    dialog.querySelectorAll('[data-date-part]').forEach(element=>{const part=element.dataset.datePart;wheels.set(part,createWheel(element,{values:options(part),value:current(part),label:element.getAttribute('aria-label'),onChange:n=>onChange(part,n)}));});
    refresh();trigger.setAttribute('aria-expanded','true');win.addEventListener('resize',position);win.visualViewport?.addEventListener('resize',position);win.visualViewport?.addEventListener('scroll',position);dialog.querySelector('.kn-date-wheel')?.focus({preventScroll:true});

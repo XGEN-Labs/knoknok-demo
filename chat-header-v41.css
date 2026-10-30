@@ -281,5 +281,23 @@
   .phone#phone #app .page.shared-chat-page .shared-agent-art img {animation:none;}
 }
 
+/* Keep the avatar trip on its compositor layer. New chat controls use their
+   approved translucent fills for this brief handoff; the cached glass and
+   progressive message filter reconcile once the character has landed. */
+.phone#phone[data-conversation-avatar-motion] #app :is(.scene-icon,.home-chat-identity,.conversation-message,.composer-row,.kn-glass-control) {
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.phone#phone > .conversation-avatar-flight {
+  will-change:transform,opacity;
+  backface-visibility:hidden;
+}
+/* A hidden log can still leave an empty SVG filter surface alive in WebKit.
+   Suppress that entire paint owner for the return trip while retaining its
+   DOM/geometry until cleanup after landing. */
+.phone#phone[data-conversation-avatar-motion="leave"] #app .kn-conversation-edge-group {
+  visibility:hidden!important;
+}
+
 /* Public space title has no participant avatar or icon. */
 .phone#phone #app .page.shared-chat-page .shared-people > .shared-person:only-child { max-width:100%; }

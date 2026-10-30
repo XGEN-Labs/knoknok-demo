@@ -11,15 +11,15 @@ export function createRoomVideo({container, src, poster, startTime = 0, videoEle
   video.setAttribute('aria-hidden', 'true'); video.setAttribute('playsinline', '');
   Object.assign(video.style, {position: 'absolute', inset: '0', width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none'});
   container.append(video);
-  let active = false, reduced = !!reducedMotion, disposed = false, failed = false, pending = false, attempt = 0;
-  const shouldPlay = () => !!src && active && !reduced && !doc.hidden && !disposed && !failed;
+  let active = false, held = false, reduced = !!reducedMotion, disposed = false, failed = false, pending = false, attempt = 0;
+  const shouldPlay = () => !!src && active && !held && !reduced && !doc.hidden && !disposed && !failed;
   let initialSeek = null;
   const conceal = () => {video.hidden = true;};
   const playing = () => {if (shouldPlay()) video.hidden = false;};
-  const pause = () => {attempt++; pending = false; conceal(); video.pause();};
+  const pause = ({preserveFrame = false} = {}) => {attempt++; pending = false; if (!preserveFrame) conceal(); video.pause();};
   const error = () => {failed = true; pause();};
   const sync = () => {
-    if (!shouldPlay()) {pause(); return;}
+    if (!shouldPlay()) {pause({preserveFrame: held}); return;}
     if (pending || !video.paused) return;
     if (!video.getAttribute('src')) {
       video.src = src; video.preload = 'auto';
@@ -39,7 +39,7 @@ export function createRoomVideo({container, src, poster, startTime = 0, videoEle
   doc.addEventListener('visibilitychange', visibility);
   return {
     video,
-    update(options = {}) {if (disposed) return; active = options.active ?? active; reduced = options.reducedMotion ?? reduced; sync();},
+    update(options = {}) {if (disposed) return; held = !!options.holdFrame && !video.hidden && video.readyState >= 2; active = options.active ?? active; reduced = options.reducedMotion ?? reduced; sync();},
     dispose() {if (disposed) return; disposed = true; pause(); if (initialSeek) {video.removeEventListener('loadedmetadata', initialSeek); initialSeek = null;} video.removeEventListener('playing', playing); video.removeEventListener('error', error); doc.removeEventListener('visibilitychange', visibility); video.removeAttribute('src'); video.load(); video.remove();},
   };
 }

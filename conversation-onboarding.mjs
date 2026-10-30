@@ -79,7 +79,7 @@ const STEPS = Object.freeze([
   { key: 'where', prompt: 'NokNok 敲敲……你终于醒了', replies: ['我在哪兒'], interaction: true, inputMode: 'none' },
   { key: 'birthDate', prompt: '你可以告诉我你的生日吗', placeholder: '像 1998 年 6 月 18 日', inputMode: 'text' },
   { key: 'birthTime', prompt: '时辰，不记得也没关系', placeholder: '选择一个大概的时辰', options: BIRTH_TIME_OPTIONS, skipLabel: '记不清了，跳过', canSkip: true },
-  { key: 'gender', prompt: '性別（用來排大運）', placeholder: '', replies: ['男生', '女生'], canSkip: true },
+  { key: 'gender', prompt: '性別', placeholder: '', replies: ['男生', '女生'], canSkip: true },
   { key: 'birthPlace', prompt: '或许还记得你的出生地吗？', placeholder: '城市名称就可以', canSkip: true },
   { key: 'response', prompt: '有些地方开始连起来了。', placeholder: '想到什么，就说给我听', replies: ['……你怎么知道', '想慢慢認識你'], canSkip: false },
   { key: 'contractLight', prompt: '这个是我们的契约', replies: ['打開我們的契約'], interaction: true, inputMode: 'none' },

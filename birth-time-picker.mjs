@@ -1,4 +1,4 @@
-import { BIRTH_TIME_OPTIONS } from './conversation-onboarding.mjs?v=20261026-answers-47';
+import { BIRTH_TIME_OPTIONS } from './conversation-onboarding.mjs?v=20261031-product-sync';
 
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const validClock = value => typeof value === 'string' && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);

@@ -1,10 +1,11 @@
-import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261030-spirit-notebook-8';
-import { ELEMENT_COMPANIONS, DEMO_COMPANION_ELEMENTS } from './companion-elements.mjs?v=20261030-shared-elements-88';
+import { migrateProfileIntroduction, PROFILE_LANGUAGES } from './profile-preferences-v92.mjs?v=20261031-product-sync';
+import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261030-spirit-notebook-5';
+import { ELEMENT_COMPANIONS, DEMO_COMPANION_ELEMENTS } from './companion-elements.mjs?v=20261031-product-sync';
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, accountLandingComplete, validMetalVoice } from './landing.mjs';
-import { interestTags, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs?v=20261026-answers-47d';
+import { interestTags, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs?v=20261031-product-sync';
 import { ensureSocialTags, syncSocialTags, applyLandingSocialTags, endSocialTagSession, manageSocialTag, updateManualSocialTags, publicSocialTags } from './social-tags.mjs?v=20261026-social-tags-45';
-export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261026-answers-47d';
+export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261031-product-sync';
 export const STORAGE_KEY = 'knokknok-prototype-v1';
 const DAY = 24 * 60 * 60 * 1000;
 const copy = value => JSON.parse(JSON.stringify(value));
@@ -490,8 +491,14 @@ export function reduce(previous, action = {}) {
       if (typeof action.userId !== 'string' || !Object.hasOwn(state.users, action.userId) || !Object.hasOwn(state.private, action.userId)) return fail(state, '找不到這個示範身份。');
       state.session.activeUserId = action.userId;
       return state;
+    case 'UPDATE_LANGUAGE': {
+      if(!PROFILE_LANGUAGES.includes(action.language))return fail(state,'請選擇有效的聊天語言。');
+      state.users[actorId].language=action.language;
+      return state;
+    }
     case 'UPDATE_PROFILE': {
       const patch = action.patch || {};
+      if(patch.bio!==undefined)state.users[actorId].bioDefaultVersion=1;
       if (patch.name !== undefined && !clean(patch.name)) return fail(state, '請填寫暱稱。');
       for (const key of ['name', 'bio']) if (patch[key] !== undefined) state.users[actorId][key] = clean(patch[key]);
       if (patch.cardTags !== undefined || patch.cardLabels !== undefined) {
@@ -810,6 +817,7 @@ export function hydrateState(serialized, now = Date.now()) {
       if (!Array.isArray(state.private[id].memory) || !Array.isArray(state.private[id].companionMessages)) state.private[id] = fallback;
     }
     for (const id of ['a', ...DEMO_FRIENDS.map(friend => friend.id)]) {
+      migrateProfileIntroduction(state.users[id]);
       state.users[id].language ||= '粵語';
       state.users[id].region ||= '香港';
       const companionName = clean(state.users[id].companionName);

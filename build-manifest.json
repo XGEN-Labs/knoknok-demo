@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T16:22:46.564356Z",
+  "createdAt": "2026-10-30T17:02:18.660Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 217480405,
+  "payloadBytes": 217534650,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 138268,
-      "sha256": "beb161be0ee3e333bef0abeca749e3c4b05041993bb61b1b019c6a47d3ec82f4"
+      "bytes": 146936,
+      "sha256": "b03414fbacc70c51cc41802291e73c2e1670f7d20bdf7fd631d7fba3f2f19284"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -294,6 +294,18 @@
       "sha256": "f13c18ff8cff4787db14dbd3013e60c4d84c5f52d0557f901b52c050544f7fba"
     },
     {
+      "source": "assets/klin-front-react-20261030-v01/day-react.mp4",
+      "path": "assets/klin-front-react-20261030-v01/day-react.mp4",
+      "bytes": 1121916,
+      "sha256": "c9af352c015bd49bf8b2130d9f6746126264c467b805a7c9919a037882989cf7"
+    },
+    {
+      "source": "assets/klin-front-react-20261030-v01/night-react.mp4",
+      "path": "assets/klin-front-react-20261030-v01/night-react.mp4",
+      "bytes": 1292497,
+      "sha256": "5f98ec2beda906591b14083b3bdf8728d8e081d23b802fb88a239bbdea0ba508"
+    },
+    {
       "source": "assets/klin-native-20261016-0907/juvenile.png",
       "path": "assets/klin-native-20261016-0907/juvenile.png",
       "bytes": 727228,
@@ -532,6 +544,150 @@
       "path": "assets/login-world-20261019/source/original-login-world.png",
       "bytes": 1902641,
       "sha256": "77633e4702a6b254d29406bed33f837d9b492e0821b941486970e859a35724d1"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/day-poster.png",
+      "bytes": 700454,
+      "sha256": "3748902a899c7606f27bbb9816cea1392c3125d96d65e5e4e967bf7e37061d04"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/day-room-only.png",
+      "bytes": 692679,
+      "sha256": "67b356037a45dcf63d9efa6c6cbbab213c843b01e6605cfc124b15b072d50beb"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-idle.mp4",
+      "bytes": 1493313,
+      "sha256": "f414072174ddb45593e52280e4eddecb05f93c0772739b55b4692ca6f521108d"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-poster.png",
+      "bytes": 655141,
+      "sha256": "f2e3104ffd474ae1f895a7d57e2e1c2de1b3837e17e8cf8cf316c2d57acb301f"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-react.mp4",
+      "bytes": 1312233,
+      "sha256": "1b789a5cab0e4994a3945b7adb1922effa55070f13e213ce6fcb1632c4fdb72c"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-room-only.png",
+      "bytes": 642150,
+      "sha256": "3ae43811b18ed4deb61ff8fee6c574a63f888622ce5c2a79ed7a686509b19bee"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/day-poster.png",
+      "bytes": 665455,
+      "sha256": "a96167b4d25189848a74c03401e5c0cd473f3c211a353dfaf4f4f5f3c9da66e7"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/day-room-only.png",
+      "bytes": 644832,
+      "sha256": "60e6c393f9e60bd1ef38807d3858746291af453b5ab7c7d19925260a0cb3f0d0"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-idle.mp4",
+      "bytes": 1415334,
+      "sha256": "a95fc25265c4858cd5c7d2e9465f1beda92b7f50548de59413f60ebf7fd461c8"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-poster.png",
+      "bytes": 678365,
+      "sha256": "2713efaf0cdb2c981f3d76928d05397925d92acc011330f02c8e4c75facd6576"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-react.mp4",
+      "bytes": 1204632,
+      "sha256": "b3a489769ae084e63a0bdfadff0331e44261694facf8016291fd7ee039859337"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-room-only.png",
+      "bytes": 605696,
+      "sha256": "d5af429aa4787ce53fea79cdf3f0f89246dea8700e0d29bec49b012c40a9a526"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/day-poster.png",
+      "bytes": 620037,
+      "sha256": "7a661618725e253f76c11ac5f0a02a81e233f8416efc95b38f59cbdbc2950c25"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/day-room-only.png",
+      "bytes": 611059,
+      "sha256": "220182a7216f37a0334f20a59ac11f5a9688c7e215e6706c56a4712c92e9ba8c"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-idle.mp4",
+      "bytes": 1382614,
+      "sha256": "fe5eacd07131cb4371895b0abf08d84ddf1888bb958509758d9da7489b61fe33"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-poster.png",
+      "bytes": 649041,
+      "sha256": "b4a11b766f355462910983246667f4e1004cf713fb99f4b17129da63d053106a"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-react.mp4",
+      "bytes": 1125027,
+      "sha256": "0c86fb6c58e56f9cf94185d988a54019cef41b6397842dda651e7809b069eb01"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-room-only.png",
+      "bytes": 635802,
+      "sha256": "00e6028f3562e22825468494c006c9280a8d27ab48a2e0f237299c63b38a3518"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/day-poster.png",
+      "bytes": 724085,
+      "sha256": "71dcf2b9783c5fabcac70192ee27b39a52911d42d9a9d57c3b32541efc701a83"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/day-room-only.png",
+      "bytes": 716449,
+      "sha256": "d1fabab6ee78b100d7766145b9238c1814f5d01be47d0db6c1ea0a742d7cf520"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-idle.mp4",
+      "bytes": 978451,
+      "sha256": "7b6b51a2198e5fda1397690976811f53f46e2790f8aedbadd3735d9d0e8fd4c4"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-poster.png",
+      "bytes": 763037,
+      "sha256": "326e644063513411fec3451af9accbf05e7c19e9167fa6fa668ba1787a8f1122"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-react.mp4",
+      "bytes": 1334787,
+      "sha256": "8feb5828c1ad36d265d320e6b52290c22adc8eaaa9f21a285dcd30c88215b90b"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-room-only.png",
+      "bytes": 715470,
+      "sha256": "6b9258d631b9c99de6d4e5e8020afa87a4e996e54778d6c5f15085a91dc0c491"
     },
     {
       "source": "assets/palette-20261021/ivory-blue-room.png",
@@ -1674,6 +1830,18 @@
       "sha256": "12075927f76f257f63a4844fd66d942a52bfe0c7132b5f02524b4fcc271c2ed6"
     },
     {
+      "source": "assets/spirit-notebook-20261030/closed-book-minimal.png",
+      "path": "assets/spirit-notebook-20261030/closed-book-minimal.png",
+      "bytes": 2229756,
+      "sha256": "32a13e5d05c619ef2f4b7b0ffae9e41e58b18f84a806ef3ecc0482ed37553199"
+    },
+    {
+      "source": "assets/spirit-notebook-20261030/open-book-minimal.png",
+      "path": "assets/spirit-notebook-20261030/open-book-minimal.png",
+      "bytes": 2336928,
+      "sha256": "290857a7761c4311b05669e3c377371fb7675fd8b69850ff3f8ee3f06bb6effd"
+    },
+    {
       "source": "assets/studio-family-artwork.svg",
       "path": "assets/studio-family-artwork.svg",
       "bytes": 2091121,
@@ -1838,8 +2006,8 @@
     {
       "source": "birth-time-picker.mjs",
       "path": "birth-time-picker.mjs",
-      "bytes": 10125,
-      "sha256": "f82a71f3a71ae8df7ad1cb55e5b9a9b4aeeffb2083018ca76ba3865481e01090"
+      "bytes": 10127,
+      "sha256": "b37b0aea18eb18275d117ccedbb1f42eaa270dd20a96fedcb08b57a111f68905"
     },
     {
       "source": "brand-v41.css",
@@ -1902,6 +2070,12 @@
       "sha256": "68f41bf7a6f6ad38652286ab27feda2d3b07d2fd528c8828d3f81915f71dd1e1"
     },
     {
+      "source": "card-tags-v92.mjs",
+      "path": "card-tags-v92.mjs",
+      "bytes": 1402,
+      "sha256": "150a6afb0a023b55d04c7299d8dc81e3eff654fd868d537744971b3a1ce5a4d2"
+    },
+    {
       "source": "chat-edge-blur.css",
       "path": "chat-edge-blur.css",
       "bytes": 1633,
@@ -1910,8 +2084,8 @@
     {
       "source": "chat-header-v41.css",
       "path": "chat-header-v41.css",
-      "bytes": 9408,
-      "sha256": "1070a61703e4262184c33942b3f038d372ce128f35f49eca281bd7b615ab5684"
+      "bytes": 10290,
+      "sha256": "16373614c09af18e34a1a7cea05cfc932e38739a13cb3b501f808f68f0fa789b"
     },
     {
       "source": "chat-identity-v87.css",
@@ -1922,8 +2096,8 @@
     {
       "source": "communication-mode.mjs",
       "path": "communication-mode.mjs",
-      "bytes": 19350,
-      "sha256": "1ce13bba4ad63151ebd608f23eb55450eeb14e5de8cf7b6bbdb7f276ad972699"
+      "bytes": 19347,
+      "sha256": "2bb9de0d91812e52cd1e102ce4e3b6b55bc20a78b27a37061b329d505b53221b"
     },
     {
       "source": "companion-animation.mjs",
@@ -1934,8 +2108,8 @@
     {
       "source": "companion-elements.mjs",
       "path": "companion-elements.mjs",
-      "bytes": 1115,
-      "sha256": "57a16f9837732b436b408ba658332abe1064ea133bad17e873cfde82ee3ccd9e"
+      "bytes": 1568,
+      "sha256": "52b573651c44c954b8034d64cdd7b9a52466f7e9f09f537d61e47b6cbe8249fe"
     },
     {
       "source": "compat/web-naming/landing-handoff.mjs",
@@ -1970,8 +2144,8 @@
     {
       "source": "conversation-avatar-motion.mjs",
       "path": "conversation-avatar-motion.mjs",
-      "bytes": 9323,
-      "sha256": "a1e58546ddbae7075a1877267d02d79e68fc31f03894f7c4687ec7dd3b3ba246"
+      "bytes": 12897,
+      "sha256": "b0d8c9076203777c9c22031325b62945259fdde2002f086967fe845c4ebaa3e0"
     },
     {
       "source": "conversation-edge-blur.mjs",
@@ -2000,8 +2174,8 @@
     {
       "source": "conversation-onboarding.mjs",
       "path": "conversation-onboarding.mjs",
-      "bytes": 18320,
-      "sha256": "e9953cdc77c98de32d5ca8431639e8527ca01a3a0287f01a3e81479b8bc7586d"
+      "bytes": 18299,
+      "sha256": "fc17f664ac0509e2c12a9a40ede3bd0b10718d0d646c7d5ba43d2d3557b8b50d"
     },
     {
       "source": "conversation-scroll.mjs",
@@ -2024,14 +2198,14 @@
     {
       "source": "date-picker.mjs",
       "path": "date-picker.mjs",
-      "bytes": 16004,
-      "sha256": "822f7a3bedb141f9eb8a03d4615bcbbbdbd0b565383d49a8e52395900fa4048b"
+      "bytes": 16059,
+      "sha256": "9c7e74a81c54283569ae9acb04b018d6f886b74674708f981561db7e1724d1bb"
     },
     {
       "source": "demo-account-state.mjs",
       "path": "demo-account-state.mjs",
-      "bytes": 1479,
-      "sha256": "1bc9ec425c236998f80acf6cfa5930ebcd9d3f86f141ad6579c69555a934f3ba"
+      "bytes": 1627,
+      "sha256": "e2dccc3ac208443add4591e62ad58ac3a031f14826192a9cac17562a04f860a2"
     },
     {
       "source": "demo.css",
@@ -2048,8 +2222,8 @@
     {
       "source": "element-character-art.mjs",
       "path": "element-character-art.mjs",
-      "bytes": 1195,
-      "sha256": "40716bd4983aa28d0cb902377e66f543bfa7b5e926d0f902d93cc5196a189e1a"
+      "bytes": 1196,
+      "sha256": "cb7890a56bd9139fd83624825e16ddb207eee5acf916cb65087a02e4a867ba81"
     },
     {
       "source": "energy-experience.css",
@@ -2114,14 +2288,14 @@
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2777,
-      "sha256": "fbdbb76e10523a522a9bf72105cb0a2faddcb2b11fed97cbb9eeaf6828569051"
+      "bytes": 2771,
+      "sha256": "97aa79af91583399de266fd52a5076ae87a365bf1248f114e41594b9d50dc9b0"
     },
     {
       "source": "friend-room.mjs",
       "path": "friend-room.mjs",
-      "bytes": 976,
-      "sha256": "00fe2cde5c55144794e7cc3ad66adb87455567e01e4206f3af6748b0666fe4a3"
+      "bytes": 977,
+      "sha256": "5a48a955ea87f62ca09ae3e03f368d036804dee7ad21dc938bf2305325371922"
     },
     {
       "source": "friend-world-fluid.mjs",
@@ -2192,8 +2366,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11966,
-      "sha256": "615ad9685d2783b5740cc6302d63b254414e8feb37351fab4a926637ff33e18c"
+      "bytes": 11960,
+      "sha256": "89134d9a8209742ffdad8a500d77251ab8e1ec3f44ca1012475b55e66e28a5d4"
     },
     {
       "source": "journey-experience.css",
@@ -2222,8 +2396,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 28472,
-      "sha256": "79b950ad9915d8d12142a323ba838ee56ef7931c77c6af572d6f2c3e2d7e6ebb"
+      "bytes": 30220,
+      "sha256": "857f846811288946a52c660ca4839df70c30e1b4d9f3d9d5158a4ffe593a678b"
     },
     {
       "source": "klin-world-2d.css",
@@ -2246,8 +2420,8 @@
     {
       "source": "landing-creation.mjs",
       "path": "landing-creation.mjs",
-      "bytes": 4116,
-      "sha256": "c84447011ab149dadc0fba3506594e03c13e07c73b748b1ee3f8e5eb33ae91f1"
+      "bytes": 4117,
+      "sha256": "1a8a0e454134e0ff5c15c84861f550481375ce5ed0cdfdc0d0360b7966ff5ac5"
     },
     {
       "source": "landing-day-master-reading.mjs",
@@ -2384,8 +2558,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 63607,
-      "sha256": "eeb8bb2b869718976f8f596c89796f9aef66a82f6129dcc617e3d9b2b42b9cf2"
+      "bytes": 64065,
+      "sha256": "a1deb121d1a145f6376a14d9eec86b7db3cd80b9e6753c05800ed4627a68489a"
     },
     {
       "source": "motion.css",
@@ -2400,16 +2574,40 @@
       "sha256": "20ec650226e28a3f0a3b981750b1155046e5c4a17e4032f5cd277b5178adb1a5"
     },
     {
+      "source": "notebook-motion.mjs",
+      "path": "notebook-motion.mjs",
+      "bytes": 3358,
+      "sha256": "d99982254ee393f3405a0e61d885354776f4e86a8ffe7feb722b0f9bb8eabc44"
+    },
+    {
+      "source": "notebook-panels-v92.css",
+      "path": "notebook-panels-v92.css",
+      "bytes": 14390,
+      "sha256": "733a816016702b4051fd08ee29d1e2e11ba2a5dc7d70e34721a6642eb000b4bc"
+    },
+    {
+      "source": "notebook-ui-v92.mjs",
+      "path": "notebook-ui-v92.mjs",
+      "bytes": 11534,
+      "sha256": "783c0f4b464a886fe16b342b2cc091cbd34c76f32db7757dbe6242036ca7c37a"
+    },
+    {
       "source": "paper-font.css",
       "path": "paper-font.css",
       "bytes": 58986,
       "sha256": "f813c4b1eb7f17aaca30733db3598e1e07e84dfdad552c5b767e4d7767b1531a"
     },
     {
+      "source": "personal-room-families.mjs",
+      "path": "personal-room-families.mjs",
+      "bytes": 7222,
+      "sha256": "7f06de6cea9380384665404dacd120722f9f28d4a067a65b4e0cca680f5ff7cf"
+    },
+    {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 15422,
-      "sha256": "3786ade656dc05267613b4f28903088be0129422380b43f4dc47f65b2152c8b6"
+      "bytes": 15719,
+      "sha256": "318f778d881255865c02ea024e721da62d3fa7c2a35e2ff99f465ce30eb2c7ce"
     },
     {
       "source": "pixel-room.mjs",
@@ -2428,6 +2626,18 @@
       "path": "portal-social-v24.css",
       "bytes": 3343,
       "sha256": "bea915c273f8340f942174a6882c078460f493f483ade09ac4f8c1aa9536c5b2"
+    },
+    {
+      "source": "product-panels-v92.mjs",
+      "path": "product-panels-v92.mjs",
+      "bytes": 2318,
+      "sha256": "5150e5f5e3bc52a49218a4482e34d39a241a582ededbef556d4a51eeedbdb5ab"
+    },
+    {
+      "source": "profile-preferences-v92.mjs",
+      "path": "profile-preferences-v92.mjs",
+      "bytes": 402,
+      "sha256": "90d5c2bb0c4b2f66732529301e15f3c468e84cf4f5aa8ac8b897c6e351ff9bdf"
     },
     {
       "source": "public-card.css",
@@ -2498,8 +2708,8 @@
     {
       "source": "room-video.mjs",
       "path": "room-video.mjs",
-      "bytes": 3033,
-      "sha256": "0dd62cbc5be3505e8eca57b396bafd4313b80ed73430c01dfce0f8cafa9f47a9"
+      "bytes": 3195,
+      "sha256": "3f21af0ecbe80f0c45b7c6ead66f5be2c2c132259b27e116581452282c399f80"
     },
     {
       "source": "room-voice-clips.mjs",
@@ -2540,8 +2750,8 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 14795,
-      "sha256": "ef12c418b7b5a779645c1487294a86e5414019f4e008e10a3ffddee4e6abbe8a"
+      "bytes": 14866,
+      "sha256": "d067a10c4a373f2e987946b677fd1f8ce7a7db37f3f73a718c70c59ef8d64366"
     },
     {
       "source": "scene-experience.css",
@@ -2564,8 +2774,8 @@
     {
       "source": "shared-agents.mjs",
       "path": "shared-agents.mjs",
-      "bytes": 1531,
-      "sha256": "33c44d77adc2d9d86ecc2ff8daac5fcfd9b01f320e6cedcafef3a74aba91258a"
+      "bytes": 1533,
+      "sha256": "a8a7ac629607827a063f0b0cdfa6d7cb38a7bd8d267504b634e5505a784deea2"
     },
     {
       "source": "shared-chat-polish-v62.css",
@@ -2592,6 +2802,24 @@
       "sha256": "067f5c0709ad07f9eee8b429e7371d05cfa880c4faa13038a976d33588ef6c8e"
     },
     {
+      "source": "shared-space-v92.css",
+      "path": "shared-space-v92.css",
+      "bytes": 2063,
+      "sha256": "b626f6ebbb30aa3d518bfe96834e4376ed8ac40242463a06e175344f8865cb53"
+    },
+    {
+      "source": "shared-space-v92.mjs",
+      "path": "shared-space-v92.mjs",
+      "bytes": 1738,
+      "sha256": "f9df6f7deb9a85dc738a8672e62d7110a9c5ba7467297f19404e7bd2008337dd"
+    },
+    {
+      "source": "shared-voice-v92.mjs",
+      "path": "shared-voice-v92.mjs",
+      "bytes": 940,
+      "sha256": "c2bc9ce00255187e6a3192d692b3c5d732a091f121e823a813e35d0935205a0d"
+    },
+    {
       "source": "sheet-dismiss.mjs",
       "path": "sheet-dismiss.mjs",
       "bytes": 1226,
@@ -2606,8 +2834,8 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 17648,
-      "sha256": "ac82f9c7371f368773fa0542d50d61651375c66b96d82c25ed7967ce2a467141"
+      "bytes": 18212,
+      "sha256": "0bc39aa7d75cc6e04fbf30721cd7587e53ee2fa673922bad23871e11c3afc52c"
     },
     {
       "source": "social-tags.css",
@@ -2652,6 +2880,30 @@
       "sha256": "1967d1dd0b625bd5da91c13a5caf513aee1f575277d079a639acb724bfb64d32"
     },
     {
+      "source": "topic-journey-v92.css",
+      "path": "topic-journey-v92.css",
+      "bytes": 5932,
+      "sha256": "1ebe121441a5c5772327eed9bd5a5cc00f454fd48a9aa0445a048ad418c8dca9"
+    },
+    {
+      "source": "topic-journey-v92.mjs",
+      "path": "topic-journey-v92.mjs",
+      "bytes": 15645,
+      "sha256": "858f1fc3d64a18571b12808b3425fed846124a335e916b188ad2c35e49567bd6"
+    },
+    {
+      "source": "topic-service-v92.mjs",
+      "path": "topic-service-v92.mjs",
+      "bytes": 2561,
+      "sha256": "0e5d3bf380a37bf8515c9f76982b1afe2561f92d768be79f1e54673fe0d4d656"
+    },
+    {
+      "source": "topic-ui-v92.mjs",
+      "path": "topic-ui-v92.mjs",
+      "bytes": 3425,
+      "sha256": "36ce473e9036152982b6520cc5bbb0bdfca51b62a0d977660ed974ef4de41a01"
+    },
+    {
       "source": "typography.css",
       "path": "typography.css",
       "bytes": 1440,
@@ -2684,8 +2936,8 @@
     {
       "source": "ui-icons.mjs",
       "path": "ui-icons.mjs",
-      "bytes": 5700,
-      "sha256": "1b154985e8e127ed70729ab4cfa658b0dd9b21b4d5d14b07e8cde0ee71613011"
+      "bytes": 6481,
+      "sha256": "df3bbb57adff8251b4a32b2decdb521b03078b448bb84f9583dfa1feac0778fc"
     },
     {
       "source": "ui-inputs-v31.css",
@@ -2758,198 +3010,6 @@
       "path": "welcome-logo-motion.mjs",
       "bytes": 5118,
       "sha256": "86f1cb5b31f57dbd0500a2e1f18782eabd6fadb9c29e6e6a26340176be993eed"
-    },
-    {
-      "source": "assets/spirit-notebook-20261030/closed-book-minimal.png",
-      "path": "assets/spirit-notebook-20261030/closed-book-minimal.png",
-      "bytes": 2229756,
-      "sha256": "32a13e5d05c619ef2f4b7b0ffae9e41e58b18f84a806ef3ecc0482ed37553199"
-    },
-    {
-      "source": "assets/spirit-notebook-20261030/open-book-minimal.png",
-      "path": "assets/spirit-notebook-20261030/open-book-minimal.png",
-      "bytes": 2336928,
-      "sha256": "290857a7761c4311b05669e3c377371fb7675fd8b69850ff3f8ee3f06bb6effd"
-    },
-    {
-      "source": "notebook-motion.mjs",
-      "path": "notebook-motion.mjs",
-      "bytes": 3358,
-      "sha256": "d99982254ee393f3405a0e61d885354776f4e86a8ffe7feb722b0f9bb8eabc44"
-    },
-    {
-      "source": "notebook-panels-v92.css",
-      "path": "notebook-panels-v92.css",
-      "bytes": 14390,
-      "sha256": "733a816016702b4051fd08ee29d1e2e11ba2a5dc7d70e34721a6642eb000b4bc"
-    },
-    {
-      "source": "notebook-ui-v92.mjs",
-      "path": "notebook-ui-v92.mjs",
-      "bytes": 11547,
-      "sha256": "bd7fba0684d9371e8f310e741b2693b2e19af6fb41d6cfc99a38617644533be5"
-    },
-    {
-      "source": "assets/klin-front-react-20261030-v01/day-react.mp4",
-      "path": "assets/klin-front-react-20261030-v01/day-react.mp4",
-      "bytes": 1121916,
-      "sha256": "c9af352c015bd49bf8b2130d9f6746126264c467b805a7c9919a037882989cf7"
-    },
-    {
-      "source": "assets/klin-front-react-20261030-v01/night-react.mp4",
-      "path": "assets/klin-front-react-20261030-v01/night-react.mp4",
-      "bytes": 1292497,
-      "sha256": "5f98ec2beda906591b14083b3bdf8728d8e081d23b802fb88a239bbdea0ba508"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/earth/day-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/earth/day-poster.png",
-      "bytes": 700454,
-      "sha256": "3748902a899c7606f27bbb9816cea1392c3125d96d65e5e4e967bf7e37061d04"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/earth/day-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/earth/day-room-only.png",
-      "bytes": 692679,
-      "sha256": "67b356037a45dcf63d9efa6c6cbbab213c843b01e6605cfc124b15b072d50beb"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-idle.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-idle.mp4",
-      "bytes": 1493313,
-      "sha256": "f414072174ddb45593e52280e4eddecb05f93c0772739b55b4692ca6f521108d"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-poster.png",
-      "bytes": 655141,
-      "sha256": "f2e3104ffd474ae1f895a7d57e2e1c2de1b3837e17e8cf8cf316c2d57acb301f"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-react.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-react.mp4",
-      "bytes": 1312233,
-      "sha256": "1b789a5cab0e4994a3945b7adb1922effa55070f13e213ce6fcb1632c4fdb72c"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-room-only.png",
-      "bytes": 642150,
-      "sha256": "3ae43811b18ed4deb61ff8fee6c574a63f888622ce5c2a79ed7a686509b19bee"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/fire/day-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/fire/day-poster.png",
-      "bytes": 665455,
-      "sha256": "a96167b4d25189848a74c03401e5c0cd473f3c211a353dfaf4f4f5f3c9da66e7"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/fire/day-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/fire/day-room-only.png",
-      "bytes": 644832,
-      "sha256": "60e6c393f9e60bd1ef38807d3858746291af453b5ab7c7d19925260a0cb3f0d0"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-idle.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-idle.mp4",
-      "bytes": 1415334,
-      "sha256": "a95fc25265c4858cd5c7d2e9465f1beda92b7f50548de59413f60ebf7fd461c8"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-poster.png",
-      "bytes": 678365,
-      "sha256": "2713efaf0cdb2c981f3d76928d05397925d92acc011330f02c8e4c75facd6576"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-react.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-react.mp4",
-      "bytes": 1204632,
-      "sha256": "b3a489769ae084e63a0bdfadff0331e44261694facf8016291fd7ee039859337"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-room-only.png",
-      "bytes": 605696,
-      "sha256": "d5af429aa4787ce53fea79cdf3f0f89246dea8700e0d29bec49b012c40a9a526"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/water/day-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/water/day-poster.png",
-      "bytes": 620037,
-      "sha256": "7a661618725e253f76c11ac5f0a02a81e233f8416efc95b38f59cbdbc2950c25"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/water/day-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/water/day-room-only.png",
-      "bytes": 611059,
-      "sha256": "220182a7216f37a0334f20a59ac11f5a9688c7e215e6706c56a4712c92e9ba8c"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/water/night-idle.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/water/night-idle.mp4",
-      "bytes": 1382614,
-      "sha256": "fe5eacd07131cb4371895b0abf08d84ddf1888bb958509758d9da7489b61fe33"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/water/night-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/water/night-poster.png",
-      "bytes": 649041,
-      "sha256": "b4a11b766f355462910983246667f4e1004cf713fb99f4b17129da63d053106a"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/water/night-react.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/water/night-react.mp4",
-      "bytes": 1125027,
-      "sha256": "0c86fb6c58e56f9cf94185d988a54019cef41b6397842dda651e7809b069eb01"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/water/night-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/water/night-room-only.png",
-      "bytes": 635802,
-      "sha256": "00e6028f3562e22825468494c006c9280a8d27ab48a2e0f237299c63b38a3518"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/wood/day-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/wood/day-poster.png",
-      "bytes": 724085,
-      "sha256": "71dcf2b9783c5fabcac70192ee27b39a52911d42d9a9d57c3b32541efc701a83"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/wood/day-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/wood/day-room-only.png",
-      "bytes": 716449,
-      "sha256": "d1fabab6ee78b100d7766145b9238c1814f5d01be47d0db6c1ea0a742d7cf520"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-idle.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-idle.mp4",
-      "bytes": 978451,
-      "sha256": "7b6b51a2198e5fda1397690976811f53f46e2790f8aedbadd3735d9d0e8fd4c4"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-poster.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-poster.png",
-      "bytes": 763037,
-      "sha256": "326e644063513411fec3451af9accbf05e7c19e9167fa6fa668ba1787a8f1122"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-react.mp4",
-      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-react.mp4",
-      "bytes": 1334787,
-      "sha256": "8feb5828c1ad36d265d320e6b52290c22adc8eaaa9f21a285dcd30c88215b90b"
-    },
-    {
-      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-room-only.png",
-      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-room-only.png",
-      "bytes": 715470,
-      "sha256": "6b9258d631b9c99de6d4e5e8020afa87a4e996e54778d6c5f15085a91dc0c491"
-    },
-    {
-      "source": "personal-room-families.mjs",
-      "path": "personal-room-families.mjs",
-      "bytes": 7222,
-      "sha256": "7f06de6cea9380384665404dacd120722f9f28d4a067a65b4e0cca680f5ff7cf"
     }
   ],
   "runtimeDependencies": [
@@ -3359,6 +3419,56 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "shared-space-v92.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "notebook-panels-v92.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "topic-journey-v92.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "notebook-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "topic-journey-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "topic-service-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "topic-ui-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "shared-agents.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "friend-room.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "card-tags-v92.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "deployment-mode.mjs",
       "kind": "module"
@@ -3410,6 +3520,16 @@
     },
     {
       "from": "app.mjs",
+      "to": "notebook-ui-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "product-panels-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "tag-stickers.mjs",
       "kind": "module"
     },
@@ -3430,17 +3550,17 @@
     },
     {
       "from": "app.mjs",
-      "to": "shared-agents.mjs",
+      "to": "shared-space-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "shared-voice-v92.mjs",
       "kind": "module"
     },
     {
       "from": "app.mjs",
       "to": "shared-message-identity.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "app.mjs",
-      "to": "friend-room.mjs",
       "kind": "module"
     },
     {
@@ -3575,6 +3695,11 @@
     },
     {
       "from": "app.mjs",
+      "to": "personal-room-families.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "login-video-scene.mjs",
       "kind": "module"
     },
@@ -3624,6 +3749,61 @@
       "kind": "resource"
     },
     {
+      "from": "topic-journey-v92.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-service-v92.mjs",
+      "to": "topic-journey-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "topic-journey-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "loading-state.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "public-card.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "friend-avatars.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-agents.mjs",
+      "to": "element-character-art.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-agents.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "friend-room.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "card-tags-v92.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "card-tags-v92.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
       "from": "landing-creation.mjs",
       "to": "compat/web-naming/landing-handoff.mjs",
       "kind": "module"
@@ -3639,6 +3819,11 @@
       "kind": "module"
     },
     {
+      "from": "demo-account-state.mjs",
+      "to": "profile-preferences-v92.mjs",
+      "kind": "module"
+    },
+    {
       "from": "social-tags-ui.mjs",
       "to": "social-tags.mjs",
       "kind": "module"
@@ -3650,6 +3835,41 @@
     },
     {
       "from": "social-tags-ui.mjs",
+      "to": "ui-icons.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "social-tags-ui.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "ui-icons.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "studio-family-data.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "product-panels-v92.mjs",
+      "to": "public-card.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "product-panels-v92.mjs",
       "to": "ui-icons.mjs",
       "kind": "module"
     },
@@ -3699,23 +3919,23 @@
       "kind": "module"
     },
     {
-      "from": "shared-agents.mjs",
-      "to": "element-character-art.mjs",
+      "from": "shared-space-v92.mjs",
+      "to": "scene-assets.mjs",
       "kind": "module"
     },
     {
-      "from": "shared-agents.mjs",
-      "to": "companion-elements.mjs",
+      "from": "shared-space-v92.mjs",
+      "to": "shared-message-identity.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-voice-v92.mjs",
+      "to": "communication-mode.mjs",
       "kind": "module"
     },
     {
       "from": "shared-message-identity.mjs",
       "to": "card-labels.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "friend-room.mjs",
-      "to": "companion-elements.mjs",
       "kind": "module"
     },
     {
@@ -3875,6 +4095,11 @@
     },
     {
       "from": "model.mjs",
+      "to": "profile-preferences-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "model.mjs",
       "to": "card-design.mjs",
       "kind": "module"
     },
@@ -3951,66 +4176,6 @@
     {
       "from": "room-light-assets.mjs",
       "to": "scene-assets.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "index.html",
-      "to": "notebook-panels-v92.css",
-      "kind": "resource"
-    },
-    {
-      "from": "app.mjs",
-      "to": "notebook-ui-v92.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "app.mjs",
-      "to": "notebook-motion.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "notebook-ui-v92.mjs",
-      "to": "social-tags.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "notebook-ui-v92.mjs",
-      "to": "social-tags-ui.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "notebook-ui-v92.mjs",
-      "to": "ui-icons.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "notebook-ui-v92.mjs",
-      "to": "tag-stickers.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "notebook-ui-v92.mjs",
-      "to": "studio-family-data.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "notebook-panels-v92.css",
-      "to": "assets/spirit-notebook-20261030/closed-book-minimal.png",
-      "kind": "resource"
-    },
-    {
-      "from": "notebook-panels-v92.css",
-      "to": "assets/spirit-notebook-20261030/open-book-minimal.png",
-      "kind": "resource"
-    },
-    {
-      "from": "notebook-motion.mjs",
-      "to": "assets/brand-20261028-noknok/noknok-selected-white.png",
-      "kind": "resource"
-    },
-    {
-      "from": "app.mjs",
-      "to": "personal-room-families.mjs",
       "kind": "module"
     }
   ],

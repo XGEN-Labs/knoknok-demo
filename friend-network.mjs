@@ -2,7 +2,7 @@ import { friendAvatarSource } from './friend-avatars.mjs?v=20261026-social-tags-
 import { loadingIndicatorMarkup } from './loading-state.mjs';
 import { WORLD_ANCHORS } from './friend-world-math.mjs?v=20261029-visit-82c';
 const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-import { friendRoomKind } from './friend-room.mjs?v=20261030-shared-elements-88';
+import { friendRoomKind } from './friend-room.mjs?v=20261031-product-sync';
 export function friendNetworkSearchText(friend){return `${friend.name||''} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase();}
 export function renderFriendNetwork({friends=[],users={},query=''}={}){
  const search=String(query).trim().toLocaleLowerCase();

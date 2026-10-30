@@ -111,6 +111,9 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
     returnPreparation?.cancel();
     let cancelled = false, settled = false, mode = null, revealed = false, fade = null, resolveReady;
     let seekRequested = false;
+    // Resume the decoded pose left in this film; seeking to zero causes a
+    // visible pose jump and decoder work during the trip back to the room.
+    const returnTime = idle.readyState >= 2 && !idle.seeking ? Math.max(0, Number(idle.currentTime) || 0) : 0;
     const ready = new Promise(resolve => {resolveReady = resolve;});
     const events = ['loadedmetadata', 'loadeddata', 'canplay', 'seeked'];
     const clear = () => {
@@ -125,9 +128,9 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
       if (cancelled || disposed || mode === 'poster') return;
       if (!seekRequested && idle.readyState >= 1) {
         seekRequested = true;
-        try {if (Math.abs(idle.currentTime) >= 1 / 24) idle.currentTime = 0;} catch {fallback(); return;}
+        try {if (Math.abs(idle.currentTime - returnTime) >= 1 / 24) idle.currentTime = returnTime;} catch {fallback(); return;}
       }
-      if (seekRequested && idle.readyState >= 2 && !idle.seeking && Math.abs(idle.currentTime) < 1 / 24) {
+      if (seekRequested && idle.readyState >= 2 && !idle.seeking && Math.abs(idle.currentTime - returnTime) < 1 / 24) {
         mode = 'idle'; settle(true);
       }
     };

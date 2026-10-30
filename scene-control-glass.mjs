@@ -1,4 +1,4 @@
-import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261028-diary-paper-71b';
+import {coverRect,glassPosition,renderGlassTexture} from './landing-glass.mjs?v=20261031-product-sync';
 
 // Ordinary image backgrounds are deliberately used instead of one composited
 // backdrop per capsule. WebKit can split a live backdrop even on a paint-only
@@ -84,7 +84,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
   function restore(node,prior){PROPERTIES.forEach((p,i)=>{const [value,priority]=prior.styles[i];if(value)node.style.setProperty(p,value,priority);else node.style.removeProperty(p);});if(prior.marker===null)node.removeAttribute('data-scene-glass');else node.setAttribute('data-scene-glass',prior.marker);resize?.unobserve(node);observed.delete(node);touched.delete(node);}
   function schedule(video){if(timer!==null){cancel(timer);timer=null;}if(!disposed&&!doc.hidden&&video&&!video.paused&&!video.ended)timer=later(()=>{timer=null;refresh();},250);}
   function refresh(){
-    if(disposed||refreshing)return false;refreshing=true;
+    if(disposed||refreshing||phone.dataset.conversationAvatarMotion)return false;refreshing=true;
     try{
       const nodes=sceneTargets();
       const current=new Set(nodes);for(const [node,prior]of touched)if(!current.has(node))restore(node,prior);
@@ -129,7 +129,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
     finally{refreshing=false;}
   }
   resize?.observe(phone);
-  mutation?.observe(phone,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','hidden','src','data-active','data-video-ready','data-landing-glass','data-landing-cue','data-landing-frame-revision']});
+  mutation?.observe(phone,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','hidden','src','data-active','data-conversation-avatar-motion','data-video-ready','data-landing-glass','data-landing-cue','data-landing-frame-revision']});
   // A seek/decode may replace pixels without advancing the 250ms sample bucket.
   // Invalidate only the currently sampled landing video; while its captured still
   // is displayed above it, that still remains the paint owner until handoff.

@@ -1,5 +1,5 @@
 import {landingInformation} from './compat/web-naming/landing-handoff.mjs';
-import {normalizeOnboardingConversation} from './conversation-onboarding.mjs?v=20261026-answers-47d';
+import {normalizeOnboardingConversation} from './conversation-onboarding.mjs?v=20261031-product-sync';
 
 const clone=value=>JSON.parse(JSON.stringify(value));
 const fields=['birthDate','birthTime','gender','birthPlace','response'];

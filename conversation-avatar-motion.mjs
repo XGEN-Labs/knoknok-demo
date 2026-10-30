@@ -44,95 +44,144 @@ export function applyConversationAvatarSource(container,image,value) {
 
 export function createConversationAvatarMotion(phone, {duration = 620, imageSrc = '', roomFrame} = {}) {
   const doc = phone.ownerDocument, win = doc.defaultView;
-  let flight = null, flightSource = null, animation = null, complete = null, entering = false, started = 0;
-  let handoff = null, generation = 0, phase = 'idle', still = false;
+  const later = win.setTimeout?.bind(win) || setTimeout;
+  const clearLater = win.clearTimeout?.bind(win) || clearTimeout;
+  let flight = null, flightSource = null, animation = null, opacityAnimation = null, complete = null, entering = false, started = 0;
+  let handoff = null, entryHandoff = null, generation = 0, phase = 'idle', still = false;
+  let destinationRect = null, blendTimer = null, landed = false, returnReady = false, returnBlending = false, returnBlended = false;
   const roomImage = () => phone.querySelector('.klin-illustrated-actor.is-primary .klin-illustrated-art') || phone.querySelector('.home-companion img');
   const avatar = () => phone.querySelector('.home-chat-avatar img');
   const readSource = () => avatarSource(typeof imageSrc==='function'?imageSrc():imageSrc);
   const roomAnchor = () => {const rect=roomFrame?.();return validRectangle(rect)?rect:(flightSource||readSource())?.crop?null:avatarImageRect(roomImage(),phone);};
-  const destinationRect = () => entering ? avatarImageRect(flightSource?.crop?avatar()?.parentElement:avatar(),phone) : roomAnchor();
+  const targetRect = () => entering ? avatarImageRect(flightSource?.crop?avatar()?.parentElement:avatar(),phone) : roomAnchor();
   const stopAnimation = () => { const previous = animation; animation = null; previous?.cancel(); };
-  const finish = (committed = false) => {
-    generation++; phase = 'idle';
-    stopAnimation(); flight?.remove(); flight = null; flightSource = null;
+  const stopOpacity = () => { const previous = opacityAnimation; opacityAnimation = null; previous?.cancel(); };
+  const clearBlendTimer = () => { if (blendTimer !== null) clearLater(blendTimer); blendTimer = null; };
+  const finish = (committed = false, notify = true) => {
+    generation++; phase = 'idle'; destinationRect = null;
+    clearBlendTimer(); stopAnimation(); stopOpacity(); flight?.remove(); flight = null; flightSource = null;
     delete phone.dataset.conversationAvatarMotion;
+    const departure = entryHandoff; entryHandoff = null; departure?.cancel();
     const previous = handoff; handoff = null;
     if (committed) previous?.complete(); else previous?.cancel();
-    const callback = complete; complete = null; callback?.();
+    const callback = complete; complete = null; if (notify) callback?.();
   };
   function placeAtDestination() {
-    const destination = destinationRect();
+    const destination = targetRect();
     if (!destination || !flight) return false;
-    stopAnimation();
+    stopAnimation(); destinationRect = destination;
     Object.assign(flight.style, {left:`${destination.x}px`, top:`${destination.y}px`, width:`${destination.width}px`, height:`${destination.height}px`});
     return true;
   }
+  function blendReturn() {
+    if (!handoff || returnBlending || !returnReady || !flight) return;
+    const pending = handoff, token = generation, fadeDuration = still ? 0 : 120;
+    if (!pending.reveal({duration:fadeDuration})) { if (landed) finish(); return; }
+    returnBlending = true;
+    if (!fadeDuration || !flight.animate) {returnBlended = true; if (landed) finish(true); return;}
+    stopOpacity();
+    const fade = flight.animate([{opacity:1}, {opacity:0}], {duration:fadeDuration, easing:'ease-in-out', fill:'both'});
+    opacityAnimation = fade;
+    fade.finished.then(() => {
+      if (token !== generation || opacityAnimation !== fade || handoff !== pending) return;
+      returnBlended = true;
+      if (landed) finish(true);
+    }, () => {});
+  }
   async function arrive() {
+    landed = true; clearBlendTimer();
     if (!handoff) {finish(); return;}
     phase = 'waiting'; placeAtDestination();
+    if (returnBlended) {finish(true); return;}
+    if (returnBlending) return;
     const token = generation, pending = handoff;
     let ready = false;
     try {ready = await pending.ready;} catch {}
     if (token !== generation || handoff !== pending) return;
-    // Retain the landed image while the first movie frame is unavailable.
-    // Navigation/reversal cancels immediately; total media failure releases the
-    // bridge to the existing scene fallback instead of trapping its ownership.
     if (!ready) {finish(); return;}
-    const fadeDuration = still ? 0 : 150;
-    if (!pending.reveal({duration:fadeDuration})) {finish(); return;}
-    phase = 'blending';
-    if (!fadeDuration || !flight?.animate) {finish(true); return;}
-    const fade = flight.animate([{opacity:1}, {opacity:0}], {duration:fadeDuration, easing:'ease-out', fill:'both'});
-    animation = fade;
-    fade.finished.then(() => {if (animation === fade && token === generation) finish(true);}, () => {});
+    returnReady = true; blendReturn();
   }
   function animateFrom(source, remaining = duration) {
-    const destination = destinationRect();
+    const destination = targetRect();
     if (!source || !destination || !flight?.animate) { arrive(); return; }
-    stopAnimation(); phase = 'moving';
+    stopAnimation(); clearBlendTimer(); phase = 'moving'; destinationRect = destination;
     Object.assign(flight.style, {left:`${source.x}px`, top:`${source.y}px`, width:`${source.width}px`, height:`${source.height}px`});
     const current = flight.animate([
-      {transform:'translate(0px, 0px) scale(1, 1)'},
-      {transform:`translate(${destination.x-source.x}px, ${destination.y-source.y}px) scale(${destination.width/source.width}, ${destination.height/source.height})`},
-    ], {duration:remaining, easing:'cubic-bezier(.22,.72,.2,1)', fill:'both'});
+      {transform:'translate3d(0px, 0px, 0px) scale(1, 1)'},
+      {transform:`translate3d(${destination.x-source.x}px, ${destination.y-source.y}px, 0px) scale(${destination.width/source.width}, ${destination.height/source.height})`},
+    ], {duration:remaining, easing:'cubic-bezier(.4,0,.2,1)', fill:'both'});
     animation = current;
+    // Blend over the last part of the same trip instead of landing, stopping,
+    // then starting a second animation. A cold/failed frame still has the
+    // existing readiness gate after arrival.
+    if (!entering && handoff && !returnBlending) {
+      const token = generation;
+      blendTimer = later(() => {blendTimer = null; if (token === generation && animation === current) blendReturn();}, Math.max(0, remaining - 120));
+    }
     current.finished.then(() => {if (animation === current) arrive();}, () => {});
   }
-  function move(value, {reducedMotion = false, prepareReturn, mutate, onComplete} = {}) {
-    const sourceImage = flight || (value ? roomImage() : avatar());
-    const descriptor = flightSource || readSource() || avatarSource(sourceImage?.currentSrc || sourceImage?.src);
-    const source = flight ? avatarImageRect(flight,phone) : value && descriptor?.crop ? roomAnchor() : avatarImageRect(!value&&descriptor?.crop?avatar()?.parentElement:sourceImage,phone);
-    // Keep a reversal on its currently visible image; a fresh HOME flight can
-    // use the film-matched avatar without changing cards or other scene actors.
+  async function depart(source) {
+    const token = generation, pending = entryHandoff, image = flight;
+    phase = 'entry-preparing';
+    Object.assign(image.style, {left:`${source.x}px`, top:`${source.y}px`, width:`${source.width}px`, height:`${source.height}px`, opacity:'0'});
+    try {await (image.tagName?.toLowerCase()==='span'?image.querySelector?.('img'):image).decode?.();} catch {if (token === generation && image === flight) finish(); return;}
+    if (token !== generation || image !== flight || pending !== entryHandoff) return;
+    if (!pending.reveal({duration:120})) {finish(); return;}
+    started = win.performance.now(); animateFrom(source);
+    // Source handoff and travel share a start time; no frozen 120ms prelude.
+    if (!image.animate) {image.style.opacity = '1'; entryHandoff = null; pending.complete(); return;}
+    const fade = image.animate([{opacity:0}, {opacity:1}], {duration:120, easing:'ease-in-out', fill:'both'});
+    opacityAnimation = fade;
+    fade.finished.then(() => {
+      if (token !== generation || image !== flight || opacityAnimation !== fade || entryHandoff !== pending) return;
+      // Keep the filled opacity effect on the same compositor layer until
+      // landing; cancelling it here can force WebKit to rasterize mid-flight.
+      entryHandoff = null; pending.complete();
+    }, () => {});
+  }
+  function move(value, {reducedMotion = false, prepareEntry, prepareReturn, mutate, onComplete} = {}) {
+    if (!value && entryHandoff && phase === 'entry-preparing') {
+      complete = null; mutate?.(); complete = onComplete; finish(); return;
+    }
+    const reversing = !!flight, sourceImage = flight || (value ? roomImage() : avatar());
+    const requested = readSource(), header = avatar();
+    const descriptor = flightSource || (requested?.crop ? requested : avatarSource(header?.currentSrc || header?.src) || requested || avatarSource(sourceImage?.currentSrc || sourceImage?.src));
+    const source = flight ? avatarImageRect(flight,phone) : value && descriptor?.crop ? roomAnchor() : avatarImageRect(!value&&descriptor?.crop?header?.parentElement:sourceImage,phone);
     const src = descriptor?.src;
-    // A reversal starts at the currently displayed frame, never at an endpoint.
-    finish(); entering = !!value; complete = onComplete; still = reducedMotion;
-    // Establish ownership before mutate can activate the room at frame zero.
+    finish(false, false); entering = !!value; complete = onComplete; still = reducedMotion;
+    landed = returnReady = returnBlending = returnBlended = false;
+    if (entering && !reversing && !reducedMotion && !doc.hidden && source && src) entryHandoff = prepareEntry?.() || null;
     phone.dataset.conversationAvatarMotion = entering ? 'enter' : 'leave';
     mutate?.();
-    if (!entering && !doc.hidden) handoff = prepareReturn?.() || null;
+    if (!entering && !doc.hidden) {
+      handoff = prepareReturn?.() || null;
+      const pending = handoff, token = generation;
+      if (pending) Promise.resolve(pending.ready).then(ready => {if (generation === token && handoff === pending) returnReady = !!ready;}, () => {});
+    }
     if (doc.hidden || !source || !src || (reducedMotion && !handoff)) {finish(); return;}
     flightSource = descriptor;
     flight = doc.createElement(descriptor.crop?'span':'img'); flight.className = 'conversation-avatar-flight';
     if(descriptor.crop){const image=doc.createElement('img');image.alt='';image.draggable=false;flight.append(image);applyConversationAvatarSource(flight,image,descriptor);Object.assign(flight.style,{position:'absolute',display:'block',pointerEvents:'none',transformOrigin:'top left'});}
     else {flight.src=src;flight.alt='';flight.draggable=false;}
     flight.setAttribute('aria-hidden','true');
-    phone.append(flight);
-    started = win.performance.now();
-    if (reducedMotion) arrive(); else animateFrom(source);
+    phone.append(flight); started = win.performance.now();
+    if (reducedMotion) arrive(); else if (entryHandoff) depart(source); else animateFrom(source);
   }
   function refresh({reducedMotion = false} = {}) {
     if (!flight) return;
     if (!phone.querySelector('.room-chat-page')) {finish(); return;}
-    if (phase === 'waiting') {still ||= reducedMotion; placeAtDestination(); return;}
-    if (phase === 'blending') {
-      // Keep the opacity animation; resize only retargets the fixed endpoint.
-      const destination = destinationRect();
-      if (destination) Object.assign(flight.style, {left:`${destination.x}px`, top:`${destination.y}px`, width:`${destination.width}px`, height:`${destination.height}px`});
-      if (reducedMotion) finish(true);
+    if (phase === 'entry-preparing') {
+      if (reducedMotion) {finish(); return;}
+      const origin = flightSource?.crop ? roomAnchor() : entryHandoff?.frame?.() || roomAnchor();
+      if (origin) Object.assign(flight.style, {left:`${origin.x}px`, top:`${origin.y}px`, width:`${origin.width}px`, height:`${origin.height}px`});
       return;
     }
+    if (phase === 'waiting') {still ||= reducedMotion; placeAtDestination(); if (reducedMotion && returnBlending) finish(true); return;}
     if (reducedMotion) {still = true; if (handoff) arrive(); else finish(); return;}
+    const next = targetRect();
+    // Render hooks and ResizeObserver can report unchanged geometry. Restarting
+    // the easing there creates a velocity discontinuity in the middle of a trip.
+    if (next && destinationRect && ['x','y','width','height'].every(key => Math.abs(next[key]-destinationRect[key]) < .1)) return;
     const remaining = Math.max(120, duration - (win.performance.now() - started));
     animateFrom(avatarImageRect(flight, phone), remaining);
   }

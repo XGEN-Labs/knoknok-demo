@@ -1,6 +1,6 @@
 import { socialTagState, SOCIAL_TAG_CATEGORIES } from './social-tags.mjs?v=20261026-social-tags-45';
-import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-spirit-notebook-8';
-import { uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
+import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-spirit-notebook-5';
+import { uiIcon } from './ui-icons.mjs?v=20261031-product-sync';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const button=(text,action,id='',extra='')=>`<button type="button" class="tag-ui-button" data-action="${action}" data-id="${esc(id)}" ${extra}>${text}</button>`;
@@ -55,7 +55,8 @@ const messageTime=value=>{
 };
 function diaryChatData(space,entry){
  const day=diaryDay(entry.createdAt),ids=new Set(entry.messageIds||[]);
- const records=(space.companionMessages||[]).filter(message=>message&&(message.role==='user'||message.role==='assistant'));
+ const seen=new Set();
+ const records=[...(space.companionMessages||[]),...(space.topicMessages||[])].filter(message=>{if(!message||!['user','assistant'].includes(message.role)||message.id&&seen.has(message.id))return false;if(message.id)seen.add(message.id);return true;});
  const dated=records.map((message,index)=>({message,index,time:messageTime(message.createdAt)}))
   .filter(record=>record.time!==null&&diaryDay(record.time)===day)
   .sort((a,b)=>a.time-b.time||a.index-b.index).map(record=>record.message);
@@ -82,7 +83,9 @@ export function diaryRecordsMarkup(space,user,options={}){
   const count=linkedTags(ledger,entry).length;
   return `<button type="button" data-action="tag-diary-entry" data-id="${esc(entry.id)}"><time datetime="${new Date(entry.createdAt).toISOString()}">${new Date(entry.createdAt).toLocaleTimeString('zh-HK',{hour:'2-digit',minute:'2-digit',hour12:false})}</time><p>${esc(String(entry.text||'').slice(0,100))}</p><span>${count?`${count} 枚關聯標籤`:'翻開聊天摘記'}<span aria-hidden="true"> ↗</span></span></button>`;
  }).join('')||'<p class="tag-empty">這一天還沒有小記。</p>';
- return `<div class="social-tags-panel tag-diary-browser tag-diary-records" data-diary-month="${calendar.month}" data-diary-day="${calendar.day}">${heading}<div class="tag-calendar-weekdays" aria-hidden="true">${['一','二','三','四','五','六','日'].map(label=>`<span>${label}</span>`).join('')}</div><div class="tag-diary-calendar" role="group" aria-label="${calendar.title}日記日曆">${cells}</div><section class="tag-diary-day-list" aria-label="${selectedLabel}的小記"><h4>${selectedLabel}<span>${calendar.entries.length?`${calendar.entries.length} 篇小記`:''}</span></h4><div class="tag-diary-list">${entries}</div></section></div>`;
+ const selectedDate=new Date(`${calendar.day}T12:00:00`).getTime(),messages=diaryChatData(space,{createdAt:selectedDate,messageIds:[]});
+ const originals=`<section class="tag-chat-records"><h4>這一天的原始聊天</h4><div class="tag-original-chat">${originalMessages(messages.dated,nokName(options.companionName))||'<p class="small-note">這一天沒有保存聊天記錄。</p>'}</div></section>`;
+ return `<div class="social-tags-panel tag-diary-browser tag-diary-records" data-diary-month="${calendar.month}" data-diary-day="${calendar.day}">${heading}<div class="tag-calendar-weekdays" aria-hidden="true">${['一','二','三','四','五','六','日'].map(label=>`<span>${label}</span>`).join('')}</div><div class="tag-diary-calendar" role="group" aria-label="${calendar.title}日記日曆">${cells}</div><section class="tag-diary-day-list" aria-label="${selectedLabel}的小記"><h4>${selectedLabel}<span>${calendar.entries.length?`${calendar.entries.length} 篇小記`:''}</span></h4><div class="tag-diary-list">${entries}</div></section>${originals}</div>`;
 }
 export function diaryEntryMarkup(space,user,id,{tab='diary',selectTags=false,companionName='Klin'}={}){
  const ledger=socialTagState(space,user),entry=ledger.diary.find(e=>e.id===id);if(!entry)return '<p>這篇日記暫時找不到。</p>';

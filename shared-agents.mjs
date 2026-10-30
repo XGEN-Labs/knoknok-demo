@@ -1,5 +1,5 @@
-import { characterArt } from './element-character-art.mjs?v=20261030-elements-88';
-import { ELEMENT_COMPANIONS } from './companion-elements.mjs?v=20261030-elements-88';
+import { characterArt } from './element-character-art.mjs?v=20261031-product-sync';
+import { ELEMENT_COMPANIONS } from './companion-elements.mjs?v=20261031-product-sync';
 const escape = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
 /** Each seat uses its participant's saved identity. Captions are intentionally
  * absent; screen readers still identify the owner and companion. */
