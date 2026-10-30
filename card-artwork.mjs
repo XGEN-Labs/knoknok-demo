@@ -5,7 +5,7 @@ export const CARD_PAPER_TEXTURE='assets/card-paper-20261027/ivory-cotton.jpg';
 export const CARD_PAPER_OPACITY=.92;
 export const CARD_PAPER_SCALE=1.4;
 const CARD_DETAIL_INK='#5d4033';
-export const DEFAULT_CARD_AVATAR = 'assets/klin-20261014/adult.png';
+export const DEFAULT_CARD_AVATAR = 'assets/demo-avatars-20261026-45/b.jpg';
 export const CARD_FONTS={
  sans:'Helvetica Neue,PingFang TC,PingFang SC,Arial,sans-serif',
  name:'Klin Paper Serif,serif',
@@ -60,12 +60,11 @@ export function cardArtwork(data){
  const tags=Array.isArray(data.tags)?data.tags:[];
  const portrait={x:52,y:118,w:152,h:152};
  const contentLeft=portrait.x-8,contentWidth=Math.min(492,CARD_WIDTH-contentLeft-44);
- // Align visible logo ink, biography and sticker rows with the avatar ring.
+ // Keep the established logo, biography and sticker alignment as the portrait shrinks.
  // The selected 2172px PNG's alpha>=32 ink starts at x76; its size stays unchanged.
  const logoScale=1646/2045,logoWidth=184*logoScale;
  items.push({type:'logo',x:contentLeft-logoWidth*76/2172,y:24+(184/3)*(371.5-363.5*logoScale)/724,w:logoWidth,h:logoWidth/3,color:CARD_DETAIL_INK});
- items.push({type:'rect',x:portrait.x-8,y:portrait.y-8,w:portrait.w+16,h:portrait.h+16,fill:'#e5eace',r:portrait.w/2+8});
- items.push({type:'avatar',...portrait,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:data.avatar?'cover':'contain',fill:data.avatar?'transparent':'#f4f1e7',pad:data.avatar?0:10});
+ items.push({type:'avatar',x:portrait.x+8,y:portrait.y+8,w:portrait.w-16,h:portrait.h-16,src:data.avatar||DEFAULT_CARD_AVATAR,custom:!!data.avatar,fit:'cover',fill:'transparent',pad:0});
  txt('name',data.name,230,136,318,116,48,{weight:500,family:'name',align:'left',maxLines:2,lineHeight:1.2});
  const nameItem=items.find(item=>item.kind==='name');
  const nameBottom=nameItem?nameItem.y+nameItem.lines.length*nameItem.size*nameItem.lineHeight:252;

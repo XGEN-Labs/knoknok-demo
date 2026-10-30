@@ -1,4 +1,4 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261030-text-ink-87';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261030-card-avatar-89';
 import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261030-text-ink-87';
 import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
@@ -112,7 +112,7 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
   if(item.type==='rect')return `<div class="bc-art bc-block" aria-hidden="true" style="${box}background:${item.fill};border-radius:${cqw(item.r)}cqw"></div>`;
   if(item.type==='logo')return `<span class="bc-art bc-logo" role="img" aria-label="NokNok" style="${box}color:${item.color}"></span>`;
   if(item.type==='avatar'){
-   const alt=item.custom?'名片頭像':'Klin 預設頭像';
+   const alt=item.custom?'名片頭像':'預設名片頭像';
    const portraitStyle=`object-fit:${item.fit};background:${item.fill};padding:${cqw(item.pad)}cqw;box-sizing:border-box;`;
    const src=escape(artworkAsset(item.src));
    return editable?`<button class="bc-art bc-avatar" type="button" data-action="edit-card" aria-label="${item.custom?'更換頭像':'上傳頭像'}" title="${item.custom?'更換頭像':'上傳頭像'}" style="${box}"><img src="${src}" alt="${alt}" style="${portraitStyle}" draggable="false"></button>`:`<img class="bc-art bc-avatar" src="${src}" alt="${alt}" style="${box}${portraitStyle}" draggable="false">`;

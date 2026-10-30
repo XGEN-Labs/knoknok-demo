@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T07:35:18.614446Z",
+  "createdAt": "2026-10-30T08:04:54.539640Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 167974995,
+  "payloadBytes": 167979966,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 129319,
-      "sha256": "f0500aa97da7366793dd483604045119df1a6313126275204f8bd90229a93794"
+      "bytes": 134396,
+      "sha256": "09e76223e9eda2d9aa9919f92a34ec8a4bb35fc552d00a135f2bdeea5a4548de"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1514,8 +1514,8 @@
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 7475,
-      "sha256": "659fd891b4ffb40cbc8467ad8c20c4c88fad8436f7b4de15c0ab3b548ed372dd"
+      "bytes": 7362,
+      "sha256": "035e9dc1db9d32a0a1eeaaa9831190564cf9f4fc73de4cc575ffddf97920175f"
     },
     {
       "source": "card-design.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11653,
-      "sha256": "96cac60395cdf4443a565d703ad85a8d2a0ef5cdeb4f443424bd8e484c94af14"
+      "bytes": 11656,
+      "sha256": "873462ce38af889208444559cf9a76fc76194341a0f6ed8b44ba82217b9b72b6"
     },
     {
       "source": "journey-experience.css",
@@ -2000,8 +2000,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 16008,
-      "sha256": "e70b332379378b25362e8c8b3bca339e1811120f069c169a7e566469f4fc0d80"
+      "bytes": 16012,
+      "sha256": "2e13f8c5a2d04f88c19803894669f2b1008cb9af0be392dfe2ebc90600276a3e"
     },
     {
       "source": "realm-scene.css",
