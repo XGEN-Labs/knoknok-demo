@@ -12,7 +12,7 @@ test('full actual landing information is carried with unset choices, not initial
  const prompt=landingPrompt(information);assert.ok(prompt.includes(JSON.stringify(information,null,2)));assert.match(prompt,/不用再提問/);assert.match(prompt,/不啟動其他任務/);assert.match(prompt,/私有資料規則/);
 });
 test('one existing chat request contains the full handoff and its reply is only acknowledged, not inserted into later chat',async()=>{
- const h=harness();await h.controller.ensure(information);assert.equal(h.calls.length,1);assert.equal(h.calls[0][0].length,1);assert.equal(h.calls[0][0][0].role,'user');assert.equal(h.calls[0][0][0].content,landingPrompt(information));assert.equal(h.calls[0][1],'1');assert.equal(h.receipts.length,1);assert.equal(h.receipts[0].receipt.provider,'knok-agent');assert.equal('text' in h.receipts[0].receipt,false);
+ const h=harness();await h.controller.ensure(information);assert.equal(h.calls.length,1);assert.equal(h.calls[0][0].length,1);assert.equal(h.calls[0][0][0].role,'user');assert.equal(h.calls[0][0][0].content,landingPrompt(information));assert.equal(h.calls[0][1],'1');assert.deepEqual(h.calls[0][3],{purpose:'landing_handoff'});assert.equal(h.receipts.length,1);assert.equal(h.receipts[0].receipt.provider,'knok-agent');assert.equal('text' in h.receipts[0].receipt,false);
 });
 test('refresh and login reuse only this owner and this intake receipt; later normal chat does not resend it',async()=>{
  const h=harness();await h.controller.ensure(information);const receipt=h.receipts[0].receipt;
