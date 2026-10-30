@@ -1,4 +1,4 @@
-import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261023-card-36h';
+import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261030-spirit-notebook-8';
 import { ELEMENT_COMPANIONS, DEMO_COMPANION_ELEMENTS } from './companion-elements.mjs?v=20261030-shared-elements-88';
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, accountLandingComplete, validMetalVoice } from './landing.mjs';

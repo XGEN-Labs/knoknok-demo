@@ -23,7 +23,7 @@
   /* existing | film-scenes-v30.css */
   --kn-ui-color-scene-base: #e7dfd0;
   /* existing | film-scenes-v30.css; decorative light tint */
-  --kn-ui-color-scene-sage: #b7c8bf;
+  --kn-ui-color-scene-sage: #c7c4c1;
   /* existing | refinement-v27.css */
   --kn-ui-color-error: #824b48;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
@@ -107,9 +107,9 @@
   /* adopted | ui-states-v31.css; UI v1 disabled state */
   --kn-ui-color-disabled-text: var(--kn-ui-color-text-hint);
   /* adopted | ui-states-v31.css; UI v1 disabled state */
-  --kn-ui-color-disabled-surface: #eff1eb;
+  --kn-ui-color-disabled-surface: #f3f0ed;
   /* adopted | ui-states-v31.css; UI v1 disabled state */
-  --kn-ui-color-disabled-edge: #e2e5dd;
+  --kn-ui-color-disabled-edge: #e7e4e1;
   /* adopted | ui-foundations-v31.css; unified cool blue-gray editable text */
   --kn-ui-color-input-text: #30394c;
   /* adopted | 2026-10-27 latest placeholder feedback; ui-surface-v51.css */

@@ -1,5 +1,5 @@
 import { socialTagState, SOCIAL_TAG_CATEGORIES } from './social-tags.mjs?v=20261026-social-tags-45';
-import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-text-ink-87';
+import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-spirit-notebook-8';
 import { uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

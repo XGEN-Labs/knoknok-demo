@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T14:09:11.073841Z",
+  "createdAt": "2026-10-30T15:14:39.458344Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 189490779,
+  "payloadBytes": 194087954,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 135690,
-      "sha256": "bb287d731c9aecb609e26d6b1331b6edb10018c3ce65b859155d2f99dafafff7"
+      "bytes": 136779,
+      "sha256": "a946cf0253c890767f52ccbe9bd1547cc250cc861d53665a5d6f9140b66a1ecd"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1856,14 +1856,14 @@
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 7362,
-      "sha256": "035e9dc1db9d32a0a1eeaaa9831190564cf9f4fc73de4cc575ffddf97920175f"
+      "bytes": 7372,
+      "sha256": "45290d1933f3a6453d52e8b4d2299e5853ab5c9b8a03dbd4abb95ed63258f853"
     },
     {
       "source": "card-design.mjs",
       "path": "card-design.mjs",
       "bytes": 1295,
-      "sha256": "645da0a87780bebc8e8c0af0a8e53b07bd7d08de6fe676e3506d094846e5dc17"
+      "sha256": "322e9c3458d7bb862c102cfc954069aace637dfc6542eb8a1bb39ec698f70a81"
     },
     {
       "source": "card-editor-readability.css",
@@ -1995,7 +1995,7 @@
       "source": "conversation-experience.css",
       "path": "conversation-experience.css",
       "bytes": 22478,
-      "sha256": "b1b097eda3fa6e4d39136b4965c8daf8f74b290bd23416e1566dc2f2344e0f0a"
+      "sha256": "3ef2ae6046171882b4ad1b64b83ec10857d5f66b168717dd6f28c16502aae530"
     },
     {
       "source": "conversation-onboarding.mjs",
@@ -2061,7 +2061,7 @@
       "source": "experience-v33.css",
       "path": "experience-v33.css",
       "bytes": 2034,
-      "sha256": "73f99c6712482880958ee82d2ecd9335a1511ea7032db41c8d22b40241f23ee6"
+      "sha256": "f7b0877c266f219129e71844d159aad88b7b7a11006fb65e2b1c59ec7fb234e2"
     },
     {
       "source": "experience-v34.css",
@@ -2192,8 +2192,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11826,
-      "sha256": "64396483236abd43a6467fa415ca49efe002038455e0cf48e86987658def5b7d"
+      "bytes": 11957,
+      "sha256": "a52386c30033b96392acdc48620072bf08f1ad7403c307f94ae5849c431728a6"
     },
     {
       "source": "journey-experience.css",
@@ -2271,7 +2271,7 @@
       "source": "landing-flow.css",
       "path": "landing-flow.css",
       "bytes": 4991,
-      "sha256": "dc26fd103ea29a42cd5aef8c8fcc10e7098e2c8ad28987bdb5df7c0f1587bfb7"
+      "sha256": "1289f2b1e30c26e14fd710170acfd4b6d2d9128c151069f82209b553fefb8751"
     },
     {
       "source": "landing-glass.css",
@@ -2313,7 +2313,7 @@
       "source": "landing-video.css",
       "path": "landing-video.css",
       "bytes": 7294,
-      "sha256": "1a64c34bf545c4e01bd79b0663ec29b2ee5b98ef49ddcc6a7c5ae81c36bb0545"
+      "sha256": "7bbf8f04f33015174af82ea7415b912fbee913eae47ba9b38b8ca4a3cd37ef3c"
     },
     {
       "source": "landing.mjs",
@@ -2384,8 +2384,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 63598,
-      "sha256": "92acfbdab3e197c83420db87bbde89f12b525ccde1e3845790be53c68912f887"
+      "bytes": 63607,
+      "sha256": "eeb8bb2b869718976f8f596c89796f9aef66a82f6129dcc617e3d9b2b42b9cf2"
     },
     {
       "source": "motion.css",
@@ -2438,8 +2438,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 16012,
-      "sha256": "2e13f8c5a2d04f88c19803894669f2b1008cb9af0be392dfe2ebc90600276a3e"
+      "bytes": 16025,
+      "sha256": "4e3fad73845e6edc4b40cd5b869a6d741e307a82b69924c6d74fbd73feb74c69"
     },
     {
       "source": "realm-scene.css",
@@ -2540,14 +2540,14 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 14728,
-      "sha256": "6781478136f5722b52cd11041aad53a010a0355ec73926136520a8b8ecc05c08"
+      "bytes": 14795,
+      "sha256": "ef12c418b7b5a779645c1487294a86e5414019f4e008e10a3ffddee4e6abbe8a"
     },
     {
       "source": "scene-experience.css",
       "path": "scene-experience.css",
       "bytes": 19273,
-      "sha256": "c49f8e36a9fe8893f58e079658cb7d6c29ecbdb10627afa93f2f6f68425b4721"
+      "sha256": "130581dc488703a2c25e62ed6ce65470808d3e1c1870915ffda26a18a3bc0044"
     },
     {
       "source": "scene-sound.mjs",
@@ -2606,14 +2606,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 17642,
-      "sha256": "def11e251ebcb89e0e34ae7cca8ae4e2d8b6d29099858c5c7807042783563272"
+      "bytes": 17648,
+      "sha256": "ac82f9c7371f368773fa0542d50d61651375c66b96d82c25ed7967ce2a467141"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
       "bytes": 18800,
-      "sha256": "e7b05dd7b75f019a4c1c504a17d2ad774dd6a53c05a0bde750b8ae6db5d7ce91"
+      "sha256": "c3046a81c297c8588b014e313af4de1e487c9ed890b98f57b766ce899cc727f2"
     },
     {
       "source": "social-tags.mjs",
@@ -2637,13 +2637,13 @@
       "source": "styles.css",
       "path": "styles.css",
       "bytes": 28439,
-      "sha256": "76afcf631cdb179f5442e1b4e109cd3afbb6305b461d417634b6a48e2022441a"
+      "sha256": "4f753980cb50e52b28c37a4a134dd596555302bb6d52009b9558425cb37f3442"
     },
     {
       "source": "tag-stickers.mjs",
       "path": "tag-stickers.mjs",
       "bytes": 19266,
-      "sha256": "4662930b5bfba6b6fda1630f257ff140307b6dbeacd544add2ab1618c55884b6"
+      "sha256": "a6a9a19bc1c66d01603230df65e4b272f2de4f1c5a49b00877fa7a0b7629ce81"
     },
     {
       "source": "theme-black.css",
@@ -2715,7 +2715,7 @@
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
       "bytes": 7573,
-      "sha256": "e822a1652b04b799f64bf2fcaaa5005c62ea18fbff39280500f75ca141ffaae6"
+      "sha256": "53f3c58dd9f51f8c5f8218e9c87151809187b734b18d74ddb87d7743a4f379bf"
     },
     {
       "source": "universe-experience.css",
@@ -2758,6 +2758,36 @@
       "path": "welcome-logo-motion.mjs",
       "bytes": 5118,
       "sha256": "86f1cb5b31f57dbd0500a2e1f18782eabd6fadb9c29e6e6a26340176be993eed"
+    },
+    {
+      "source": "assets/spirit-notebook-20261030/closed-book-minimal.png",
+      "path": "assets/spirit-notebook-20261030/closed-book-minimal.png",
+      "bytes": 2229756,
+      "sha256": "32a13e5d05c619ef2f4b7b0ffae9e41e58b18f84a806ef3ecc0482ed37553199"
+    },
+    {
+      "source": "assets/spirit-notebook-20261030/open-book-minimal.png",
+      "path": "assets/spirit-notebook-20261030/open-book-minimal.png",
+      "bytes": 2336928,
+      "sha256": "290857a7761c4311b05669e3c377371fb7675fd8b69850ff3f8ee3f06bb6effd"
+    },
+    {
+      "source": "notebook-motion.mjs",
+      "path": "notebook-motion.mjs",
+      "bytes": 3358,
+      "sha256": "d99982254ee393f3405a0e61d885354776f4e86a8ffe7feb722b0f9bb8eabc44"
+    },
+    {
+      "source": "notebook-panels-v92.css",
+      "path": "notebook-panels-v92.css",
+      "bytes": 14261,
+      "sha256": "f32bb8dfbded88fac0fd0a4359b2f96f261799782feedb3efe866190f4b80d0b"
+    },
+    {
+      "source": "notebook-ui-v92.mjs",
+      "path": "notebook-ui-v92.mjs",
+      "bytes": 11547,
+      "sha256": "bd7fba0684d9371e8f310e741b2693b2e19af6fb41d6cfc99a38617644533be5"
     }
   ],
   "runtimeDependencies": [
@@ -3760,6 +3790,61 @@
       "from": "room-light-assets.mjs",
       "to": "scene-assets.mjs",
       "kind": "module"
+    },
+    {
+      "from": "index.html",
+      "to": "notebook-panels-v92.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "notebook-ui-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "notebook-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "social-tags-ui.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "ui-icons.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "studio-family-data.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-panels-v92.css",
+      "to": "assets/spirit-notebook-20261030/closed-book-minimal.png",
+      "kind": "resource"
+    },
+    {
+      "from": "notebook-panels-v92.css",
+      "to": "assets/spirit-notebook-20261030/open-book-minimal.png",
+      "kind": "resource"
+    },
+    {
+      "from": "notebook-motion.mjs",
+      "to": "assets/brand-20261028-noknok/noknok-selected-white.png",
+      "kind": "resource"
     }
   ],
   "thirdPartyNotices": [

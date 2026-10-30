@@ -27,7 +27,7 @@ export const SCENE_GLASS_TARGETS = [
   '#app .composer-row','#app .onboarding-input-row','#app .network-search',
   '#app .auth-panel','#app .conversation-message','#app .room-speech',
   '#app .bubble:not(.failed)','#app .onboarding-message',
-  '#sheet','#sheet .sheet-title .icon-button',
+  '#sheet:not(.notebook-stage)','#sheet .notebook-close','#sheet .sheet-title .icon-button',
   '#sheet .tag-history-entry','#sheet .tag-history-story',
   '#sheet .tag-history-options .tag-ui-button','#sheet .tag-diary-browser .tag-diary-list>button',
   '.landing-volume-toggle','.landing-video-resume',
@@ -105,7 +105,7 @@ export function createSceneControlGlass({phone,environment={}}={}){
         // Controls inside an already painted form/sheet naturally see that
         // parent's texture. Keep their white layer instead of sampling behind
         // the parent again (which would erase the panel's 38% white material).
-        const parent=node.parentElement?.closest('.auth-panel,.tag-chat-card,#sheet,.kn-date-picker,.kn-glass-panel,.kn-glass-control,.landing-form-card,.tag-history-entry');
+        const parent=node.parentElement?.closest('.auth-panel,.tag-chat-card,#sheet:not(.notebook-stage),.kn-date-picker,.kn-glass-panel,.kn-glass-control,.landing-form-card,.tag-history-entry');
         if(parent&&current.has(parent)){surfaces.push({node,material,layer:true});continue;}
         const materialKey=JSON.stringify([material.kind,material.fill,material.blur,material.saturation]);
         let texture=materials.get(materialKey)||textures.get(materialKey);

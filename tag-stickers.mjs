@@ -25,7 +25,7 @@ export function socialTagCategory(item){
 }
 const motif=(icon,fill,ink,shape,shapeName,material='paper',outline=ink,textInk=ink)=>Object.freeze({icon,fill,ink,textInk,outline,shape,shapeName,material});
 const MOTIFS=Object.freeze({
- wood:motif('sprout','#eff2d8','#4b622d','leaf-note','叶缘方签','leaf','#4b622d','#26242c'),
+ wood:motif('sprout','#f3efec','#5b5958','leaf-note','叶缘方签','leaf','#5b5958','#26242c'),
  fire:motif('flame','#b6482e','#fff3d4','ember-cut','斜切火签','enamel','#853c29'),
  earth:motif('mountain','#f6e5b9','#80562c','clay-note','平底陶签','clay'),
  metal:motif('gem','#e5eaf6','#415887','metal-note','直角银签','satin'),
@@ -35,22 +35,22 @@ const MOTIFS=Object.freeze({
  cat:motif('cat','#f3ddc6','#825539','cat-note','双耳标签','paper'),
  music:motif('music','#263f7b','#fff0be','record-note','唱片弧签','ink','#24365d'),
  coffee:motif('coffee','#f4e1c8','#805638','cup-note','杯弧标签','glaze'),
- reading:motif('book','#e7edc7','#4d6432','bookmark','书角缺口','leaf','#4d6432','#26242c'),
+ reading:motif('book','#ece9e6','#5d5c5a','bookmark','书角缺口','leaf','#5d5c5a','#26242c'),
  camera:motif('camera','#d8e9ec','#346b7a','ticket','票券缺口','satin','#346b7a','#26242c'),
  guitar:motif('guitar','#ffd9ad','#954a24','pick-note','拨片弧角','glaze'),
  travel:motif('suitcase','#cdecef','#256b77','travel-cut','单角旅签','film','#256b77','#26242c'),
  language:motif('language','#ece2fa','#654c9e','speech-note','对话尾角','enamel'),
- citywalk:motif('footsteps','#dcebe5','#426b60','flag','斜边漫游签','paper','#426b60','#26242c'),
- fitness:motif('motion','#e3edbf','#587034','travel-cut','活力切角','film','#587034','#26242c'),
+ citywalk:motif('footsteps','#eae7e4','#636160','flag','斜边漫游签','paper','#636160','#26242c'),
+ fitness:motif('motion','#ebe8e4','#686765','travel-cut','活力切角','film','#686765','#26242c'),
  film:motif('film','#e8e0d4','#62533f','ticket','电影票券'),
  exhibitions:motif('frame','#e8dcf1','#755285','metal-note','画框方签'),
- plants:motif('sprout','#e2eecb','#4d6a36','leaf-note','叶缘方签','leaf','#4d6a36','#26242c'),
+ plants:motif('sprout','#ece9e6','#62605f','leaf-note','叶缘方签','leaf','#62605f','#26242c'),
  cake:motif('cake','#f6dce2','#904f61','soft-note','甜点弧签','glaze'),
  gaming:motif('gamepad','#dce5f7','#4a6091','record-note','游戏弧签','film'),
  drawing:motif('pencil','#f9dfbe','#935d2f','bookmark','画纸缺口'),
  craft:motif('thread','#ebdfce','#826148','plaque','手作方签','paper'),
  baking:motif('oven','#f5dbb6','#945c33','clay-note','烘焙纸签','clay'),
- hiking:motif('mountain','#e4eacb','#5c6c35','travel-cut','山野切角','leaf','#5c6c35','#26242c'),
+ hiking:motif('mountain','#eae6e3','#666563','travel-cut','山野切角','leaf','#666563','#26242c'),
 });
 const topicMotifs={cats:'cat',firstcat:'cat',jazz:'music',music:'music',citywalk:'citywalk',reading:'reading',coffee:'coffee',fitness:'fitness',film:'film',exhibitions:'exhibitions',plants:'plants',cake:'cake',gaming:'gaming',photo:'camera',guitar:'guitar',drawing:'drawing',craft:'craft',baking:'baking',french:'language',solo:'travel',hiking:'hiking'};
 const TAG_MATCHES=[

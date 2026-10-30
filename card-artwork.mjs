@@ -1,5 +1,5 @@
-import { resolveCardDesign } from './card-design.mjs?v=20261026-experience-42';
-import { socialTagStyle } from './tag-stickers.mjs?v=20261030-text-ink-87';
+import { resolveCardDesign } from './card-design.mjs?v=20261030-spirit-notebook-8';
+import { socialTagStyle } from './tag-stickers.mjs?v=20261030-spirit-notebook-8';
 export const CARD_WIDTH=600, CARD_HEIGHT=650, CARD_BOTTOM_PADDING=32;
 export const CARD_PAPER_TEXTURE='assets/card-paper-20261027/ivory-cotton.jpg';
 export const CARD_PAPER_OPACITY=.92;

@@ -1,3 +1,5 @@
+import { notebookMarkup } from './notebook-ui-v92.mjs?v=20261030-spirit-notebook-8';
+import { mountNotebookMotion } from './notebook-motion.mjs?v=20261030-spirit-notebook-8';
 import { LIVE_WEB } from './deployment-mode.mjs';
 import { createLiveSession } from './live-session.mjs';
 import { createLandingHandoff, landingInformation } from './compat/web-naming/landing-handoff.mjs';
@@ -7,8 +9,8 @@ import {isLandingCreation,prepareLandingSubmission,restoreLandingSubmission,crea
 import {assignedFamily,familyArtwork,familyMarkup} from './family-presentation.mjs';
 import { createDemoAccountRooms, freshDemoAccountState } from './demo-account-state.mjs?v=20261026-social-tags-45';
 import { socialTagState, publicSocialTags, socialTagSource } from './social-tags.mjs?v=20261026-social-tags-45';
-import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261030-text-ink-87';
-import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-text-ink-87';
+import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalendarData, diaryListMarkup, diaryRecordsMarkup, diaryEntryMarkup } from './social-tags-ui.mjs?v=20261030-spirit-notebook-8';
+import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261030-spirit-notebook-8';
 import { mountFriendWorld } from './friend-world.mjs?v=20261030-visit-fur-public96';
 import { mountCosmosBackground } from './cosmos-background.mjs?v=20261029-visit-82c';
 let cosmosBackground=null;
@@ -22,7 +24,7 @@ import { companionDisplayProfile } from './companion-elements.mjs?v=20261030-sha
 import { friendAvatarSource } from './friend-avatars.mjs';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
 import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261029-compositor-blur-79';
-import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261030-avatar-return-85&glass=61';
+import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261030-spirit-notebook-8&glass=61';
 import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261030-avatar-return-85';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261030-avatar-return-85';
@@ -41,7 +43,7 @@ import { initTypography } from './typography.mjs?v=20261023-experience-34d';
 import { createSceneSound } from './scene-sound.mjs?v=20261028-music-balance-70';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261027-first-landing';
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
-import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261030-card-avatar-89';
+import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261030-spirit-notebook-8';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261030-klin-room-daynight-v12';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';
@@ -52,7 +54,7 @@ import { initPixelRoom } from './pixel-room.mjs?v=20261023-experience-34d';
 import { createHomeGreeting } from './home-greeting.mjs?v=20261023-experience-34d';
 import { pixelCompanionMarkup, initCompanionAnimation, syncCompanionAnimation } from './companion-animation.mjs?v=20261023-experience-34d';
 import { captureCompanion, transitionScene, prefersStillness } from './motion.mjs?v=20261023-actions-38';
-import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261030-shared-elements-88';
+import { initialState, reduce, validateDemand, publicMessages, serializeState, hydrateState, STORAGE_KEY, validateBasics, validateBirth, BIRTH_TIME_OPTIONS, ageFromBirth, companionProfile, getDemoFriends, getCompanionTurn, SHARED_MOMENT_OPTIONS } from './model.mjs?v=20261030-spirit-notebook-8';
 
 const $ = (query, root=document) => root.querySelector(query);
 // Personal-room identity only; uploaded/public card avatars retain their own sources.
@@ -574,22 +576,20 @@ function manageCardTags(){
 }
 function chooseHistoryTags(){showSheet('從記憶碎片選擇標籤',historyTagPickerMarkup(privateSpace(),me()));}
 function openTagChat(){closeSheet();if(ui.route!=='home')go('home');setHomeConversation(true);render(false);const log=$('#conversation-log');if(log)log.scrollTop=log.scrollHeight;}
-function showSocialDiary(month=ui.diaryMonth||'',day=ui.diaryDay||''){
+function showSocialDiary(tab='today',{month=ui.diaryMonth||'',day=ui.diaryDay||''}={}){
  const calendar=diaryCalendarData(privateSpace(),me(),{month,day,now:state.now});
  ui.diaryMonth=calendar.month;ui.diaryDay=calendar.day;
- showSheet('Nok 日記',diaryListMarkup(privateSpace(),me(),{month:calendar.month,day:calendar.day,now:state.now,companionName:companionName()}));
+ showSheet('日記本',notebookMarkup(privateSpace(),me(),{tab,month:calendar.month,day:calendar.day,now:state.now,companionName:companionName(),avatar:currentAvatar(),companion:displayedCompanion(actor()),family:currentFamily()||displayedCompanion(actor()).element}),{notebook:true});
  const sheet=$('#sheet');if(sheet)sheet.scrollTop=0;
 }
 function showSocialDiaryRecords(month=ui.diaryMonth||'',day=ui.diaryDay||''){
- const calendar=diaryCalendarData(privateSpace(),me(),{month,day,now:state.now});
- ui.diaryMonth=calendar.month;ui.diaryDay=calendar.day;
- showSheet('聊天記錄',diaryRecordsMarkup(privateSpace(),me(),{month:calendar.month,day:calendar.day,now:state.now,companionName:companionName()}),{backAction:'tag-diary',backLabel:'返回 Nok 日記'});
- const sheet=$('#sheet');if(sheet)sheet.scrollTop=0;
+ return showSocialDiary('records',{month,day});
 }
 function showSocialDiaryEntry(id,{tab='diary'}={}){
  const entry=socialTagState(privateSpace(),me()).diary.find(item=>item.id===id);
  if(entry){const date=new Date(entry.createdAt);ui.diaryMonth=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;ui.diaryDay=`${ui.diaryMonth}-${String(date.getDate()).padStart(2,'0')}`;}
- showSheet('這天的 Nok 日記',diaryEntryMarkup(privateSpace(),me(),id,{tab,companionName:companionName()}));
+ if(!entry)return toast('這篇日記暫時找不到。');
+ showSheet('這一天的日記',notebookMarkup(privateSpace(),me(),{tab:'day',month:ui.diaryMonth,day:ui.diaryDay,now:state.now,showChat:tab==='chat',companionName:companionName()}),{notebook:true});
  const sheet=$('#sheet');if(sheet)sheet.scrollTop=0;
 }
 function showSocialTagSource(id,{selectTags=false}={}){
@@ -842,11 +842,12 @@ function flushVoiceRefresh(state){
 function guideButtons(){if(ui.route==='chat'&&latestRelationship()?.status==='active')return `<button class="review-btn" type="button" data-action="simulate-reply">模擬朋友回覆</button>`;return '';}
 function scenarioControls(){return `<div class="scenario-group"><button class="review-btn" type="button" data-action="reset">重新開始</button></div><p class="small-note">對話與朋友均為本地示範。</p>`;}
 
-let cleanSheetDismiss;
-function showSheet(title,body,{backAction='',backLabel='返回'}={}){cleanSheetDismiss?.();cleanSheetDates?.();cleanSheetControls?.();const dialog=$('#sheet');dialog.classList.toggle('card-editor-sheet',body.includes('data-form="profile"'));$('#sheet-content').innerHTML=`<div class="sheet-inner"><div class="sheet-handle"></div><div class="sheet-title${backAction?' has-back':''}">${backAction?`<button type="button" class="sheet-back" data-action="${esc(backAction)}" aria-label="${esc(backLabel)}">${backArrow}</button>`:''}<h3 id="sheet-title" tabindex="-1" autofocus>${esc(title)}</h3></div>${body}</div>`;dialog.setAttribute('aria-labelledby','sheet-title');if(!dialog.open)dialog.showModal();$('#phone').classList.add('sheet-open');if(!$('#phone > .phone-scrim'))$('#phone').insertAdjacentHTML('beforeend','<div class="phone-scrim" aria-hidden="true"></div>');cleanSheetControls=initFormControls(dialog);cleanSheetDates=initDatePickers(dialog);initTypography(dialog);positionSheet();cleanSheetDismiss=bindSheetDismiss(dialog,closeSheet);$('#sheet-title').focus({preventScroll:true});}
+let cleanSheetDismiss,notebookMotion;
+function closeNotebook(){if(notebookMotion)notebookMotion.close(closeSheet);else closeSheet();}
+function showSheet(title,body,{backAction='',backLabel='返回',notebook=false}={}){if(!notebook){notebookMotion?.destroy();notebookMotion=null;}cleanSheetDismiss?.();cleanSheetDates?.();cleanSheetControls?.();const dialog=$('#sheet');dialog.classList.toggle('card-editor-sheet',body.includes('data-form="profile"'));dialog.classList.toggle('notebook-stage',notebook);$('#sheet-content').innerHTML=`<div class="sheet-inner"><div class="sheet-handle"></div><div class="sheet-title${backAction?' has-back':''}">${backAction?`<button type="button" class="sheet-back" data-action="${esc(backAction)}" aria-label="${esc(backLabel)}">${backArrow}</button>`:''}<h3 id="sheet-title" tabindex="-1" autofocus>${esc(title)}</h3></div>${body}${notebook?'<button type="button" class="notebook-close kn-glass-control" data-action="notebook-close" aria-label="合上日記本">'+uiIcon('close')+'</button>':''}</div>`;dialog.setAttribute('aria-labelledby','sheet-title');if(!dialog.open)dialog.showModal();$('#phone').classList.add('sheet-open');if(!$('#phone > .phone-scrim'))$('#phone').insertAdjacentHTML('beforeend','<div class="phone-scrim" aria-hidden="true"></div>');cleanSheetControls=initFormControls(dialog);cleanSheetDates=initDatePickers(dialog);initTypography(dialog);positionSheet();if(notebook){$('#phone').classList.remove('sheet-open');if(!notebookMotion)notebookMotion=mountNotebookMotion(dialog,$('#phone'));else dialog.querySelector('.notebook-panel')?.focus({preventScroll:true});}else{cleanSheetDismiss=bindSheetDismiss(dialog,closeSheet);$('#sheet-title').focus({preventScroll:true});}}
 function positionSheet(){const phone=$('#phone'),dialog=$('#sheet'),v=visibleViewport(window),p=sheetPlacement(phone.getBoundingClientRect(),phone.offsetWidth,{...v,layoutHeight:innerHeight});for(const key of ['left','bottom','width','height'])dialog.style.setProperty(`--sheet-${key}`,`${p[key]}px`);dialog.style.setProperty('--sheet-scale',String(p.scale));}
-function closeSheet(){cleanSheetDismiss?.();cleanSheetDismiss=null;$('#sheet').classList.remove('card-editor-sheet');ui.visitDialog=false;cleanSheetDates?.();cleanSheetDates=null;adviceRequest++;cleanSheetControls?.();cleanSheetControls=null;if($('#sheet').open)$('#sheet').close();$('#phone').classList.remove('sheet-open');}
-$('#sheet').addEventListener('cancel',e=>{e.preventDefault();closeSheet();});
+function closeSheet(){notebookMotion?.destroy();notebookMotion=null;cleanSheetDismiss?.();cleanSheetDismiss=null;$('#sheet').classList.remove('card-editor-sheet');ui.visitDialog=false;cleanSheetDates?.();cleanSheetDates=null;adviceRequest++;cleanSheetControls?.();cleanSheetControls=null;if($('#sheet').open)$('#sheet').close();$('#phone').classList.remove('sheet-open');}
+$('#sheet').addEventListener('cancel',e=>{e.preventDefault();if(notebookMotion)closeNotebook();else closeSheet();});
 $('#sheet').addEventListener('close',()=>{if(!$('#sheet').open)closeSheet();});
 function confirmSheet(title,copy,action,buttonText='確認',id=''){showSheet(title,`<p>${copy}</p>${btn(buttonText,action,'',`data-id="${esc(id)}"`)}${btn('再想一下','close-sheet','ghost')}`);}
 function privateHelp(){const rel=latestRelationship();if(!rel||rel.status!=='active')return toast('這段聯繫已結束，可以回到伙伴頁聊聊。');showSheet(`私下問問 ${companionName()}`, `<div class="sheet-private-label">${spiritImage(`${companionName()} 伙伴`)}僅你可見 · ${esc(me().name)} 的伙伴</div><p>不知道怎麼開口？我可以幫你準備一句話。你可以修改，也可以不用。</p>${btn('幫我想個開場','generate-advice')}`);}
@@ -918,9 +919,12 @@ async function runAction(action,element){
     case 'tag-decline':if(dispatch({type:'SOCIAL_TAG_DECLINE',candidateId:element.dataset.id},false)){render(false);toast('好，這個說法先收起來。');}return;
     case 'tag-end-session':return showSheet('把今天收進日記',`<form data-form="social-tag-session"><p>留住這次的對話，再慢慢認識自己。</p><label class="check"><input type="checkbox" name="allowPublic">也從這次對話裡找找適合公開介紹我的標籤</label><p class="small-note">新標籤會先給你選，確認後才用於名片展示和找朋友。日記與原話仍只屬於你。</p><button type="submit" class="btn">收好這一天</button></form>`);
     case 'tag-diary':return showSocialDiary();
+    case 'notebook-close':return closeNotebook();
+    case 'notebook-tab':return showSocialDiary(element.dataset.tab);
+    case 'notebook-day':return showSocialDiary('day',{month:element.dataset.day.slice(0,7),day:element.dataset.day});
     case 'tag-diary-records':return showSocialDiaryRecords();
     case 'tag-diary-month':return showSocialDiaryRecords(element.dataset.month,'');
-    case 'tag-diary-day':return showSocialDiaryRecords(element.dataset.day.slice(0,7),element.dataset.day);
+    case 'tag-diary-day':return showSocialDiary('day',{month:element.dataset.day.slice(0,7),day:element.dataset.day});
     case 'tag-diary-entry':return showSocialDiaryEntry(element.dataset.id);
     case 'tag-diary-chat':return showSocialDiaryEntry(element.dataset.id,{tab:'chat'});
     case 'tag-diary-restore':if(dispatch({type:'SOCIAL_TAG_RESTORE',tagId:element.dataset.id},false)){render(false);showSocialDiaryEntry(element.dataset.entry);toast('已加入名片展示。');}return;
