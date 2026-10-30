@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T06:31:52.686947Z",
+  "createdAt": "2026-10-30T07:10:11.828844Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 167973092,
+  "payloadBytes": 167974823,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 129321,
-      "sha256": "a3be6c108f9547ee8a7d0ed5a6346f5df59c061db6f1c5822472bd3ef2d4eebe"
+      "bytes": 129319,
+      "sha256": "f0500aa97da7366793dd483604045119df1a6313126275204f8bd90229a93794"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1466,8 +1466,8 @@
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 4483,
-      "sha256": "eba3878699a4ea6ed51fb9d4f55c5e4a7f34e19cc5f5e4641ca7df3662185683"
+      "bytes": 4589,
+      "sha256": "838d260c6768e124ab220deddbe5e444ad391e488d0a39b124c500cec5754588"
     },
     {
       "source": "auth-entry.mjs",
@@ -1508,14 +1508,14 @@
     {
       "source": "business-card.css",
       "path": "business-card.css",
-      "bytes": 8610,
-      "sha256": "5beec1b78c5ab99e7c3822650ac06a00e687d821d08b9fb6c6bb5b82823027f8"
+      "bytes": 8645,
+      "sha256": "2489b19d7fb45eae3611151c3d42b1932c06b4d3e83443e14c2e48cfcb185f66"
     },
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 7446,
-      "sha256": "df6da90bec7fc5792b68eed89be785ffbc51658ebb73db79cea199c9ce0eee7c"
+      "bytes": 7475,
+      "sha256": "659fd891b4ffb40cbc8467ad8c20c4c88fad8436f7b4de15c0ab3b548ed372dd"
     },
     {
       "source": "card-design.mjs",
@@ -1622,8 +1622,8 @@
     {
       "source": "conversation-experience.css",
       "path": "conversation-experience.css",
-      "bytes": 22189,
-      "sha256": "4780e928ff0bbd4ce71fd3633f85883ec9e0525d73092ba78d073df621cfc13d"
+      "bytes": 22478,
+      "sha256": "b1b097eda3fa6e4d39136b4965c8daf8f74b290bd23416e1566dc2f2344e0f0a"
     },
     {
       "source": "conversation-onboarding.mjs",
@@ -1658,8 +1658,8 @@
     {
       "source": "demo.css",
       "path": "demo.css",
-      "bytes": 823,
-      "sha256": "dc31cb60dd51eaebd53a81df837c8b2f1deee1c4f8146ba69331a4137b1d345e"
+      "bytes": 860,
+      "sha256": "1c7a023dc585e864b2d173c09a4e949820e40c4f8303f1939aeb9af9cbd28e2d"
     },
     {
       "source": "energy-experience.css",
@@ -1670,8 +1670,8 @@
     {
       "source": "experience-v33.css",
       "path": "experience-v33.css",
-      "bytes": 2018,
-      "sha256": "c403e6c6f4bdc6ad17985755f381f593ae8dfe4ac2938d88eec32df3e8f4cbad"
+      "bytes": 2034,
+      "sha256": "73f99c6712482880958ee82d2ecd9335a1511ea7032db41c8d22b40241f23ee6"
     },
     {
       "source": "experience-v34.css",
@@ -1712,8 +1712,8 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 9212,
-      "sha256": "5675b7d6e170eae91a14e313553ea1b4dc4815b047cd82017554df59fac7b841"
+      "bytes": 9234,
+      "sha256": "20257dce1a04ea2c9d518ad0ef7673043c8bc3574c102f42e51d45b6569f0372"
     },
     {
       "source": "friend-network.mjs",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11674,
-      "sha256": "fbf97c60561c9ded144569c6a2d5da4d878c16a72d75b45be46290cb9d71ccb4"
+      "bytes": 11646,
+      "sha256": "a2afc0672a5b815d857a94a072cff33b28034c64eec7ea220bd6a3377348b154"
     },
     {
       "source": "journey-experience.css",
@@ -1844,8 +1844,8 @@
     {
       "source": "landing-flow.css",
       "path": "landing-flow.css",
-      "bytes": 4990,
-      "sha256": "8796948c1f8276d5e51dec7d7e397f2a8e76768bf2d12b86cd4ad04c74527cef"
+      "bytes": 4991,
+      "sha256": "dc26fd103ea29a42cd5aef8c8fcc10e7098e2c8ad28987bdb5df7c0f1587bfb7"
     },
     {
       "source": "landing-glass.css",
@@ -2000,8 +2000,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 15954,
-      "sha256": "212dc69e5e151ccdabdc715fe35efe62db7afeee75a1cea5976eaf8496d9f770"
+      "bytes": 16008,
+      "sha256": "e70b332379378b25362e8c8b3bca339e1811120f069c169a7e566469f4fc0d80"
     },
     {
       "source": "realm-scene.css",
@@ -2090,8 +2090,8 @@
     {
       "source": "scene-experience.css",
       "path": "scene-experience.css",
-      "bytes": 18784,
-      "sha256": "a99a232753c9840b0a30054b8c8b6aba25ff2d6c7b9dfbee5ca63967dba7fea4"
+      "bytes": 19273,
+      "sha256": "c49f8e36a9fe8893f58e079658cb7d6c29ecbdb10627afa93f2f6f68425b4721"
     },
     {
       "source": "scene-sound.mjs",
@@ -2126,14 +2126,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 17638,
-      "sha256": "734f8331cdffededfe76ce623863758114fce69e865d04ab55aadb8e5bd5d11a"
+      "bytes": 17642,
+      "sha256": "def11e251ebcb89e0e34ae7cca8ae4e2d8b6d29099858c5c7807042783563272"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
-      "bytes": 18525,
-      "sha256": "f6db221d85545fed78e383f262eb37ab5bf71b35830885c42964e392ff6a1c63"
+      "bytes": 18800,
+      "sha256": "e7b05dd7b75f019a4c1c504a17d2ad774dd6a53c05a0bde750b8ae6db5d7ce91"
     },
     {
       "source": "social-tags.mjs",
@@ -2150,14 +2150,14 @@
     {
       "source": "styles.css",
       "path": "styles.css",
-      "bytes": 28407,
-      "sha256": "b932a55a68ef1398efb1e4a978605751bc10b69acad788879c646f0abe6215b2"
+      "bytes": 28439,
+      "sha256": "76afcf631cdb179f5442e1b4e109cd3afbb6305b461d417634b6a48e2022441a"
     },
     {
       "source": "tag-stickers.mjs",
       "path": "tag-stickers.mjs",
-      "bytes": 18931,
-      "sha256": "5178f81e8da330ac0655f4fe9b7c53526e9a106506c3f546f525e03fe2525e36"
+      "bytes": 19266,
+      "sha256": "4662930b5bfba6b6fda1630f257ff140307b6dbeacd544add2ab1618c55884b6"
     },
     {
       "source": "theme-black.css",
@@ -2228,8 +2228,8 @@
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 7536,
-      "sha256": "251cbbc2ea6ff86d1dd43d000a899e79a4da3af3c50cf593d2803ac0137ff12a"
+      "bytes": 7573,
+      "sha256": "e822a1652b04b799f64bf2fcaaa5005c62ea18fbff39280500f75ca141ffaae6"
     },
     {
       "source": "universe-experience.css",

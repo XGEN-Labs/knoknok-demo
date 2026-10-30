@@ -1,5 +1,5 @@
 import { resolveCardDesign } from './card-design.mjs?v=20261026-experience-42';
-import { socialTagStyle } from './tag-stickers.mjs?v=20261027-tags-50';
+import { socialTagStyle } from './tag-stickers.mjs?v=20261030-text-ink-87';
 export const CARD_WIDTH=600, CARD_HEIGHT=650, CARD_BOTTOM_PADDING=32;
 export const CARD_PAPER_TEXTURE='assets/card-paper-20261027/ivory-cotton.jpg';
 export const CARD_PAPER_OPACITY=.92;
@@ -72,7 +72,7 @@ export function cardArtwork(data){
  // Region and language belong to the identity block, directly below the name.
  // Measure their actual height so long names and bilingual metadata never collide.
  const meta=[data.region,data.language].filter(Boolean).join(' · ');
- txt('meta',meta,230,nameBottom+12,318,58,22,{family:'hand',color:'#737568',align:'left',maxLines:2,lineHeight:1.25});
+ txt('meta',meta,230,nameBottom+12,318,58,22,{family:'hand',color:'#625d65',align:'left',maxLines:2,lineHeight:1.25});
  const metaItem=items.find(item=>item.kind==='meta');
  const identityBottom=metaItem?metaItem.y+metaItem.lines.length*metaItem.size*metaItem.lineHeight:nameBottom;
  const bio=String(data.bio||'').trim();
@@ -88,7 +88,7 @@ export function cardArtwork(data){
   const height=Math.max(86,lines.length*size*1.14+padY*2);
   let row=rows.at(-1);
   if(row.length&&row.reduce((n,tag)=>n+tag.w,0)+gap*row.length+width>492){row=[];rows.push(row);}
-  row.push({type:'tag',text,label:text,lines,w:width,h:height,size,weight:400,family:'hand',align:'left',color:visual.ink,fill:visual.fill,stroke:visual.outline||visual.ink,shape:visual.shape,icon:visual.icon,category:visual.category,r:0,padX,padY,iconSize,iconSpace,lineHeight:1.14});
+  row.push({type:'tag',text,label:text,lines,w:width,h:height,size,weight:400,family:'hand',align:'left',color:visual.ink,textColor:visual.textInk,fill:visual.fill,stroke:visual.outline||visual.ink,shape:visual.shape,icon:visual.icon,category:visual.category,r:0,padX,padY,iconSize,iconSpace,lineHeight:1.14});
  }
  // An omitted introduction has no reserved text block. Keep a clear gap after
  // whichever identity element extends lowest, including a wrapped name or city.
