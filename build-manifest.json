@@ -1,9 +1,9 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T15:14:39.458344Z",
+  "createdAt": "2026-10-30T15:51:29.330054Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 194087954,
+  "payloadBytes": 194088083,
   "files": [
     {
       "source": "app.mjs",
@@ -2193,7 +2193,7 @@
       "source": "demo.html",
       "path": "index.html",
       "bytes": 11957,
-      "sha256": "a52386c30033b96392acdc48620072bf08f1ad7403c307f94ae5849c431728a6"
+      "sha256": "e20ca2b5fa5c0ec563d3122d9e0a0f0dd0dc6f17c9b9b7660b93d8d1e46fb6bb"
     },
     {
       "source": "journey-experience.css",
@@ -2780,8 +2780,8 @@
     {
       "source": "notebook-panels-v92.css",
       "path": "notebook-panels-v92.css",
-      "bytes": 14261,
-      "sha256": "f32bb8dfbded88fac0fd0a4359b2f96f261799782feedb3efe866190f4b80d0b"
+      "bytes": 14390,
+      "sha256": "733a816016702b4051fd08ee29d1e2e11ba2a5dc7d70e34721a6642eb000b4bc"
     },
     {
       "source": "notebook-ui-v92.mjs",
