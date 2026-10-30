@@ -13,12 +13,13 @@ const hanziPage=letter=>{const page=(letter.codePointAt(0)>>8).toString(16);retu
 // Only name-related local pages are requested. Data is Hanzi Writer 2.0.1,
 // derived from Make Me a Hanzi / Arphic; the original license ships beside it.
 // These are authentic glyph outlines + pen medians, never invented pen flourishes.
-export async function loadContractSignatureGlyphs(name,{fetcher=globalThis.fetch}={}){
+export async function loadContractSignatureGlyphs(name,{fetcher=globalThis.fetch,timeoutMs=3000}={}){
  const letters=graphemes(name),pages=new Set(letters.map(hanziPage).filter(Boolean));
  if(letters.some(letter=>/^[\x21-\x7e]$/.test(letter)))pages.add('hershey-cursive');
  const values=await Promise.all([...pages].map(async page=>{
   if(!signaturePages.has(page))signaturePages.set(page,(async()=>{
-   try{const response=await fetcher(new URL(`./assets/signature-strokes-20261020/${page}.json`,import.meta.url));if(!response.ok)return{};return(await response.json()).characters||{};}catch{return{};}
+   // Stroke art is optional: a stalled asset must not block the signed name.
+   try{const response=await fetcher(new URL(`./assets/signature-strokes-20261020/${page}.json`,import.meta.url),{signal:AbortSignal.timeout(timeoutMs)});if(!response.ok)return{};return(await response.json()).characters||{};}catch{return{};}
   })());
   return[page,await signaturePages.get(page)];
  }));
