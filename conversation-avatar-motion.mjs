@@ -20,24 +20,48 @@ export function avatarImageRect(image, phone) {
   return {x:(x - bounds.left) / scale - (phone.clientLeft || 0), y:(y - bounds.top) / scale - (phone.clientTop || 0), width:width / scale, height:height / scale};
 }
 
-export function createConversationAvatarMotion(phone, {duration = 620, imageSrc = ''} = {}) {
+const validRectangle = value => value && ['x','y','width','height'].every(key=>Number.isFinite(value[key])) && value.width>0 && value.height>0;
+function avatarSource(value) {
+  if(typeof value==='string')return value?{src:value}:null;
+  if(!value || typeof value.src!=='string' || !value.src)return null;
+  if(!value.crop)return {src:value.src};
+  if(!(value.width>0&&value.height>0&&validRectangle(value.crop)&&value.crop.width===value.crop.height))return null;
+  return value;
+}
+export function applyConversationAvatarSource(container,image,value) {
+  const source=avatarSource(value);if(!container||!image||!source)return false;
+  image.src=source.src;
+  if(source.crop){
+    const c=source.crop;
+    Object.assign(container.style,{position:'relative',overflow:'hidden',borderRadius:'50%'});
+    Object.assign(image.style,{position:'absolute',maxWidth:'none',width:`${source.width/c.width*100}%`,height:`${source.height/c.height*100}%`,left:`${-c.x/c.width*100}%`,top:`${-c.y/c.height*100}%`,objectFit:'fill'});
+  }else{
+    for(const key of ['position','overflow','borderRadius'])container.style[key]='';
+    for(const key of ['position','maxWidth','width','height','left','top','objectFit'])image.style[key]='';
+  }
+  return true;
+}
+
+export function createConversationAvatarMotion(phone, {duration = 620, imageSrc = '', roomFrame} = {}) {
   const doc = phone.ownerDocument, win = doc.defaultView;
-  let flight = null, animation = null, complete = null, entering = false, started = 0;
+  let flight = null, flightSource = null, animation = null, complete = null, entering = false, started = 0;
   let handoff = null, generation = 0, phase = 'idle', still = false;
   const roomImage = () => phone.querySelector('.klin-illustrated-actor.is-primary .klin-illustrated-art') || phone.querySelector('.home-companion img');
   const avatar = () => phone.querySelector('.home-chat-avatar img');
-  const target = () => entering ? avatar() : roomImage();
+  const readSource = () => avatarSource(typeof imageSrc==='function'?imageSrc():imageSrc);
+  const roomAnchor = () => {const rect=roomFrame?.();return validRectangle(rect)?rect:(flightSource||readSource())?.crop?null:avatarImageRect(roomImage(),phone);};
+  const destinationRect = () => entering ? avatarImageRect(flightSource?.crop?avatar()?.parentElement:avatar(),phone) : roomAnchor();
   const stopAnimation = () => { const previous = animation; animation = null; previous?.cancel(); };
   const finish = (committed = false) => {
     generation++; phase = 'idle';
-    stopAnimation(); flight?.remove(); flight = null;
+    stopAnimation(); flight?.remove(); flight = null; flightSource = null;
     delete phone.dataset.conversationAvatarMotion;
     const previous = handoff; handoff = null;
     if (committed) previous?.complete(); else previous?.cancel();
     const callback = complete; complete = null; callback?.();
   };
   function placeAtDestination() {
-    const destination = avatarImageRect(target(), phone);
+    const destination = destinationRect();
     if (!destination || !flight) return false;
     stopAnimation();
     Object.assign(flight.style, {left:`${destination.x}px`, top:`${destination.y}px`, width:`${destination.width}px`, height:`${destination.height}px`});
@@ -63,7 +87,7 @@ export function createConversationAvatarMotion(phone, {duration = 620, imageSrc 
     fade.finished.then(() => {if (animation === fade && token === generation) finish(true);}, () => {});
   }
   function animateFrom(source, remaining = duration) {
-    const destination = avatarImageRect(target(), phone);
+    const destination = destinationRect();
     if (!source || !destination || !flight?.animate) { arrive(); return; }
     stopAnimation(); phase = 'moving';
     Object.assign(flight.style, {left:`${source.x}px`, top:`${source.y}px`, width:`${source.width}px`, height:`${source.height}px`});
@@ -76,10 +100,11 @@ export function createConversationAvatarMotion(phone, {duration = 620, imageSrc 
   }
   function move(value, {reducedMotion = false, prepareReturn, mutate, onComplete} = {}) {
     const sourceImage = flight || (value ? roomImage() : avatar());
-    const source = avatarImageRect(sourceImage, phone);
+    const descriptor = flightSource || readSource() || avatarSource(sourceImage?.currentSrc || sourceImage?.src);
+    const source = flight ? avatarImageRect(flight,phone) : value && descriptor?.crop ? roomAnchor() : avatarImageRect(!value&&descriptor?.crop?avatar()?.parentElement:sourceImage,phone);
     // Keep a reversal on its currently visible image; a fresh HOME flight can
     // use the film-matched avatar without changing cards or other scene actors.
-    const src = flight ? (flight.currentSrc || flight.src) : (imageSrc || sourceImage?.currentSrc || sourceImage?.src);
+    const src = descriptor?.src;
     // A reversal starts at the currently displayed frame, never at an endpoint.
     finish(); entering = !!value; complete = onComplete; still = reducedMotion;
     // Establish ownership before mutate can activate the room at frame zero.
@@ -87,8 +112,11 @@ export function createConversationAvatarMotion(phone, {duration = 620, imageSrc 
     mutate?.();
     if (!entering && !doc.hidden) handoff = prepareReturn?.() || null;
     if (doc.hidden || !source || !src || (reducedMotion && !handoff)) {finish(); return;}
-    flight = doc.createElement('img'); flight.className = 'conversation-avatar-flight';
-    flight.src = src; flight.alt = ''; flight.draggable = false; flight.setAttribute('aria-hidden','true');
+    flightSource = descriptor;
+    flight = doc.createElement(descriptor.crop?'span':'img'); flight.className = 'conversation-avatar-flight';
+    if(descriptor.crop){const image=doc.createElement('img');image.alt='';image.draggable=false;flight.append(image);applyConversationAvatarSource(flight,image,descriptor);Object.assign(flight.style,{position:'absolute',display:'block',pointerEvents:'none',transformOrigin:'top left'});}
+    else {flight.src=src;flight.alt='';flight.draggable=false;}
+    flight.setAttribute('aria-hidden','true');
     phone.append(flight);
     started = win.performance.now();
     if (reducedMotion) arrive(); else animateFrom(source);
@@ -99,7 +127,7 @@ export function createConversationAvatarMotion(phone, {duration = 620, imageSrc 
     if (phase === 'waiting') {still ||= reducedMotion; placeAtDestination(); return;}
     if (phase === 'blending') {
       // Keep the opacity animation; resize only retargets the fixed endpoint.
-      const destination = avatarImageRect(target(), phone);
+      const destination = destinationRect();
       if (destination) Object.assign(flight.style, {left:`${destination.x}px`, top:`${destination.y}px`, width:`${destination.width}px`, height:`${destination.height}px`});
       if (reducedMotion) finish(true);
       return;

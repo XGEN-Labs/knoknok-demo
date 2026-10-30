@@ -77,7 +77,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
     if (seekable && react.readyState >= 1 && !react.seeking && Math.abs(react.currentTime - entry) >= 1 / 48) {try {react.currentTime = entry;} catch {}}
   }
   function sync({restart = false, startTime = 0} = {}) {
-    if (!shouldPlay()) {pauseFilms({preserveFrame: held}); return;}
+    if (!shouldPlay()) {pauseFilms({preserveFrame: held || (active && blocked && showing !== null && !disposed && !failed)}); return;}
     const kind = desired, video = films[kind];
     if (pending?.kind === kind && !restart) return;
     if (!restart && showing === kind && !video.paused) {notify(); return;}
