@@ -30,7 +30,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
   container.append(layer);
   let active = false, held = false, reduced = !!reducedMotion, disposed = false, failed = false, blocked = false;
   let posterReady = false, desired = 'idle', showing = null, pending = null, attempt = 0, response = 0;
-  let reported = '';
+  let reported = '', returnPreparation = null;
   const metadataSeeks = new Map();
   const clearSeeks = () => {for (const [video, callback] of metadataSeeks) video.removeEventListener('loadedmetadata', callback); metadataSeeks.clear();};
   const shouldPlay = () => !!idleSrc && active && !held && !reduced && !doc.hidden && !disposed && !failed && !blocked;
@@ -86,6 +86,63 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
       blocked = true; desired = 'idle'; response++; pauseFilms({preserveFrame: showing !== null});
     });
   }
+  // Decode the return pose while the avatar still owns the visible character.
+  // This never plays a hidden movie and never drops a live media src on cancel.
+  function prepareReturn() {
+    returnPreparation?.cancel();
+    let cancelled = false, settled = false, mode = null, revealed = false, fade = null, resolveReady;
+    let seekRequested = false;
+    const ready = new Promise(resolve => {resolveReady = resolve;});
+    const events = ['loadedmetadata', 'loadeddata', 'canplay', 'seeked'];
+    const clear = () => {
+      clearTimeout(timer);
+      for (const name of events) idle.removeEventListener(name, check);
+      idle.removeEventListener('error', fallback); still.removeEventListener('load', posterLoaded);
+    };
+    const settle = value => {if (settled) return; settled = true; clear(); resolveReady(value);};
+    const posterLoaded = () => {posterReady = !!still.naturalWidth; if (mode === 'poster') settle(posterReady);};
+    const fallback = () => {mode = 'poster'; if (posterReady) settle(true);};
+    const check = () => {
+      if (cancelled || disposed || mode === 'poster') return;
+      if (!seekRequested && idle.readyState >= 1) {
+        seekRequested = true;
+        try {if (Math.abs(idle.currentTime) >= 1 / 24) idle.currentTime = 0;} catch {fallback(); return;}
+      }
+      if (seekRequested && idle.readyState >= 2 && !idle.seeking && Math.abs(idle.currentTime) < 1 / 24) {
+        mode = 'idle'; settle(true);
+      }
+    };
+    const timer = setTimeout(() => {fallback(); settle(posterReady);}, 10000);
+    const ticket = {
+      ready,
+      reveal({duration = 150} = {}) {
+        if (cancelled || disposed || !settled || !mode || (mode === 'poster' && !posterReady)) return false;
+        revealed = true; active = false; held = true; desired = 'idle';
+        blocked = mode === 'poster' && !reduced; showing = mode === 'idle' ? 'idle' : null;
+        for (const [kind, video] of Object.entries(films)) {video.pause(); video.hidden = kind !== showing;}
+        // Crossfade from the same empty room to this paused decoded frame.
+        // The travelling PNG fades out over this exact interval.
+        if (duration && layer.animate) fade = layer.animate([{opacity: 0}, {opacity: 1}], {duration, easing: 'ease-out', fill: 'both'});
+        notify(); return true;
+      },
+      complete() {cancelled = true; clear(); fade?.cancel(); fade = null; if (returnPreparation === ticket) returnPreparation = null;},
+      cancel() {
+        if (cancelled) return; cancelled = true; settle(false); clear(); fade?.cancel(); fade = null;
+        if (returnPreparation === ticket) returnPreparation = null;
+        if (revealed) {held = false; active = false; reset();} else idle.pause();
+      },
+    };
+    returnPreparation = ticket;
+    pauseFilms();
+    for (const name of events) idle.addEventListener(name, check);
+    idle.addEventListener('error', fallback); still.addEventListener('load', posterLoaded);
+    if (reduced || failed || !idleSrc) fallback();
+    else {
+      if (!idle.getAttribute('src')) {idle.src = idleSrc; idle.preload = 'auto'; idle.load();}
+      check();
+    }
+    return ticket;
+  }
   const playing = Object.fromEntries(Object.keys(films).map(kind => [kind, () => reveal(kind)]));
   const decodeError = () => {failed = true; reset();};
   const ended = () => {
@@ -110,7 +167,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
   still.src = poster;
   posterReady = !!(still.complete && still.naturalWidth);
   return {
-    supported: true, layer, poster: still, idle, react,
+    supported: true, layer, poster: still, idle, react, prepareReturn,
     get visible() {return ownsScene();},
     update(options = {}) {
       if (disposed) return;
@@ -154,7 +211,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
     },
     dispose() {
       if (disposed) return;
-      disposed = true; active = false; held = false; reset();
+      returnPreparation?.cancel(); disposed = true; active = false; held = false; reset();
       for (const [kind, video] of Object.entries(films)) {
         video.removeEventListener('playing', playing[kind]); video.removeEventListener('error', decodeError);
         video.removeAttribute('src'); video.load();

@@ -1,5 +1,5 @@
 import { createLandingVideoPlayer } from './landing-video-player.mjs?v=20261028-opening-audio-68';
-import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261027-polish-48a';
+import { createLandingHeldFrame } from './landing-held-frame.mjs?v=20261030-avatar-return-85';
 import { createLandingGlass } from './landing-glass.mjs?v=20261028-diary-paper-71b';
 import { createLandingDeparture } from './landing-departure.mjs?v=20261023-experience-34d';
 import { LOADING_CHARACTER_MARKUP } from './loading-state.mjs?v=20261023-experience-34d';

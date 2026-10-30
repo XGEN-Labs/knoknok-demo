@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T04:00:38.319992Z",
+  "createdAt": "2026-10-30T04:07:51.770302Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 164117702,
+  "payloadBytes": 164126530,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 129130,
-      "sha256": "b4118dc471f465b6ee26628c80fc4b159e72175293ee880d5ffe7589397429c9"
+      "bytes": 129193,
+      "sha256": "b92d11fbf8a7d510412c1f4a98f05406d161859061e891634f8ee2cdcff35d2f"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -1460,8 +1460,8 @@
     {
       "source": "auth-entry-ui.mjs",
       "path": "auth-entry-ui.mjs",
-      "bytes": 4120,
-      "sha256": "82b44075873bedcc84f7def32434b1c4e87b07549474fba5f61106922553cd08"
+      "bytes": 5124,
+      "sha256": "5f02e91268286f77adc50023e86f9b645ddb4d7ed431ce166c944be67a553750"
     },
     {
       "source": "auth-entry.css",
@@ -1472,8 +1472,8 @@
     {
       "source": "auth-entry.mjs",
       "path": "auth-entry.mjs",
-      "bytes": 18288,
-      "sha256": "64164597d8a2abc0652820e13cd5941aef7d484a988783ded86dc7d92357e42c"
+      "bytes": 18455,
+      "sha256": "5b2fc5544dee7c590fa4fa2a4c4dff2a9805bb5febf8dbf89e13ecb4cb41f4a1"
     },
     {
       "source": "auth-hours-polish.css",
@@ -1604,8 +1604,8 @@
     {
       "source": "conversation-avatar-motion.mjs",
       "path": "conversation-avatar-motion.mjs",
-      "bytes": 4834,
-      "sha256": "b61fa400f6ccc4a3de7cf16debe18a7b780a9f9cbded3c88c3142ac9fea37390"
+      "bytes": 7241,
+      "sha256": "1ed8cdc4f4e801830a20b8120045aeeaba434250c94d90f129bcc367bee5fa41"
     },
     {
       "source": "conversation-entry-motion.css",
@@ -1778,8 +1778,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11531,
-      "sha256": "6fc69068d97008b43d91bd5d404ae8e613e6543505a6e28321a648d88b4fe2c0"
+      "bytes": 11534,
+      "sha256": "12068a650966e316db3882d28b2dbe6a261ecffd3ca9014302178db1aae2b963"
     },
     {
       "source": "journey-experience.css",
@@ -1808,8 +1808,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 25461,
-      "sha256": "0fa4c13ccdcc3a92ffa9054efb7220e9d4f27be7f06fa44fcc358b9f0750f69a"
+      "bytes": 26558,
+      "sha256": "91f3aa60679e16bbf125efd1936f5d9b217da27c418246efe99b988b54d74000"
     },
     {
       "source": "klin-world-2d.css",
@@ -1862,8 +1862,8 @@
     {
       "source": "landing-held-frame.mjs",
       "path": "landing-held-frame.mjs",
-      "bytes": 8006,
-      "sha256": "8e771f498d493eeabda3cede1e3930eef02bdfd9ead1cb427d0e96a01695a05a"
+      "bytes": 8249,
+      "sha256": "cca6edd60844c5060f0076cf4f596cd71f1479473bb66b94d76dc2fece697a7a"
     },
     {
       "source": "landing-video-cues.mjs",
@@ -1880,8 +1880,8 @@
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 13609,
-      "sha256": "b1a00a6cdcd51b2959f62c12527c2dc9ec4c39d09c47e46366c2f0bac73f184d"
+      "bytes": 13615,
+      "sha256": "36c9220456a5d73f27cebc5e77747d73094c523260417fef8483349f97f14c26"
     },
     {
       "source": "landing-video.css",
@@ -2084,8 +2084,8 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 14106,
-      "sha256": "062bf33976e35cba01105c646ee7eb8e355dfb2bd7f78e59dc048f159016b95b"
+      "bytes": 14728,
+      "sha256": "6781478136f5722b52cd11041aad53a010a0355ec73926136520a8b8ecc05c08"
     },
     {
       "source": "scene-experience.css",
@@ -2396,8 +2396,8 @@
     {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 9359,
-      "sha256": "fe514ad17b52d1141cd36a7c4379144c0bac0303d3c8923d5718b043da42f2dc"
+      "bytes": 12575,
+      "sha256": "dce999df214d4ed9e41330202c4dca054cb6307e602f2346583498a35678d8cd"
     },
     {
       "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",

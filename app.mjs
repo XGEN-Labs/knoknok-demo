@@ -16,10 +16,10 @@ import { sharedAgentsMarkup } from './shared-agents.mjs?v=20261028-seated-63';
 import { friendRoomKind, friendRoomScene, SEATED_KLIN_ASSET } from './friend-room.mjs?v=20261028-seated-63';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261027-glass-52g';
 import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261029-compositor-blur-79';
-import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261028-shared-composer-74b&glass=61';
-import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261029-klin-room-v10';
+import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261030-avatar-return-85&glass=61';
+import { createConversationAvatarMotion } from './conversation-avatar-motion.mjs?v=20261030-avatar-return-85';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261026-answers-47d';
-import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261028-diary-paper-71b';
+import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261030-avatar-return-85';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261023-experience-34d';
 import { createSceneAssetReadiness } from './scene-asset-readiness.mjs?v=20261023-experience-34d';
 import { voiceComposerMarkup, restoredControlIcon, bindVoiceComposer, centeredVolumeIcon } from './communication-mode.mjs?v=20261028-diary-paper-71b';
@@ -37,7 +37,7 @@ import { landingComplete, onboardingDestination, applyAccountOnboarding } from '
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261028-diary-paper-71b';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261030-card-empty-84';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-reference-2d.mjs?v=20261029-klin-room-v10';
+import { createKlinWorld } from './klin-reference-2d.mjs?v=20261030-avatar-return-85';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261026-social-tags-45';
 import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261029-klin-room-v10';
 import { klinAssets, klinMarkup, setKlinLoadingState } from './klin-companion.mjs?v=20261023-original-room-character-39';
@@ -391,7 +391,7 @@ function setHomeConversation(active){
   if(next===conversationActive)return;
   const phone=$('#phone'),reducedMotion=prefersStillness(ui.motion);
   conversationAvatarMotion ||= createConversationAvatarMotion(phone,{imageSrc:HOME_CHARACTER_AVATAR});
-  conversationAvatarMotion.move(next,{reducedMotion,mutate(){
+  conversationAvatarMotion.move(next,{reducedMotion,prepareReturn:()=>klinWorld?.prepareConversationReturn?.(),mutate(){
     conversationActive=next;phone.dataset.conversation=String(next);
     if(next&&!reducedMotion)phone.dataset.conversationEntering='true';else delete phone.dataset.conversationEntering;
     klinWorld?.setConversationMode?.(next);

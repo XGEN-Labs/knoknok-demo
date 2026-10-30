@@ -50,6 +50,9 @@ export function createLandingHeldFrame({ video, canvas, onSettled = () => {}, sc
       canvas.height = video.videoHeight;
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
       captures += 1;
+      // Consumers sample the same canvas across cues and same-cue replay. Its
+      // identity and current cue do not tell them that the pixels were replaced.
+      if (canvas.dataset) canvas.dataset.landingFrameRevision = String(captures);
       settle(token, true);
     } catch {
       // A resource/platform failure must never trap the onboarding form.
