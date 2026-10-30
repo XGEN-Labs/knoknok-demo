@@ -152,7 +152,8 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
   function problem(error,token,patch={}) {
     if (!current(token) || error?.name==='AbortError') return snapshot();
     const status=Number(error?.status)||0,code=error?.code||'network_error';
-    const message=status===429?'操作有點頻繁，請稍等後再試。':status===503?'服務暫時不可用，請稍後重試。':status===401?'帳號或密碼不正確，或帳號暫不可用。':code==='invalid_response'?'服務回覆不完整，請重試。':status===0?'連線暫時中斷，請重試。':error?.message||'暫時無法完成，請重試。';
+    const recovery=patch.step==='bootstrap'||['setup','bootstrap'].includes(state.step);
+    const message=status===429?'操作有點頻繁，請稍等後再試。':status===503?'服務暫時不可用，請稍後重試。':status===401?'帳號或密碼不正確，或帳號暫不可用。':code==='invalid_response'?'服務回覆不完整，請重試。':status===0?'連線暫時中斷，請重試。':recovery?'暫時無法確認帳號或伙伴狀態，請稍後重新載入。':error?.message||'暫時無法完成，請重試。';
     return emit({busy:false,error:message,errorCode:code,retryAt:status===429?(error.retryAt||now()+30000):0,...patch});
   }
   function applyEntry(result) {
