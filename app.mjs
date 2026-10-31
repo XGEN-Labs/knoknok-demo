@@ -53,7 +53,7 @@ import { initDatePickers } from './date-picker.mjs?v=20261031-product-sync';
 import { initTypography } from './typography.mjs?v=20261031-product-sync';
 import { createSceneSound } from './scene-sound.mjs?v=20261031-product-sync';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261031-product-sync';
-import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261101-visit-history-105';
+import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261101-visit-history-106';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261031-product-sync';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261101-avatar-flight-v06g';
