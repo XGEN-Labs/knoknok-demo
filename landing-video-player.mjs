@@ -53,6 +53,7 @@ export function createLandingVideoPlayer({
   let playAttempts = 0;
   let hasPresentedFrame = false;
   let suspended = false;
+  let audioHold = null;
   let lastNotification = '';
 
   const cue = () => cueList[index] || null;
@@ -67,7 +68,7 @@ export function createLandingVideoPlayer({
   function getDiagnostics() {
     return {
       state, key: cue()?.key ?? null, active, reducedMotion, disposed,
-      readyForInput: active && state === 'waiting',
+      readyForInput: active && (state === 'waiting' || state === 'audio-waiting' && audioHold?.mode === 'hold'),
       reason, currentTime: mediaTime(), startTime: cue()?.start ?? null,
       targetTime: cue() ? targetTime() : null,
       duration: Number.isFinite(video.duration) ? video.duration : null,
@@ -255,6 +256,9 @@ export function createLandingVideoPlayer({
     const wasReducedMotion = reducedMotion;
     active = Boolean(nextActive);
     reducedMotion = Boolean(nextReducedMotion);
+    if (audioHold && (!active || key !== cue()?.key || restore || nextReducedMotion)) {
+      mode = audioHold.mode; reason = audioHold.reason; audioHold = null;
+    }
     if (!active) {
       if (wasActive) stopPlayback();
       suspended = false;
@@ -284,6 +288,32 @@ export function createLandingVideoPlayer({
       enterCurrentMode();
     }
     return getDiagnostics();
+  }
+
+  // A sound-on click may need to decode audio before replaying this cue. Keep
+  // its exact current picture and original input readiness until then.
+  function holdForAudio() {
+    if (disposed || !active || !cue() || reducedMotion || audioHold) return null;
+    const token = { mode, index, reason };
+    audioHold = token;
+    mode = 'audio-hold';
+    stopPlayback();
+    report('audio-waiting');
+    return token;
+  }
+  function replayCurrent(token) {
+    if (!token || token !== audioHold || disposed || !active || index !== token.index) return false;
+    audioHold = null; mode = 'play'; reason = ''; hasPresentedFrame = false;
+    seek(cue().start); suspended = hidden();
+    if (suspended) report('loading', 'visibility-hidden');
+    else startPlayback();
+    return true;
+  }
+  function cancelAudioHold(token) {
+    if (!token || token !== audioHold) return false;
+    audioHold = null; mode = token.mode; reason = token.reason;
+    if (!disposed && active) enterCurrentMode();
+    return true;
   }
 
   /** Call directly from a user click/tap to retry autoplay without losing gesture activation. */
@@ -364,9 +394,10 @@ export function createLandingVideoPlayer({
     stopPlayback();
     disposed = true;
     active = false;
+    audioHold = null;
     state = 'inactive';
     for (const remove of listeners.splice(0)) remove();
   }
 
-  return Object.freeze({ update, retry, skip, getDiagnostics, dispose });
+  return Object.freeze({ update, retry, skip, holdForAudio, replayCurrent, cancelAudioHold, getDiagnostics, dispose });
 }

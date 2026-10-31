@@ -23,11 +23,11 @@
   /* existing | film-scenes-v30.css */
   --kn-ui-color-scene-base: #e7dfd0;
   /* existing | film-scenes-v30.css; decorative light tint */
-  --kn-ui-color-scene-sage: #b7c8bf;
+  --kn-ui-color-scene-sage: #c7c4c1;
   /* existing | refinement-v27.css */
   --kn-ui-color-error: #824b48;
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
-  --kn-ui-color-success: #526b59;
+  --kn-ui-color-success: var(--kn-ui-color-text);
   /* adopted | ui-foundations-v31.css / ui-inputs-v31.css / ui-states-v31.css */
   --kn-ui-color-focus: #56647f;
   /* adopted | 2026-10-27 brighter white glass feedback; glass-material.css v1.8 */
@@ -105,11 +105,11 @@
   /* existing | home-controls-v24.css */
   --kn-ui-motion-ease: cubic-bezier(.22,.61,.24,1);
   /* adopted | ui-states-v31.css; UI v1 disabled state */
-  --kn-ui-color-disabled-text: #7d8279;
+  --kn-ui-color-disabled-text: var(--kn-ui-color-text-hint);
   /* adopted | ui-states-v31.css; UI v1 disabled state */
-  --kn-ui-color-disabled-surface: #eff1eb;
+  --kn-ui-color-disabled-surface: #f3f0ed;
   /* adopted | ui-states-v31.css; UI v1 disabled state */
-  --kn-ui-color-disabled-edge: #e2e5dd;
+  --kn-ui-color-disabled-edge: #e7e4e1;
   /* adopted | ui-foundations-v31.css; unified cool blue-gray editable text */
   --kn-ui-color-input-text: #30394c;
   /* adopted | 2026-10-27 latest placeholder feedback; ui-surface-v51.css */
@@ -130,8 +130,8 @@
   --kn-ui-color-sheet-handle: rgba(0,0,0,.1);
   /* adopted | 2026-10-28 auth outer panel white fill */
   --kn-ui-glass-auth-panel-fill: rgba(255,255,255,.6);
-  /* adopted | 2026-10-27 account/password field feedback; ui-surface-v51.css */
-  --kn-ui-glass-auth-input-fill: rgba(255,255,255,.1);
+  /* adopted | 2026-10-28 account/password field feedback; ui-surface-v51.css */
+  --kn-ui-glass-auth-input-fill: rgba(255,255,255,.3);
   /* adopted | 2026-10-27 iOS reference glass; glass-material.css v1.9 */
   --kn-ui-glass-inner-highlight: inset 0 1px 1px rgba(255,255,255,.82),inset 0 -1px 1px rgba(255,255,255,.26);
   /* adopted | 2026-10-27 iOS reference glass; glass-material.css v1.9 */

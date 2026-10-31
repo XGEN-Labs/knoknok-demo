@@ -1,14 +1,8 @@
-/* 2026-10-28: content-sized friend-room title and a soft scroll exit. */
+/* 2026-10-28: content-sized friend-room title. */
 .phone#phone #app .page.shared-chat-page .shared-people {
   left:50%;
   right:auto;
   width:max-content;
   max-width:calc(100% - var(--kn-safe-left) - var(--kn-safe-right) - 104px);
   transform:translateX(-50%);
-}
-.phone#phone #app .page.shared-chat-page .shared-messages {
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 18px,#000 100%);
-  mask-image:linear-gradient(to bottom,transparent 0,#000 18px,#000 100%);
-  -webkit-mask-repeat:no-repeat;
-  mask-repeat:no-repeat;
 }

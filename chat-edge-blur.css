@@ -1,0 +1,32 @@
+/* Message-only edge softening; the room stays clear behind floating chrome. */
+.phone#phone[data-conversation="true"] #app .room-chat-page,
+.phone#phone #app .page.shared-chat-page {
+  --kn-chat-edge-top:calc(var(--app-safe-top) + 64px);
+  --kn-chat-edge-bottom:calc(var(--app-safe-bottom) + 108px);
+}
+.phone#phone[data-conversation="true"] #app .room-chat-page:has(.conversation-replies:not([hidden]):not(:empty)) {
+  --kn-chat-edge-bottom:calc(var(--app-safe-bottom) + 158px);
+}
+/* One fixed viewport filter uses only this group's SourceGraphic. The room
+   and floating controls remain outside it; native scrolling needs no JS paint. */
+.phone#phone #app .kn-conversation-edge-group {
+  position:absolute;
+  inset:0;
+  z-index:2;
+  overflow:hidden;
+  pointer-events:none;
+}
+.phone#phone #app .kn-conversation-edge-group > :is(.conversation-log,.shared-messages) {pointer-events:auto;}
+/* Keep the native scroll viewport at the phone edges and the existing
+   24px content rail. The filter adds no scroll content or visual duplicates. */
+.phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log,
+.phone#phone #app .page.shared-chat-page .shared-messages {
+  left:0!important;
+  right:0!important;
+  padding-inline:24px;
+}
+.phone#phone[data-conversation="true"] #app .room-chat-page .conversation-log {z-index:2;}
+.phone#phone #app .page.shared-chat-page .shared-composer {z-index:5;}
+/* Own speech keeps the existing pale glass, with a cool blue-grey ink. */
+.phone#phone #app .room-chat-page .conversation-message.own,
+.phone#phone #app .page.shared-chat-page .message.own .bubble {color:#244b68!important;}

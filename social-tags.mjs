@@ -108,12 +108,12 @@ export function socialTagSource(space,tagId){
 }
 export function ensureSocialTags(space,user){return space.socialTags=socialTagState(space,user);}
 export function syncSocialTags(space,user){user.cardTags=publicSocialTags(space,user).map(item=>item.label);}
-export function applyLandingSocialTags(space,user,now){
+export function applyLandingSocialTags(space,user,now,chartLabels){
  const ledger=ensureSocialTags(space,user);if(ledger.defaultsApplied)return;ledger.defaultsApplied=true;
  if(user.cardTagsEdited===true)return;
  ledger.items=ledger.items.filter(item=>!['新朋友','隨心聊聊'].includes(item.label));
- const master=[space.about?.dayMaster,user.dayMaster].find(value=>['甲木','乙木','丙火','丁火','戊土','己土','庚金','辛金','壬水','癸水'].includes(value))||dayMasterFromDate(space.birth?.date);
- const zodiac=zodiacFromDate(space.birth?.date);
+ const master=chartLabels?chartLabels.dayMaster:[space.about?.dayMaster,user.dayMaster].find(value=>['甲木','乙木','丙火','丁火','戊土','己土','庚金','辛金','壬水','癸水'].includes(value))||dayMasterFromDate(space.birth?.date);
+ const zodiac=chartLabels?chartLabels.zodiac:zodiacFromDate(space.birth?.date);
  for(const label of [master,zodiac].filter(Boolean))if(!ledger.items.some(item=>item.label===label))ledger.items.push({id:makeId(ledger,'tag'),topic:label===master?'identity:day-master':'identity:zodiac',category:'identity',label,visible:ledger.items.filter(item=>item.visible).length<7,sourceIds:[],history:[{kind:'landing',label,at:now}],createdAt:now,updatedAt:now,origin:'landing'});
  syncSocialTags(space,user);
 }

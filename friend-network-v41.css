@@ -9,41 +9,37 @@
 .phone#phone[data-world-page="relations"] .status-bar {color:#f3f6ff;}
 .phone#phone[data-world-page="relations"] #status-icons {filter:brightness(0) invert(1);}
 .phone#phone[data-world-page="relations"] .home-indicator {background:#f3f6ff;}
-.phone#phone #app .page.friends-lounge .network-search input::placeholder {color:var(--kn-ui-color-text-hint,#78818f)!important;opacity:1;}
-.phone#phone #app .page.friends-lounge .network-search svg {color:var(--kn-ui-color-text-hint,#78818f);stroke-width:1.9;}
+.phone#phone #app .page.friends-lounge .network-search input::placeholder {color:rgba(0,0,0,.2)!important;opacity:1;}
+.phone#phone #app .page.friends-lounge .network-search svg {color:rgba(0,0,0,.2);stroke-width:1.9;}
 .phone#phone #app .page.friends-lounge .network-search-status {color:var(--kn-ui-color-text-hint,#78818f)!important;}
 .phone#phone #app .page.friends-lounge .relationship-network.spirit-world {
  position:absolute;inset:calc(var(--app-safe-top) + 62px) 8px calc(var(--app-safe-bottom) + 80px);
  width:auto;height:auto;display:block;transform:none;overflow:visible;isolation:isolate;pointer-events:auto;
 }
 .spirit-world .world-viewport {position:absolute;inset:0;touch-action:none;cursor:grab;outline:none;overflow:visible;}
-.spirit-world .world-viewport::before {content:"";position:absolute;left:50%;top:var(--world-center-y,50%);width:calc(var(--world-diameter,300px)*1.25);height:calc(var(--world-diameter,300px)*1.25);transform:translate(-50%,-50%);background:radial-gradient(ellipse,#97b6e800 51%,#97b6e81c 57%,#97b6e80a 63%,#97b6e800 71%);pointer-events:none;}
-.spirit-world[data-world-filtered="true"] .world-viewport::before,
-.phone#phone[data-keyboard-open="true"] .spirit-world .world-viewport::before {display:none;}
+.spirit-world .world-viewport::before {content:"";position:absolute;left:50%;top:var(--world-center-y,50%);width:calc(var(--world-diameter,300px)*1.25);height:calc(var(--world-diameter,300px)*1.25);transform:translate(-50%,-50%);background:none;pointer-events:none;}
 .spirit-world[data-world-dragging="true"] .world-viewport {cursor:grabbing;}
 .spirit-world .world-viewport:focus-visible {outline:2px solid var(--kn-ui-color-focus);outline-offset:3px;border-radius:32px;}
 .spirit-world .world-canvas {position:absolute;inset:0;width:100%;height:100%;pointer-events:none;}
-.spirit-world .world-fallback {position:absolute;left:50%;top:var(--world-center-y,50%);transform:translate(-50%,-50%);width:var(--world-diameter,300px);height:var(--world-diameter,300px);border-radius:49% 50% 49% 50%;background:linear-gradient(#92b77355,#7b9d4e44),url('assets/world-20261026-42/planet-meadow.webp') center/200% 100%,#b8cb80;box-shadow:inset -12px -18px 25px #48583a26;}
+.spirit-world .world-fallback {position:absolute;left:50%;top:var(--world-center-y,50%);transform:translate(-50%,-50%);width:calc(var(--world-diameter,300px)*1.13);height:calc(var(--world-diameter,300px)*1.13);background:url('assets/visit-plush-20261030-91/sphere.png') center/contain no-repeat;}
+
 .spirit-world[data-world-renderer="webgl"] .world-fallback {visibility:hidden;}
 .spirit-world .world-shadow {display:none;}
 .spirit-world .world-rooms {position:absolute;inset:0;pointer-events:none;}
 .phone#phone #app .friends-lounge .spirit-world .network-friend {
- --world-node-scale:1;--house-size:72px;position:absolute;left:50%;top:50%;transform:translate(-50%,-100%) scale(var(--world-node-scale));transform-origin:50% 100%;
- display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:var(--house-size);min-width:0;max-width:none;height:auto;min-height:0;padding:0;gap:0;
+ --world-node-scale:1;--contact-width:72px;position:absolute;left:50%;top:50%;transform:translate(-50%,-100%) scale(var(--world-node-scale));transform-origin:50% 100%;
+ display:flex;flex-direction:column;align-items:center;justify-content:flex-start;width:var(--contact-width);min-width:0;max-width:none;height:auto;min-height:0;padding:0;gap:0;
  border:0!important;border-radius:0;background:transparent!important;color:#424957;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;filter:none;pointer-events:auto;transition:none;animation:none;user-select:none;-webkit-user-select:none;touch-action:none;
 }
-.phone#phone #app .friends-lounge .spirit-world .network-friend.is-primary {--house-size:88px;}
-.phone#phone #app .friends-lounge .spirit-world .network-house {display:block;position:relative;width:var(--house-size);height:calc(var(--house-size)*.75);flex:none;pointer-events:none;}
-.phone#phone #app .friends-lounge .spirit-world .network-house img {display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 2px #53643d20);}
+.phone#phone #app .friends-lounge .spirit-world .network-friend.is-primary {--contact-width:88px;}
 .phone#phone #app .friends-lounge .spirit-world .world-contact-avatar {
- display:grid;place-items:center;position:relative;width:40px;height:40px;box-sizing:border-box;flex:none;margin-bottom:-7px;z-index:2;border:2px solid #fffffff2;border-radius:50%;
- background:linear-gradient(135deg,#f9fbf5,#d9e6cb);color:#5a6e4e;font:600 18px/1 var(--kn-ui-font-ui);box-shadow:0 3px 10px #43563d22;overflow:hidden;
+ display:grid;place-items:center;position:relative;width:40px;height:40px;box-sizing:border-box;flex:none;margin:0 0 4px;z-index:2;border:2px solid #fffffff2;border-radius:50%;
+ background:linear-gradient(135deg,#f7feff,#d5eaee);color:var(--kn-ui-color-input-text);font:600 18px/1 var(--kn-ui-font-ui);box-shadow:0 3px 10px #143d4b24;overflow:hidden;
 }
-.phone#phone #app .friends-lounge .spirit-world .is-water .world-contact-avatar {background:linear-gradient(135deg,#f4fbff,#d1e0ec);color:#596f87;}
-.phone#phone #app .friends-lounge .spirit-world .is-earth .world-contact-avatar {background:linear-gradient(135deg,#fffaf0,#ebd9bd);color:#8a7557;}
 .phone#phone #app .friends-lounge .spirit-world .is-primary .world-contact-avatar {width:52px;height:52px;font-size:23px;}
 .phone#phone #app .friends-lounge .spirit-world .world-contact-avatar img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:50%;}
-.phone#phone #app .friends-lounge .spirit-world .network-house-label {display:flex;justify-content:center;min-height:22px;max-width:110px;box-sizing:border-box;margin:-4px 0 0;padding:1px 8px;border:1px solid #ffffffb0;border-radius:11px;background:#fffdf0e8;box-shadow:0 2px 6px #6471510d;backdrop-filter:none;-webkit-backdrop-filter:none;}
+.phone#phone #app .friends-lounge .spirit-world .network-contact-label {display:flex;justify-content:center;min-height:22px;max-width:110px;box-sizing:border-box;margin:0;padding:1px 8px;border:1px solid #ffffffe0;border-radius:11px;background:rgba(246,252,255,.92);box-shadow:0 2px 6px #153e4b14;backdrop-filter:none;-webkit-backdrop-filter:none;}
+.phone#phone #app .friends-lounge .spirit-world .network-contact-pointer {display:block;width:10px;height:6px;flex:none;margin-top:-1px;background:rgba(246,252,255,.92);clip-path:polygon(0 0,100% 0,50% 100%);pointer-events:none;}
 .phone#phone #app .friends-lounge .spirit-world .network-friend strong {margin:0;padding:0;max-width:90px;border:0;border-radius:0;background:none!important;box-shadow:none!important;font:500 12px/18px var(--kn-ui-font-ui);color:#434a50!important;text-shadow:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;backdrop-filter:none;-webkit-backdrop-filter:none;}
 .phone#phone #app .friends-lounge .spirit-world .is-primary strong {font-size:13px;font-weight:600;}
 .phone#phone #app .friends-lounge .spirit-world .network-friend:active {transform:translate(-50%,-100%) scale(var(--world-node-scale))!important;}
@@ -59,21 +55,10 @@
 .spirit-world .world-loading .loading-character-eyes {animation:kn-loading-fullscreen-blink 1800ms ease-in-out infinite;transform:scale(1.25,1.15);}
 .spirit-world[data-reduced-motion="true"] .world-loading .loading-character-eyes,
 body.reduced-motion .spirit-world .world-loading .loading-character-eyes {animation:none!important;}
-.spirit-world .network-house[data-image-failed="true"]::after {content:"";position:absolute;inset:10% 18% 5%;border:3px solid #e7dfcc;border-radius:50% 50% 12% 12%;background:#f3eedf;box-shadow:inset 0 0 0 7px #d4d9b8;}
 .phone#phone #app .friends-lounge .spirit-world .network-empty {position:absolute;top:40%;left:7%;right:7%;padding:18px 12px;margin:0;border:0;border-radius:20px;background:#ffffffb8;color:var(--kn-ui-color-text-hint,#78818f);font-size:14px;line-height:22px;text-shadow:none;text-align:center;z-index:40;}
 .phone#phone #app .friends-lounge .spirit-world :is(.network-friend,.network-empty)[hidden] {display:none!important;}
-/* Text search and a short keyboard viewport use the same accessible contacts. */
-.phone#phone #app .spirit-world[data-world-filtered="true"] .world-viewport,
-.phone#phone[data-keyboard-open="true"] #app .spirit-world .world-viewport {inset:8px 12px 0;overflow-y:auto;touch-action:pan-y;}
-.phone#phone #app .spirit-world[data-world-filtered="true"] :is(.world-canvas,.world-fallback,.world-shadow),
-.phone#phone[data-keyboard-open="true"] #app .spirit-world :is(.world-canvas,.world-fallback,.world-shadow) {display:none;}
-.phone#phone #app .spirit-world[data-world-filtered="true"] .world-rooms,
-.phone#phone[data-keyboard-open="true"] #app .spirit-world .world-rooms {display:flex;flex-direction:column;gap:10px;position:relative;pointer-events:auto;padding-bottom:12px;}
-.phone#phone #app .friends-lounge .spirit-world[data-world-filtered="true"] .network-friend,
-.phone#phone[data-keyboard-open="true"] #app .friends-lounge .spirit-world .network-friend {position:relative;left:auto!important;top:auto!important;transform:none!important;visibility:visible;opacity:1!important;pointer-events:auto;display:flex;flex-direction:row;justify-content:flex-start;gap:8px;--house-size:58px;width:100%;height:74px;padding:7px 12px;box-sizing:border-box;border-radius:22px;background:#ffffff86!important;}
-.phone#phone #app .spirit-world[data-world-filtered="true"] .network-house-label,
-.phone#phone[data-keyboard-open="true"] #app .spirit-world .network-house-label {margin:0;background:none;border:0;box-shadow:none;}
-@media(hover:hover){.spirit-world .network-friend:hover .world-contact-avatar {box-shadow:0 0 0 3px #ffffff6b,0 4px 12px #485c3d26;}}
+/* Search filters markers in place; the live planet remains visible. */
+@media(hover:hover){.spirit-world .network-friend:hover .world-contact-avatar {box-shadow:0 0 0 3px #ffffff6b,0 4px 12px #143d4b26;}}
 
 /* The scene title is centred on the screen; navigation keeps its own lane. */
 .phone#phone #app .page.friends-lounge .page-top{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:12px;align-items:center;padding:0;margin:0;width:auto;min-width:0;max-width:none;box-sizing:border-box;justify-content:normal}
@@ -84,6 +69,7 @@ body.reduced-motion .spirit-world .world-loading .loading-character-eyes {animat
 /* The visible plate also supplies the shared preblurred control texture. */
 .phone#phone #app .page.friends-lounge {isolation:isolate;background:transparent!important;}
 .phone#phone #app .friends-lounge .network-scene-source {position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;}
+.network-scene-source>img {filter:brightness(.84);}
 .network-scene-source img {display:block;width:100%;height:100%;object-fit:cover;object-position:center;}
 
 /* The canvas includes the same moving image sampled by the glass controls. */

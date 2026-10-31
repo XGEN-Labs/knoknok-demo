@@ -4,7 +4,7 @@
 // but no longer choose a different layout or palette.
 export const CARD_DESIGN_NAMES = Object.freeze(['奶油白直式']);
 export const CARD_PALETTES = Object.freeze([
- {paper:'#fbf8f1',ink:'#363a42',accent:'#a7b19f'},
+ {paper:'#fbf8f1',ink:'#363a42',accent:'#afaeac'},
 ]);
 export function normalizeCardDesign(value) {
   return Number.isSafeInteger(value) && value >= 0 && value <= 0xffffffff ? value : null;

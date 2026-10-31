@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-28T03:17:41.723599+00:00",
+  "createdAt": "2026-10-30T17:02:18.660Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 122243273,
+  "payloadBytes": 217534650,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 122864,
-      "sha256": "824b81057bfc6c5ec1fb7e74487bcbb6f9555b9e5d53a271f1186e9804734d4b"
+      "bytes": 146936,
+      "sha256": "b03414fbacc70c51cc41802291e73c2e1670f7d20bdf7fd631d7fba3f2f19284"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -22,6 +22,18 @@
       "path": "assets/brand-20261026/knoknok-handwritten-white.png",
       "bytes": 355920,
       "sha256": "251233a9123e37055167d1957eaecd23ef03ff19e4b0853b2c4e3e8df303222a"
+    },
+    {
+      "source": "assets/brand-20261027-noknok/noknok-selected-white.png",
+      "path": "assets/brand-20261027-noknok/noknok-selected-white.png",
+      "bytes": 561648,
+      "sha256": "0f0622e4661f337a30f1fdd4b5bb8733db6184b2f9d02908b3d09c8db4650c2e"
+    },
+    {
+      "source": "assets/brand-20261028-noknok/noknok-selected-white.png",
+      "path": "assets/brand-20261028-noknok/noknok-selected-white.png",
+      "bytes": 530401,
+      "sha256": "a5c8691a7f1830f14ee91819d1c2f711d378bad3b87982520190a8d070df4c5c"
     },
     {
       "source": "assets/business-card-20261023-v2/blue-paw.png",
@@ -102,6 +114,12 @@
       "sha256": "c681cb9acff043ba66bece3d91ea4c24eae97667edd7da5f6e79f3d4a545972c"
     },
     {
+      "source": "assets/demo-avatars-20261026-45/README.md",
+      "path": "assets/demo-avatars-20261026-45/README.md",
+      "bytes": 922,
+      "sha256": "96d9c5109421175e66b5c8e94cac41e55e04e276aec8bd07022797d7acccccbc"
+    },
+    {
       "source": "assets/demo-avatars-20261026-45/b.jpg",
       "path": "assets/demo-avatars-20261026-45/b.jpg",
       "bytes": 5242,
@@ -148,12 +166,6 @@
       "path": "assets/demo-avatars-20261026-45/i.jpg",
       "bytes": 4291,
       "sha256": "ec911d836da2e0c03a0b5bacc06b1cc628ee4db4567dd684e51e3e47d2a2028e"
-    },
-    {
-      "source": "assets/demo-avatars-20261026-45/README.md",
-      "path": "assets/demo-avatars-20261026-45/README.md",
-      "bytes": 922,
-      "sha256": "96d9c5109421175e66b5c8e94cac41e55e04e276aec8bd07022797d7acccccbc"
     },
     {
       "source": "assets/demo-avatars-20261026-45/sources.json",
@@ -258,10 +270,202 @@
       "sha256": "fc25f234ce65a218f69fb9214df06fc17c1d71fe2965cea000a13ba2345016de"
     },
     {
+      "source": "assets/klin-alive-room-20261028-v02/idle.mp4",
+      "path": "assets/klin-alive-room-20261028-v02/idle.mp4",
+      "bytes": 1090010,
+      "sha256": "c7428378e16d35b979bf26e6b24ef510d4dbef0b185e7f802e7055e3db140966"
+    },
+    {
+      "source": "assets/klin-alive-room-20261028-v02/poster.jpg",
+      "path": "assets/klin-alive-room-20261028-v02/poster.jpg",
+      "bytes": 78694,
+      "sha256": "b02f3197064b7d710dd86776576a996084faa3404fb4450cd8f2393276718deb"
+    },
+    {
+      "source": "assets/klin-alive-room-20261028-v02/react.mp4",
+      "path": "assets/klin-alive-room-20261028-v02/react.mp4",
+      "bytes": 1068577,
+      "sha256": "6e6aca637935a80e0feb78983877fe45c14fcb518f388b3e5371f7bde5073ee6"
+    },
+    {
+      "source": "assets/klin-avatar-20261029-v10/avatar.png",
+      "path": "assets/klin-avatar-20261029-v10/avatar.png",
+      "bytes": 1426664,
+      "sha256": "f13c18ff8cff4787db14dbd3013e60c4d84c5f52d0557f901b52c050544f7fba"
+    },
+    {
+      "source": "assets/klin-front-react-20261030-v01/day-react.mp4",
+      "path": "assets/klin-front-react-20261030-v01/day-react.mp4",
+      "bytes": 1121916,
+      "sha256": "c9af352c015bd49bf8b2130d9f6746126264c467b805a7c9919a037882989cf7"
+    },
+    {
+      "source": "assets/klin-front-react-20261030-v01/night-react.mp4",
+      "path": "assets/klin-front-react-20261030-v01/night-react.mp4",
+      "bytes": 1292497,
+      "sha256": "5f98ec2beda906591b14083b3bdf8728d8e081d23b802fb88a239bbdea0ba508"
+    },
+    {
       "source": "assets/klin-native-20261016-0907/juvenile.png",
       "path": "assets/klin-native-20261016-0907/juvenile.png",
       "bytes": 727228,
       "sha256": "e2ef10304170cd452c0a686abffd9c479ea16e17c78a69489ddad53a6d9ba9e7"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/idle.mp4",
+      "path": "assets/klin-room-motion-20261029-v09/idle.mp4",
+      "bytes": 1232625,
+      "sha256": "22a2344142d7b1932974fc211d57d90124da44197c53cb6c96533f09f133fa89"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/poster.png",
+      "path": "assets/klin-room-motion-20261029-v09/poster.png",
+      "bytes": 686730,
+      "sha256": "c3a31a53d835621ae6f8f7b6158a1060ea6c275eaa40dcb1dad9ecabdf15c531"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/react.mp4",
+      "path": "assets/klin-room-motion-20261029-v09/react.mp4",
+      "bytes": 1264359,
+      "sha256": "7f8c86859c2e8c516b12937766e6c27f6b9f15ebe1b9eba911063f305c64d254"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/room-loop.mp4",
+      "path": "assets/klin-room-motion-20261029-v09/room-loop.mp4",
+      "bytes": 921120,
+      "sha256": "a181f123d2e6c6c90d325d28223c14ec5ff411cda3857ee7f999d062a114e1c4"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v09/room-only.png",
+      "path": "assets/klin-room-motion-20261029-v09/room-only.png",
+      "bytes": 690423,
+      "sha256": "8e00aa7fa618fc76a463be7f9a88c120f5804d91bd00f1a4f100807faa5df13d"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/idle-daylight.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/idle-daylight.mp4",
+      "bytes": 1479835,
+      "sha256": "fdf8ab429ab5cfe3dab34d5ace2e745e01937ce9dac1c7c71bb041e07ecbe94d"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/idle.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/idle.mp4",
+      "bytes": 1548399,
+      "sha256": "65717c514442666d9d245be000a4b192a1e3a10c3f7df8dce919ee56add68606"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/poster-daylight.png",
+      "path": "assets/klin-room-motion-20261029-v10/poster-daylight.png",
+      "bytes": 604240,
+      "sha256": "b856195f201ce1ea7417d593883ca48675631bdadd3a26fad4b8ff1fca958781"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/poster.png",
+      "path": "assets/klin-room-motion-20261029-v10/poster.png",
+      "bytes": 680900,
+      "sha256": "2bab9c29a4bfc62d7a630459c7de2669105c5d150b2c569f53c17e985c6d1f81"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/react-daylight.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/react-daylight.mp4",
+      "bytes": 1114711,
+      "sha256": "9e7eae920ae03b1645585afdd0e0d696bbde810641114aa5f2e69a36c456bf20"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/react.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/react.mp4",
+      "bytes": 1175317,
+      "sha256": "2e66cd752ae72c841afc865d9d655856c4e80f05a175008bec64ad240cb0fea5"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-loop-daylight.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/room-loop-daylight.mp4",
+      "bytes": 180760,
+      "sha256": "0f010110a28425f123a49afa4d5a21b0fde50bd0261dd314d662d602ab15ad08"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-loop.mp4",
+      "path": "assets/klin-room-motion-20261029-v10/room-loop.mp4",
+      "bytes": 170934,
+      "sha256": "f640e15f698696925f1df9d7ad6c7a8e1c0e24bea06c3d938dbbdcb8b59ce60e"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-only-daylight.png",
+      "path": "assets/klin-room-motion-20261029-v10/room-only-daylight.png",
+      "bytes": 646149,
+      "sha256": "125adbbf10aacc280e9ef898c65a3206f5ddc9640b981dcee1cb961ef5e9bce0"
+    },
+    {
+      "source": "assets/klin-room-motion-20261029-v10/room-only.png",
+      "path": "assets/klin-room-motion-20261029-v10/room-only.png",
+      "bytes": 690423,
+      "sha256": "8e00aa7fa618fc76a463be7f9a88c120f5804d91bd00f1a4f100807faa5df13d"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
+      "bytes": 857322,
+      "sha256": "b59e237ae127b4f8eb7c07daa35740960e787eef782d8720343c2169794dc351"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/poster-daylight.png",
+      "path": "assets/klin-room-motion-20261030-v11/poster-daylight.png",
+      "bytes": 501161,
+      "sha256": "83de55f46fbe281c6a4013a0b92ca6ecc30f01ae4a7e4a96a70a229c4ebbe612"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/react-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/react-daylight.mp4",
+      "bytes": 628734,
+      "sha256": "a46a7a00cabf0263a95855b12fef1d8d6a427386af6c8005d59e15449af104d6"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/react.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/react.mp4",
+      "bytes": 822573,
+      "sha256": "3cbc19247ac9c060d42b5b78e5e829a34d29bea36dfdfb0dd14fa30f7d6dfcc8"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/room-loop-daylight.mp4",
+      "path": "assets/klin-room-motion-20261030-v11/room-loop-daylight.mp4",
+      "bytes": 147813,
+      "sha256": "4bf9ff833155bc220a6252d40fb3c229dd60ba22ec46588f78536263cf680f09"
+    },
+    {
+      "source": "assets/klin-room-motion-20261030-v11/room-only-daylight.png",
+      "path": "assets/klin-room-motion-20261030-v11/room-only-daylight.png",
+      "bytes": 881036,
+      "sha256": "b6d40aa5b012d889b371a8c708a95cbcf6e80a0c5ff0d2fe8c0e6316724b609a"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/idle.mp4",
+      "path": "assets/klin-room-night-20261030-v12/idle.mp4",
+      "bytes": 1705223,
+      "sha256": "d7ddad336361dd3b449cc8443404f49fb7f8498a6176491b47189ce5790587e9"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/poster.png",
+      "path": "assets/klin-room-night-20261030-v12/poster.png",
+      "bytes": 578111,
+      "sha256": "7d4730bf996b3c410e999170730c8dc76715881ba8c75c1048fd155e4fa3b430"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/react.mp4",
+      "path": "assets/klin-room-night-20261030-v12/react.mp4",
+      "bytes": 832156,
+      "sha256": "106199ae6cf7a86aca4cbeec22341dd7a2d6f42b477404788cadc7fafd8eca8d"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/room-loop.mp4",
+      "path": "assets/klin-room-night-20261030-v12/room-loop.mp4",
+      "bytes": 519977,
+      "sha256": "99e5cf8d3ee8c5d182766b2fa9433a8977a94c7415b4b44ee6d2d0d95e87991e"
+    },
+    {
+      "source": "assets/klin-room-night-20261030-v12/room-only.png",
+      "path": "assets/klin-room-night-20261030-v12/room-only.png",
+      "bytes": 611869,
+      "sha256": "30900208e6a13c39ea5bae9f43f45326178c7e804efd44702db4a77435d737b3"
     },
     {
       "source": "assets/landing-20261027-52/34-complete-selected23-original-colors-voice.mp4",
@@ -274,6 +478,54 @@
       "path": "assets/landing-20261027-52/film-original-audio.m4a",
       "bytes": 1663703,
       "sha256": "a13e3de9aac8ab2e800ce5237a0bfa29ea4ea9f3ef2efd23a60098fac92c096c"
+    },
+    {
+      "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
+      "path": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
+      "bytes": 17645982,
+      "sha256": "415e5049e28b1e114138abdad17792bb23e659bd85d2e656415fba64479f1633"
+    },
+    {
+      "source": "assets/landing-audio-20261027-61/background.m4a",
+      "path": "assets/landing-audio-20261027-61/background.m4a",
+      "bytes": 1247864,
+      "sha256": "6aedf6f6062c102c49315ad7bda80df73de12a41df11e4fee7cf0a00b188547c"
+    },
+    {
+      "source": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
+      "path": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
+      "bytes": 575883,
+      "sha256": "55b2b4cf18c1a953e5b89ff2cd1b2fbb3bbe71c0b1119270bf4f7e5dc8466d46"
+    },
+    {
+      "source": "assets/landing-audio-20261028-63/background.m4a",
+      "path": "assets/landing-audio-20261028-63/background.m4a",
+      "bytes": 1640505,
+      "sha256": "aee0b6982a4570be210311416777f41b151f963c263732032f5330d1c55de385"
+    },
+    {
+      "source": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
+      "path": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
+      "bytes": 1669000,
+      "sha256": "387f563ce3888f5d981c48ca50708c0f70a1ec1cafc32659368a8d8534099fd9"
+    },
+    {
+      "source": "assets/landing-audio-20261028-67/background.m4a",
+      "path": "assets/landing-audio-20261028-67/background.m4a",
+      "bytes": 1155461,
+      "sha256": "d691db4b632abac51073d64ab8fe9dbf8fc58316ab528df9d584ee6229049d0f"
+    },
+    {
+      "source": "assets/landing-audio-20261028-67/dialogue-actions.m4a",
+      "path": "assets/landing-audio-20261028-67/dialogue-actions.m4a",
+      "bytes": 1669000,
+      "sha256": "387f563ce3888f5d981c48ca50708c0f70a1ec1cafc32659368a8d8534099fd9"
+    },
+    {
+      "source": "assets/landing-audio-20261028-69/background.m4a",
+      "path": "assets/landing-audio-20261028-69/background.m4a",
+      "bytes": 2045154,
+      "sha256": "73041a3cacba353d6b4b579a8931b3f26fd3d2962ac6d25be28f5bbc835ead02"
     },
     {
       "source": "assets/login-world-20261019/source/character-transparent.png",
@@ -292,6 +544,150 @@
       "path": "assets/login-world-20261019/source/original-login-world.png",
       "bytes": 1902641,
       "sha256": "77633e4702a6b254d29406bed33f837d9b492e0821b941486970e859a35724d1"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/day-poster.png",
+      "bytes": 700454,
+      "sha256": "3748902a899c7606f27bbb9816cea1392c3125d96d65e5e4e967bf7e37061d04"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/day-room-only.png",
+      "bytes": 692679,
+      "sha256": "67b356037a45dcf63d9efa6c6cbbab213c843b01e6605cfc124b15b072d50beb"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-idle.mp4",
+      "bytes": 1493313,
+      "sha256": "f414072174ddb45593e52280e4eddecb05f93c0772739b55b4692ca6f521108d"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-poster.png",
+      "bytes": 655141,
+      "sha256": "f2e3104ffd474ae1f895a7d57e2e1c2de1b3837e17e8cf8cf316c2d57acb301f"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-react.mp4",
+      "bytes": 1312233,
+      "sha256": "1b789a5cab0e4994a3945b7adb1922effa55070f13e213ce6fcb1632c4fdb72c"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/earth/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/earth/night-room-only.png",
+      "bytes": 642150,
+      "sha256": "3ae43811b18ed4deb61ff8fee6c574a63f888622ce5c2a79ed7a686509b19bee"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/day-poster.png",
+      "bytes": 665455,
+      "sha256": "a96167b4d25189848a74c03401e5c0cd473f3c211a353dfaf4f4f5f3c9da66e7"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/day-room-only.png",
+      "bytes": 644832,
+      "sha256": "60e6c393f9e60bd1ef38807d3858746291af453b5ab7c7d19925260a0cb3f0d0"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-idle.mp4",
+      "bytes": 1415334,
+      "sha256": "a95fc25265c4858cd5c7d2e9465f1beda92b7f50548de59413f60ebf7fd461c8"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-poster.png",
+      "bytes": 678365,
+      "sha256": "2713efaf0cdb2c981f3d76928d05397925d92acc011330f02c8e4c75facd6576"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-react.mp4",
+      "bytes": 1204632,
+      "sha256": "b3a489769ae084e63a0bdfadff0331e44261694facf8016291fd7ee039859337"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/fire/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/fire/night-room-only.png",
+      "bytes": 605696,
+      "sha256": "d5af429aa4787ce53fea79cdf3f0f89246dea8700e0d29bec49b012c40a9a526"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/day-poster.png",
+      "bytes": 620037,
+      "sha256": "7a661618725e253f76c11ac5f0a02a81e233f8416efc95b38f59cbdbc2950c25"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/day-room-only.png",
+      "bytes": 611059,
+      "sha256": "220182a7216f37a0334f20a59ac11f5a9688c7e215e6706c56a4712c92e9ba8c"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-idle.mp4",
+      "bytes": 1382614,
+      "sha256": "fe5eacd07131cb4371895b0abf08d84ddf1888bb958509758d9da7489b61fe33"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-poster.png",
+      "bytes": 649041,
+      "sha256": "b4a11b766f355462910983246667f4e1004cf713fb99f4b17129da63d053106a"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-react.mp4",
+      "bytes": 1125027,
+      "sha256": "0c86fb6c58e56f9cf94185d988a54019cef41b6397842dda651e7809b069eb01"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/water/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/water/night-room-only.png",
+      "bytes": 635802,
+      "sha256": "00e6028f3562e22825468494c006c9280a8d27ab48a2e0f237299c63b38a3518"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/day-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/day-poster.png",
+      "bytes": 724085,
+      "sha256": "71dcf2b9783c5fabcac70192ee27b39a52911d42d9a9d57c3b32541efc701a83"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/day-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/day-room-only.png",
+      "bytes": 716449,
+      "sha256": "d1fabab6ee78b100d7766145b9238c1814f5d01be47d0db6c1ea0a742d7cf520"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-idle.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-idle.mp4",
+      "bytes": 978451,
+      "sha256": "7b6b51a2198e5fda1397690976811f53f46e2790f8aedbadd3735d9d0e8fd4c4"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-poster.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-poster.png",
+      "bytes": 763037,
+      "sha256": "326e644063513411fec3451af9accbf05e7c19e9167fa6fa668ba1787a8f1122"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-react.mp4",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-react.mp4",
+      "bytes": 1334787,
+      "sha256": "8feb5828c1ad36d265d320e6b52290c22adc8eaaa9f21a285dcd30c88215b90b"
+    },
+    {
+      "source": "assets/nok-personal-rooms-20261030-v01/wood/night-room-only.png",
+      "path": "assets/nok-personal-rooms-20261030-v01/wood/night-room-only.png",
+      "bytes": 715470,
+      "sha256": "6b9258d631b9c99de6d4e5e8020afa87a4e996e54778d6c5f15085a91dc0c491"
     },
     {
       "source": "assets/palette-20261021/ivory-blue-room.png",
@@ -564,6 +960,12 @@
       "sha256": "925264916a0a3b146ebab923910dafff9fd216cd3712de04b750543b532407e0"
     },
     {
+      "source": "assets/scene-audio-20261023-r2/NOTICE.txt",
+      "path": "assets/scene-audio-20261023-r2/NOTICE.txt",
+      "bytes": 1413,
+      "sha256": "dbc696ea07a4cfc1e9353de4f607e480a5d699fac7de173742b05dcd0a83efaf"
+    },
+    {
       "source": "assets/scene-audio-20261023-r2/approach.m4a",
       "path": "assets/scene-audio-20261023-r2/approach.m4a",
       "bytes": 21299,
@@ -640,12 +1042,6 @@
       "path": "assets/scene-audio-20261023-r2/named-greeting.m4a",
       "bytes": 11016,
       "sha256": "9024dc23a8b3271075e058b92708b2a8cfd9d23943c2c18fec37534588d988c6"
-    },
-    {
-      "source": "assets/scene-audio-20261023-r2/NOTICE.txt",
-      "path": "assets/scene-audio-20261023-r2/NOTICE.txt",
-      "bytes": 1413,
-      "sha256": "dbc696ea07a4cfc1e9353de4f607e480a5d699fac7de173742b05dcd0a83efaf"
     },
     {
       "source": "assets/scene-audio-20261023-r2/promise.m4a",
@@ -738,16 +1134,82 @@
       "sha256": "bd651be390d6b1864d17fb02a211f5b85793b04aac7791898ab374368cbf978c"
     },
     {
+      "source": "assets/shared-elements-20261030-88/characters.png",
+      "path": "assets/shared-elements-20261030-88/characters.png",
+      "bytes": 1565119,
+      "sha256": "31ae98db62fd659425c21dcca9b31e6decf53ae53feda4d457f31d9cb3f7ec65"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/earth-room.png",
+      "path": "assets/shared-elements-20261030-88/earth-room.png",
+      "bytes": 2213974,
+      "sha256": "83d99f24f95d8d8bb9a02a53416293ba383f0f36c22cab602de563219b81f0b5"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/fire-room.png",
+      "path": "assets/shared-elements-20261030-88/fire-room.png",
+      "bytes": 2208995,
+      "sha256": "f117c30376b838c523fcec93ae17e4a9de0c13e3339f88a5a933c31d32206626"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/metal-room.png",
+      "path": "assets/shared-elements-20261030-88/metal-room.png",
+      "bytes": 2307988,
+      "sha256": "d79e8f3d74cd01af3d1e317c8237c65def7fa9cda7fa6cdb223777fcce89ae1c"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/water-room.png",
+      "path": "assets/shared-elements-20261030-88/water-room.png",
+      "bytes": 2149830,
+      "sha256": "a506457ce1cc6d58dddc7addd152d213536514fc80234e7ae883012634406bd3"
+    },
+    {
+      "source": "assets/shared-elements-20261030-88/wood-room.png",
+      "path": "assets/shared-elements-20261030-88/wood-room.png",
+      "bytes": 2615360,
+      "sha256": "59287aacec2d4f722ab328d652b4f1f8327ec6a87921c172556a7a90cd0a138c"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/earth.png",
+      "path": "assets/shared-room-20261027-61/earth.png",
+      "bytes": 2675985,
+      "sha256": "03970139b6e99c360e8f1e0dbeaa45e6a75d6a1b845d67518a43275d7594b188"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/klin-seated-selected.png",
+      "path": "assets/shared-room-20261027-61/klin-seated-selected.png",
+      "bytes": 1533439,
+      "sha256": "18b3fff19d0d1bd829abfa359b2d7ee0ce0bae139ef826a0fa794c7dec8e1b62"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/klin-seated-v2.png",
+      "path": "assets/shared-room-20261027-61/klin-seated-v2.png",
+      "bytes": 1456452,
+      "sha256": "5e93e4b6db8efad020f016b7a0372cde2a9f40b85fdd0c57c38fba0bcb18e9c0"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/klin-seated-v3.png",
+      "path": "assets/shared-room-20261027-61/klin-seated-v3.png",
+      "bytes": 1420830,
+      "sha256": "602656585c287f47f7e6ac6395b38740a6fd50b1edf5205b0a69cc8610072a4e"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/water.png",
+      "path": "assets/shared-room-20261027-61/water.png",
+      "bytes": 2796993,
+      "sha256": "d8accf59d71c81c65bbf2d030f749c98d1d13a1d665ea776b61066cae65039f0"
+    },
+    {
+      "source": "assets/shared-room-20261027-61/wood.png",
+      "path": "assets/shared-room-20261027-61/wood.png",
+      "bytes": 2874233,
+      "sha256": "9307ac474b7285db543a84c2b90584b523bfc35bded920c8d7b7d41a0e0b01f4"
+    },
+    {
       "source": "assets/signature-strokes-20261020/ARPHICPL.TXT",
       "path": "assets/signature-strokes-20261020/ARPHICPL.TXT",
       "bytes": 6900,
       "sha256": "5590533436c70f10f2f524ee61456238c290175c6662fbe1c700b5f038a6d328"
-    },
-    {
-      "source": "assets/signature-strokes-20261020/hershey-cursive.json",
-      "path": "assets/signature-strokes-20261020/hershey-cursive.json",
-      "bytes": 12542,
-      "sha256": "0e200d80b8f3282fdd33129879d3fdb45ec9ccbd312d1973a7ec626e8033cd2b"
     },
     {
       "source": "assets/signature-strokes-20261020/HERSHEY-LICENSE",
@@ -760,6 +1222,12 @@
       "path": "assets/signature-strokes-20261020/HERSHEY-NOTICE.txt",
       "bytes": 354,
       "sha256": "cd04cc8417779cbb5a6de67be733bcdf1ce882b53b7a4492bfbbecfdaca42fbb"
+    },
+    {
+      "source": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "path": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "bytes": 12542,
+      "sha256": "0e200d80b8f3282fdd33129879d3fdb45ec9ccbd312d1973a7ec626e8033cd2b"
     },
     {
       "source": "assets/signature-strokes-20261020/manifest.json",
@@ -1362,6 +1830,24 @@
       "sha256": "12075927f76f257f63a4844fd66d942a52bfe0c7132b5f02524b4fcc271c2ed6"
     },
     {
+      "source": "assets/spirit-notebook-20261030/closed-book-minimal.png",
+      "path": "assets/spirit-notebook-20261030/closed-book-minimal.png",
+      "bytes": 2229756,
+      "sha256": "32a13e5d05c619ef2f4b7b0ffae9e41e58b18f84a806ef3ecc0482ed37553199"
+    },
+    {
+      "source": "assets/spirit-notebook-20261030/open-book-minimal.png",
+      "path": "assets/spirit-notebook-20261030/open-book-minimal.png",
+      "bytes": 2336928,
+      "sha256": "290857a7761c4311b05669e3c377371fb7675fd8b69850ff3f8ee3f06bb6effd"
+    },
+    {
+      "source": "assets/studio-family-artwork.svg",
+      "path": "assets/studio-family-artwork.svg",
+      "bytes": 2091121,
+      "sha256": "89637eb758bd6b1427b70d7e0ed6b9f3c43a5b7055734b1eb648c9866cc1d4f9"
+    },
+    {
       "source": "assets/ui/arrow-up.svg",
       "path": "assets/ui/arrow-up.svg",
       "bytes": 253,
@@ -1434,6 +1920,30 @@
       "sha256": "7488b6c1ea210268e2c8f5e175ac6b10d1c8342030a0a9abf20566c9e7e21015"
     },
     {
+      "source": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
+      "path": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
+      "bytes": 13950,
+      "sha256": "314e7f5361393962b82826d64fe6b7831a43f7ebc18c30c509976dd72b2a412d"
+    },
+    {
+      "source": "assets/visit-fluid-20261029-80/distant-planets.png",
+      "path": "assets/visit-fluid-20261029-80/distant-planets.png",
+      "bytes": 954662,
+      "sha256": "1758b5f101623ad985ea9d1e8b0ca03c1456076b81c302088c5de4634a6bd5c0"
+    },
+    {
+      "source": "assets/visit-fluid-20261029-80/fluid-pearl.png",
+      "path": "assets/visit-fluid-20261029-80/fluid-pearl.png",
+      "bytes": 1561863,
+      "sha256": "16f40ec754d2d8057c5a0529ed0efb23ad907473da23b4077d5f44e2ac3b491d"
+    },
+    {
+      "source": "assets/visit-plush-20261030-91/sphere.png",
+      "path": "assets/visit-plush-20261030-91/sphere.png",
+      "bytes": 2070254,
+      "sha256": "7020e93bb7aafe7296bb95de0e9115011e1adf789c486845a4617877f8fcd102"
+    },
+    {
       "source": "assets/welcome-sky-20261026-45/poster.jpg",
       "path": "assets/welcome-sky-20261026-45/poster.jpg",
       "bytes": 49591,
@@ -1460,20 +1970,20 @@
     {
       "source": "auth-entry-ui.mjs",
       "path": "auth-entry-ui.mjs",
-      "bytes": 4120,
-      "sha256": "82b44075873bedcc84f7def32434b1c4e87b07549474fba5f61106922553cd08"
+      "bytes": 5124,
+      "sha256": "5f02e91268286f77adc50023e86f9b645ddb4d7ed431ce166c944be67a553750"
     },
     {
       "source": "auth-entry.css",
       "path": "auth-entry.css",
-      "bytes": 4310,
-      "sha256": "deda2a27e7444d21f2328784b0233bee6a09b1dc28541e564c3f0d3a055458e3"
+      "bytes": 4589,
+      "sha256": "838d260c6768e124ab220deddbe5e444ad391e488d0a39b124c500cec5754588"
     },
     {
       "source": "auth-entry.mjs",
       "path": "auth-entry.mjs",
-      "bytes": 18288,
-      "sha256": "64164597d8a2abc0652820e13cd5941aef7d484a988783ded86dc7d92357e42c"
+      "bytes": 22306,
+      "sha256": "f98e7dee3c97d9f46e8a4c421513f34b420ab27b5f43570790ce50faf96b0571"
     },
     {
       "source": "auth-hours-polish.css",
@@ -1496,8 +2006,8 @@
     {
       "source": "birth-time-picker.mjs",
       "path": "birth-time-picker.mjs",
-      "bytes": 10027,
-      "sha256": "371d6312d3010a8ce1586147f18b2fa9918034c7dccb3ad31f2679d0f3a0e502"
+      "bytes": 10127,
+      "sha256": "b37b0aea18eb18275d117ccedbb1f42eaa270dd20a96fedcb08b57a111f68905"
     },
     {
       "source": "brand-v41.css",
@@ -1508,20 +2018,20 @@
     {
       "source": "business-card.css",
       "path": "business-card.css",
-      "bytes": 8610,
-      "sha256": "5beec1b78c5ab99e7c3822650ac06a00e687d821d08b9fb6c6bb5b82823027f8"
+      "bytes": 8645,
+      "sha256": "2489b19d7fb45eae3611151c3d42b1932c06b4d3e83443e14c2e48cfcb185f66"
     },
     {
       "source": "card-artwork.mjs",
       "path": "card-artwork.mjs",
-      "bytes": 7218,
-      "sha256": "258ff107f6f04e0fb56c8be387a2a89c1609012c970efc267e5869acdd7298e8"
+      "bytes": 7372,
+      "sha256": "45290d1933f3a6453d52e8b4d2299e5853ab5c9b8a03dbd4abb95ed63258f853"
     },
     {
       "source": "card-design.mjs",
       "path": "card-design.mjs",
       "bytes": 1295,
-      "sha256": "645da0a87780bebc8e8c0af0a8e53b07bd7d08de6fe676e3506d094846e5dc17"
+      "sha256": "322e9c3458d7bb862c102cfc954069aace637dfc6542eb8a1bb39ec698f70a81"
     },
     {
       "source": "card-editor-readability.css",
@@ -1560,22 +2070,52 @@
       "sha256": "68f41bf7a6f6ad38652286ab27feda2d3b07d2fd528c8828d3f81915f71dd1e1"
     },
     {
+      "source": "card-tags-v92.mjs",
+      "path": "card-tags-v92.mjs",
+      "bytes": 1402,
+      "sha256": "150a6afb0a023b55d04c7299d8dc81e3eff654fd868d537744971b3a1ce5a4d2"
+    },
+    {
+      "source": "chat-edge-blur.css",
+      "path": "chat-edge-blur.css",
+      "bytes": 1633,
+      "sha256": "4ef6ca316b69bba48e77b0aad45843c283e020b55b13fa7ec53fab8a6a9a3b28"
+    },
+    {
       "source": "chat-header-v41.css",
       "path": "chat-header-v41.css",
-      "bytes": 8925,
-      "sha256": "66a8e10a3a6bf2b0c0714230c8e8006d32ac84a7d30e7ad75672047821919de6"
+      "bytes": 10290,
+      "sha256": "16373614c09af18e34a1a7cea05cfc932e38739a13cb3b501f808f68f0fa789b"
+    },
+    {
+      "source": "chat-identity-v87.css",
+      "path": "chat-identity-v87.css",
+      "bytes": 3334,
+      "sha256": "0f4d74f292c89d1fd5e9f681fbf8e6872fdd47f8a2cc40f59d49d7fb51bc5d0a"
     },
     {
       "source": "communication-mode.mjs",
       "path": "communication-mode.mjs",
-      "bytes": 18976,
-      "sha256": "66125f083dbfb28241acf41efd027d485bd2e9d543c9727c71a900913ef11796"
+      "bytes": 19347,
+      "sha256": "2bb9de0d91812e52cd1e102ce4e3b6b55bc20a78b27a37061b329d505b53221b"
     },
     {
       "source": "companion-animation.mjs",
       "path": "companion-animation.mjs",
       "bytes": 1988,
       "sha256": "7522944652f4809db5bd7517dd48566e2799b8731d1cbcacade58f19e9714eec"
+    },
+    {
+      "source": "companion-elements.mjs",
+      "path": "companion-elements.mjs",
+      "bytes": 1568,
+      "sha256": "52b573651c44c954b8034d64cdd7b9a52466f7e9f09f537d61e47b6cbe8249fe"
+    },
+    {
+      "source": "compat/web-naming/landing-handoff.mjs",
+      "path": "compat/web-naming/landing-handoff.mjs",
+      "bytes": 9818,
+      "sha256": "ad59aae0c0d94151a434a00d2b940709a8bc37d33dcacdbba8463ae82cfc7514"
     },
     {
       "source": "contract-centered-paper.css",
@@ -1598,14 +2138,20 @@
     {
       "source": "contract-story.mjs",
       "path": "contract-story.mjs",
-      "bytes": 16250,
-      "sha256": "adc4fe5bb0589a53f7b06b39f000df2dd9909f173ede26f9346cf06bb1320bf7"
+      "bytes": 15720,
+      "sha256": "f894220e0de15c7e24e8a2077b71979ee96a8d1ed6f1e52ac2614dac8e1f13ea"
     },
     {
       "source": "conversation-avatar-motion.mjs",
       "path": "conversation-avatar-motion.mjs",
-      "bytes": 4590,
-      "sha256": "289a9f217c29d49408bbfb8ac7d525f56d31f82a713551a65485cf61c6cd0aa8"
+      "bytes": 12897,
+      "sha256": "b0d8c9076203777c9c22031325b62945259fdde2002f086967fe845c4ebaa3e0"
+    },
+    {
+      "source": "conversation-edge-blur.mjs",
+      "path": "conversation-edge-blur.mjs",
+      "bytes": 9704,
+      "sha256": "6d5c91ce2456482fb1bfc44f1264f0542890b674ed27f6b4ceac4d21b149dc46"
     },
     {
       "source": "conversation-entry-motion.css",
@@ -1622,20 +2168,26 @@
     {
       "source": "conversation-experience.css",
       "path": "conversation-experience.css",
-      "bytes": 22189,
-      "sha256": "4780e928ff0bbd4ce71fd3633f85883ec9e0525d73092ba78d073df621cfc13d"
+      "bytes": 22478,
+      "sha256": "3ef2ae6046171882b4ad1b64b83ec10857d5f66b168717dd6f28c16502aae530"
     },
     {
       "source": "conversation-onboarding.mjs",
       "path": "conversation-onboarding.mjs",
-      "bytes": 18320,
-      "sha256": "e9953cdc77c98de32d5ca8431639e8527ca01a3a0287f01a3e81479b8bc7586d"
+      "bytes": 18299,
+      "sha256": "fc17f664ac0509e2c12a9a40ede3bd0b10718d0d646c7d5ba43d2d3557b8b50d"
     },
     {
       "source": "conversation-scroll.mjs",
       "path": "conversation-scroll.mjs",
       "bytes": 2852,
       "sha256": "53c6525d5e29c42660983792e6f86963e0be202621946c59c6f391077cfe1e20"
+    },
+    {
+      "source": "cosmos-background.mjs",
+      "path": "cosmos-background.mjs",
+      "bytes": 10831,
+      "sha256": "9b599d0549dc368fd820923b013bc2d0b1f14df1544e58addded6d2cde88ef80"
     },
     {
       "source": "date-picker.css",
@@ -1646,20 +2198,32 @@
     {
       "source": "date-picker.mjs",
       "path": "date-picker.mjs",
-      "bytes": 16004,
-      "sha256": "822f7a3bedb141f9eb8a03d4615bcbbbdbd0b565383d49a8e52395900fa4048b"
+      "bytes": 16059,
+      "sha256": "9c7e74a81c54283569ae9acb04b018d6f886b74674708f981561db7e1724d1bb"
     },
     {
       "source": "demo-account-state.mjs",
       "path": "demo-account-state.mjs",
-      "bytes": 1479,
-      "sha256": "1bc9ec425c236998f80acf6cfa5930ebcd9d3f86f141ad6579c69555a934f3ba"
+      "bytes": 1627,
+      "sha256": "e2dccc3ac208443add4591e62ad58ac3a031f14826192a9cac17562a04f860a2"
     },
     {
       "source": "demo.css",
       "path": "demo.css",
-      "bytes": 823,
-      "sha256": "dc31cb60dd51eaebd53a81df837c8b2f1deee1c4f8146ba69331a4137b1d345e"
+      "bytes": 860,
+      "sha256": "1c7a023dc585e864b2d173c09a4e949820e40c4f8303f1939aeb9af9cbd28e2d"
+    },
+    {
+      "source": "deployment-mode.mjs",
+      "path": "deployment-mode.mjs",
+      "bytes": 123,
+      "sha256": "937193dbd36cebeecb1256c2f3c7033176fb9eacc1db259fa36c95d1ef31c3cd"
+    },
+    {
+      "source": "element-character-art.mjs",
+      "path": "element-character-art.mjs",
+      "bytes": 1196,
+      "sha256": "cb7890a56bd9139fd83624825e16ddb207eee5acf916cb65087a02e4a867ba81"
     },
     {
       "source": "energy-experience.css",
@@ -1670,14 +2234,20 @@
     {
       "source": "experience-v33.css",
       "path": "experience-v33.css",
-      "bytes": 2018,
-      "sha256": "c403e6c6f4bdc6ad17985755f381f593ae8dfe4ac2938d88eec32df3e8f4cbad"
+      "bytes": 2034,
+      "sha256": "f7b0877c266f219129e71844d159aad88b7b7a11006fb65e2b1c59ec7fb234e2"
     },
     {
       "source": "experience-v34.css",
       "path": "experience-v34.css",
       "bytes": 2940,
       "sha256": "5ee4340606682330e9d3dd84a61a9d8035b3a3b7c10b6073e26653d02af441a6"
+    },
+    {
+      "source": "family-presentation.mjs",
+      "path": "family-presentation.mjs",
+      "bytes": 1128,
+      "sha256": "56bd9dff138297222e11c1cb31d56d1e54ad02cf7b608b92bb317a9df6b9f394"
     },
     {
       "source": "figma-ui.css",
@@ -1712,14 +2282,32 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 11450,
-      "sha256": "1b0035b132749e90d95af08bfe5843fea0b8de9f20258cdbcdd4844d298d7717"
+      "bytes": 9084,
+      "sha256": "6938577d655ecd40a50f2c0e0890b7835abd22b6b281a54550e81b275bc2d2f1"
     },
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2808,
-      "sha256": "0a3e6495be7861fe5d0029d6628c6dbd15bf432d382a62869541ef68b07f2a53"
+      "bytes": 2771,
+      "sha256": "97aa79af91583399de266fd52a5076ae87a365bf1248f114e41594b9d50dc9b0"
+    },
+    {
+      "source": "friend-room.mjs",
+      "path": "friend-room.mjs",
+      "bytes": 977,
+      "sha256": "5a48a955ea87f62ca09ae3e03f368d036804dee7ad21dc938bf2305325371922"
+    },
+    {
+      "source": "friend-world-fluid.mjs",
+      "path": "friend-world-fluid.mjs",
+      "bytes": 6380,
+      "sha256": "e5aab2996414cc79b488ac894bdb4da513ef53293e127b1a3a76f8eedb9ba003"
+    },
+    {
+      "source": "friend-world-fur-volume.mjs",
+      "path": "friend-world-fur-volume.mjs",
+      "bytes": 6488,
+      "sha256": "aceeff808114968b1151c0842bef1db01180acc2ee8e9181d0fc5d2c36086796"
     },
     {
       "source": "friend-world-loading.mjs",
@@ -1731,13 +2319,13 @@
       "source": "friend-world-math.mjs",
       "path": "friend-world-math.mjs",
       "bytes": 865,
-      "sha256": "bc11c75e1b7e3b526c136953ef2f237bd85d10e10a24dd0fb0f2484d06524910"
+      "sha256": "894974f00c1e1b8db443299a102706a53421b1a4fde066fe5f0904c192d2471b"
     },
     {
       "source": "friend-world.mjs",
       "path": "friend-world.mjs",
-      "bytes": 9916,
-      "sha256": "8e12f99e71a4ae278bbf50a1afa3c09eaad7653585c39d32f27a16df0a9b967e"
+      "bytes": 10364,
+      "sha256": "7fdfead5a7e6cfbe64739be1e0e832c72a3b27c975d9519fa0983b6a22a6dac9"
     },
     {
       "source": "glass-contract.css",
@@ -1760,8 +2348,8 @@
     {
       "source": "home-controls-v24.css",
       "path": "home-controls-v24.css",
-      "bytes": 7924,
-      "sha256": "2e811f0028ff57966d446a017d88178bfcafd7c54a006c26bdd5def5f507efe0"
+      "bytes": 7962,
+      "sha256": "355cc152193cd280cf3fd021610c089e483335aedee45dbaf050a23f5421b078"
     },
     {
       "source": "home-greeting.mjs",
@@ -1778,8 +2366,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11292,
-      "sha256": "b490cf03ec6da708d5fd4d3f9a5c25521aa331ddbe2db4efb731bb1a5d3cb838"
+      "bytes": 11960,
+      "sha256": "89134d9a8209742ffdad8a500d77251ab8e1ec3f44ca1012475b55e66e28a5d4"
     },
     {
       "source": "journey-experience.css",
@@ -1808,26 +2396,32 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 13084,
-      "sha256": "d11a8e20d8ea592b82db8be1eca717e96e9fc358493f9eb69a05bac27f30f797"
+      "bytes": 30220,
+      "sha256": "857f846811288946a52c660ca4839df70c30e1b4d9f3d9d5158a4ffe593a678b"
     },
     {
       "source": "klin-world-2d.css",
       "path": "klin-world-2d.css",
-      "bytes": 1696,
-      "sha256": "bb25d8279535bfb4128230959b6dab889f0ab9764025fe1ff26cd1dc27a6011c"
+      "bytes": 2152,
+      "sha256": "16195bf11a24ecd06a3df7dc638bb59970ce90a8fff4209342d961c353ddf76c"
     },
     {
       "source": "landing-audio-clips.mjs",
       "path": "landing-audio-clips.mjs",
-      "bytes": 3527,
-      "sha256": "857000fa5385609df6459c01b2da1429a4bbceca643ba3fd8b6573529ef559ec"
+      "bytes": 3516,
+      "sha256": "a40eeddf117f1b1e63750b0c9160324b2d8eaed3e9ab6472e0d00b390527791c"
     },
     {
       "source": "landing-audio-engine.mjs",
       "path": "landing-audio-engine.mjs",
-      "bytes": 19477,
-      "sha256": "dc87dbcd576c5412c0c3ccf698e31141a5ac7df68f66a5b392b847104a99112f"
+      "bytes": 21940,
+      "sha256": "03e18e0fb887f624918278147369fd73775a5eddedf828eb25b15c2250023aa4"
+    },
+    {
+      "source": "landing-creation.mjs",
+      "path": "landing-creation.mjs",
+      "bytes": 4117,
+      "sha256": "1a8a0e454134e0ff5c15c84861f550481375ce5ed0cdfdc0d0360b7966ff5ac5"
     },
     {
       "source": "landing-day-master-reading.mjs",
@@ -1842,28 +2436,34 @@
       "sha256": "563e1daa17b60a45e8440de2c0c789cd09a6f1b69a3aa1ffc0ff1efb429cac68"
     },
     {
+      "source": "landing-family-videos.mjs",
+      "path": "landing-family-videos.mjs",
+      "bytes": 655,
+      "sha256": "d0116e6b9069c33dea95b782c1e66a0bd73d04cf2d450e32772848139da6e8fd"
+    },
+    {
       "source": "landing-flow.css",
       "path": "landing-flow.css",
-      "bytes": 4398,
-      "sha256": "a88c932d3341543996fe757691f7ad68b53e59c94f2ca5cbc57ffdc1b4eed142"
+      "bytes": 4991,
+      "sha256": "1289f2b1e30c26e14fd710170acfd4b6d2d9128c151069f82209b553fefb8751"
     },
     {
       "source": "landing-glass.css",
       "path": "landing-glass.css",
-      "bytes": 1475,
-      "sha256": "4246beaa05df1feb65a05ceb8133c0e6b123ea0831800fc7143b78931a0778d6"
+      "bytes": 1961,
+      "sha256": "14ce10dafa764e24cb6d88ffd9393e1fd9458710f5db99c5168e0285e44614b4"
     },
     {
       "source": "landing-glass.mjs",
       "path": "landing-glass.mjs",
-      "bytes": 11608,
-      "sha256": "ce8a752ad1e8cf14585071673525704b83a89c078261e9615e7f915b76091057"
+      "bytes": 11588,
+      "sha256": "94d6f0d4245ad79de4b00137c016a57d59c5da683b7a164c1cf28aa5de6853f6"
     },
     {
       "source": "landing-held-frame.mjs",
       "path": "landing-held-frame.mjs",
-      "bytes": 8006,
-      "sha256": "8e771f498d493eeabda3cede1e3930eef02bdfd9ead1cb427d0e96a01695a05a"
+      "bytes": 8249,
+      "sha256": "cca6edd60844c5060f0076cf4f596cd71f1479473bb66b94d76dc2fece697a7a"
     },
     {
       "source": "landing-video-cues.mjs",
@@ -1874,20 +2474,20 @@
     {
       "source": "landing-video-player.mjs",
       "path": "landing-video-player.mjs",
-      "bytes": 12862,
-      "sha256": "e1428465563578fe0d6f0e80c0c4897672cf673ae6d121267e88df67f5ba97ef"
+      "bytes": 14193,
+      "sha256": "919f5fde9dda7f94b99877ea719b8f34a4aa831385711acdb5a919e9d1a329fa"
     },
     {
       "source": "landing-video-scene.mjs",
       "path": "landing-video-scene.mjs",
-      "bytes": 11795,
-      "sha256": "e31a31de8da94284521e7c6c0e6c6c9be034a6f22b7326376cb4e72b4239e4e3"
+      "bytes": 14034,
+      "sha256": "5966a9cdb3446b8920a5ab24ebb90a673f87943e3151bc57bb17e9a5e2c9ce36"
     },
     {
       "source": "landing-video.css",
       "path": "landing-video.css",
       "bytes": 7294,
-      "sha256": "1a64c34bf545c4e01bd79b0663ec29b2ee5b98ef49ddcc6a7c5ae81c36bb0545"
+      "sha256": "7bbf8f04f33015174af82ea7415b912fbee913eae47ba9b38b8ca4a3cd37ef3c"
     },
     {
       "source": "landing.mjs",
@@ -1896,10 +2496,16 @@
       "sha256": "8d346effba67fa3d75fd575020b2923b5b4bf787da32cbc04e8b62398a9b5c9a"
     },
     {
+      "source": "live-session.mjs",
+      "path": "live-session.mjs",
+      "bytes": 8097,
+      "sha256": "91de0dc6ca697654b3553027e636e906308c4389f35440921e1050f2bae49765"
+    },
+    {
       "source": "loading-state.css",
       "path": "loading-state.css",
-      "bytes": 6066,
-      "sha256": "f3504a7c3a62a68ac573729986639deb7cb2edb9fa5ba739503181ec9cbbafb2"
+      "bytes": 6143,
+      "sha256": "c0423c6cc4f52b8f1f04e6ba59b4c6fd8665dad76090015edff405ea07b30971"
     },
     {
       "source": "loading-state.mjs",
@@ -1952,8 +2558,8 @@
     {
       "source": "model.mjs",
       "path": "model.mjs",
-      "bytes": 61128,
-      "sha256": "8dceb6834fdd8d59f6855bc628ef997b2f30959d398234fad53bb8a7fff3acfa"
+      "bytes": 64065,
+      "sha256": "a1deb121d1a145f6376a14d9eec86b7db3cd80b9e6753c05800ed4627a68489a"
     },
     {
       "source": "motion.css",
@@ -1968,10 +2574,40 @@
       "sha256": "20ec650226e28a3f0a3b981750b1155046e5c4a17e4032f5cd277b5178adb1a5"
     },
     {
+      "source": "notebook-motion.mjs",
+      "path": "notebook-motion.mjs",
+      "bytes": 3358,
+      "sha256": "d99982254ee393f3405a0e61d885354776f4e86a8ffe7feb722b0f9bb8eabc44"
+    },
+    {
+      "source": "notebook-panels-v92.css",
+      "path": "notebook-panels-v92.css",
+      "bytes": 14390,
+      "sha256": "733a816016702b4051fd08ee29d1e2e11ba2a5dc7d70e34721a6642eb000b4bc"
+    },
+    {
+      "source": "notebook-ui-v92.mjs",
+      "path": "notebook-ui-v92.mjs",
+      "bytes": 11534,
+      "sha256": "783c0f4b464a886fe16b342b2cc091cbd34c76f32db7757dbe6242036ca7c37a"
+    },
+    {
       "source": "paper-font.css",
       "path": "paper-font.css",
       "bytes": 58986,
       "sha256": "f813c4b1eb7f17aaca30733db3598e1e07e84dfdad552c5b767e4d7767b1531a"
+    },
+    {
+      "source": "personal-room-families.mjs",
+      "path": "personal-room-families.mjs",
+      "bytes": 7222,
+      "sha256": "7f06de6cea9380384665404dacd120722f9f28d4a067a65b4e0cca680f5ff7cf"
+    },
+    {
+      "source": "personal-room-video.mjs",
+      "path": "personal-room-video.mjs",
+      "bytes": 15719,
+      "sha256": "318f778d881255865c02ea024e721da62d3fa7c2a35e2ff99f465ce30eb2c7ce"
     },
     {
       "source": "pixel-room.mjs",
@@ -1982,14 +2618,26 @@
     {
       "source": "portal-glass.css",
       "path": "portal-glass.css",
-      "bytes": 12807,
-      "sha256": "a0fa7b322b08e941de7a06ee15c657516fb9b96710add68a8095f14cdc24ca44"
+      "bytes": 12548,
+      "sha256": "2772a4b8c3dfee18cfb096ffe2089aa4c40bace20d024e5a48ba8805078e4e2f"
     },
     {
       "source": "portal-social-v24.css",
       "path": "portal-social-v24.css",
       "bytes": 3343,
       "sha256": "bea915c273f8340f942174a6882c078460f493f483ade09ac4f8c1aa9536c5b2"
+    },
+    {
+      "source": "product-panels-v92.mjs",
+      "path": "product-panels-v92.mjs",
+      "bytes": 2318,
+      "sha256": "5150e5f5e3bc52a49218a4482e34d39a241a582ededbef556d4a51eeedbdb5ab"
+    },
+    {
+      "source": "profile-preferences-v92.mjs",
+      "path": "profile-preferences-v92.mjs",
+      "bytes": 402,
+      "sha256": "90d5c2bb0c4b2f66732529301e15f3c468e84cf4f5aa8ac8b897c6e351ff9bdf"
     },
     {
       "source": "public-card.css",
@@ -2000,8 +2648,8 @@
     {
       "source": "public-card.mjs",
       "path": "public-card.mjs",
-      "bytes": 15797,
-      "sha256": "e677aa7d44fb626f5b55b35b0a231bc5f4ff46ec576609b55119fb91b5d6a2e7"
+      "bytes": 16025,
+      "sha256": "4e3fad73845e6edc4b40cd5b869a6d741e307a82b69924c6d74fbd73feb74c69"
     },
     {
       "source": "realm-scene.css",
@@ -2024,8 +2672,8 @@
     {
       "source": "refinement-v29.css",
       "path": "refinement-v29.css",
-      "bytes": 7634,
-      "sha256": "d63906c6d6101aa9a103fcc0bf9066996c6eaa7fb89a43270922adffa0bd5a9a"
+      "bytes": 7511,
+      "sha256": "a261587de9c1b67796db7f7373920ee11490c55c9a0617ad89177af71747809e"
     },
     {
       "source": "refinement-v8.css",
@@ -2040,10 +2688,28 @@
       "sha256": "2ab6e5ceb6fc0df091a6d3b024a48e394bcbe9f37bdc29a82f5474bb8ad32576"
     },
     {
+      "source": "room-light-assets.mjs",
+      "path": "room-light-assets.mjs",
+      "bytes": 1224,
+      "sha256": "5f8fe84258118584feb461779b066a47395c52a998b9fa847362c54ff8f9699f"
+    },
+    {
+      "source": "room-light-theme.css",
+      "path": "room-light-theme.css",
+      "bytes": 237,
+      "sha256": "a800fc420d600c8bb28a5d6acd844c1b995f5fc2293af3d6bfd657049ada70c8"
+    },
+    {
+      "source": "room-light-theme.mjs",
+      "path": "room-light-theme.mjs",
+      "bytes": 12937,
+      "sha256": "61b7a9ced546466bff9f030a1963fe4ac5a6c8f7b1d81c088077fd8367d9a3f4"
+    },
+    {
       "source": "room-video.mjs",
       "path": "room-video.mjs",
-      "bytes": 2471,
-      "sha256": "550815b11c5a66419b7a005f3931b1eefdf909f397389736a244386231e216a2"
+      "bytes": 3195,
+      "sha256": "3f21af0ecbe80f0c45b7c6ead66f5be2c2c132259b27e116581452282c399f80"
     },
     {
       "source": "room-voice-clips.mjs",
@@ -2072,8 +2738,8 @@
     {
       "source": "scene-assets.mjs",
       "path": "scene-assets.mjs",
-      "bytes": 520,
-      "sha256": "8e4e17d1cd57030a47c0281e88aca25ad868024f467d99d03a53e0b0354cb7c3"
+      "bytes": 866,
+      "sha256": "24669eeffc4f85baa25e46c2cfe2a2d18f4c60337d6b012c8f51fb29115e78cb"
     },
     {
       "source": "scene-control-glass.css",
@@ -2084,20 +2750,20 @@
     {
       "source": "scene-control-glass.mjs",
       "path": "scene-control-glass.mjs",
-      "bytes": 14048,
-      "sha256": "2ff459ee5a0a3783f47e6a3a030b5a9c84d49185876ce9d491b309eeef29011e"
+      "bytes": 14866,
+      "sha256": "d067a10c4a373f2e987946b677fd1f8ce7a7db37f3f73a718c70c59ef8d64366"
     },
     {
       "source": "scene-experience.css",
       "path": "scene-experience.css",
-      "bytes": 18784,
-      "sha256": "a99a232753c9840b0a30054b8c8b6aba25ff2d6c7b9dfbee5ca63967dba7fea4"
+      "bytes": 19273,
+      "sha256": "130581dc488703a2c25e62ed6ce65470808d3e1c1870915ffda26a18a3bc0044"
     },
     {
       "source": "scene-sound.mjs",
       "path": "scene-sound.mjs",
-      "bytes": 251,
-      "sha256": "587c4cd7f421e9329b75d4c8f9e83fa5a4c9900b1289127fd25804343576eae3"
+      "bytes": 259,
+      "sha256": "721e9929dd92ff2fed81f23a06fdd186b7fef08a7a68dfed72fcf7c0022ade15"
     },
     {
       "source": "scenes-v41.css",
@@ -2108,8 +2774,50 @@
     {
       "source": "shared-agents.mjs",
       "path": "shared-agents.mjs",
-      "bytes": 1588,
-      "sha256": "c56a41d6dc3069644a2e0a3d82b4a3f19b2d7482b8aa109d6e2aa69a12e77e68"
+      "bytes": 1533,
+      "sha256": "a8a7ac629607827a063f0b0cdfa6d7cb38a7bd8d267504b634e5505a784deea2"
+    },
+    {
+      "source": "shared-chat-polish-v62.css",
+      "path": "shared-chat-polish-v62.css",
+      "bytes": 265,
+      "sha256": "a49cc03fb7d7ad35fcdd80ebf31dd10301a0fca93037d71796e604f3b5890cfb"
+    },
+    {
+      "source": "shared-elements-v88.css",
+      "path": "shared-elements-v88.css",
+      "bytes": 1644,
+      "sha256": "958910ecdc69db804719f47a58acb3fd9bff4b05cc6ef924d941816d16d30154"
+    },
+    {
+      "source": "shared-message-identity.mjs",
+      "path": "shared-message-identity.mjs",
+      "bytes": 5408,
+      "sha256": "234dc4568d61bac072f27b8a8bc46b75194a933a92423a354589c9ab84f85f12"
+    },
+    {
+      "source": "shared-room-v61.css",
+      "path": "shared-room-v61.css",
+      "bytes": 4138,
+      "sha256": "067f5c0709ad07f9eee8b429e7371d05cfa880c4faa13038a976d33588ef6c8e"
+    },
+    {
+      "source": "shared-space-v92.css",
+      "path": "shared-space-v92.css",
+      "bytes": 2063,
+      "sha256": "b626f6ebbb30aa3d518bfe96834e4376ed8ac40242463a06e175344f8865cb53"
+    },
+    {
+      "source": "shared-space-v92.mjs",
+      "path": "shared-space-v92.mjs",
+      "bytes": 1738,
+      "sha256": "f9df6f7deb9a85dc738a8672e62d7110a9c5ba7467297f19404e7bd2008337dd"
+    },
+    {
+      "source": "shared-voice-v92.mjs",
+      "path": "shared-voice-v92.mjs",
+      "bytes": 940,
+      "sha256": "c2bc9ce00255187e6a3192d692b3c5d732a091f121e823a813e35d0935205a0d"
     },
     {
       "source": "sheet-dismiss.mjs",
@@ -2126,14 +2834,14 @@
     {
       "source": "social-tags-ui.mjs",
       "path": "social-tags-ui.mjs",
-      "bytes": 13135,
-      "sha256": "35a04a3e386efc099a35b39dc7d72b99bfb174521f42e45ed90e02b386e6d842"
+      "bytes": 18212,
+      "sha256": "0bc39aa7d75cc6e04fbf30721cd7587e53ee2fa673922bad23871e11c3afc52c"
     },
     {
       "source": "social-tags.css",
       "path": "social-tags.css",
-      "bytes": 15598,
-      "sha256": "b8dbb7f3b8e26d0276c8a0f5d920b21a7bbff50b69e84e66d3f31bd5da7ef070"
+      "bytes": 18800,
+      "sha256": "c3046a81c297c8588b014e313af4de1e487c9ed890b98f57b766ce899cc727f2"
     },
     {
       "source": "social-tags.mjs",
@@ -2148,22 +2856,52 @@
       "sha256": "5da8fd867964b0e2907733d99920ab47ddfe2a99e0263d3ca0bb7b8bcef813a8"
     },
     {
+      "source": "studio-family-data.mjs",
+      "path": "studio-family-data.mjs",
+      "bytes": 1647,
+      "sha256": "7fbf6ea72ff9da34e98727c79bc09f8d6e093d675b51c4e02d73bd33c5a3b02c"
+    },
+    {
       "source": "styles.css",
       "path": "styles.css",
-      "bytes": 28407,
-      "sha256": "b932a55a68ef1398efb1e4a978605751bc10b69acad788879c646f0abe6215b2"
+      "bytes": 28439,
+      "sha256": "4f753980cb50e52b28c37a4a134dd596555302bb6d52009b9558425cb37f3442"
     },
     {
       "source": "tag-stickers.mjs",
       "path": "tag-stickers.mjs",
-      "bytes": 18931,
-      "sha256": "5178f81e8da330ac0655f4fe9b7c53526e9a106506c3f546f525e03fe2525e36"
+      "bytes": 19266,
+      "sha256": "a6a9a19bc1c66d01603230df65e4b272f2de4f1c5a49b00877fa7a0b7629ce81"
     },
     {
       "source": "theme-black.css",
       "path": "theme-black.css",
       "bytes": 3645,
       "sha256": "1967d1dd0b625bd5da91c13a5caf513aee1f575277d079a639acb724bfb64d32"
+    },
+    {
+      "source": "topic-journey-v92.css",
+      "path": "topic-journey-v92.css",
+      "bytes": 5932,
+      "sha256": "1ebe121441a5c5772327eed9bd5a5cc00f454fd48a9aa0445a048ad418c8dca9"
+    },
+    {
+      "source": "topic-journey-v92.mjs",
+      "path": "topic-journey-v92.mjs",
+      "bytes": 15645,
+      "sha256": "858f1fc3d64a18571b12808b3425fed846124a335e916b188ad2c35e49567bd6"
+    },
+    {
+      "source": "topic-service-v92.mjs",
+      "path": "topic-service-v92.mjs",
+      "bytes": 2561,
+      "sha256": "0e5d3bf380a37bf8515c9f76982b1afe2561f92d768be79f1e54673fe0d4d656"
+    },
+    {
+      "source": "topic-ui-v92.mjs",
+      "path": "topic-ui-v92.mjs",
+      "bytes": 3425,
+      "sha256": "36ce473e9036152982b6520cc5bbb0bdfca51b62a0d977660ed974ef4de41a01"
     },
     {
       "source": "typography.css",
@@ -2198,8 +2936,8 @@
     {
       "source": "ui-icons.mjs",
       "path": "ui-icons.mjs",
-      "bytes": 5115,
-      "sha256": "bee87ea88905136358f87c1ed336e86abb69da2185e6d7b3e8984216799fde86"
+      "bytes": 6481,
+      "sha256": "df3bbb57adff8251b4a32b2decdb521b03078b448bb84f9583dfa1feac0778fc"
     },
     {
       "source": "ui-inputs-v31.css",
@@ -2210,8 +2948,8 @@
     {
       "source": "ui-refinements-v48.css",
       "path": "ui-refinements-v48.css",
-      "bytes": 3739,
-      "sha256": "c34824893a8125564884429e97757304ea204bb3c17ac2b66eecb6b1b86ac275"
+      "bytes": 3904,
+      "sha256": "4fd08bf06f0c020b36fcba49a3988e975ef2fbd11ca87d1b03e9c3500a260bfd"
     },
     {
       "source": "ui-states-v31.css",
@@ -2222,14 +2960,14 @@
     {
       "source": "ui-surface-v51.css",
       "path": "ui-surface-v51.css",
-      "bytes": 3809,
-      "sha256": "6e034ba3c95ce1fdb8c2f78098e22161d83ede3ad1093a8b4ebc679946a2cb5d"
+      "bytes": 4521,
+      "sha256": "1c575ca5ef10863863fe77bf8d70713370f956a7e098729622da0d53a31a147c"
     },
     {
       "source": "ui-tokens.css",
       "path": "ui-tokens.css",
-      "bytes": 7536,
-      "sha256": "b99bcc45becf7b52fb4f900e91bd54e116fb979d54c99031a3f84d29c51b1d19"
+      "bytes": 7573,
+      "sha256": "53f3c58dd9f51f8c5f8218e9c87151809187b734b18d74ddb87d7743a4f379bf"
     },
     {
       "source": "universe-experience.css",
@@ -2272,108 +3010,6 @@
       "path": "welcome-logo-motion.mjs",
       "bytes": 5118,
       "sha256": "86f1cb5b31f57dbd0500a2e1f18782eabd6fadb9c29e6e6a26340176be993eed"
-    },
-    {
-      "source": "assets/brand-20261027-noknok/noknok-selected-white.png",
-      "path": "assets/brand-20261027-noknok/noknok-selected-white.png",
-      "bytes": 561648,
-      "sha256": "0f0622e4661f337a30f1fdd4b5bb8733db6184b2f9d02908b3d09c8db4650c2e"
-    },
-    {
-      "source": "cosmos-background.mjs",
-      "path": "cosmos-background.mjs",
-      "bytes": 4129,
-      "sha256": "65dfbc48c4c92501dcf68ede63b56154dc634d2afe29a0df2bcbda58b3e78395"
-    },
-    {
-      "source": "friend-room.mjs",
-      "path": "friend-room.mjs",
-      "bytes": 777,
-      "sha256": "2b0278c3e58596c8604e55620e8af9cebce3b383299145deb46abe2b57d207c8"
-    },
-    {
-      "source": "shared-room-v61.css",
-      "path": "shared-room-v61.css",
-      "bytes": 3679,
-      "sha256": "7ac8a7764baf54770ce755a3f9cefd0d2c4e3e8387e74e7ac962a2353326ba19"
-    },
-    {
-      "source": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
-      "path": "assets/visit-cosmos-20261027-55/quiet-cosmos.svg",
-      "bytes": 13950,
-      "sha256": "314e7f5361393962b82826d64fe6b7831a43f7ebc18c30c509976dd72b2a412d"
-    },
-    {
-      "source": "assets/shared-room-20261027-61/earth.png",
-      "path": "assets/shared-room-20261027-61/earth.png",
-      "bytes": 2675985,
-      "sha256": "03970139b6e99c360e8f1e0dbeaa45e6a75d6a1b845d67518a43275d7594b188"
-    },
-    {
-      "source": "assets/shared-room-20261027-61/water.png",
-      "path": "assets/shared-room-20261027-61/water.png",
-      "bytes": 2796993,
-      "sha256": "d8accf59d71c81c65bbf2d030f749c98d1d13a1d665ea776b61066cae65039f0"
-    },
-    {
-      "source": "assets/shared-room-20261027-61/wood.png",
-      "path": "assets/shared-room-20261027-61/wood.png",
-      "bytes": 2874233,
-      "sha256": "9307ac474b7285db543a84c2b90584b523bfc35bded920c8d7b7d41a0e0b01f4"
-    },
-    {
-      "source": "assets/shared-room-20261027-61/klin-seated-v2.png",
-      "path": "assets/shared-room-20261027-61/klin-seated-v2.png",
-      "bytes": 1456452,
-      "sha256": "5e93e4b6db8efad020f016b7a0372cde2a9f40b85fdd0c57c38fba0bcb18e9c0"
-    },
-    {
-      "source": "assets/landing-audio-20261027-61/background.m4a",
-      "path": "assets/landing-audio-20261027-61/background.m4a",
-      "bytes": 1247864,
-      "sha256": "6aedf6f6062c102c49315ad7bda80df73de12a41df11e4fee7cf0a00b188547c"
-    },
-    {
-      "source": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
-      "path": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
-      "bytes": 575883,
-      "sha256": "55b2b4cf18c1a953e5b89ff2cd1b2fbb3bbe71c0b1119270bf4f7e5dc8466d46"
-    },
-    {
-      "source": "assets/shared-room-20261027-61/klin-seated-v3.png",
-      "path": "assets/shared-room-20261027-61/klin-seated-v3.png",
-      "bytes": 1420830,
-      "sha256": "602656585c287f47f7e6ac6395b38740a6fd50b1edf5205b0a69cc8610072a4e"
-    },
-    {
-      "source": "assets/shared-room-20261027-61/klin-seated-selected.png",
-      "path": "assets/shared-room-20261027-61/klin-seated-selected.png",
-      "bytes": 1533439,
-      "sha256": "18b3fff19d0d1bd829abfa359b2d7ee0ce0bae139ef826a0fa794c7dec8e1b62"
-    },
-    {
-      "source": "assets/brand-20261028-noknok/noknok-selected-white.png",
-      "path": "assets/brand-20261028-noknok/noknok-selected-white.png",
-      "bytes": 530401,
-      "sha256": "a5c8691a7f1830f14ee91819d1c2f711d378bad3b87982520190a8d070df4c5c"
-    },
-    {
-      "source": "assets/landing-audio-20261028-63/background.m4a",
-      "path": "assets/landing-audio-20261028-63/background.m4a",
-      "bytes": 1640505,
-      "sha256": "aee0b6982a4570be210311416777f41b151f963c263732032f5330d1c55de385"
-    },
-    {
-      "source": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
-      "path": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
-      "bytes": 1669000,
-      "sha256": "387f563ce3888f5d981c48ca50708c0f70a1ec1cafc32659368a8d8534099fd9"
-    },
-    {
-      "source": "shared-chat-polish-v62.css",
-      "path": "shared-chat-polish-v62.css",
-      "bytes": 566,
-      "sha256": "84405bf81079d071ff5df4420428a0ebd2ed1e929bc73d852b54e208168502de"
     }
   ],
   "runtimeDependencies": [
@@ -2753,6 +3389,101 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "shared-room-v61.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "shared-chat-polish-v62.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "chat-edge-blur.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "room-light-theme.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "chat-identity-v87.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "shared-elements-v88.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "shared-space-v92.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "notebook-panels-v92.css",
+      "kind": "resource"
+    },
+    {
+      "from": "demo.html",
+      "to": "topic-journey-v92.css",
+      "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "notebook-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "topic-journey-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "topic-service-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "topic-ui-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "shared-agents.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "friend-room.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "card-tags-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "deployment-mode.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "live-session.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "compat/web-naming/landing-handoff.mjs",
+      "kind": "module"
+    },
+    {
       "from": "app.mjs",
       "to": "auth-entry.mjs",
       "kind": "module"
@@ -2760,6 +3491,16 @@
     {
       "from": "app.mjs",
       "to": "auth-entry-ui.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "landing-creation.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "family-presentation.mjs",
       "kind": "module"
     },
     {
@@ -2779,6 +3520,16 @@
     },
     {
       "from": "app.mjs",
+      "to": "notebook-ui-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "product-panels-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "tag-stickers.mjs",
       "kind": "module"
     },
@@ -2789,17 +3540,52 @@
     },
     {
       "from": "app.mjs",
+      "to": "cosmos-background.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "friend-network.mjs",
       "kind": "module"
     },
     {
       "from": "app.mjs",
-      "to": "shared-agents.mjs",
+      "to": "shared-space-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "shared-voice-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "shared-message-identity.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "element-character-art.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "friend-avatars.mjs",
       "kind": "module"
     },
     {
       "from": "app.mjs",
       "to": "conversation-entry-motion.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "conversation-edge-blur.mjs",
       "kind": "module"
     },
     {
@@ -2810,11 +3596,6 @@
     {
       "from": "app.mjs",
       "to": "conversation-avatar-motion.mjs",
-      "kind": "module"
-    },
-    {
-      "from": "app.mjs",
-      "to": "conversation-scroll.mjs",
       "kind": "module"
     },
     {
@@ -2914,6 +3695,11 @@
     },
     {
       "from": "app.mjs",
+      "to": "personal-room-families.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "login-video-scene.mjs",
       "kind": "module"
     },
@@ -2963,6 +3749,81 @@
       "kind": "resource"
     },
     {
+      "from": "topic-journey-v92.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-service-v92.mjs",
+      "to": "topic-journey-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "topic-journey-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "loading-state.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "public-card.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "friend-avatars.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-agents.mjs",
+      "to": "element-character-art.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-agents.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "friend-room.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "card-tags-v92.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "card-tags-v92.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-creation.mjs",
+      "to": "compat/web-naming/landing-handoff.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-creation.mjs",
+      "to": "conversation-onboarding.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "family-presentation.mjs",
+      "to": "studio-family-data.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "demo-account-state.mjs",
+      "to": "profile-preferences-v92.mjs",
+      "kind": "module"
+    },
+    {
       "from": "social-tags-ui.mjs",
       "to": "social-tags.mjs",
       "kind": "module"
@@ -2974,6 +3835,41 @@
     },
     {
       "from": "social-tags-ui.mjs",
+      "to": "ui-icons.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "social-tags.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "social-tags-ui.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "ui-icons.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "notebook-ui-v92.mjs",
+      "to": "studio-family-data.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "product-panels-v92.mjs",
+      "to": "public-card.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "product-panels-v92.mjs",
       "to": "ui-icons.mjs",
       "kind": "module"
     },
@@ -2998,6 +3894,11 @@
       "kind": "module"
     },
     {
+      "from": "friend-world.mjs",
+      "to": "friend-world-fur-volume.mjs",
+      "kind": "module"
+    },
+    {
       "from": "friend-network.mjs",
       "to": "friend-avatars.mjs",
       "kind": "module"
@@ -3013,13 +3914,48 @@
       "kind": "module"
     },
     {
-      "from": "shared-agents.mjs",
-      "to": "klin-companion.mjs",
+      "from": "friend-network.mjs",
+      "to": "friend-room.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-space-v92.mjs",
+      "to": "scene-assets.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-space-v92.mjs",
+      "to": "shared-message-identity.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-voice-v92.mjs",
+      "to": "communication-mode.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "shared-message-identity.mjs",
+      "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "element-character-art.mjs",
+      "to": "companion-elements.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "friend-avatars.mjs",
+      "to": "card-labels.mjs",
       "kind": "module"
     },
     {
       "from": "scene-control-glass.mjs",
       "to": "landing-glass.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "landing-video-scene.mjs",
+      "to": "landing-family-videos.mjs",
       "kind": "module"
     },
     {
@@ -3129,7 +4065,22 @@
     },
     {
       "from": "klin-reference-2d.mjs",
+      "to": "room-light-assets.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "room-light-theme.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
       "to": "room-video.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "personal-room-video.mjs",
       "kind": "module"
     },
     {
@@ -3144,7 +4095,17 @@
     },
     {
       "from": "model.mjs",
+      "to": "profile-preferences-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "model.mjs",
       "to": "card-design.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "model.mjs",
+      "to": "companion-elements.mjs",
       "kind": "module"
     },
     {
@@ -3183,8 +4144,8 @@
       "kind": "module"
     },
     {
-      "from": "friend-avatars.mjs",
-      "to": "card-labels.mjs",
+      "from": "friend-world-fur-volume.mjs",
+      "to": "friend-world-fluid.mjs",
       "kind": "module"
     },
     {
@@ -3210,6 +4171,11 @@
     {
       "from": "card-artwork.mjs",
       "to": "tag-stickers.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "room-light-assets.mjs",
+      "to": "scene-assets.mjs",
       "kind": "module"
     }
   ],

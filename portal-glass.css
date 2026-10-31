@@ -122,15 +122,10 @@
   backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
   -webkit-backdrop-filter:blur(var(--kn-glass-blur)) saturate(var(--kn-glass-saturation));
 }
-/* Keep the scroll viewport unmasked so bubbles can sample the room. The edge
-   controller fades each painted surface itself as it approaches the header
-   or composer; scrolling still exposes every message in full. */
+/* Bubbles retain their full surface as they scroll behind floating controls.
+   Keep the viewport unmasked so their glass can sample the room. */
 .phone#phone[data-conversation="true"] #app .conversation-log{
   mask-image:none;-webkit-mask-image:none;transition:none;
-}
-.phone#phone #app .conversation-log [data-conversation-scroll-surface]{
-  mask-image:var(--kn-conversation-edge-mask,none);
-  -webkit-mask-image:var(--kn-conversation-edge-mask,none);
 }
 /* Preserve the arrival movement without briefly isolating a glass bubble in
    its parent's opacity animation. Transform alone keeps the scene available. */

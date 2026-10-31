@@ -1,5 +1,5 @@
 /* Keep the existing glass/input typography; only the scene and its timing change. */
-.phone>.landing-video-scene{position:absolute;inset:0;z-index:1;border-radius:inherit;overflow:hidden;background:#202624}
+.phone>.landing-video-scene{position:absolute;inset:0;z-index:1;border-radius:inherit;overflow:hidden;background:#262523}
 .phone>.landing-video-scene[hidden]{display:none}
 .landing-video-plate{display:block;width:100%;height:100%;object-fit:cover;object-position:center;pointer-events:none}
 /* A decoded still is the backdrop while users read/type. Keeping the paused
@@ -31,7 +31,7 @@
   color:#fff;
   font-weight:600;
   text-wrap:balance;
-  text-shadow:0 1px 4px #20262499,0 2px 15px #20262466;
+  text-shadow:0 1px 4px #26252399,0 2px 15px #26252366;
 }
 .landing-video-noking{
   display:flex;

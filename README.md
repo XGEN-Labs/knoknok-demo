@@ -23,3 +23,5 @@ The root static Pages demo is separate from the formal Web compatibility build. 
 Local hosting must support HTTP byte ranges for film cue seeking. Private sources, original design explorations, tests, journal data and modeling files are excluded from this public runtime.
 
 The production compatibility page follows the same account-level rule using the backend onboarding state; see [registration-only Landing](docs/first-landing.md) for the deployment dependency and verification scope.
+
+The production build uses the latest root visuals and real account/chat integration: `npm run build` (alias `npm run build:live`) → `dist/web-live/`. See [live Web release](docs/LIVE-WEB.md) for exact backend dependencies, supported features and rollout instructions. Root Pages stays a local design demo; the historical compatibility artifact is available only with `npm run build:compat`; do not deploy it as the current product.

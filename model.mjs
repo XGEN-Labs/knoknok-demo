@@ -1,9 +1,11 @@
-import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261023-card-36h';
+import { migrateProfileIntroduction, PROFILE_LANGUAGES } from './profile-preferences-v92.mjs?v=20261031-product-sync';
+import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261030-spirit-notebook-5';
+import { ELEMENT_COMPANIONS, DEMO_COMPANION_ELEMENTS } from './companion-elements.mjs?v=20261031-product-sync';
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, accountLandingComplete, validMetalVoice } from './landing.mjs';
-import { interestTags, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs?v=20261026-answers-47d';
+import { interestTags, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs?v=20261031-product-sync';
 import { ensureSocialTags, syncSocialTags, applyLandingSocialTags, endSocialTagSession, manageSocialTag, updateManualSocialTags, publicSocialTags } from './social-tags.mjs?v=20261026-social-tags-45';
-export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261026-answers-47d';
+export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs?v=20261031-product-sync';
 export const STORAGE_KEY = 'knokknok-prototype-v1';
 const DAY = 24 * 60 * 60 * 1000;
 const copy = value => JSON.parse(JSON.stringify(value));
@@ -15,7 +17,14 @@ const pairBlocked = (state, a, b) => state.blockedPairs.includes(pairKey(a, b));
 const fail = (state, message) => { state.error = message; return state; };
 const newOnboarding = (now = Date.now()) => ({ basicsComplete: false, birthComplete: false, status: 'new', initializedAt: null, error: null, contractRequired: true, contract: null, interaction: { version: 1, greeted: false, tone: null, response: null }, conversation: createOnboardingConversation(now) });
 const defaultBirth = ownerId => ({ date: ownerId === 'a' ? '1998-06-18' : '', time: '', unknownTime: true, place: '', timezone: '' });
-const newCompanion = (stage = 'juvenile', grownAt = null, name = 'Klin') => ({ id: 'klin', name, element: 'metal', stage, grownAt: stage === 'adult' ? grownAt : null });
+const COMPANION_IDENTITY_VERSION = 1;
+const companionElement = value => {const key = clean(value).toLowerCase(); return Object.hasOwn(ELEMENT_COMPANIONS, key) ? key : 'metal';};
+const newCompanion = (stage = 'juvenile', grownAt = null, name = '', element = 'metal', version = COMPANION_IDENTITY_VERSION) => {
+  element = companionElement(element);
+  const species = ELEMENT_COMPANIONS[element];
+  return {id: species.id, name: clean(name) || species.name, element, stage, grownAt: stage === 'adult' ? grownAt : null,
+    identityVersion: Number.isInteger(version) && version >= COMPANION_IDENTITY_VERSION ? version : COMPANION_IDENTITY_VERSION};
+};
 const newSocialIntent = () => ({ step: 'idle', topic: '', pace: '', status: 'idle', friendIds: [], selectedRelationshipId: null });
 
 function normalizedContract(value, now) {
@@ -143,7 +152,24 @@ export function companionProfile(state, userId = active(state)) {
   const stage = ['juvenile', 'adult'].includes(saved?.stage) ? saved.stage : legacyAdult ? 'adult' : 'juvenile';
   const grownAt = Number.isFinite(saved?.grownAt) ? saved.grownAt
     : userId === 'a' && Number.isFinite(state.onboarding?.initializedAt) ? state.onboarding.initializedAt : state.now;
-  return newCompanion(stage, grownAt, clean(state.users?.[userId]?.companionName) || 'Klin');
+  const element = companionElement(saved?.element);
+  const profileName = clean(state.users?.[userId]?.companionName), savedName = clean(saved?.name);
+  // A default profile field must not erase a custom name stored on the companion.
+  const profileIsDefault = !profileName || profileName === 'Klin' || profileName === ELEMENT_COMPANIONS[element].name;
+  const name = profileIsDefault && savedName ? savedName : profileName || savedName;
+  return newCompanion(stage, grownAt, name, element, saved?.identityVersion);
+}
+
+function restoreCompanionIdentity(state, userId) {
+  const person = state.users[userId], space = state.private[userId], saved = space.companion;
+  const unversioned = !Number.isInteger(saved?.identityVersion) || saved.identityVersion < COMPANION_IDENTITY_VERSION;
+  const legacyMetal = (!saved?.id || saved.id === 'klin') && (!clean(saved?.element) || clean(saved.element).toLowerCase() === 'metal');
+  if (unversioned && legacyMetal && person.isSimulated === true && userId !== 'a' && Object.hasOwn(DEMO_COMPANION_ELEMENTS, userId)) {
+    const element = companionElement(DEMO_COMPANION_ELEMENTS[userId]), previous = companionProfile(state, userId);
+    space.companion = {...saved, element, name: previous.name === 'Klin' ? ELEMENT_COMPANIONS[element].name : previous.name};
+  }
+  space.companion = companionProfile(state, userId);
+  person.companionName = space.companion.name;
 }
 
 function futureTime(now) {
@@ -153,10 +179,10 @@ function futureTime(now) {
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T14:00`;
 }
 
-function privateSpace(ownerId, now) {
+function privateSpace(ownerId, now, element = 'metal') {
   return {
     birth: defaultBirth(ownerId),
-    companion: newCompanion(ownerId === 'a' ? 'juvenile' : 'adult', now),
+    companion: newCompanion(ownerId === 'a' ? 'juvenile' : 'adult', now, '', element),
     memory: ownerId === 'a' ? [
       { id: 'memory-initial-1', text: '最近工作有點累', source: '示範私人對話', status: 'confirmed', updatedAt: now },
       { id: 'memory-initial-2', text: '認識新朋友時，想先從文字聊天開始', source: '伙伴的待確認理解', status: 'pending', updatedAt: now },
@@ -173,15 +199,15 @@ export function initialState(now = Date.now()) {
     onboarding: newOnboarding(now),
     users: {
       a: { id: 'a', cardDesign: 0, name: 'Frank', language: '粵語', region: '香港', bio: '喜歡發掘城市裡的小展覽。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [], cardTagsEdited: false, cardAvatar: '', shareRegion: false },
-      b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['攝影','看展'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
-      c: { id: 'c', name: '小雨', language: '粵語', region: '香港', bio: '喜歡閱讀、咖啡和安靜的小書店。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['閱讀', '咖啡'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
+      b: { id: 'b', name: '阿朗', language: '粵語', region: '香港', bio: '喜歡攝影、展覽和慢慢聊天。', introVersion: 1, isSimulated: true, companionName: ELEMENT_COMPANIONS[DEMO_COMPANION_ELEMENTS.b].name, cardLabels: {}, cardTags: ['攝影','看展'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
+      c: { id: 'c', name: '小雨', language: '粵語', region: '香港', bio: '喜歡閱讀、咖啡和安靜的小書店。', introVersion: 1, isSimulated: true, companionName: ELEMENT_COMPANIONS[DEMO_COMPANION_ELEMENTS.c].name, cardLabels: {}, cardTags: ['閱讀', '咖啡'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       d: { id: 'd', name: '阿哲', language: '粵語', region: '香港', bio: '喜歡散步、音樂和城市裡的小發現。', introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: ['散步', '音樂'], cardTagsEdited: true, cardAvatar: '', shareRegion: false },
       ...Object.fromEntries(DEMO_FRIENDS.slice(3).map(friend => [friend.id, {
         id: friend.id, cardDesign: friend.cardDesign, name: friend.name, language: '粵語', region: '香港', bio: friend.recent,
-        introVersion: 1, isSimulated: true, companionName: 'Klin', cardLabels: {}, cardTags: [...friend.interests], cardTagsEdited: true, cardAvatar: '', shareRegion: false,
+        introVersion: 1, isSimulated: true, companionName: ELEMENT_COMPANIONS[DEMO_COMPANION_ELEMENTS[friend.id]].name, cardLabels: {}, cardTags: [...friend.interests], cardTagsEdited: true, cardAvatar: '', shareRegion: false,
       }])),
     },
-    private: Object.fromEntries(['a', ...DEMO_FRIENDS.map(friend => friend.id)].map(id => [id, privateSpace(id, now)])),
+    private: Object.fromEntries(['a', ...DEMO_FRIENDS.map(friend => friend.id)].map(id => [id, privateSpace(id, now, DEMO_COMPANION_ELEMENTS[id])])),
     draft: {
       topic: '一起看展，聊聊最近喜歡的作品', language: '粵語', time: futureTime(now), mode: 'online', area: '九龍',
       expiresAt: now + 7 * DAY, intro: '想認識喜歡看展的朋友，可以先在線上聊聊。', hard: ['language', 'mode'],
@@ -382,7 +408,7 @@ export function reduce(previous, action = {}) {
       if (action.type === 'FINISH_CONVERSATION') {
         state.onboarding.status = 'ready'; state.onboarding.basicsComplete = true; state.onboarding.birthComplete = true;
         state.onboarding.initializedAt ||= state.now;
-        applyLandingSocialTags(space,state.users.a,state.now);
+        applyLandingSocialTags(space,state.users.a,state.now,state.onboarding.birthChart?.labels);
         if (state.users.a.bio === '喜歡發掘城市裡的小展覽。') {
           const tags = interestTags(/喜歡|喜欢|愛好|爱好/.test(answers.response || '') ? answers.response : '');
           state.users.a.bio = tags.length ? `喜歡${tags.join('、')}，想和新朋友慢慢聊聊。` : '想和新朋友，慢慢聊些喜歡的事。';
@@ -459,14 +485,20 @@ export function reduce(previous, action = {}) {
       if (actorId === 'a' && !hasSignedCompanionContract(state)) return fail(state, '先和我許下陪伴的約定，再一起回家吧。');
       if (!landingComplete(state)) return fail(state, '先和 Klin 慢慢認識，再一起回家。');
       space.companion = companionProfile(state, actorId);
-      if (space.companion.stage === 'juvenile') space.companion = newCompanion('adult', state.now, state.users[actorId].companionName);
+      if (space.companion.stage === 'juvenile') space.companion = {...space.companion, stage: 'adult', grownAt: state.now};
       return state;
     case 'SWITCH_USER':
       if (typeof action.userId !== 'string' || !Object.hasOwn(state.users, action.userId) || !Object.hasOwn(state.private, action.userId)) return fail(state, '找不到這個示範身份。');
       state.session.activeUserId = action.userId;
       return state;
+    case 'UPDATE_LANGUAGE': {
+      if(!PROFILE_LANGUAGES.includes(action.language))return fail(state,'請選擇有效的聊天語言。');
+      state.users[actorId].language=action.language;
+      return state;
+    }
     case 'UPDATE_PROFILE': {
       const patch = action.patch || {};
+      if(patch.bio!==undefined)state.users[actorId].bioDefaultVersion=1;
       if (patch.name !== undefined && !clean(patch.name)) return fail(state, '請填寫暱稱。');
       for (const key of ['name', 'bio']) if (patch[key] !== undefined) state.users[actorId][key] = clean(patch[key]);
       if (patch.cardTags !== undefined || patch.cardLabels !== undefined) {
@@ -780,10 +812,12 @@ export function hydrateState(serialized, now = Date.now()) {
     const ready = savedOnboarding.status === 'ready' && savedOnboarding.basicsComplete === true && savedOnboarding.birthComplete === true;
     for (const id of DEMO_FRIENDS.map(friend => friend.id).filter(id => id !== 'b')) {
       state.users[id] ||= defaults.users[id];
-      state.private[id] ||= defaults.private[id];
-      if (!Array.isArray(state.private[id].memory) || !Array.isArray(state.private[id].companionMessages)) state.private[id] = defaults.private[id];
+      const fallback = state.users[id].isSimulated === true ? defaults.private[id] : privateSpace(id, now);
+      state.private[id] ||= fallback;
+      if (!Array.isArray(state.private[id].memory) || !Array.isArray(state.private[id].companionMessages)) state.private[id] = fallback;
     }
     for (const id of ['a', ...DEMO_FRIENDS.map(friend => friend.id)]) {
+      migrateProfileIntroduction(state.users[id]);
       state.users[id].language ||= '粵語';
       state.users[id].region ||= '香港';
       const companionName = clean(state.users[id].companionName);
@@ -801,7 +835,7 @@ export function hydrateState(serialized, now = Date.now()) {
       state.private[id].birth = { ...defaultBirth(id), ...(state.private[id].birth || {}) };
       ensureSocialTags(state.private[id],state.users[id]);
       syncSocialTags(state.private[id],state.users[id]);
-      state.private[id].companion = companionProfile(state, id);
+      restoreCompanionIdentity(state, id);
       state.private[id].pendingDemandSuggestion = false;
       const savedIntent = state.private[id].socialIntent;
       const intent = newSocialIntent();
@@ -822,6 +856,9 @@ export function hydrateState(serialized, now = Date.now()) {
       const welcome = state.private[id].companionMessages.find(message => message.id === `welcome-${id}`);
       if (welcome?.text === '嗨，我在這裡。我們可以慢慢認識，也可以一起找到聊得來的新朋友。') welcome.text = '今天想聊什麼？';
     }
+    for (const id of Object.keys(state.users).filter(id => !Object.hasOwn(DEMO_COMPANION_ELEMENTS, id))) {
+      if (state.users[id] && typeof state.users[id] === 'object' && state.private[id] && typeof state.private[id] === 'object' && !Array.isArray(state.private[id])) restoreCompanionIdentity(state, id);
+    }
     const legacy = savedOnboarding.interaction === undefined && savedOnboarding.status === 'ready';
     const savedInteraction = savedOnboarding.interaction && typeof savedOnboarding.interaction === 'object' && !Array.isArray(savedOnboarding.interaction) ? savedOnboarding.interaction : {};
     const tone = legacy ? 'xin' : validMetalVoice(savedInteraction.tone) ? savedInteraction.tone : null;
@@ -839,7 +876,7 @@ export function hydrateState(serialized, now = Date.now()) {
       conversation: normalizeOnboardingConversation(savedOnboarding.conversation, now, { legacyReady: ready }),
     };
     if (typeof state.session.activeUserId !== 'string' || !Object.hasOwn(state.users, state.session.activeUserId) || !Object.hasOwn(state.private, state.session.activeUserId)) state.session.activeUserId = 'a';
-    if(state.onboarding.status==='ready'&&state.onboarding.conversation.complete)applyLandingSocialTags(state.private.a,state.users.a,Math.max(state.now,now));
+    if(state.onboarding.status==='ready'&&state.onboarding.conversation.complete)applyLandingSocialTags(state.private.a,state.users.a,Math.max(state.now,now),state.onboarding.birthChart?.labels);
     state.now = Math.max(state.now, now);
     state.error = null;
     return expire(state);

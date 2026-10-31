@@ -11,7 +11,7 @@ function seed(userName,agentName,complete){const s=initialState();Object.assign(
  Object.assign(s.onboarding,{basicsComplete:true,birthComplete:true,status:'ready',initializedAt:s.now,contractRequired:true,contract:{version:1,signedAt:s.now,userName,companionName:agentName},conversation:{version:2,step:'complete',complete,messages:[],answers:{birthDate:'1995-03-10',birthTime:null,gender:'女生',birthPlace:'上海',response:'我喜欢周末看展',name:userName,companionName:agentName}}});s.onboarding.agentHandoff={version:1,provider:'knok-agent',digest:'old-test-receipt'};s.private.a.companionMessages.push({id:'previous-chat',role:'user',text:'以前的聊天',source:'model',provider:'knok-agent',status:'sent',createdAt:s.now});return JSON.stringify(s);}
 let fixture,browser,context,page;const checks=[],errors=[];const report={passed:false,scope:'Built Web in real Chrome; local BFF/model fixture, no production or Memory verification',checks,pageErrors:errors};
 try{
- fixture=await landingBrowserFixture(join(root,'dist/web'));browser=await chromium.launch({channel:'chrome',headless:true});context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'});
+ fixture=await landingBrowserFixture(join(root,'dist/web'));browser=await chromium.launch({...process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{channel:'chrome'},headless:true});context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'});
  await context.addInitScript(({prefix,a,b})=>{if(sessionStorage.getItem('seeded'))return;localStorage.setItem(prefix+'101',a);localStorage.setItem(prefix+'202',b);sessionStorage.setItem('seeded','1');},{prefix,a:JSON.stringify(initialState()),b:seed('乙用户','乙伙伴',false)});
  page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));await page.goto(fixture.url,{waitUntil:'domcontentloaded'});
  async function login(id){await page.locator('[data-action="login"]').click();await page.locator('#auth-account').fill(`test${id}`);await page.locator('#auth-password').fill('fixture-only');await page.locator('#auth-form button[type="submit"]').click();}
@@ -38,8 +38,10 @@ try{
  await page.locator('[name="timezone-confirmed"]').check();await page.locator('[name="chart-consent"]').check();
  await page.locator('[data-form="birth-chart"] button[type="submit"]').click();await page.getByText('日主：甲木 · 星座：金牛座',{exact:true}).waitFor();
  checks.push('explicit private intake saves a native chart and displays its labels before Agent handoff');
+ assert.equal(fixture.landings.size,0);
  await Promise.all([page.waitForResponse(r=>r.url().endsWith('/api/web/chat')&&r.status()===503),page.locator('[data-action="finish-conversation"]').click()]);
  await page.locator('#toast').filter({hasText:'資料仍保留'}).waitFor();assert.equal(await page.locator('#private-message').count(),0);assert.equal((await read(101)).onboarding.agentHandoff,undefined);assert.equal((await read(101)).onboarding.conversation.answers.name,'甲用户');checks.push('failed finish stays on landing and preserves all entered information for retry');
+ assert.equal(fixture.landings.size,1);assert.equal(fixture.landings.get(101).input.birthChartVersion,1);assert.ok(fixture.landings.get(101).input.contract.signedAt>0);
  fixture.controls.failHandoff=false;fixture.controls.failCompletion=true;
  await Promise.all([page.waitForResponse(r=>r.url().endsWith('/api/auth/onboarding/complete')&&r.status()===503),page.locator('[data-action="finish-conversation"]').click()]);
  await page.locator('#toast').filter({hasText:'資料仍保留'}).waitFor();assert.equal(fixture.onboarding.get(101),'required');assert.equal(await page.locator('#private-message').count(),0);assert.equal(fixture.accepted.length,1);

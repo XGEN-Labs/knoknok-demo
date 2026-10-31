@@ -1,0 +1,111 @@
+/* Spirit-world diary. Original artwork supplies material; text remains real HTML. */
+.phone#phone #sheet .notebook-v92{color:var(--kn-ui-color-text,#26242c);font:400 14px/20px var(--kn-ui-font,system-ui);min-width:0}
+.phone#phone #sheet .notebook-v92{position:relative;isolation:isolate;display:flex;flex-direction:column;padding:28px 23px 27px 33px;background:transparent;filter:drop-shadow(0 12px 15px #38261c26);color:#4c433f}
+.phone#phone #sheet .notebook-v92::before{content:"";position:absolute;inset:-8px -5px -8px -7px;z-index:-1;background:#fff9ef;border-radius:28px 38px 29px 23px;background:url('assets/spirit-notebook-20261030/open-book-minimal.png') center/100% 100% no-repeat;pointer-events:none}
+.phone#phone #sheet .notebook-book-title{display:flex;align-items:center;justify-content:flex-start;gap:16px;margin:2px 2px 15px;color:#958780;font-size:12px;line-height:20px}
+.phone#phone #sheet .notebook-tabs{display:flex;gap:12px;flex:none;align-items:center;margin:0 0 17px;padding:0 0 8px;border-bottom:1px solid #74625418}
+.phone#phone #sheet .notebook-tabs button{position:relative;appearance:none;flex:1;min-width:0;min-height:44px;padding:8px 0;border:0;border-radius:0;background:none;color:#9a8b83;font:400 13px/20px var(--kn-ui-font,system-ui);white-space:nowrap;cursor:pointer}
+.phone#phone #sheet .notebook-tabs [aria-selected=true]{color:#4b403b;font-weight:500}
+.phone#phone #sheet .notebook-tabs [aria-selected=true]::after{content:"";position:absolute;bottom:-9px;left:calc(50% - 9px);width:18px;height:2px;background:#ab8d79;border-radius:40% 60% 50% 40%;transform:rotate(-3deg)}
+.phone#phone #sheet .notebook-v92 :is(button,summary):focus-visible{outline:2px solid #a28a7b;outline-offset:3px}
+.phone#phone #sheet .notebook-panel{position:relative;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#8d7b6b30 transparent;margin-right:-22px;padding:0 26px 4px 0;overflow-wrap:anywhere}
+/* Extend only the scroll gutter toward the paper edge; keep text aligned. */
+@supports selector(::-webkit-scrollbar){.phone#phone #sheet .notebook-panel{scrollbar-width:auto;scrollbar-color:auto}}
+.phone#phone #sheet .notebook-panel::-webkit-scrollbar{width:3px;height:3px}
+.phone#phone #sheet .notebook-panel::-webkit-scrollbar-track{background:transparent;margin-block:4px}
+.phone#phone #sheet .notebook-panel::-webkit-scrollbar-thumb{border-radius:3px;background:#8d7b6b30}
+.phone#phone #sheet .notebook-panel::-webkit-scrollbar-thumb:hover{background:#8d7b6b55}
+.phone#phone #sheet .notebook-paper{padding:0;border:0;background:none;box-shadow:none}
+.phone#phone #sheet .notebook-v92 :is(h2,h3,h4){margin:0 0 10px;font:500 16px/24px var(--kn-ui-font,system-ui);color:#4c433f}
+.phone#phone #sheet .notebook-v92 :is(p,blockquote,li){font:400 14px/22px var(--kn-ui-font,system-ui);color:inherit;margin:0}
+.phone#phone #sheet .notebook-day-heading{padding:6px 0 25px}
+.phone#phone #sheet .notebook-day-heading time{font:500 25px/36px var(--kn-ui-font,system-ui);letter-spacing:-.03em;color:#51423b}
+.phone#phone #sheet .notebook-day-heading p{margin-top:4px;font-size:12px;line-height:18px;color:#a29388}
+.phone#phone #sheet .notebook-section+.notebook-section{margin-top:24px}
+.phone#phone #sheet .notebook-section>p+p{margin-top:12px}
+.phone#phone #sheet .notebook-copy,.phone#phone #sheet .notebook-quotes blockquote{white-space:pre-wrap}
+.phone#phone #sheet .notebook-v92 :is(.notebook-empty,.notebook-privacy){color:#9a8e86}
+.phone#phone #sheet .notebook-v92 .notebook-privacy{margin-top:24px;font-size:11px;line-height:18px;letter-spacing:.03em}
+.phone#phone #sheet .notebook-quotes blockquote{margin:12px 0 0;padding:2px 0 2px 13px;border-left:2px solid #d3bba7;background:none}
+.phone#phone #sheet .notebook-v92 .tag-associated{margin:10px 0 0}
+.phone#phone #sheet .notebook-nok-heading{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.phone#phone #sheet .notebook-nok-heading h4{margin:0 0 4px}
+.phone#phone #sheet .notebook-nok-heading p{font-size:12px;color:#92857e}
+.phone#phone #sheet .notebook-nok-avatar{display:block;flex:none;width:64px;height:64px;object-fit:contain;border-radius:50%;background:#f1e8dd}
+.phone#phone #sheet .notebook-skills ul{display:grid;gap:14px;list-style:none;margin:0;padding:0}
+.phone#phone #sheet .notebook-skills li>span{font-weight:500}
+.phone#phone #sheet .notebook-skills li>p{margin-top:4px;color:#92857e}
+.phone#phone #sheet .notebook-originals{margin-top:28px;border-top:1px solid #bba59030;padding-top:4px}
+.phone#phone #sheet .notebook-originals summary{display:flex;align-items:center;gap:10px;min-height:46px;font-size:14px;cursor:pointer;list-style:none}
+.phone#phone #sheet .notebook-originals summary::-webkit-details-marker{display:none}
+.phone#phone #sheet .notebook-originals summary span{font-size:12px;color:#9a8e86;margin-left:auto}
+.phone#phone #sheet .notebook-originals summary svg{width:15px;height:15px;transform:rotate(-90deg);opacity:.55}
+.phone#phone #sheet .notebook-originals[open] summary svg{transform:rotate(90deg)}
+.phone#phone #sheet .notebook-message{margin:14px 0}
+.phone#phone #sheet .notebook-message small{display:block;margin-bottom:5px;font-size:11px;color:#9d9087}
+.phone#phone #sheet .notebook-message p{padding:10px 12px;border-radius:3px 14px 14px;background:#e8ded14d;white-space:pre-wrap}
+.phone#phone #sheet .notebook-message.own p{background:#f3e3ca70;border-radius:14px 3px 14px 14px}
+.phone#phone #sheet .notebook-undated{margin-top:22px}
+.phone#phone #sheet .notebook-calendar-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.phone#phone #sheet .notebook-calendar-heading h4{font-size:15px;margin:0}
+.phone#phone #sheet .notebook-calendar-heading button{appearance:none;display:grid;place-items:center;width:36px;height:44px;padding:0;border:0;background:none;color:#87766c;cursor:pointer}
+.phone#phone #sheet .notebook-calendar-heading svg{width:16px;height:16px}
+.phone#phone #sheet .notebook-calendar-heading .is-next svg{transform:rotate(180deg)}
+.phone#phone #sheet .notebook-weekdays,.phone#phone #sheet .notebook-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px}
+.phone#phone #sheet .notebook-weekdays{color:#aa9b8f;font-size:11px;text-align:center;margin-bottom:8px}
+.phone#phone #sheet .notebook-calendar-day{appearance:none;position:relative;display:grid;place-items:center;box-sizing:border-box;height:40px;min-width:0;padding:0 0 8px;border:0;border-radius:47% 53% 52% 48%;background:none;color:#6c5d54;font:400 13px/18px var(--kn-ui-font,system-ui);cursor:pointer}
+.phone#phone #sheet .notebook-calendar-day[aria-current=date]{background:#ead6be88;color:#654e3d}
+.phone#phone #sheet .notebook-calendar-day i{display:none;position:absolute;bottom:6px;left:50%;width:3px;height:3px;margin-left:-1.5px;border-radius:50%;background:#b8936d}
+.phone#phone #sheet .notebook-calendar-day.has-record i{display:block}
+.phone#phone #sheet .notebook-days{margin-top:20px;border-top:1px solid #b9a18b30}
+.phone#phone #sheet .notebook-day-row{appearance:none;display:flex;align-items:center;gap:13px;width:100%;padding:15px 0;border:0;border-bottom:1px solid #b9a18b20;background:none;color:inherit;text-align:left;cursor:pointer}
+.phone#phone #sheet .notebook-day-row time{display:grid;flex:none;width:32px;text-align:center;color:#8c715e}
+.phone#phone #sheet .notebook-day-row strong{font:400 24px/28px var(--kn-ui-font,system-ui)}
+.phone#phone #sheet .notebook-day-row time span{font-size:10px;line-height:18px;color:#ae9b8b}
+.phone#phone #sheet .notebook-row-copy{flex:1;min-width:0;display:grid;gap:3px}
+.phone#phone #sheet .notebook-row-copy>span:first-child{font:500 13px/20px var(--kn-ui-font,system-ui)}
+.phone#phone #sheet .notebook-row-copy>span:last-child{font:400 12px/19px var(--kn-ui-font,system-ui);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#a19389}
+.phone#phone #sheet .notebook-day-row>svg{width:14px;height:14px;transform:rotate(180deg);color:#b4a092;flex:none}
+.phone#phone #sheet .notebook-return{appearance:none;display:flex;align-items:center;gap:6px;flex:none;min-height:44px;margin:-3px 0 8px;padding:0;border:0;background:none;color:#9a8576;font:400 13px/20px var(--kn-ui-font,system-ui);cursor:pointer}
+.phone#phone #sheet .notebook-return svg{width:16px;height:16px}
+/* Transparent centered stage, retaining the room behind the book. */
+.phone#phone #sheet.notebook-stage{position:fixed!important;inset:auto!important;left:var(--notebook-left,0px)!important;top:var(--notebook-top,0px)!important;width:var(--notebook-width,100vw)!important;height:var(--notebook-height,100dvh)!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;transform:none!important;animation:none!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:hidden!important}
+.phone#phone #sheet.notebook-stage::backdrop{background:transparent!important;backdrop-filter:none!important}
+.phone#phone #sheet.notebook-stage::before{content:"";position:absolute;inset:0;background:#32201922;pointer-events:none;animation:notebook-room-dim 900ms ease both}
+.phone#phone #sheet.notebook-stage #sheet-content{height:100%;padding:0!important;background:transparent!important}
+.phone#phone #sheet.notebook-stage .sheet-inner{position:relative;display:flex;align-items:center;justify-content:center;box-sizing:border-box;height:100%;padding:50px 22px 68px!important;perspective:1200px;background:transparent!important}
+.phone#phone #sheet.notebook-stage :is(.sheet-handle,.sheet-title){display:none!important}
+.phone#phone #sheet.notebook-stage .notebook-v92{flex:1;width:100%;max-width:380px;min-width:0;height:min(520px,calc(var(--notebook-width) * 1.30),calc(var(--notebook-height) - 140px));margin:0;transform-origin:center;overflow:visible}
+.phone#phone #sheet.notebook-stage .notebook-close{position:absolute;bottom:22px;left:calc(50% - 24px);display:grid;place-items:center;width:48px;height:48px;padding:0;border-radius:50%;background:var(--kn-glass-sheen),var(--kn-glass-fill);border:var(--kn-glass-edge-width) solid var(--kn-glass-edge);box-shadow:var(--kn-glass-control-shadow);backdrop-filter:blur(var(--kn-glass-blur));-webkit-backdrop-filter:blur(var(--kn-glass-blur));color:var(--kn-glass-ink);cursor:pointer}
+.phone#phone #sheet .notebook-close svg{width:22px;height:22px}
+.phone#phone #sheet .notebook-front-cover{position:absolute;z-index:10;inset:-8px -5px -8px -7px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 25px 36px 32px;transform-origin:18px center;backface-visibility:hidden;background:url('assets/spirit-notebook-20261030/closed-book-minimal.png') center/100% 100% no-repeat;clip-path:inset(.5% .5% 1% .5%);pointer-events:none;color:#806657}
+.phone#phone #sheet .notebook-cover-logo{width:135px;height:45px;object-fit:contain;filter:brightness(0);opacity:.56;margin-bottom:18px}
+.phone#phone #sheet .notebook-cover-name{font:400 16px/24px var(--kn-ui-font,system-ui);letter-spacing:.2em;color:#92745f}
+.phone#phone #sheet.notebook-animating .notebook-close{opacity:0;pointer-events:none}
+.phone#phone:has(#sheet.notebook-stage[open]) :is(.home-top,.home-chat-bottom,.conversation-replies,.visit-entry,.scene-volume){opacity:0!important;pointer-events:none!important}
+@keyframes notebook-room-dim{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.phone#phone #sheet.notebook-stage::before{animation:none}}
+@media(max-height:580px){.phone#phone #sheet .notebook-v92{padding-top:18px;padding-bottom:18px}.phone#phone #sheet .notebook-book-title{margin-bottom:6px}.phone#phone #sheet.notebook-stage .sheet-inner{padding:28px 24px 66px!important}}
+
+.phone#phone #sheet .notebook-v92::before,.phone#phone #sheet .notebook-front-cover{clip-path:inset(3.5% 2.3% 3.3% 2.3% round 13px)}
+
+/* Secondary sections are small top-edge bookmarks, while today owns the page. */
+.phone#phone #sheet .notebook-v92{padding:45px 35px 34px 45px}
+.phone#phone #sheet .notebook-book-title{flex:none;height:30px;min-height:30px;margin:0 0 24px;gap:8px}
+.phone#phone #sheet .notebook-cover-logo{opacity:1}
+.phone#phone #sheet .notebook-current-label{font-size:11px;color:#aa9b91;white-space:nowrap}
+/* The paper paints over the lower half of each marker, physically tucking it in. */
+.phone#phone #sheet .notebook-v92::before{z-index:0}
+.phone#phone #sheet .notebook-book-title{position:relative;z-index:1}
+.phone#phone #sheet .notebook-panel{z-index:1}
+.phone#phone #sheet .notebook-bookmarks{position:absolute;top:-25px;right:30px;display:flex;align-items:flex-start;gap:8px;z-index:-1}
+.phone#phone #sheet .notebook-bookmarks button{--bookmark-paper:#d0bda3;appearance:none;position:relative;min-height:58px;padding:8px 14px 24px;border:1px solid #9c84746b;border-bottom:0;border-radius:5px 6px 0 0;background:linear-gradient(90deg,#fff2,transparent 18%,transparent 85%,#9c857914),linear-gradient(180deg,#fff3,transparent 28%,#68544318 58%,#68544340),var(--bookmark-paper);color:#514238;font:500 12px/18px var(--kn-ui-font,system-ui);white-space:nowrap;cursor:pointer;box-shadow:inset 0 1px .5px #fff9,inset 1px 0 .5px #fff5,1px 1px 0 #a58e7780,2px 3px 4px #38261c24;transform:rotate(-1.5deg);transform-origin:50% 100%;transition:transform 180ms ease,color 180ms ease}
+.phone#phone #sheet .notebook-bookmarks button::after{content:"";position:absolute;inset:-10px -3px 0}
+.phone#phone #sheet .notebook-bookmarks button:nth-child(2){--bookmark-paper:#c6bbb3;transform:translateY(3px) rotate(1.5deg)}
+.phone#phone #sheet .notebook-bookmarks [aria-pressed=true]{color:#30251f;transform:translateY(-3px) rotate(-1.5deg)}
+.phone#phone #sheet .notebook-bookmarks button:nth-child(2)[aria-pressed=true]{transform:translateY(-1px) rotate(1.5deg)}
+@media(prefers-reduced-motion:reduce){.phone#phone #sheet .notebook-bookmarks button{transition:none}}
+.phone#phone #sheet .notebook-book-title .notebook-return{margin:0;min-height:30px;font-size:11px;line-height:18px;white-space:nowrap;color:#9b8a7d}
+.phone#phone #sheet .notebook-book-title .notebook-return svg{width:12px;height:12px}
+.phone#phone #sheet .notebook-day-heading{padding-top:0}
+.phone#phone #sheet .notebook-panel:focus{outline:none}

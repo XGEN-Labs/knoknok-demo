@@ -16,14 +16,17 @@
 .phone#phone #app .page.shared-chat-page .page-top :is(.icon-button,.scene-icon) {width:44px;height:44px;min-width:44px;margin:0;}
 .phone#phone #app .page.shared-chat-page .shared-people>.shared-person {max-width:100%;gap:7px;}
 .phone#phone #app .page.shared-chat-page .shared-person strong {font-size:14px;}
-.phone#phone #app .page.shared-chat-page .shared-messages {z-index:2;top:calc(var(--app-safe-top) + 58px);bottom:auto;height:max(100px,calc(var(--shared-seat-y) - var(--shared-plate-width)*.26 - var(--app-safe-top) - 78px));padding:10px 0 8px;overscroll-behavior:contain;}
+.phone#phone #app .page.shared-chat-page .page-top {z-index:4;}
+/* Keep the resting messages above the seated companions, while scrolling
+   continues behind the floating header and composer without an early clip. */
+.phone#phone #app .page.shared-chat-page .shared-messages {--shared-message-rest-edge:max(calc(var(--app-safe-top) + 158px),calc(var(--shared-seat-y) - var(--shared-plate-width)*.26 - 20px));z-index:2;top:0;bottom:0;height:auto;padding:calc(var(--app-safe-top) + 68px) 0 calc(100cqh - var(--shared-message-rest-edge) + 8px);scroll-padding-block:calc(var(--app-safe-top) + 68px) calc(100cqh - var(--shared-message-rest-edge) + 8px);overscroll-behavior:contain;}
 .phone#phone #app .page.shared-chat-page .shared-messages .message {margin-bottom:12px;}
 .phone#phone #app .page.shared-chat-page .shared-messages .message-content {max-width:92%;}
-.phone#phone #app .page.shared-chat-page .shared-messages .bubble {padding:12px 15px;font-size:15px;line-height:1.65;border-radius:20px;}
+.phone#phone #app .page.shared-chat-page .shared-messages .bubble {padding:12px 15px;font-size:14px;line-height:20px;border-radius:20px;}
 .phone#phone #app .page.shared-chat-page .shared-messages .message-label {background:none;padding:0 4px;margin-bottom:5px;font-size:11px;color:#635b54;}
 .phone#phone #app .page.shared-chat-page .shared-composer {z-index:3;display:block;}
 .phone#phone #app .page.shared-chat-page .private-entry {display:none;}
 .phone#phone[data-keyboard-open="true"] #app .page.shared-chat-page .shared-room-scene {opacity:.6;}
 .phone#phone[data-keyboard-open="true"] #app .page.shared-chat-page .shared-agents {visibility:hidden;}
-.phone#phone[data-keyboard-open="true"] #app .page.shared-chat-page .shared-messages {height:auto;bottom:calc(var(--app-safe-bottom) + 72px);}
+.phone#phone[data-keyboard-open="true"] #app .page.shared-chat-page .shared-messages {padding-bottom:calc(var(--app-safe-bottom) + 80px);scroll-padding-bottom:calc(var(--app-safe-bottom) + 80px);}
 .phone#phone #app .page.shared-chat-page .shared-messages .message-label {border:0!important;background:none!important;box-shadow:none!important;color:#544b42!important;text-shadow:none!important;backdrop-filter:none!important;}

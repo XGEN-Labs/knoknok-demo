@@ -11,7 +11,7 @@ export function landingInformation(state) {
   const agentName = text(answers.companionName) || (signed ? text(contract.companionName) : null);
   if (!userName || !agentName) return null;
   const information = { userName, agentName };
-  for (const key of ['response']) {
+  for (const key of ['birthDate', 'birthTime', 'gender', 'birthPlace', 'response']) {
     if (own(answers, key) && (answers[key] === null || typeof answers[key] === 'string')) information[key] = answers[key];
   }
   return information;
@@ -28,17 +28,109 @@ export function landingPrompt(information) {
   ].join('\n\n');
 }
 
-export function createLandingHandoff({ chat, accepted, cryptoImpl = globalThis.crypto }) {
+function birthProfile(information) {
+  const profile = {};
+  for (const [input, output] of [['userName', 'nickname'], ['birthDate', 'birthDate'], ['birthTime', 'birthTime'], ['birthPlace', 'birthplace']]) {
+    const value = text(information?.[input]);
+    if (value) profile[output] = value;
+  }
+  if (profile.birthDate) profile.calendar = 'solar'; // Both Landing date pickers use Gregorian dates.
+  const gender = information?.gender;
+  const sex = ['男', '男生', '男性'].includes(gender) ? '男' : ['女', '女生', '女性'].includes(gender) ? '女' : null;
+  if (sex) profile.birthSex = sex;
+  return profile;
+}
+const sameProfile = (left, right) => left && right && Object.keys(left).length === Object.keys(right).length &&
+  Object.keys(left).every(key => own(right, key) && left[key] === right[key]);
+function invalidateTimezoneConfirmation(profile, previous) {
+  if (['birthDate', 'birthTime', 'birthplace', 'birthTimezone', 'calendar', 'leapMonth'].some(key => profile[key] !== previous?.[key])) delete profile.birthTimezoneConfirmed;
+}
+
+export function createLandingHandoff({ chat, accepted, request, cryptoImpl = globalThis.crypto }) {
   let active = null;
   const cancelled = () => Object.assign(new Error('登入帳號已變更。'), { name: 'AbortError', code: 'SESSION_CHANGED' });
-  function check(session) { if (active !== session || session.abort.signal.aborted) throw cancelled(); }
+  function check(session) { if (!session || active !== session || session.abort.signal.aborted) throw cancelled(); }
+  function validateProfile(session, value) {
+    check(session);
+    if (!value || !Number.isSafeInteger(value.version) || value.version < 0 ||
+        !(value.profile === null || typeof value.profile === 'object' && !Array.isArray(value.profile)) ||
+        typeof value.profileConsent !== 'boolean' || !(value.updatedAt === null || typeof value.updatedAt === 'string') ||
+        typeof value.agentId !== 'string' || typeof value.roomId !== 'string' ||
+        session.binding.agentId && value.agentId !== session.binding.agentId ||
+        session.binding.roomId && value.roomId !== session.binding.roomId) throw new Error('出生資料尚未確認，請稍後再試。');
+    return value;
+  }
+  async function readProfile(session) {
+    check(session);
+    return validateProfile(session, await request('/api/web/birth-profile'));
+  }
+  async function writeProfile(session, current, profile) {
+    check(session);
+    validateProfile(session, current);
+    const saved = validateProfile(session, await request('/api/web/birth-profile', {
+      method: 'PATCH', body: { expectedVersion: current.version, profile, profileConsent: true },
+    }));
+    if (saved.version < current.version || !saved.profileConsent || !sameProfile(saved.profile, profile)) throw new Error('出生資料尚未保存，請稍後再試。');
+    return saved;
+  }
+  const canInitialize = current => current.profile === null && current.version === 0;
+  async function storeLanding(session, information, initializeOnly) {
+    const current = await readProfile(session);
+    // A nonzero empty profile can be an intentional clear or consent revocation.
+    if (initializeOnly && !canInitialize(current)) return true;
+    const mapped = birthProfile(information);
+    const profile = { ...(current.profile || {}) };
+    for (const key of ['nickname', 'birthDate', 'birthTime', 'birthSex', 'birthplace', 'calendar']) delete profile[key];
+    Object.assign(profile, mapped);
+    if (profile.calendar === 'solar') delete profile.leapMonth;
+    invalidateTimezoneConfirmation(profile, current.profile);
+    if (current.profileConsent && sameProfile(current.profile, profile)) return true;
+    try { await writeProfile(session, current, profile); }
+    catch (error) {
+      if (!initializeOnly || error.status !== 409) throw error;
+      // Another writer won. A repair may accept its state, but must never overwrite it.
+      const latest = await readProfile(session);
+      if (canInitialize(latest)) throw error;
+    }
+    return true;
+  }
   return {
-    activate(owner) {
+    activate(owner, binding = {}) {
       active?.abort.abort();
-      active = owner === null || owner === undefined ? null : { owner: String(owner), abort: new AbortController(), pending: null };
+      active = owner === null || owner === undefined ? null : { owner: String(owner), binding: { ...binding }, abort: new AbortController(), pending: null, repair: null, repaired: false };
     },
     clear() { active?.abort.abort(); active = null; },
-    async ensure(information, receipt) {
+    async repair(information) {
+      const session = active;
+      check(session);
+      if (!request || !information) return false;
+      if (session.repaired) return true;
+      if (session.repair) return session.repair;
+      const snapshot = JSON.parse(JSON.stringify(information));
+      const promise = storeLanding(session, snapshot, true).then(() => { check(session); session.repaired = true; return true; });
+      session.repair = promise;
+      try { return await promise; }
+      finally { if (session.repair === promise) session.repair = null; }
+    },
+    async readBirthProfile() {
+      const session = active;
+      return readProfile(session);
+    },
+    async saveBirthProfile(form, current) {
+      const session = active;
+      check(session);
+      const profile = { ...(current.profile || {}) };
+      for (const key of ['birthDate', 'birthTime', 'birthplace', 'birthTimezone', 'calendar', 'leapMonth']) delete profile[key];
+      for (const [input, output] of [['date', 'birthDate'], ['place', 'birthplace'], ['timezone', 'birthTimezone']]) {
+        const value = text(form[input]);
+        if (value) profile[output] = value;
+      }
+      if (profile.birthDate) profile.calendar = 'solar';
+      if (!form.unknownTime && text(form.time)) profile.birthTime = text(form.time);
+      invalidateTimezoneConfirmation(profile, current.profile);
+      return writeProfile(session, current, profile);
+    },
+    async ensure(information, receipt, { persistBirthProfile = true } = {}) {
       const session = active;
       if (!session) throw cancelled();
       if (!information) return false;
@@ -47,13 +139,16 @@ export function createLandingHandoff({ chat, accepted, cryptoImpl = globalThis.c
       const bytes = await cryptoImpl.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify([session.owner, snapshot])));
       check(session);
       const digest = Array.from(new Uint8Array(bytes), n => n.toString(16).padStart(2, '0')).join('');
-      if (receipt?.version === 1 && receipt?.provider === 'knok-agent' && receipt?.digest === digest) return true;
+      const alreadyAccepted = receipt?.version === 1 && receipt?.provider === 'knok-agent' && receipt?.digest === digest;
       if (session.pending) {
         if (session.pending.digest !== digest) throw new Error('資料正在交接，請稍後再試。');
         return session.pending.promise;
       }
       const promise = (async () => {
-        const response = await chat([{ role: 'user', content: landingPrompt(snapshot) }], session.owner, session.abort.signal);
+        if (request && persistBirthProfile) await storeLanding(session, snapshot, alreadyAccepted);
+        check(session);
+        if (alreadyAccepted) return true;
+        const response = await chat([{ role: 'user', content: landingPrompt(snapshot) }], session.owner, session.abort.signal, { purpose: 'landing_handoff' });
         check(session);
         // Gemini fallback cannot confirm that the native Agent/Memory path received
         // the intake. Retain the form and allow an explicit retry instead.

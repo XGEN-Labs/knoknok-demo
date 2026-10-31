@@ -1,13 +1,13 @@
 .social-tags-panel{color:var(--text,#35393b)}
-.tag-ui-button{border:1.5px solid #d9ddd0;background:rgba(255,255,255,.78);color:#566153;border-radius:18px;padding:9px 13px;font:600 13px inherit;cursor:pointer;min-height:36px}
-.tag-ui-button:disabled{opacity:.3;cursor:default}.tag-ui-button:focus-visible,.tag-sticker-open:focus-visible{outline:3px solid #839e75;outline-offset:3px}
+.tag-ui-button{border:1.5px solid #dedbd8;background:rgba(255,255,255,.78);color:var(--kn-ui-color-text);border-radius:18px;padding:9px 13px;font:600 13px inherit;cursor:pointer;min-height:36px}
+.tag-ui-button:disabled{opacity:.3;cursor:default}.tag-ui-button:focus-visible,.tag-sticker-open:focus-visible{outline:3px solid #979594;outline-offset:3px}
 .tag-sticker-open{border:0;background:transparent;padding:5px;cursor:pointer;text-align:left;min-width:0}
 .tag-management-list{display:grid;gap:8px;margin:18px 0}.tag-management-row{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:56px}.tag-row-actions{display:flex;gap:4px;flex-shrink:0}.tag-row-actions button{padding:5px 8px;font-size:12px}
-.tag-history{border-top:1px solid #dfe1d7;margin-top:22px;padding-top:16px}.tag-history summary,.tag-chat-card summary{cursor:pointer;color:#65705f;font-size:13px;line-height:1.8}.tag-history summary span{opacity:.65;margin-left:6px}
-.tag-panel-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}.tag-empty{padding:20px 0;line-height:1.7;color:var(--kn-text-hint,#858c87);font-size:14px}
-.tag-chat-card{background:#fcfaf2;border:1.5px solid #fff;border-radius:24px;padding:17px;margin:14px 0;box-shadow:0 5px 18px #3c4c3a0a;color:#465040;text-align:left}.tag-chat-card .small-note{margin:7px 0 12px;line-height:1.5}.tag-chat-eyebrow{font-size:12px!important;font-weight:700;letter-spacing:.04em;color:#7a856c;margin:0 0 10px!important}.tag-candidate-options{display:flex;flex-wrap:wrap;gap:6px;margin:10px -5px}.tag-chat-card form{display:grid;gap:10px;margin-top:12px}.tag-chat-card label{font-size:12px;color:#73806c}.tag-chat-card input,.tag-chat-card select{min-height:42px;font-size:14px;padding:10px 14px;border-radius:18px;max-width:100%;width:100%;box-sizing:border-box}.tag-confirm{background:#506849;color:#fff;border-color:#506849}.tag-replace-choice{display:grid;gap:8px}.tag-replace-choice[hidden]{display:none}
+.tag-history{border-top:1px solid #e3e0dd;margin-top:22px;padding-top:16px}.tag-history summary,.tag-chat-card summary{cursor:pointer;color:var(--kn-ui-color-text-secondary);font-size:13px;line-height:1.8}.tag-history summary span{opacity:.65;margin-left:6px}
+.tag-panel-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px}.tag-empty{padding:20px 0;line-height:1.7;color:var(--kn-ui-color-text-hint);font-size:14px}
+.tag-chat-card{background:#fcfaf2;border:1.5px solid #fff;border-radius:24px;padding:17px;margin:14px 0;box-shadow:0 5px 18px #4947460a;color:var(--kn-ui-color-text);text-align:left}.tag-chat-card .small-note{margin:7px 0 12px;line-height:1.5}.tag-chat-eyebrow{font-size:12px!important;font-weight:700;letter-spacing:.04em;color:var(--kn-ui-color-text-hint);margin:0 0 10px!important}.tag-candidate-options{display:flex;flex-wrap:wrap;gap:6px;margin:10px -5px}.tag-chat-card form{display:grid;gap:10px;margin-top:12px}.tag-chat-card label{font-size:12px;color:var(--kn-ui-color-text-secondary)}.tag-chat-card input,.tag-chat-card select{min-height:42px;font-size:14px;padding:10px 14px;border-radius:18px;max-width:100%;width:100%;box-sizing:border-box}.tag-confirm{background:#62615f;color:#fff;border-color:#62615f}.tag-replace-choice{display:grid;gap:8px}.tag-replace-choice[hidden]{display:none}
 .tag-chat-tools{display:flex;gap:6px;justify-content:flex-end;margin:15px 0 8px}.tag-chat-tools button{font-size:12px;padding:7px 10px;background:rgba(255,255,255,.84)}.conversation-log .tag-chat-card p{font-size:14px}.conversation-log .tag-chat-card{max-width:100%}
-.tag-month-label{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#7d8776;gap:15px}.tag-month-label select{width:auto;min-height:36px;border:0;background:transparent;color:#566153;font-size:14px}.tag-diary-calendar{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0}.tag-diary-calendar button{border-radius:50%;width:38px;padding:0;background:#e7edda}.tag-diary-list{display:grid;gap:12px;margin:15px 0}.tag-diary-list>button{border:1px solid #e0e2d8;background:#fbfaf3;border-radius:22px;padding:18px;text-align:left;cursor:pointer;color:#434c40}.tag-diary-list time{font-size:12px;color:#8a937e}.tag-diary-list p{font-size:15px;line-height:1.65;margin:9px 0}.tag-diary-list span{font-size:12px;color:#7f8a70}.tag-diary-tabs{display:flex;gap:8px;margin-bottom:18px}.tag-diary-tabs [aria-pressed=true]{background:#e5ecd8;border-color:#aab99b}.tag-diary-body{white-space:pre-wrap;line-height:1.9;font-size:16px;margin:20px 0}.social-tags-panel blockquote{border-left:3px solid #bcc9a5;padding:7px 14px;margin:20px 0;background:#f2f3e9;font-size:13px;color:#79836f}.tag-associated{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.tag-original-chat{display:grid;gap:10px;margin:20px 0}.tag-original-chat>div{padding:14px;border-radius:18px;background:#f1f1e9}.tag-original-chat .own{background:#e8eedf}.tag-original-chat small{font-size:11px;color:#89937d}.tag-original-chat p{font-size:14px;line-height:1.65;margin:6px 0 0}.tag-source-hero{display:flex;justify-content:center;padding:15px}.tag-source-history{font-size:13px;color:#838b7b}.tag-source-history li{margin:8px 0}.card-tools{gap:10px;flex-wrap:wrap}
+.tag-month-label{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--kn-ui-color-text-hint);gap:15px}.tag-month-label select{width:auto;min-height:36px;border:0;background:transparent;color:var(--kn-ui-color-text);font-size:14px}.tag-diary-calendar{display:flex;flex-wrap:wrap;gap:7px;margin:15px 0}.tag-diary-calendar button{border-radius:50%;width:38px;padding:0;background:#edeae7}.tag-diary-list{display:grid;gap:12px;margin:15px 0}.tag-diary-list>button{border:1px solid #e4e1de;background:#fbfaf3;border-radius:22px;padding:18px;text-align:left;cursor:pointer;color:var(--kn-ui-color-text)}.tag-diary-list time{font-size:12px;color:var(--kn-ui-color-text-hint)}.tag-diary-list p{font-size:15px;line-height:1.65;margin:9px 0}.tag-diary-list span{font-size:12px;color:var(--kn-ui-color-text-hint)}.tag-diary-tabs{display:flex;gap:8px;margin-bottom:18px}.tag-diary-tabs [aria-pressed=true]{background:#ece9e6;border-color:#b5b4b2}.tag-diary-body{white-space:pre-wrap;line-height:1.9;font-size:16px;margin:20px 0}.social-tags-panel blockquote{border-left:3px solid #c7c4c1;padding:7px 14px;margin:20px 0;background:#f5f2ef;font-size:13px;color:var(--kn-ui-color-text)}.tag-associated{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.tag-original-chat{display:grid;gap:10px;margin:20px 0}.tag-original-chat>div{padding:14px;border-radius:18px;background:#f1f1e9}.tag-original-chat .own{background:#efece9}.tag-original-chat small{font-size:11px;color:var(--kn-ui-color-text-hint)}.tag-original-chat p{font-size:14px;line-height:1.65;margin:6px 0 0}.tag-source-hero{display:flex;justify-content:center;padding:15px}.tag-source-history{font-size:13px;color:var(--kn-ui-color-text-hint)}.tag-source-history li{margin:8px 0}.card-tools{gap:10px;flex-wrap:wrap}
 @media(max-width:360px){.tag-row-actions button{padding:5px 6px}.tag-management-row .social-tag-sticker{font-size:12px}.tag-chat-card{padding:14px}}
 
 /* Chat proposals and wording edits sit in the room's approved glass material.
@@ -139,3 +139,36 @@
 .phone#phone #sheet .tag-diary-privacy{margin:16px 0;font-size:12px;line-height:18px;color:#68656e}
 
 .phone#phone #sheet .tag-calendar-nav:disabled{opacity:.3;cursor:default}
+
+/* Diary71: Nok's introduction is separate from saved words and private chat. */
+.phone#phone #sheet :is(.tag-diary-browser,.tag-diary-detail) .tag-nok-intro{
+ margin:0 0 22px;padding:18px;border:1px solid #e0dbcb;border-radius:20px;
+ background:#faf7ef url('assets/card-paper-20261027/ivory-cotton.jpg') center/420px 420px repeat;
+ color:var(--kn-ui-color-text);box-shadow:0 2px 8px #55493608;
+}
+.phone#phone #sheet .tag-nok-intro h4{margin:0 0 10px;font-size:15px;line-height:22px;font-weight:500;color:inherit}
+.phone#phone #sheet .tag-nok-intro p{margin:8px 0 0;font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.phone#phone #sheet .tag-diary-tabs{display:flex;gap:8px;margin:18px 0}
+.phone#phone #sheet .tag-diary-tabs [role="tab"]{flex:1;min-width:0;min-height:44px;font-size:14px;line-height:20px}
+.phone#phone #sheet .tag-diary-tabs [aria-selected="true"]{background:#ece9e6;border-color:#b5b4b2;box-shadow:none}
+.phone#phone #sheet .tag-diary-tabs [role="tab"]:focus-visible{outline:2px solid #66636e;outline-offset:3px}
+.phone#phone #sheet .tag-diary-panel[hidden]{display:none!important}
+.phone#phone #sheet :is(.tag-diary-browser,.tag-diary-detail) .tag-diary-readonly{display:flex;flex-wrap:wrap;align-items:flex-start;gap:8px;margin:0}
+.phone#phone #sheet .tag-diary-readonly>.social-tag-sticker{max-width:100%;box-sizing:border-box}
+.phone#phone #sheet .tag-diary-readonly>.small-note{margin:0;line-height:1.7}
+.phone#phone #sheet .tag-day-associations{margin:20px 0}
+.phone#phone #sheet .tag-chat-records>h4,.phone#phone #sheet .tag-undated-chat>h4{margin:0;font-size:15px;line-height:22px;font-weight:500;color:inherit}
+.phone#phone #sheet .tag-undated-chat{margin-top:22px;padding-top:18px;border-top:1px solid rgba(67,64,74,.12)}
+.phone#phone #sheet .tag-original-chat small{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.phone#phone #sheet .tag-original-chat time{font-size:11px;white-space:nowrap}
+
+/* Diary72: the month and saved records live in the secondary sheet. */
+.phone#phone #sheet .tag-diary-summary>.tag-diary-date{display:block;margin:0 0 12px}
+.phone#phone #sheet .tag-diary-summary>.tag-diary-quote{margin-top:0}
+.phone#phone #sheet .tag-diary-summary>.tag-ui-button{width:100%;margin-top:4px}
+/* Secondary-sheet navigation shares the title row, with balanced side columns. */
+.phone#phone #sheet .sheet-title.has-back{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;gap:0;min-height:44px}
+.phone#phone #sheet .sheet-title.has-back h3{grid-area:1/2;text-align:center;width:100%}
+.phone#phone #sheet .sheet-back{grid-area:1/1;display:grid;place-items:center;width:44px;height:44px;padding:10px;border:0;border-radius:50%;background:transparent;color:var(--ink);box-shadow:none;cursor:pointer}
+.phone#phone #sheet .sheet-back svg{display:block;width:24px;height:24px}
+.phone#phone #sheet .sheet-back:focus-visible{outline:2px solid currentColor;outline-offset:2px}

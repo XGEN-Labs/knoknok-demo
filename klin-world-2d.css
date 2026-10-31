@@ -14,6 +14,10 @@
 .phone[data-card-handoff] > .klin-illustrated-world .klin-illustrated-room { filter: blur(20px); transform: scale(1.06); }
 /* Prevent the old whole-canvas blur from softening the offering illustration. */
 .phone[data-character-renderer="illustrated-2d"][data-card-handoff] > .klin-world-host { filter: none !important; transition: none !important; }
+/* A card over the live personal room retains the exact paused film frame.
+   Keep one crop and blur across the offer and the settled card. */
+.phone[data-scene-overlay="true"] > .klin-illustrated-world[data-personal-room-held="true"] { filter: none !important; transition: none !important; }
+.phone[data-scene-overlay="true"] > .klin-illustrated-world[data-personal-room-held="true"] .klin-illustrated-room { filter: blur(28px); transform: scale(1.06); }
 @media (prefers-reduced-motion: reduce) {
   .klin-illustrated-art { transition: none; }
 }

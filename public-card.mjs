@@ -1,6 +1,6 @@
-import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261027-logo-56';
-import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261027-tags-50';
-import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261026-experience-42';
+import { cardArtwork, CARD_FONTS, DEFAULT_CARD_AVATAR } from './card-artwork.mjs?v=20261030-spirit-notebook-8';
+import { stickerSurfaceMarkup, STICKER_ICONS, paintStickerSurface, traceStickerIcon } from './tag-stickers.mjs?v=20261030-spirit-notebook-8';
+import { normalizeCardDesign, generateCardDesign } from './card-design.mjs?v=20261030-spirit-notebook-8';
 import { normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, migrateCardTags } from './card-labels.mjs?v=20261021-refine-27c';
 export { CARD_LABEL_GROUPS, CARD_LABEL_LIMIT, CARD_LABEL_MAX_LENGTH, normalizeCardLabels, normalizePersonalityTags, normalizeCardAvatar, PERSONALITY_TAG_LIMIT, PERSONALITY_TAG_MAX_LENGTH, CARD_AVATAR_MAX_BYTES } from './card-labels.mjs?v=20261021-refine-27c';
 
@@ -112,7 +112,7 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
   if(item.type==='rect')return `<div class="bc-art bc-block" aria-hidden="true" style="${box}background:${item.fill};border-radius:${cqw(item.r)}cqw"></div>`;
   if(item.type==='logo')return `<span class="bc-art bc-logo" role="img" aria-label="NokNok" style="${box}color:${item.color}"></span>`;
   if(item.type==='avatar'){
-   const alt=item.custom?'名片頭像':'Klin 預設頭像';
+   const alt=item.custom?'名片頭像':'預設名片頭像';
    const portraitStyle=`object-fit:${item.fit};background:${item.fill};padding:${cqw(item.pad)}cqw;box-sizing:border-box;`;
    const src=escape(artworkAsset(item.src));
    return editable?`<button class="bc-art bc-avatar" type="button" data-action="edit-card" aria-label="${item.custom?'更換頭像':'上傳頭像'}" title="${item.custom?'更換頭像':'上傳頭像'}" style="${box}"><img src="${src}" alt="${alt}" style="${portraitStyle}" draggable="false"></button>`:`<img class="bc-art bc-avatar" src="${src}" alt="${alt}" style="${box}${portraitStyle}" draggable="false">`;
@@ -122,7 +122,7 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
   if(item.type==='tag'){
    const textY=(item.h-item.lines.length*item.size*item.lineHeight)/2;
    const style=`${box}${font}padding:0;text-align:${item.align||'left'};`;
-   const inner=`${stickerSurfaceMarkup(item,item.w,item.h)}<svg class="bc-sticker-icon" viewBox="0 0 24 24" aria-hidden="true" style="left:${cqw(item.padX)}cqw;top:${cqw((item.h-item.iconSize)/2)}cqw;width:${cqw(item.iconSize)}cqw;height:${cqw(item.iconSize)}cqw"><path d="${STICKER_ICONS[item.icon]}"/></svg><span class="bc-sticker-label" style="left:${cqw(item.padX+item.iconSpace)}cqw;top:${cqw(textY)}cqw;line-height:${item.lineHeight}">${item.lines.map(escape).join('<br>')}</span>`;
+   const inner=`${stickerSurfaceMarkup(item,item.w,item.h)}<svg class="bc-sticker-icon" viewBox="0 0 24 24" aria-hidden="true" style="left:${cqw(item.padX)}cqw;top:${cqw((item.h-item.iconSize)/2)}cqw;width:${cqw(item.iconSize)}cqw;height:${cqw(item.iconSize)}cqw"><path d="${STICKER_ICONS[item.icon]}"/></svg><span class="bc-sticker-label" style="color:${item.textColor||item.color};left:${cqw(item.padX+item.iconSpace)}cqw;top:${cqw(textY)}cqw;line-height:${item.lineHeight}">${item.lines.map(escape).join('<br>')}</span>`;
    return interactive?`<button class="bc-art bc-tag" type="button" data-action="view-card-tags" data-label="${escape(item.text)}" aria-label="查看全部標籤：${escape(item.text)}" title="${escape(item.text)}" style="${style}">${inner}</button>`:`<span class="bc-art bc-tag" title="${escape(item.text)}" style="${style}">${inner}</span>`;
   }
   const tag=item.kind==='name'?'h2':'p';
@@ -132,7 +132,7 @@ function artworkMarkup(art,{interactive=false,editable=false}={}){
 export function cardMarkup(value, { compact = false, showAllTags = false, editable = false } = {}) {
  const data=validatedData(value);if(!data)return '';
  const art=cardArtwork(data);
- return `<article class="share-card business-card${compact?' is-compact':''}" data-print-card data-business-card data-layout="${art.layout}" style="--bc-paper:${art.paper};aspect-ratio:${art.width}/${art.height};border-radius:${art.radius/art.width*100}% / ${art.radius/art.height*100}%" aria-label="${escape(data.name)}的名片"><div class="bc-face bc-front" style="background:${art.paper};color:${art.ink}"><div class="bc-paper" aria-hidden="true" style="background-image:url('${escape(artworkAsset(art.paperTexture))}');opacity:${art.paperOpacity}"></div>${artworkMarkup(art,{interactive:showAllTags&&!compact,editable:editable&&!compact})}</div></article>`;
+ return `<article class="share-card business-card${compact?' is-compact':''}" data-print-card data-business-card data-layout="${art.layout}" style="--bc-paper:${art.paper};aspect-ratio:${art.width}/${art.height};border-radius:${art.radius/art.width*100}% / ${art.radius/art.height*100}%" aria-label="${escape(data.name)}的名片"><div class="bc-face bc-front" style="background:${art.paper};color:${art.ink}"><div class="bc-paper" aria-hidden="true" style="background-image:url('${escape(artworkAsset(art.paperTexture))}');opacity:${art.paperOpacity};background-size:${art.paperScale*100}cqw ${art.paperScale*100}cqw;mix-blend-mode:multiply"></div>${artworkMarkup(art,{interactive:showAllTags&&!compact,editable:editable&&!compact})}</div></article>`;
 }
 
 export function cardShareURL(value, baseURL) {
@@ -171,7 +171,7 @@ export async function renderCardImage(value) {
  const loaded=await Promise.all(paths.map(cardImage)),images=new Map(paths.map((p,i)=>[p,loaded[i]]));
  ctx.scale(2,2);rounded(ctx,0,0,art.width,art.height,art.radius);ctx.clip();ctx.fillStyle=art.paper;ctx.fillRect(0,0,art.width,art.height);ctx.textBaseline='top';
  const paperImage=images.get(art.paperTexture);
- if(paperImage){ctx.save();ctx.globalAlpha=art.paperOpacity;for(let y=0;y<art.height;y+=art.width)ctx.drawImage(paperImage,0,y,art.width,art.width);ctx.restore();}
+ if(paperImage){ctx.save();ctx.globalAlpha=art.paperOpacity;ctx.globalCompositeOperation='multiply';const tile=art.width*art.paperScale;for(let y=0;y<art.height;y+=tile)ctx.drawImage(paperImage,0,y,tile,tile);ctx.restore();}
  for(const item of art.items){
   ctx.save();ctx.translate(item.x+item.w/2,item.y+item.h/2);ctx.rotate((item.rotate||0)*Math.PI/180);ctx.translate(-item.w/2,-item.h/2);
   if(item.type==='rect'){ctx.fillStyle=item.fill;if(item.r){rounded(ctx,0,0,item.w,item.h,Math.min(item.r,item.w/2,item.h/2));ctx.fill();}else ctx.fillRect(0,0,item.w,item.h);}
@@ -195,7 +195,7 @@ export async function renderCardImage(value) {
    if(item.type==='tag'){
     paintStickerSurface(ctx,item,item.w,item.h);ctx.strokeStyle=item.color;ctx.lineJoin='round';ctx.lineCap='round';
     ctx.save();ctx.translate(item.padX,(item.h-item.iconSize)/2);ctx.scale(item.iconSize/24,item.iconSize/24);ctx.lineWidth=2;traceStickerIcon(ctx,item.icon);ctx.stroke();ctx.restore();
-    ctx.fillStyle=item.color;ctx.textAlign='left';
+    ctx.fillStyle=item.textColor||item.color;ctx.textAlign='left';
     const textY=(item.h-item.lines.length*item.size*item.lineHeight)/2;
     item.lines.forEach((line,index)=>ctx.fillText(line,item.padX+item.iconSpace,textY+index*item.size*item.lineHeight));
    }else{ctx.textAlign=item.align;item.lines.forEach((line,i)=>ctx.fillText(line,item.align==='right'?item.w:item.align==='center'?item.w/2:0,i*item.size*item.lineHeight));}

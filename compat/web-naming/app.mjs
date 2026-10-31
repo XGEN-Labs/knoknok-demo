@@ -1,4 +1,4 @@
-import { submitBirthChart, birthChartForm } from './birth-chart.mjs';
+import { submitBirthChart, birthChartForm, isSharedBirthChart, validBirthChart } from './birth-chart.mjs';
 import { createApi, chatHistory } from './api.mjs?v=20261027-first-landing';
 import { createLandingHandoff, landingInformation } from './landing-handoff.mjs?v=20261023-landing-handoff';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-experience-33';
@@ -45,9 +45,9 @@ let serverUser = null, startupError = '';
 if (!offlineDemo) {
   try { serverUser = await api.me(); } catch (error) { startupError = error.message; }
 }
-let restoredBirthChart=null;
+let restoredBirthChart=null,accountBootstrap=null;
 if(!offlineDemo&&serverUser){
- try {const boot=await api.bootstrap();if(String(boot?.user?.id)===String(serverUser.id)&&boot.birthChart?.status==='ready')restoredBirthChart=boot.birthChart.chart;} catch {}
+ try {const boot=await api.bootstrap();if(String(boot?.user?.id)!==String(serverUser.id))throw new Error('登入帳號已變更');accountBootstrap=boot;if(isSharedBirthChart(boot)&&boot.birthChart?.status==='ready'&&validBirthChart(boot.birthChart.chart))restoredBirthChart=boot.birthChart.chart;} catch(error) {if(serverUser.onboarding.status==='required')startupError=error.message;}
 }
 let STATE_KEY = offlineDemo ? BASE_STATE_KEY : `${BASE_STATE_KEY}-account-${serverUser?.id ?? 'guest'}`;
 let UI_KEY = `${STATE_KEY}-ui`;
@@ -133,8 +133,22 @@ async function handoffLanding(){
  const epoch=sessionEpoch;
  landingHandoffBusy=true;
  try{
-  if(!state.onboarding?.birthChart){const boot=await api.bootstrap();if(epoch!==sessionEpoch)return false;if(String(boot?.user?.id)!==String(serverUser.id))throw Object.assign(new Error('登入帳號已變更'),{code:'SESSION_CHANGED'});if(boot.birthChart?.status==='ready'&&boot.agent?.status==='bound')state.onboarding.birthChart=boot.birthChart.chart;}
-  if(!state.onboarding?.birthChart)throw new Error('請先確認出生資料並完成排盤。');
+  let boot=await api.bootstrap();if(epoch!==sessionEpoch)return false;if(String(boot?.user?.id)!==String(serverUser.id))throw Object.assign(new Error('登入帳號已變更'),{code:'SESSION_CHANGED'});accountBootstrap=boot;
+  if(isSharedBirthChart(boot)){
+   if(boot.birthChart.status!=='ready'||!validBirthChart(boot.birthChart.chart))throw new Error('請先確認出生資料並完成排盤。');
+   const chart=boot.birthChart.chart;state.onboarding.birthChart=chart;
+   if(boot.landingCreation?.state==='awaiting_input'){
+    const info=landingInformation(state),contract=state.onboarding.contract;
+    if(!info||!contract?.signedAt)throw new Error('請先完成資料與簽署。');
+    const input={userName:info.userName,agentName:info.agentName,response:info.response,birthChartId:chart.id,birthChartVersion:chart.version,contract:structuredClone(contract)};
+    let submission=state.onboarding.creationRequest;
+    if(!submission?.requestId||JSON.stringify(submission.input)!==JSON.stringify(input)){submission={requestId:crypto.randomUUID(),input};state.onboarding.creationRequest=submission;save();}
+    await api.submitLanding(submission,serverUser.id);if(epoch!==sessionEpoch)return false;
+    boot=await api.bootstrap();if(epoch!==sessionEpoch)return false;
+    if(String(boot?.user?.id)!==String(serverUser.id))throw Object.assign(new Error('登入帳號已變更'),{code:'SESSION_CHANGED'});accountBootstrap=boot;
+   }
+   if(boot.agent?.status!=='bound'||boot.landingCreation?.state!=='submitted')throw new Error('伙伴仍在準備中，請稍後重試。');
+  }
   if(!await landingHandoff.ensure(landingInformation(state),state.onboarding?.agentHandoff))return false;
   if(epoch!==sessionEpoch)return false;
   const result=await api.completeOnboarding(serverUser.id);
@@ -240,7 +254,7 @@ function landing(){
  const choices=hours&&!waiting?`<div class="birth-hour-grid" role="group" aria-label="選擇出生時辰">${(turn.options||[]).map(option=>`<button type="button" data-action="onboarding-reply" data-text="${esc(option.text)}"><strong>${esc(option.label)}</strong><small>${esc(option.range)}</small></button>`).join('')}</div>`:'';
  const replies=!waiting?(hours?'<button type="button" data-action="onboarding-skip">记不清了，跳过</button>':turn.replies.map(r=>`<button type="button" data-action="onboarding-reply" data-text="${esc(r.text)}">${esc(r.label)}</button>`).join('')+(turn.canSkip&&!turn.replies.length?'<button type="button" data-action="onboarding-skip">記不清了，先跳過</button>':'')):'';
  const ending=turn.canFinish?btn(landingHandoffBusy?'正在交接這次相遇…':coda===0?'那怎么办呢':coda===1?'好，我记住了':state.onboarding?.contract?.signedAt?'一起回家':'簽署相遇契約',coda<2?'onboarding-coda':state.onboarding?.contract?.signedAt?'finish-conversation':'open-contract'):'';
- return shell(`<button type="button" class="onboarding-klin" data-action="onboarding-touch" aria-label="輕觸 Klin">${spiritImage('正在聽你說話的 Klin','','juvenile')}</button><div class="onboarding-thread"><div class="onboarding-messages" role="log" aria-live="polite">${visible.map((m,i)=>`<div class="onboarding-message ${m.role==='user'?'is-user':'is-klin'} ${i===visible.length-1?'is-new':''}"><p>${esc(m.text)}</p></div>`).join('')}${waiting?'<div class="onboarding-message"><span class="typing" aria-label="Klin 正在想"><i></i><i></i><i></i></span></div>':''}${!waiting&&turn.key==='response'?'<article class="onboarding-reading"><small>彼之境 · 第一段回響</small><h3>有些相遇，正在等一句你好。</h3><p>有時想靠近，有時又想留一點自己的空間。不需要一下子變得熱鬧，我們可以慢慢來。</p></article>':''}${epilogue}</div>${choices}${turn.canFinish&&!offlineDemo?birthChartForm(state,esc):''}</div><form class="onboarding-composer" data-form="onboarding" novalidate><div class="quick-replies">${replies}</div>${waiting||hours||turn.key==='gender'?'':ending||`<div class="onboarding-input-row">${input}<button class="onboarding-send" type="submit" aria-label="回覆 Klin">${sendArrow}</button></div>`}<p class="${calendar?'sr-only':'onboarding-error'}" role="alert">${esc(state.error||'')}</p></form>`,'conversation-onboarding'+(hours?' is-birth-time':'')+(turn.canFinish?' is-final-turn':''));
+ return shell(`<button type="button" class="onboarding-klin" data-action="onboarding-touch" aria-label="輕觸 Klin">${spiritImage('正在聽你說話的 Klin','','juvenile')}</button><div class="onboarding-thread"><div class="onboarding-messages" role="log" aria-live="polite">${visible.map((m,i)=>`<div class="onboarding-message ${m.role==='user'?'is-user':'is-klin'} ${i===visible.length-1?'is-new':''}"><p>${esc(m.text)}</p></div>`).join('')}${waiting?'<div class="onboarding-message"><span class="typing" aria-label="Klin 正在想"><i></i><i></i><i></i></span></div>':''}${!waiting&&turn.key==='response'?'<article class="onboarding-reading"><small>彼之境 · 第一段回響</small><h3>有些相遇，正在等一句你好。</h3><p>有時想靠近，有時又想留一點自己的空間。不需要一下子變得熱鬧，我們可以慢慢來。</p></article>':''}${epilogue}</div>${choices}${turn.canFinish&&!offlineDemo&&isSharedBirthChart(accountBootstrap)?birthChartForm(state,esc):''}</div><form class="onboarding-composer" data-form="onboarding" novalidate><div class="quick-replies">${replies}</div>${waiting||hours||turn.key==='gender'?'':ending||`<div class="onboarding-input-row">${input}<button class="onboarding-send" type="submit" aria-label="回覆 Klin">${sendArrow}</button></div>`}<p class="${calendar?'sr-only':'onboarding-error'}" role="alert">${esc(state.error||'')}</p></form>`,'conversation-onboarding'+(hours?' is-birth-time':'')+(turn.canFinish?' is-final-turn':''));
 }
 
 function revealOnboarding(from=0){
@@ -717,12 +731,14 @@ document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!
 function sendOfflineCompanion(text){if(companionTyping)return;if(!text.trim())return toast('先寫一句想說的話吧。');sceneSound.stopSpeech();const who=actor();ui.companionDrafts={...(ui.companionDrafts||{}),[who]:''};delete ui.boopReply;companionTyping=true;sceneSound.cue('send');klinWorld?.interact('look');dispatch({type:'COMPANION_SEND',text},false);render(false);if(conversationActive)$('#private-message')?.focus({preventScroll:true});setTimeout(()=>{companionTyping=false;if(actor()===who&&['companion','home'].includes(ui.route)){sceneSound.cue('reply');klinWorld?.interact('wave');render(false);}},950);}
 function cancelChat() { sessionEpoch++; chatAbort?.abort(); chatAbort=null; companionTyping=false; landingHandoff.clear(); landingHandoffBusy=false; }
 function announceSession() { try { localStorage.setItem(SESSION_EVENT, crypto.randomUUID()); } catch {} }
-function activateAccount(user) {
+function activateAccount(user,bootstrap=null) {
+  accountBootstrap=bootstrap;
   resetSound(); landingVideoScene?.dispose(); landingVideoScene=null; cancelChat(); serverUser=user; landingHandoff.activate(user?.id);
   STATE_KEY=`${BASE_STATE_KEY}-account-${user?.id ?? 'guest'}`; UI_KEY=`${STATE_KEY}-ui`;
   try { state=hydrateState(localStorage.getItem(STATE_KEY)); } catch { state=initialState(); }
   state.session={authenticated:Boolean(user),activeUserId:'a',provider:'account'};
   if(user)applyAccountOnboarding(state,user.onboarding);
+  if(isSharedBirthChart(bootstrap)&&bootstrap.birthChart.status==='ready'&&validBirthChart(bootstrap.birthChart.chart))state.onboarding.birthChart=bootstrap.birthChart.chart;
   for(const message of state.private.a.companionMessages)if(message.status==='pending'){message.status='failed';message.error='上次連線已中斷，請重新發送。';}
   ui={route:user?onboardingDestination(state):'welcome',history:[],motion:false,matchResult:'found',failNext:false};
   homeGreeting.reset(); clearMatching(); clearTimeout(initializeTimer); clearTimeout(landingHelloTimer);
@@ -778,7 +794,7 @@ document.addEventListener('submit',async e=>{const form=e.target.closest('form[d
   authDraft.account=account;authDraft.password=password;
   if(!offlineDemo){
     if(authBusy)return; authBusy=true; updateAuthControls();
-    try { const user=await api.login(account,password); activateAccount(user); announceSession(); revealOnboarding(); }
+    try { const user=await api.login(account,password);const boot=await api.bootstrap();if(String(boot?.user?.id)!==String(user.id))throw new Error('登入帳號已變更');activateAccount(user,boot); announceSession(); revealOnboarding(); }
     catch(error){const target=$('#auth-error');if(target)target.textContent=error.message;}
     finally {authBusy=false;authDraft.password='';const input=$('#auth-password');if(input)input.value='';updateAuthControls();}
     return;
@@ -799,7 +815,7 @@ case 'verify':{
 case 'setup-basics':{const patch=basicsFormPatch(),errors=validateBasics(patch);if(Object.keys(errors).length){$('#basics-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#basics-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BASICS',patch},false)){if(state.onboarding.status!=='ready'&&!state.demand)dispatch({type:'UPDATE_DRAFT',patch:{language:patch.language}},false);ui.setupBasics=null;go('setup-birth');}return;}
 case 'setup-birth':{const patch=birthFormPatch(),errors=validateBirth(patch,state.now);if(Object.keys(errors).length){$('#birth-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#birth-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BIRTH',patch},false)){ui.setupBirth=null;if(state.onboarding.status==='ready'){go('profile');toast('資料已儲存。');}else if(dispatch({type:'BEGIN_INITIALIZATION'},false)){go('initializing');startInitialization();}}return;}
 case 'birth-chart':{
-  if(landingHandoffBusy||!serverUser)return;
+  if(landingHandoffBusy||!serverUser||!isSharedBirthChart(accountBootstrap))return;
   const epoch=sessionEpoch,owner=serverUser.id,button=form.querySelector('button[type="submit"]');
   const controller=new AbortController(); landingHandoffBusy=true;button.disabled=true;button.textContent='正在排盤與匹配…';
   try {

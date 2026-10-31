@@ -1,6 +1,6 @@
 // A paused scene sampled once into an ordinary image: no live backdrop-filter
 // surface is retained under editable text or reflowing conversation content.
-export const LANDING_GLASS_TARGETS = '.conversation-onboarding :is(.onboarding-message,.onboarding-reading,.onboarding-input-row,.kn-birth-time-picker,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn)';
+export const LANDING_GLASS_TARGETS = '.conversation-onboarding :is(.onboarding-message,.onboarding-input-row,.kn-birth-time-picker,.birth-hour-grid button,.quick-replies button,.onboarding-composer>.btn)';
 const PROPERTIES = ['--landing-glass-image','--landing-glass-size','--landing-glass-position','--landing-glass-fill'];
 
 export function coverRect(sourceWidth,sourceHeight,width,height) {
