@@ -6,7 +6,7 @@ import {join,extname} from 'node:path';
 export async function landingBrowserFixture(webRoot){
  const manifest=JSON.parse(await readFile(join(webRoot,'build-manifest.json'),'utf8'));
  const allowed=new Set(manifest.files.map(f=>f.path));const calls=[],accepted=[];const controls={failHandoff:true,failCompletion:false};
- const charts=new Map(),landings=new Map();
+ const charts=new Map(),landings=new Map(),chartSaves=[];
  const chartState=id=>({protocol:'shared-birth-chart-v1',status:charts.has(id)?'ready':'required',chart:charts.get(id)||null});
  const onboarding=new Map([[101,'required'],[202,'not_required']]);
  const session=id=>({user:{id,username:`test${id}`},...(onboarding.has(id)?{onboarding:{status:onboarding.get(id)}}:{})});
@@ -19,7 +19,7 @@ export async function landingBrowserFixture(webRoot){
   if(req.method==='POST'){
    const parts=[];for await(const p of req)parts.push(p);const body=JSON.parse(Buffer.concat(parts));
    if(url.pathname==='/api/auth/login'){const n=Number(body.username.replace('test',''));if(![101,202,303].includes(n)||body.password!=='fixture-only')return json(res,401,{error:'invalid'});res.setHeader('set-cookie',`fixture=${n}; HttpOnly; Path=/; SameSite=Lax`);return json(res,200,session(n));}
-   if(url.pathname==='/api/auth/onboarding/birth-chart'){if(!id||req.headers['x-knok-user-id']!==String(id))return json(res,409,{code:'SESSION_CHANGED'});charts.set(id,{id:'a'.repeat(64),version:1,labels:{dayMaster:'甲木',zodiac:'金牛座'}});return json(res,200,{birthChart:{status:'pending'}});}
+   if(url.pathname==='/api/auth/onboarding/birth-chart'){if(!id||req.headers['x-knok-user-id']!==String(id))return json(res,409,{code:'SESSION_CHANGED'});chartSaves.push({id,body});charts.set(id,{id:'a'.repeat(64),version:1,labels:{dayMaster:'壬水',zodiac:'白羊座',element:'water'}});return json(res,200,{birthChart:{status:'pending'}});}
    if(url.pathname==='/api/auth/agent-initialization/landing'){
     if(id!==101||req.headers['x-knok-user-id']!==String(id))return json(res,409,{code:'SESSION_CHANGED'});
     if(!charts.has(id)||body.input?.birthChartId!==charts.get(id).id||body.input?.birthChartVersion!==charts.get(id).version||!body.input?.contract?.signedAt)return json(res,409,{code:'birth_chart_version_conflict'});
@@ -43,5 +43,5 @@ export async function landingBrowserFixture(webRoot){
   const mime={'.mjs':'text/javascript','.js':'text/javascript','.html':'text/html','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.webp':'image/webp','.mp4':'video/mp4','.m4a':'audio/mp4','.woff2':'font/woff2'};
   const bytes=await readFile(join(webRoot,file));res.writeHead(200,{'content-type':mime[extname(file)]||'application/octet-stream','cache-control':'no-store'});res.end(bytes);
  }catch(error){if(!res.headersSent)json(res,500,{error:'fixture error'});else res.destroy();console.error(error.message);}});
- server.listen(0,'127.0.0.1');await once(server,'listening');return{url:`http://127.0.0.1:${server.address().port}`,calls,accepted,controls,onboarding,manifest,charts,landings,close:async()=>{const done=new Promise(r=>server.close(r));server.closeAllConnections();await done;}};
+ server.listen(0,'127.0.0.1');await once(server,'listening');return{url:`http://127.0.0.1:${server.address().port}`,calls,accepted,controls,onboarding,manifest,charts,landings,chartSaves,close:async()=>{const done=new Promise(r=>server.close(r));server.closeAllConnections();await done;}};
 }

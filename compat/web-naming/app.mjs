@@ -1,4 +1,4 @@
-import { submitBirthChart, birthChartForm, isSharedBirthChart, validBirthChart } from './birth-chart.mjs';
+import { submitBirthChart, birthChartForm, isSharedBirthChart, validBirthChart, restoreSharedLanding, sharedLandingInformation } from './birth-chart.mjs';
 import { createApi, chatHistory } from './api.mjs?v=20261027-first-landing';
 import { createLandingHandoff, landingInformation } from './landing-handoff.mjs?v=20261023-landing-handoff';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261022-experience-33';
@@ -45,7 +45,7 @@ let serverUser = null, startupError = '';
 if (!offlineDemo) {
   try { serverUser = await api.me(); } catch (error) { startupError = error.message; }
 }
-let restoredBirthChart=null,accountBootstrap=null;
+let restoredBirthChart=null,accountBootstrap=null,restoredSignedLanding=false;
 if(!offlineDemo&&serverUser){
  try {const boot=await api.bootstrap();if(String(boot?.user?.id)!==String(serverUser.id))throw new Error('登入帳號已變更');accountBootstrap=boot;if(isSharedBirthChart(boot)&&boot.birthChart?.status==='ready'&&validBirthChart(boot.birthChart.chart))restoredBirthChart=boot.birthChart.chart;} catch(error) {if(serverUser.onboarding.status==='required')startupError=error.message;}
 }
@@ -61,6 +61,7 @@ if (!offlineDemo) {
   state.session = { authenticated: Boolean(serverUser), activeUserId: 'a', provider: 'account' };
   if (serverUser) applyAccountOnboarding(state, serverUser.onboarding);
   if(restoredBirthChart)state.onboarding.birthChart=restoredBirthChart;
+  if(serverUser)restoredSignedLanding=restoreSharedLanding(state,accountBootstrap,serverUser.id);
   for (const message of state.private.a.companionMessages) {
     if (message.status === 'pending') { message.status = 'failed'; message.error = '上次連線已中斷，請重新發送。'; }
   }
@@ -147,9 +148,12 @@ async function handoffLanding(){
     boot=await api.bootstrap();if(epoch!==sessionEpoch)return false;
     if(String(boot?.user?.id)!==String(serverUser.id))throw Object.assign(new Error('登入帳號已變更'),{code:'SESSION_CHANGED'});accountBootstrap=boot;
    }
+   if(!restoreSharedLanding(state,boot,serverUser.id))throw new Error('簽署資料尚未確認，請稍後重試。');
+   save();
    if(boot.agent?.status!=='bound'||boot.landingCreation?.state!=='submitted')throw new Error('伙伴仍在準備中，請稍後重試。');
   }
-  if(!await landingHandoff.ensure(landingInformation(state),state.onboarding?.agentHandoff))return false;
+  const information=isSharedBirthChart(boot)?sharedLandingInformation(boot,serverUser.id):landingInformation(state);
+  if(!await landingHandoff.ensure(information,state.onboarding?.agentHandoff))return false;
   if(epoch!==sessionEpoch)return false;
   const result=await api.completeOnboarding(serverUser.id);
   if(epoch!==sessionEpoch)return false;
@@ -247,7 +251,7 @@ function birthDraft(){return {...privateSpace().birth,...(ui.setupBirth||{})};}
 function landingProgress(step){return `<div class="landing-progress" aria-label="初次見面，第 ${step} 步，共 4 步">${[1,2,3,4].map(n=>`<i class="${n<=step?'done':''}"></i>`).join('')}</div>`;}
 function landing(){
  const turn=getOnboardingTurn(state),all=getOnboardingMessages(state),messages=landingReveal?.key===turn.key?all.slice(0,landingReveal.count):all,waiting=messages.length<all.length;
- const calendar=turn.key==='birthDate',hours=turn.key==='birthTime',coda=turn.canFinish?(ui.onboardingCoda||0):0;
+ const calendar=turn.key==='birthDate',hours=turn.key==='birthTime',coda=turn.canFinish?(state.onboarding.conversation.sharedLanding?2:ui.onboardingCoda||0):0;
  const visible=coda?[]:turn.key==='response'?[]:turn.canFinish?messages.slice(-1):messages.slice(-2);
  const input=calendar?`<div class="field"><label for="onboarding-calendar">出生日期</label><input id="onboarding-calendar" name="answer" type="date" data-date-purpose="birthday" autocomplete="bday" value="${esc(ui.onboardingDraft||'')}" required></div>`:`<textarea id="onboarding-answer" name="answer" rows="1" maxlength="160" placeholder="${esc(turn.placeholder||'告訴我吧…')}" aria-label="${esc(turn.prompt)}">${esc(ui.onboardingDraft||'')}</textarea>`;
  const epilogue=coda===1?`<div class="onboarding-message is-user"><p>那怎么办呢</p></div><div class="onboarding-message is-klin is-new"><p>先從一句你好開始。我們簽下相遇的約定，我陪你慢慢去看看。</p></div>`:coda===2?`<div class="onboarding-message is-user"><p>好，我记住了</p></div><div class="onboarding-message is-klin is-new"><p>${esc(me().name)}，把這次相遇留下來吧。你願意和我簽下這份契約嗎？</p></div>`:'';
@@ -273,10 +277,11 @@ function answerOnboarding(text,skip=false){
 async function departToHome(){
  if(ui.route!=='landing'||!state.session.authenticated||!state.onboarding?.contract?.signedAt||landingHandoffBusy)return;
  sceneSound.stopSpeech();
- const originUI=ui,who=actor(),signature=state.onboarding.contract.signedAt,epoch=sessionEpoch;
+ const originUI=ui,who=actor(),epoch=sessionEpoch;
  const delivery=handoffLanding();render(false);
  if(!await delivery){if(epoch===sessionEpoch)render(false);return;}
  if(epoch!==sessionEpoch||ui!==originUI||ui.route!=='landing')return;
+ const signature=state.onboarding.contract?.signedAt;
  clearTimeout(landingHelloTimer);
  const arrive=()=>{
   if(ui!==originUI||ui.route!=='landing'||!state.session.authenticated||actor()!==who||state.onboarding?.contract?.signedAt!==signature)return;
@@ -739,6 +744,7 @@ function activateAccount(user,bootstrap=null) {
   state.session={authenticated:Boolean(user),activeUserId:'a',provider:'account'};
   if(user)applyAccountOnboarding(state,user.onboarding);
   if(isSharedBirthChart(bootstrap)&&bootstrap.birthChart.status==='ready'&&validBirthChart(bootstrap.birthChart.chart))state.onboarding.birthChart=bootstrap.birthChart.chart;
+  if(user)restoreSharedLanding(state,bootstrap,user.id);
   for(const message of state.private.a.companionMessages)if(message.status==='pending'){message.status='failed';message.error='上次連線已中斷，請重新發送。';}
   ui={route:user?onboardingDestination(state):'welcome',history:[],motion:false,matchResult:'found',failNext:false};
   homeGreeting.reset(); clearMatching(); clearTimeout(initializeTimer); clearTimeout(landingHelloTimer);
@@ -904,7 +910,7 @@ if(comparisonMode) {
   });
 }
 if(!pixelVariant&&ui.route==='home'&&state.session.authenticated)state=reduce(state,{type:'ENTER_COMPANION_HOME'});
-resize();render(true);
+resize();if(restoredSignedLanding)save();render(true);
 if(pixelVariant)initCompanionAnimation();
 if(ui.route==='initializing')startInitialization();
 

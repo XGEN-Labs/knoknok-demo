@@ -7,6 +7,51 @@ export function validBirthChart(chart) {
     typeof chart.labels?.zodiac === 'string' && Boolean(chart.labels.zodiac.trim()) &&
     (chart.labels.element === undefined || ['wood','fire','earth','metal','water'].includes(chart.labels.element));
 }
+const clone = value => JSON.parse(JSON.stringify(value));
+const nonempty = value => typeof value === 'string' && Boolean(value.trim());
+function validSharedReceipt(receipt) {
+  const input=receipt?.input,contract=input?.contract,chart=receipt?.chart;
+  return nonempty(receipt?.owner) && nonempty(receipt?.requestId) && validBirthChart(chart) &&
+    input && Object.keys(input).every(key=>['userName','agentName','response','birthChartId','birthChartVersion','contract'].includes(key)) &&
+    ['userName','agentName','response'].every(key=>nonempty(input[key])) && input.birthChartId===chart.id && input.birthChartVersion===chart.version &&
+    contract?.version===1 && Number.isFinite(contract.signedAt) && contract.signedAt>0 && contract.userName===input.userName && contract.companionName===input.agentName;
+}
+function sharedReceipt(bootstrap,owner) {
+  if(owner==null || String(bootstrap?.user?.id)!==String(owner) || !isSharedBirthChart(bootstrap) || bootstrap.birthChart.status!=='ready' ||
+      bootstrap.landingCreation?.flow!==SHARED_BIRTH_CHART_PROTOCOL || bootstrap.landingCreation.state!=='submitted')return null;
+  const value={owner:String(owner),requestId:bootstrap.landingCreation.requestId,input:bootstrap.landingCreation.input,chart:bootstrap.birthChart.chart};
+  return validSharedReceipt(value)?clone(value):null;
+}
+// The pinned compatibility questionnaire cannot reconstruct private birth
+// answers. A signed server receipt resumes only its already-confirmed stage.
+export function sharedLandingConversation(saved) {
+  const receipt=saved?.sharedLanding;
+  if(!validSharedReceipt(receipt))return null;
+  const input=receipt.input;
+  return {version:2,step:'complete',complete:saved.complete===true,answers:{name:input.userName,companionName:input.agentName,response:input.response},messages:[],sharedLanding:clone(receipt)};
+}
+export function restoreSharedLanding(state,bootstrap,owner) {
+  const receipt=sharedReceipt(bootstrap,owner);
+  if(!receipt || !['required','completed'].includes(bootstrap.onboarding?.status))return false;
+  const {input,chart}=receipt;
+  state.onboarding.birthChart=clone(chart);
+  if(bootstrap.onboarding.status==='completed'){
+    if(!state.users.a.companionName || state.users.a.companionName==='Klin'){state.users.a.companionName=input.agentName;state.private.a.companion.name=input.agentName;}
+    if(!state.users.a.cardTagsEdited)state.users.a.cardTags=[chart.labels.dayMaster,chart.labels.zodiac];
+    return true;
+  }
+  state.onboarding.conversation=sharedLandingConversation({sharedLanding:receipt,complete:false});
+  state.onboarding.contract=clone(input.contract);state.onboarding.contractRequired=true;
+  state.onboarding.creationRequest={requestId:receipt.requestId,input:clone(input)};
+  state.users.a.name=input.userName;state.users.a.companionName=input.agentName;state.private.a.companion.name=input.agentName;
+  return true;
+}
+export function sharedLandingInformation(bootstrap,owner) {
+  const receipt=sharedReceipt(bootstrap,owner);
+  if(!receipt || bootstrap.agent?.status!=='bound')return null;
+  const {userName,agentName,response}=receipt.input;
+  return {userName,agentName,response};
+}
 export function birthChartInput(form) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(form['birth-date'] || '') || !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(form['birth-time'] || '') ||
       !['男','女'].includes(form['birth-sex']) || !['Asia/Shanghai','Asia/Hong_Kong'].includes(form['birth-timezone']) ||
@@ -39,7 +84,7 @@ export function birthChartForm(state, esc) {
   const selected = (key, value) => draft[key] === value ? ' selected' : '';
   return `<form data-form="birth-chart" class="landing-form-card"><h3>確認排盤資料</h3>
   <p>出生資料私有保存，日主與星座會顯示在名片。請填準確時間；只有時辰或時間未知時，先核對後再排盤。</p>
-  <label for="chart-date">出生日期（必填）</label><input id="chart-date" name="birth-date" type="date" value="${esc(draft['birth-date'] ?? answers.birthDate ?? '')}" required>
+  <label for="chart-date">出生日期（必填，YYYY-MM-DD）</label><input id="chart-date" name="birth-date" type="text" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" maxlength="10" placeholder="YYYY-MM-DD" value="${esc(draft['birth-date'] ?? answers.birthDate ?? '')}" required>
   <label for="chart-time">當地出生時間（必填）</label><input id="chart-time" name="birth-time" type="time" required value="${esc(draft['birth-time'] || '')}">
   <label for="chart-sex">排盤性別（必填）</label><select id="chart-sex" name="birth-sex" required><option value="">請選擇</option><option${selected('birth-sex','男')}>男</option><option${selected('birth-sex','女')}>女</option></select>
   <label for="chart-zone">出生時區（必填）</label><select id="chart-zone" name="birth-timezone" required><option value="">請選擇</option><option value="Asia/Shanghai"${selected('birth-timezone','Asia/Shanghai')}>上海</option><option value="Asia/Hong_Kong"${selected('birth-timezone','Asia/Hong_Kong')}>香港</option></select>

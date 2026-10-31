@@ -37,7 +37,7 @@ export async function liveBrowserFixture(webRoot,{landingCreation=false,sharedBi
    if(!sharedBirthChart||id!==101)return json(res,409,{error:'legacy_account'});
    if(req.method==='POST'){
     if(!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(body['birth-time']||'')||body['chart-consent']!=='同意'||body['timezone-confirmed']!=='已确认')return json(res,422,{code:'invalid_birth_chart'});
-    controls.chart={id:'a'.repeat(64),version:1,labels:{dayMaster:'乙木',zodiac:'金牛座',element:'wood'}};
+    controls.chart={id:'a'.repeat(64),version:1,labels:body.calendar==='lunar'&&body['birth-date']==='2024-02-30'?{dayMaster:'壬水',zodiac:'白羊座',element:'water'}:{dayMaster:'乙木',zodiac:'金牛座',element:'wood'}};
    }
    return json(res,200,{birthChart:{protocol:flow,status:controls.chart?'ready':'required',chart:controls.chart}});
   }

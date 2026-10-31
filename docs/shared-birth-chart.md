@@ -13,6 +13,9 @@ sex for calculation, timezone, leap-month choice, timezone confirmation and
 storage consent. A questionnaire hour-period midpoint never fills the exact-time
 field. Unknown/approximate time remains unresolved until the user can confirm an
 exact time. The account's explicit form draft survives reload.
+The YYYY-MM-DD date field is calendar-independent text: lunar dates such as
+`2024-02-30` must not be rejected by an HTML Gregorian date control. Native
+performs the exact calendar and leap-month validation.
 
 `POST /api/auth/onboarding/birth-chart` sends only the published chart form keys:
 `birth-date`, `birth-time`, `birth-sex`, `birth-timezone`, `calendar`, `leap-month`,
@@ -54,6 +57,11 @@ The historical compatibility build retains its pinned page baseline and uses
 the declared shared capability, chart receipt and final signed initialization.
 It is not the current live release or a replacement for its full account and
 history integration.
+Submitted-but-incomplete compatibility sessions restore the frozen signed
+names, introduction, contract and chart reference before continuing. Handoff
+uses that owner-checked server receipt, even when an older local draft differs;
+no raw birth answer is reconstructed. The pinned questionnaire resumes only
+this confirmed stage, with existing account and completion guards retained.
 
 Local checks use synthetic Cookie accounts and BFF responses, with no live host,
 real login, paid model or production end-to-end claim. Commands:
@@ -74,3 +82,13 @@ auth/chat/history/Landing checks, then failed at `card-edit-return` (15000ms):
 current main's `manageCardTags` opens `cardTagsManagementMarkup`, whose markup has
 no return-to-editor control. Those product functions are unchanged here. The
 remaining card/diary/visit checks are unverified; no page errors were reported.
+
+Original integration evidence at `d4cf0d29` remains: 85 Node tests, shared live
+7 checks, generic creation 5, generic birth-profile 10, and compatibility 11
+passed. The single final-review fix pass reproduced both lunar HTML rejection
+and missing fresh-browser compatibility recovery before repair. Affected Node
+tests now pass 18/18, shared live Chromium passes 7 checks, and compatibility
+passes 13 including submitted receipt recovery and A/B/A owner protection. The
+lunar fixture uses Native's separately verified deterministic vector:
+`2024-02-30`, lunar/non-leap, `12:00`, male, `Asia/Shanghai`, producing
+`壬水 / water / 白羊座`. Browser fixtures remain synthetic BFF verification.
