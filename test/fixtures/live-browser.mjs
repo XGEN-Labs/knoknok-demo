@@ -4,9 +4,10 @@ import {join,extname} from 'node:path';
 import {createServer} from 'node:http';
 import {once} from 'node:events';
 // Local protocol fixtures only. All identities, replies and native DTOs are synthetic.
-export async function liveBrowserFixture(webRoot,{landingCreation=false}={}){
+export async function liveBrowserFixture(webRoot,{landingCreation=false,sharedBirthChart=false}={}){
  const manifest=JSON.parse(await readFile(join(webRoot,'build-manifest.json'),'utf8')),allowed=new Set(manifest.files.map(f=>f.path)),calls=[],status=new Map([[101,'required'],[202,'not_required'],[303,'completed']]),histories=new Map(),profiles=new Map();
- const controls={failHandoff:false,failCompletion:false,creationBound:false,creation:null,failBirthProfile:false};
+ const controls={failHandoff:false,failCompletion:false,creationBound:false,creation:null,failBirthProfile:false,chart:null};
+ const flow=sharedBirthChart?'shared-birth-chart-v1':'landing-v1';
  const json=(res,code,value)=>{res.writeHead(code,{'content-type':'application/json','cache-control':'no-store'});res.end(JSON.stringify(value));};
  const session=id=>({user:{id,username:`test${id}`},onboarding:{status:status.get(id)||'required'}});
  const server=createServer(async(req,res)=>{try{
@@ -29,12 +30,21 @@ export async function liveBrowserFixture(webRoot,{landingCreation=false}={}){
   if(!id)return json(res,401,{error:'unauthenticated'});
   if(url.pathname==='/api/auth/bootstrap'){
    const newer=landingCreation&&id===101,bound=!newer||controls.creationBound;
-   return json(res,200,{...session(id),accountStatus:'registered',nextAction:bound?'open_chat':'setup_agent',agent:bound?{status:'bound',agentId:`agent-${id}`,roomId:`room-${id}`}:{status:'setup_required',initialization:{state:'pending'}},memory:{status:'not_loaded'},...(newer?{landingCreation:controls.creation||{flow:'landing-v1',state:'awaiting_input'}}:{})});
+   return json(res,200,{...session(id),accountStatus:'registered',nextAction:bound?'open_chat':'setup_agent',agent:bound?{status:'bound',agentId:`agent-${id}`,roomId:`room-${id}`}:{status:'setup_required',initialization:{state:'pending'}},memory:{status:'not_loaded'},...(newer?{landingCreation:controls.creation||{flow,state:'awaiting_input'},...(sharedBirthChart?{birthChart:{protocol:flow,status:controls.chart?'ready':'required',chart:controls.chart}}:{})}:{})});
   }
   if(req.headers['x-knok-user-id']!==String(id))return json(res,409,{error:'SESSION_CHANGED',code:'SESSION_CHANGED'});
+  if(url.pathname==='/api/auth/onboarding/birth-chart'){
+   if(!sharedBirthChart||id!==101)return json(res,409,{error:'legacy_account'});
+   if(req.method==='POST'){
+    if(!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(body['birth-time']||'')||body['chart-consent']!=='同意'||body['timezone-confirmed']!=='已确认')return json(res,422,{code:'invalid_birth_chart'});
+    controls.chart={id:'a'.repeat(64),version:1,labels:body.calendar==='lunar'&&body['birth-date']==='2024-02-30'?{dayMaster:'壬水',zodiac:'白羊座',element:'water'}:{dayMaster:'乙木',zodiac:'金牛座',element:'wood'}};
+   }
+   return json(res,200,{birthChart:{protocol:flow,status:controls.chart?'ready':'required',chart:controls.chart}});
+  }
   if(url.pathname==='/api/auth/agent-initialization/landing'){
    if(!landingCreation||id!==101)return json(res,409,{error:'legacy_account'});
-   if(!controls.creation)controls.creation={flow:'landing-v1',state:'submitted',...body,selection:{ruleVersion:'rongyu-day-master-v1',dayMaster:'甲木',element:'wood',familyId:'wood',personaSpecId:'nok-wood-1',personaVersion:'8.0.0'}};
+   if(sharedBirthChart&&(!controls.chart||body.input?.birthChartId!==controls.chart.id||body.input?.birthChartVersion!==controls.chart.version||['birthDate','birthTime','gender','birthPlace'].some(key=>Object.hasOwn(body.input||{},key))))return json(res,409,{code:'birth_chart_changed'});
+   if(!controls.creation)controls.creation={flow,state:'submitted',...body,selection:sharedBirthChart?{profileId:'nok/default',content:{id:'content-1',version:'1.0.9',integrity:'sha256:fixture',sourceSha256:'b'.repeat(64),creationProfileId:'nok/default'},chart:controls.chart}:{ruleVersion:'rongyu-day-master-v1',dayMaster:'甲木',element:'wood',familyId:'wood',personaSpecId:'nok-wood-1',personaVersion:'8.0.0'}};
    return json(res,200,{landingCreation:controls.creation,initialization:{state:'pending'}});
   }
   if(url.pathname==='/api/web/birth-profile'){
@@ -47,10 +57,10 @@ export async function liveBrowserFixture(webRoot,{landingCreation=false}={}){
   if(url.pathname==='/api/auth/onboarding/complete'){if(controls.failCompletion)return json(res,503,{error:'completion_unavailable'});status.set(id,'completed');return json(res,200,{onboarding:{status:'completed'}});}
   if(url.pathname==='/api/web/chat/history')return json(res,200,{user:session(id).user,items:histories.get(id)||[],order:'asc',hasMore:false,nextCursor:null,resumeCursor:'fixture-cursor'});
   if(url.pathname==='/api/web/chat'){
-   const text=body.messages.at(-1).content,handoff=text.startsWith('這是一段首次見面');if(handoff&&controls.failHandoff)return json(res,503,{error:'unavailable'});
+   const text=body.messages.at(-1).content,handoff=body.purpose==='landing_handoff';if(handoff&&controls.failHandoff)return json(res,503,{error:'unavailable'});
    const history=histories.get(id)||[];let seq=history.length;
-   for(const [role,content]of [['user',text],['assistant',handoff?'已收到資料':`真實協議回覆 ${id}`]])history.push({kind:'message',eventId:`event-${id}-${++seq}`,seq,at:'2026-10-28T00:00:00Z',messageId:`message-${id}-${seq}`,role,content,status:'complete'});
-   histories.set(id,history);return json(res,200,{text:handoff?'已收到資料':`真實協議回覆 ${id}`,source:'model',provider:'knok-agent'});
+   for(const [role,content]of [['user',text],['assistant',handoff?'已收到資料':`真實協議回覆 ${id}`]])history.push({kind:'message',eventId:`event-${id}-${++seq}`,seq,at:'2026-10-28T00:00:00Z',messageId:`message-${id}-${seq}`,role,content,status:'complete',...(handoff?{presentation:'landing_handoff'}:{})});
+   histories.set(id,history);return json(res,200,{text:handoff?'已收到資料':`真實協議回覆 ${id}`,source:'model',provider:'knok-agent',...(handoff?{presentation:'landing_handoff'}:{})});
   }
   return json(res,404,{error:'missing'});
  }catch(error){json(res,500,{error:error.message});}});

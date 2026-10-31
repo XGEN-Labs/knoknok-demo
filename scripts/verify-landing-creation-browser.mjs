@@ -5,10 +5,11 @@ import {mkdir} from 'node:fs/promises';
 import {liveBrowserFixture} from '../test/fixtures/live-browser.mjs';
 const root=fileURLToPath(new URL('..',import.meta.url));
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE?pathToFileURL(process.env.PLAYWRIGHT_MODULE).href:'playwright');
-const fixture=await liveBrowserFixture(join(root,'dist/web-live'),{landingCreation:true});
-const browser=await chromium.launch({channel:'chrome',headless:true}),errors=[],checks=[];
+const sharedBirthChart=process.env.LANDING_BIRTH_CHART==='1';
+const fixture=await liveBrowserFixture(join(root,'dist/web-live'),{landingCreation:true,sharedBirthChart});
+const browser=await chromium.launch({...process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{channel:'chrome'},headless:true}),errors=[],checks=[];
 try{
- const context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'}),page=await context.newPage();
+ let context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'}),page=await context.newPage();
  page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));
  await page.goto(fixture.url,{waitUntil:'domcontentloaded'});
  await page.locator('[data-action="login"]').click();await page.locator('#auth-username').fill('test101');await page.locator('#auth-form button[type="submit"]').click();
@@ -27,27 +28,47 @@ try{
  });
  await page.reload({waitUntil:'domcontentloaded'});await page.locator('[data-action="finish-conversation"]').waitFor();
  if(await page.locator('.landing-video-skip').isVisible())await page.locator('.landing-video-skip').click();
+ if(sharedBirthChart){
+  await page.locator('#chart-date').fill('2024-02-30');assert.equal(await page.locator('#chart-time').inputValue(),'');
+  await page.locator('#chart-time').fill('12:00');await page.locator('#chart-sex').selectOption('男');await page.locator('#chart-zone').selectOption('Asia/Shanghai');await page.locator('#chart-calendar').selectOption('lunar');await page.locator('#chart-leap').selectOption('否');await page.locator('[name="timezone-confirmed"]').check();await page.locator('[name="chart-consent"]').check();
+  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#chart-time').waitFor();if(await page.locator('.landing-video-skip').isVisible())await page.locator('.landing-video-skip').click();
+  assert.equal(await page.locator('#chart-date').inputValue(),'2024-02-30');assert.equal(await page.locator('#chart-time').inputValue(),'12:00');assert.equal(await page.locator('#chart-calendar').inputValue(),'lunar');assert.equal(await page.locator('[name="chart-consent"]').isChecked(),true);
+  await page.locator('[data-form="birth-chart"] button[type="submit"]').click();await page.getByText('日主：壬水 · 星座：白羊座',{exact:true}).waitFor();
+  const save=fixture.calls.find(c=>c.path.endsWith('/onboarding/birth-chart'));assert.equal(save.body['birth-date'],'2024-02-30');assert.equal(save.body.calendar,'lunar');
+  assert.equal(fixture.calls.filter(c=>c.path.endsWith('/agent-initialization/landing')).length,0);assert.equal(fixture.controls.creationBound,false);
+  assert.equal(fixture.calls.some(c=>c.path.startsWith('/api/web/chat')),false);
+  checks.push('real Chromium inputs lunar 2024-02-30 unchanged; exact-time/calendar/zone/consent saves only chart before signed creation');
+ }
  await page.locator('[data-action="finish-conversation"]').click();await page.locator('[data-action="auth-bootstrap"]').waitFor();
  assert.equal(fixture.calls.filter(c=>c.path.endsWith('/agent-initialization/landing')).length,1);
  assert.equal(fixture.calls.some(c=>c.path.startsWith('/api/web/chat')),false);
  assert.equal(fixture.calls.some(c=>c.path.endsWith('/onboarding/complete')),false);
- assert.equal(fixture.controls.creation.input.birthTime,null);assert.ok(fixture.controls.creation.input.contract.signedAt>0);
+ if(sharedBirthChart){
+  assert.equal(fixture.controls.creation.input.birthChartVersion,1);assert.equal(fixture.controls.creation.input.birthChartId,'a'.repeat(64));
+  for(const key of ['birthDate','birthTime','gender','birthPlace'])assert.equal(Object.hasOwn(fixture.controls.creation.input,key),false);
+ }else assert.equal(fixture.controls.creation.input.birthTime,null);
+ assert.ok(fixture.controls.creation.input.contract.signedAt>0);
  checks.push('signed intake persisted before creation; pending keeps original preparation page; no premature handoff');
  await page.locator('[data-action="auth-bootstrap"]').click();
  assert.equal(fixture.calls.filter(c=>c.path.endsWith('/agent-initialization/landing')).length,1);
  fixture.controls.creationBound=true;
+ if(sharedBirthChart){
+  await context.close();context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'});await context.addCookies([{name:'livefixture',value:'101',url:fixture.url}]);page=await context.newPage();page.setDefaultTimeout(20000);page.on('pageerror',e=>errors.push(e.message));await page.goto(fixture.url,{waitUntil:'domcontentloaded'});
+  await page.locator('[data-action="finish-conversation"]').waitFor();
+  checks.push('fresh browser restores signed names and chart reference without fabricated birth answers');
+ }else
  await page.locator('[data-action="auth-bootstrap"]').click();await page.locator('[data-action="finish-conversation"]').waitFor();
  if(await page.locator('.landing-video-skip').isVisible())await page.locator('.landing-video-skip').click();
  await page.locator('[data-action="finish-conversation"]').click();await page.locator('#private-message').waitFor();
  assert.equal(fixture.status.get(101),'completed');
- const actor=page.locator('.klin-illustrated-actor.is-primary .klin-illustrated-art');await actor.waitFor();
- await page.waitForFunction(()=>document.querySelector('.klin-illustrated-actor.is-primary .klin-illustrated-art')?.complete);
- assert.match(await actor.getAttribute('src'),/#wood-adult$/);
- assert.equal(await page.locator('.klin-world-host').getAttribute('data-personal-room'),'off');
- assert.match(await page.locator('.home-chat-avatar img').getAttribute('src'),/#wood-head$/);
- await mkdir(join(root,'dist/landing-creation-evidence'),{recursive:true});await page.screenshot({path:join(root,'dist/landing-creation-evidence/wood-room.png')});
- checks.push('bound server family uses Studio wood crop and avatar, with no embedded Klin film');
+ const actor=page.locator('.klin-personal-room-poster');await actor.waitFor();
+ await page.waitForFunction(()=>document.querySelector('.klin-personal-room-poster')?.complete);
+ assert.match(await actor.getAttribute('src'),sharedBirthChart?/\/water\/(day|night)-poster\.png$/:/\/wood\/(day|night)-poster\.png$/);
+ assert.match(await page.locator('.home-chat-avatar img').getAttribute('src'),sharedBirthChart?/\/water\/(day|night)-poster\.png$/:/\/wood\/(day|night)-poster\.png$/);
+ await mkdir(join(root,'dist/landing-creation-evidence'),{recursive:true});await page.screenshot({path:join(root,`dist/landing-creation-evidence/${sharedBirthChart?'water':'wood'}-room.png`)});
+ checks.push('bound native element uses its current room and matching cropped avatar');
  const handoffs=fixture.calls.filter(c=>c.path==='/api/web/chat');assert.equal(handoffs.length,1);assert.match(handoffs[0].body.messages[0].content,/小芽/);
+ if(sharedBirthChart){assert.doesNotMatch(handoffs[0].body.messages[0].content,/birthChart|birthDate|birthTime|birthPlace|gender|12:00|2024-02-30/);assert.equal(fixture.calls.some(c=>c.path==='/api/web/birth-profile'),false);}
  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#private-message').waitFor();
  assert.equal(fixture.calls.filter(c=>c.path.endsWith('/agent-initialization/landing')).length,1);
  assert.equal(fixture.calls.filter(c=>c.path==='/api/web/chat').length,1);

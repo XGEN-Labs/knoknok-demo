@@ -408,7 +408,7 @@ export function reduce(previous, action = {}) {
       if (action.type === 'FINISH_CONVERSATION') {
         state.onboarding.status = 'ready'; state.onboarding.basicsComplete = true; state.onboarding.birthComplete = true;
         state.onboarding.initializedAt ||= state.now;
-        applyLandingSocialTags(space,state.users.a,state.now);
+        applyLandingSocialTags(space,state.users.a,state.now,state.onboarding.birthChart?.labels);
         if (state.users.a.bio === '喜歡發掘城市裡的小展覽。') {
           const tags = interestTags(/喜歡|喜欢|愛好|爱好/.test(answers.response || '') ? answers.response : '');
           state.users.a.bio = tags.length ? `喜歡${tags.join('、')}，想和新朋友慢慢聊聊。` : '想和新朋友，慢慢聊些喜歡的事。';
@@ -876,7 +876,7 @@ export function hydrateState(serialized, now = Date.now()) {
       conversation: normalizeOnboardingConversation(savedOnboarding.conversation, now, { legacyReady: ready }),
     };
     if (typeof state.session.activeUserId !== 'string' || !Object.hasOwn(state.users, state.session.activeUserId) || !Object.hasOwn(state.private, state.session.activeUserId)) state.session.activeUserId = 'a';
-    if(state.onboarding.status==='ready'&&state.onboarding.conversation.complete)applyLandingSocialTags(state.private.a,state.users.a,Math.max(state.now,now));
+    if(state.onboarding.status==='ready'&&state.onboarding.conversation.complete)applyLandingSocialTags(state.private.a,state.users.a,Math.max(state.now,now),state.onboarding.birthChart?.labels);
     state.now = Math.max(state.now, now);
     state.error = null;
     return expire(state);

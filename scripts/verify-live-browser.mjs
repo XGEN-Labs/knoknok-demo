@@ -4,7 +4,7 @@ import {join} from 'node:path';
 import {liveBrowserFixture} from '../test/fixtures/live-browser.mjs';
 const root=fileURLToPath(new URL('..',import.meta.url));
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE?pathToFileURL(process.env.PLAYWRIGHT_MODULE).href:'playwright');
-const fixture=await liveBrowserFixture(join(root,'dist/web-live')), browser=await chromium.launch({channel:'chrome',headless:true});
+const fixture=await liveBrowserFixture(join(root,'dist/web-live')), browser=await chromium.launch({...process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{channel:'chrome'},headless:true});
 const errors=[],checks=[];let page;
 try{
  const context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'});page=await context.newPage();page.setDefaultTimeout(15000);page.on('pageerror',error=>errors.push(error.message));
@@ -13,7 +13,7 @@ try{
  async function logout(){if(await page.locator('[data-action="close-conversation"]').isVisible())await page.locator('[data-action="close-conversation"]').click();await page.locator('[data-action="settings-menu"]').click();await page.locator('#sheet [data-action="account-menu"]').click();await page.locator('#sheet [data-action="logout"]').click();}
  await login(202);await page.locator('#private-message').waitFor();checks.push('existing account uses real auth adapter and skips Landing');
  await page.waitForFunction(()=>!document.querySelector('.home-composer button[type=submit]').disabled);
- await page.locator('#private-message').fill('你好');await page.locator('#private-message').press('Enter');await page.locator('#conversation-log').getByText('真實協議回覆 202',{exact:true}).waitFor();checks.push('chat posts to same-origin real protocol');
+ await page.locator('#private-message').click();await page.locator('#private-message').fill('你好');await page.locator('#private-message').press('Enter');await page.locator('#conversation-log').getByText('真實協議回覆 202',{exact:true}).waitFor();checks.push('chat posts to same-origin real protocol after the actual composer is clickable');
  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#private-message').waitFor();await page.locator('#private-message').click();await page.locator('#conversation-log').getByText('真實協議回覆 202',{exact:true}).waitFor();checks.push('history restored from server after reload');
  await logout();await page.locator('[data-action="login"]').waitFor();await login(303);await page.locator('#private-message').waitFor();assert.ok(!(await page.locator('#conversation-log').textContent()).includes('202'));checks.push('logout and account switch do not leak prior history');
  await logout();await page.locator('[data-action="login"]').waitFor();await login(101);await page.locator('[data-screen="landing"]').waitFor();checks.push('new registration enters Landing');
@@ -29,7 +29,7 @@ try{
  assert.equal(fixture.status.get(101),'required');const before=fixture.calls.filter(c=>c.path==='/api/web/chat').length;
  fixture.controls.failCompletion=false;await page.locator('[data-action="finish-conversation"]').click();await page.locator('#private-message').waitFor();
  assert.equal(fixture.status.get(101),'completed');assert.equal(fixture.calls.filter(c=>c.path==='/api/web/chat').length,before);
- const handoff=fixture.calls.filter(c=>c.path==='/api/web/chat').at(-1).body.messages;assert.equal(handoff.length,1);for(const value of ['甲用户','甲伙伴','1995-03-10','上海','我喜欢周末看展'])assert.ok(handoff[0].content.includes(value));checks.push('Landing sends intake to native Agent before marking complete; failures preserve answers and accepted handoff is not resent');
+ const handoff=fixture.calls.filter(c=>c.path==='/api/web/chat').at(-1).body.messages;assert.equal(handoff.length,1);for(const value of ['甲用户','甲伙伴','我喜欢周末看展'])assert.ok(handoff[0].content.includes(value));for(const value of ['1995-03-10','上海'])assert.ok(!handoff[0].content.includes(value));checks.push('Landing privately stores birth fields and hands names/introduction to native Agent before marking complete; failures preserve answers and accepted handoff is not resent');
  await page.reload({waitUntil:'domcontentloaded'});await page.locator('#private-message').waitFor();assert.equal(fixture.calls.filter(c=>c.path==='/api/web/chat').length,before);checks.push('completed account skips Landing after reload');
 
  // Restore rongyu's original pages and interaction paths, not native DTO editors.

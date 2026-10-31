@@ -15,7 +15,7 @@ const files=execFileSync('git',['ls-files','--','*.mjs','*.js','*.css','*.html']
 for(const name of files){await mkdir(dirname(join(staged,name)),{recursive:true});await writeFile(join(staged,name),await readFile(join(root,name)));}
 await writeFile(join(staged,'deployment-mode.mjs'),'export const LIVE_WEB = true;\n');
 await writeFile(join(staged,'build-manifest.json'),JSON.stringify({files:files.map(path=>({path}))}));
-const fixture=await liveBrowserFixture(staged),browser=await chromium.launch({channel:'chrome',headless:true}),checks=[],errors=[];let page;
+const fixture=await liveBrowserFixture(staged),browser=await chromium.launch({...process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{channel:'chrome'},headless:true}),checks=[],errors=[];let page;
 try{
  const context=await browser.newContext({viewport:{width:430,height:932},reducedMotion:'reduce'});page=await context.newPage();page.setDefaultTimeout(10000);page.on('pageerror',error=>errors.push(error.message));
  const modules={

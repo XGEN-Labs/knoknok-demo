@@ -2,6 +2,8 @@
 
 正式 live Web 在用户确认并签署 Landing 后，先通过 `/api/web/birth-profile` 保存结构化资料，再沿用 `/api/web/chat` 发送已有的一次信息交接，最后确认账号 onboarding 完成。资料保存失败时保留表单，不确认交接或进入首页。浏览页面、恢复会话和切换账号本身不会提交出生资料。
 
+以上是未声明 shared chart 协议的通用资料路径。声明 `shared-birth-chart-v1` 的新账号先私有保存原生 chart，再提交已有签署与 chart ID/version 来创建 Agent；不会走本页的 birth-profile PATCH 或旧资料补写。详见 [共享排盘协议](shared-birth-chart.md)。两种协议的普通聊天交接都只含称呼、伙伴名和普通自述，不再包含出生日期、时间、性别或地点。
+
 ## 结构化资料
 
 GET `/api/web/birth-profile` 返回当前账号绑定的 `agentId`、`roomId`、`version`、`profile`、`profileConsent` 和 `updatedAt`。PATCH 只提交 `{ expectedVersion, profile, profileConsent }`。请求复用 `liveSession.request` 的同源 Cookie、`X-Knok-User-Id`、超时和账号切换取消；浏览器不接触原生凭据。
@@ -16,7 +18,7 @@ Landing 将实际填写的称呼映射为 `nickname`，生日、时刻、出生�
 
 原有聊天交接回执只证明聊天接口返回了原生 Agent 确认，不能证明结构化资料已存储。已有有效回执时仍可补齐缺失资料，但不会再次发送交接聊天；普通聊天只发送原来的用户输入。旧兼容构建未传入结构化请求能力，保持既有聊天行为。
 
-聊天确认仍要求 `provider=knok-agent, source=model`；fallback 不能充当确认。完整回答以用户消息沿用既有聊天协议，既不修改系统提示词，也不创建 Agent。此修复不增加通用 Memory 写入口，聊天回执也不代表异步 Memory 提取完成。
+聊天确认仍要求 `provider=knok-agent, source=model`，正式 live 路径还要求注册的 `presentation=landing_handoff`；fallback 不能充当确认。称呼和普通自述以用户消息沿用既有聊天协议，既不修改系统提示词，也不创建 Agent。出生字段只走私有结构化接口。此修复不增加通用 Memory 写入口，聊天回执也不代表异步 Memory 提取完成。
 
 ## 验证与交付边界
 

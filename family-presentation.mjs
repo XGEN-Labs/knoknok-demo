@@ -1,6 +1,12 @@
 import {families} from './studio-family-data.mjs';
+import {isSharedBirthChart,SHARED_BIRTH_CHART_PROTOCOL} from './compat/web-naming/birth-chart.mjs';
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export function assignedFamily(bootstrap){
+ if(isSharedBirthChart(bootstrap)&&bootstrap.landingCreation?.flow===SHARED_BIRTH_CHART_PROTOCOL&&bootstrap.landingCreation.state==='submitted'&&bootstrap.agent?.status==='bound'){
+  // Native's structured element selects artwork only. Actual family/persona
+  // membership remains the Studio profile resolved by the native creation.
+  return families.find(f=>f.id===bootstrap.landingCreation.selection?.chart?.labels?.element)||null;
+ }
  if(bootstrap?.landingCreation?.flow!=='landing-v1'||bootstrap.landingCreation.state!=='submitted')return null;
  return families.find(f=>f.id===bootstrap.landingCreation.selection?.familyId)||null;
 }

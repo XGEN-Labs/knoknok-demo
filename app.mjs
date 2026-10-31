@@ -8,6 +8,7 @@ import {cardTagsManagementMarkup} from './card-tags-v92.mjs?v=20261031-product-s
 import { LIVE_WEB } from './deployment-mode.mjs';
 import { createLiveSession } from './live-session.mjs';
 import { createLandingHandoff, landingInformation } from './compat/web-naming/landing-handoff.mjs';
+import {birthChartForm,birthChartInput,isSharedBirthChart,validBirthChart} from './compat/web-naming/birth-chart.mjs';
 import { createAuthEntry, createDemoAuthAdapter, createApiAuthAdapter } from './auth-entry.mjs?v=20261031-product-sync';
 import { authEntryPanel, submitAuthEntryForm } from './auth-entry-ui.mjs?v=20261031-product-sync';
 import {isLandingCreation,prepareLandingSubmission,restoreLandingSubmission,creationHandoffInformation} from './landing-creation.mjs?v=20261031-product-sync';
@@ -264,6 +265,10 @@ function applyAuthenticatedRoom(view){
  if(LIVE_WEB){state.session={authenticated:true,activeUserId:'a',provider:'account'};}else state=reduce(state,{type:'DEMO_LOGIN',provider:'demo'});
  Object.assign(state.session,{localAuthUserId:id,localAuthUsername:username,localAgentId:view.bootstrap.agent.agentId,localRoomId:view.bootstrap.agent.roomId});
  applyAccountOnboarding(state,view.bootstrap.onboarding);
+ if(isSharedBirthChart(view.bootstrap)){
+  if(view.bootstrap.birthChart.status==='ready'&&validBirthChart(view.bootstrap.birthChart.chart)){state.onboarding.birthChart=structuredClone(view.bootstrap.birthChart.chart);delete state.onboarding.birthChartDraft;}
+  else delete state.onboarding.birthChart;
+ }
  restoreLandingSubmission(state,view.bootstrap);
  if(LIVE_WEB&&ui.setupBirthOwner!==id){delete ui.setupBirth;delete ui.setupBirthOwner;}
  if(LIVE_WEB&&bound&&liveSession.getState().owner!==id){ui.companionDrafts={};conversationActive=false;liveSendPending=null;birthProfileSnapshot=null;birthProfileLoad=null;liveSession.activate(id);liveHandoff.activate(id,view.bootstrap.agent);state.private.a.companionMessages=[];void liveSession.history({full:true});}
@@ -314,7 +319,8 @@ function landing(){
  const reading=reflection?`<article class="onboarding-reading" data-day-master="${esc(reflection.dayMaster)}"><small>彼之境 · 第一段回響</small><h3>${esc(reflection.title)}</h3><p>${esc(reflection.paragraphs[0])}</p><h3>${esc(reflection.companion)} 想對你說</h3><p>${esc(reflection.paragraphs[1])}</p></article>`:'';
  const light=turn.key==='contractLight'?`<button type="button" class="contract-light-hotspot" data-action="onboarding-reply" data-text="打開我們的契約" aria-label="輕觸亮起的光塊，打開我們的契約"><span aria-hidden="true"></span></button>`:'';
  const back=turn.canBack&&authView.bootstrap?.landingCreation?.state!=='submitted'?`<button type="button" class="onboarding-answer-back" data-action="onboarding-back" aria-label="返回上一個回答">${backIcon}<span>上一步</span></button>`:'';
- return shell(`${light}<div class="onboarding-thread"><div class="onboarding-messages" role="log" aria-live="polite">${prompt}${reading}</div>${choices}</div><form class="onboarding-composer" data-form="onboarding" novalidate><div class="quick-replies${gender?' gender-replies':''}">${replies}</div>${hours||gender||turn.inputMode==='none'?'':ending||`<div class="onboarding-input-row">${calendar?'':voiceComposerMarkup()}${input}${calendar?'':`<button class="onboarding-send" type="submit" aria-label="回覆 Nok">${sendArrow}</button>`}</div>`}${back}<p class="sr-only" role="alert">${esc(state.error||'')}</p></form>`,'conversation-onboarding'+(hours?' is-birth-time':'')+(gender?' is-gender':'')+(reflection?' is-reading':'')+(contractStep?' is-final-turn':'')+(turn.key==='contractLight'?' is-contract-light':''));
+ const chart=LIVE_WEB&&isSharedBirthChart(authView.bootstrap)&&turn.canFinish?birthChartForm(state,esc):'';
+ return shell(`${light}<div class="onboarding-thread"><div class="onboarding-messages" role="log" aria-live="polite">${prompt}${reading}</div>${choices}${chart}</div><form class="onboarding-composer" data-form="onboarding" novalidate><div class="quick-replies${gender?' gender-replies':''}">${replies}</div>${hours||gender||turn.inputMode==='none'?'':ending||`<div class="onboarding-input-row">${calendar?'':voiceComposerMarkup()}${input}${calendar?'':`<button class="onboarding-send" type="submit" aria-label="回覆 Nok">${sendArrow}</button>`}</div>`}${back}<p class="sr-only" role="alert">${esc(state.error||'')}</p></form>`,'conversation-onboarding'+(hours?' is-birth-time':'')+(gender?' is-gender':'')+(reflection?' is-reading':'')+(contractStep?' is-final-turn':'')+(turn.key==='contractLight'?' is-contract-light':'')+(chart?' has-birth-chart':''));
 }
 
 // Film presentation owns the reveal. A response never runs a hidden typing timer.
@@ -379,13 +385,13 @@ async function departToHome(){
   landingHandoffBusy=true;
   try{
    if(isLandingCreation(authView.bootstrap)&&authView.bootstrap.landingCreation.state==='awaiting_input'){
-    const submission=prepareLandingSubmission(state);if(!submission){toast('請先完成初次見面的資料與約定。');return;}
+    const submission=prepareLandingSubmission(state,{bootstrap:authView.bootstrap});if(!submission){toast(isSharedBirthChart(authView.bootstrap)?'請先確認出生資料並保存排盤。':'請先完成初次見面的資料與約定。');return;}
     save();const created=await authController.submitLanding(submission);
     if(created.error){toast(created.error);return;}
     if(created.step!=='ready')return;
    }
    if(state.session.localAuthUserId!==owner||authView.step!=='ready')return;
-   if(!await liveHandoff.ensure(creationHandoffInformation(authView.bootstrap,state),state.onboarding.agentHandoff))return;
+   if(!await liveHandoff.ensure(creationHandoffInformation(authView.bootstrap,state),state.onboarding.agentHandoff,{persistBirthProfile:!isSharedBirthChart(authView.bootstrap)}))return;
   }
   catch(error){toast(error.message);return;}
   finally{landingHandoffBusy=false;}
@@ -407,6 +413,7 @@ async function departToHome(){
 function setupCompanion(){return `<div class="setup-companion"><span class="dialogue-dot" aria-hidden="true"></span><div><strong>${esc(companionName())} 正在聽你說</strong><p>${state.onboarding.basicsComplete?`${esc(me().name)}，再認識你一點點。`:'先從你的名字開始吧。'}</p></div></div>`;}
 function setupBasics(){const d=basicsDraft();return shell(top(state.onboarding.status==='ready'?'編輯資料':'我該怎麼稱呼你？')+content(`${landingProgress(2)}${setupCompanion()}<form id="setup-basics-form" autocomplete="off" data-form="setup-basics" novalidate><div class="landing-form-card">${field('你的名字','setup-name',state.onboarding.basicsComplete||ui.setupBasics?d.name:'','maxlength="18" autocomplete="off" placeholder="讓我記住你"')}<div class="field"><label for="setup-language">想用什麼語言聊天？</label><select id="setup-language" name="language">${['粵語','普通話','英語'].map(x=>`<option ${d.language===x?'selected':''}>${x}</option>`).join('')}</select></div>${field('你現在住在哪座城市？','setup-region',d.region,'maxlength="60" placeholder="例如：香港"')}</div><div id="basics-error" role="alert"></div></form>`,'with-footer setup-content')+`<div class="fixed-footer"><button type="submit" form="setup-basics-form" class="btn">告訴 ${esc(companionName())} ${sendArrow}</button></div>`,'setup-page landing-setup');}
 function setupBirth(){
+  if(LIVE_WEB&&isSharedBirthChart(authView.bootstrap))return shell(top('出生資料')+content(`<div class="landing-form-card">${birthChartForm(state,esc)}<p class="small-note">已確認的出生資料私有保存。</p></div>`,'setup-content'),'setup-page landing-setup birth-page');
   const d=birthDraft(),zones=[['','不確定'],['Asia/Hong_Kong','香港 · UTC+8'],['Asia/Shanghai','中國大陸 · UTC+8'],['Asia/Taipei','台灣 · UTC+8'],['Asia/Singapore','新加坡 · UTC+8'],['Asia/Tokyo','日本 · UTC+9'],['Europe/London','英國 · 倫敦'],['America/New_York','美國 · 紐約']];
   if(d.timezone&&!zones.some(z=>z[0]===d.timezone))zones.push([d.timezone,d.timezone]);
   return shell(top('你的生日')+content(`${landingProgress(3)}<form id="setup-birth-form" data-form="setup-birth" novalidate><div class="landing-form-card"><p class="birth-intro">再認識你一點點。</p>${field('出生日期','birth-date',state.onboarding.birthComplete||ui.setupBirth?d.date:'','autocomplete="bday" data-date-purpose="birthday"','date')}<div class="field birth-time-field"><label>出生時辰</label>${birthTimePickerMarkup({id:'profile-hour-picker',value:d.unknownTime?null:d.time||null,showConfirm:false})}<input type="hidden" name="time" value="${esc(d.time||'')}"><input type="hidden" name="unknownTime" value="true" ${d.unknownTime?'':'disabled'}></div>${field('出生地（選填）','birth-place',d.place||'','maxlength="60" placeholder="例如：香港"')}<div class="field"><label for="birth-timezone">時區（選填）</label><select id="birth-timezone" name="timezone">${zones.map(([value,label])=>`<option value="${value}" ${d.timezone===value?'selected':''}>${label}</option>`).join('')}</select></div></div><p class="small-note">出生資料僅你與 ${esc(companionName())} 可見。</p><div id="birth-error" role="alert"></div></form>`,'with-footer setup-content')+`<div class="fixed-footer"><button type="submit" form="setup-birth-form" class="btn">${state.onboarding.status==='ready'?'儲存資料':'下一步'} ${sendArrow}</button></div>`,'setup-page landing-setup birth-page');
@@ -416,6 +423,7 @@ function startInitialization(){clearTimeout(initializeTimer);if(state.onboarding
 function basicsFormPatch(){const f=$('#setup-basics-form');if(!f)return basicsDraft();const d=new FormData(f);return {name:d.get('setup-name'),language:d.get('language'),region:d.get('setup-region')};}
 function birthFormPatch(){const f=$('#setup-birth-form');if(!f)return birthDraft();const d=new FormData(f);return {date:d.get('birth-date'),time:d.get('time')||'',unknownTime:d.has('unknownTime'),place:d.get('birth-place')||'',timezone:d.get('timezone')||''};}
 function loadBirthProfile(){
+ if(isSharedBirthChart(authView.bootstrap))return;
  const owner=state.session.localAuthUserId,pending=liveHandoff.readBirthProfile();birthProfileSnapshot=null;birthProfileLoad=pending;
  pending.then(value=>{
   if(birthProfileLoad!==pending||state.session.localAuthUserId!==owner||ui.route!=='setup-birth')return;
@@ -424,6 +432,7 @@ function loadBirthProfile(){
  }).catch(error=>{if(error.name!=='AbortError'&&state.session.localAuthUserId===owner)toast(error.message);});
 }
 async function saveBirthForm(patch){
+ if(LIVE_WEB&&isSharedBirthChart(authView.bootstrap))return;
  if(birthProfileSaving)return;
  const originUI=ui,owner=state.session.localAuthUserId;setBirthDraft(patch);save();birthProfileSaving=true;
  try{
@@ -1124,7 +1133,7 @@ async function runAction(action,element){
 document.addEventListener('click',e=>{const el=e.target.closest('button,a');if(!el)return;if(el.dataset.go){e.preventDefault();if(el.closest('.bottom-nav')&&el.dataset.go===ui.route)return;return go(el.dataset.go,{direction:el.dataset.direction});}if(el.dataset.action){e.preventDefault();return runAction(el.dataset.action,el);}if(el.dataset.topic){$('#topic').value=el.dataset.topic;return;}if(el.dataset.mode){dispatch({type:'UPDATE_DRAFT',patch:{...formPatch(),mode:el.dataset.mode}},false);return render(false);}if(el.dataset.invitation){ui.selectedInvite=el.dataset.invitation;return go('invite');}if(el.dataset.relationship){ui.selectedRelationship=el.dataset.relationship;return go('chat');}if(el.dataset.say){return sendCompanion(el.dataset.say);}if(el.dataset.publicSay){dispatch({type:'SET_PUBLIC_DRAFT',text:el.dataset.publicSay},false);render(false);$('#public-message')?.focus();return;}if(el.dataset.retry){dispatch({type:'RETRY_MESSAGE',messageId:el.dataset.retry,fail:consumeFailure()});return;}});
 async function sendCompanion(text){if(privateSpace().topicJourney?.status==='active')return topicRequest({type:'reply',text});if(LIVE_WEB){if(liveSendPending||companionTyping||liveView.historyBusy||!text.trim())return;sceneSound.stopSpeech();const owner=liveSession.getState().owner,originUI=ui,pending={};liveSendPending=pending;
  try{
-  await liveHandoff.repair(state.onboarding.conversation?.complete===true?landingInformation(state):null);
+  if(!isSharedBirthChart(authView.bootstrap))await liveHandoff.repair(state.onboarding.conversation?.complete===true?landingInformation(state):null);
   if(ui!==originUI||liveSession.getState().owner!==owner)return;
   ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:''};delete ui.boopReply;sceneSound.cue('send');klinWorld?.interact('look');
   const sent=await liveSession.send(text);if(sent&&liveSession.getState().owner===owner){sceneSound.cue('reply');klinWorld?.interact('wave');}
@@ -1138,6 +1147,18 @@ document.addEventListener('submit',e=>{const form=e.target.closest('form[data-fo
 }
 case 'setup-basics':{const patch=basicsFormPatch(),errors=validateBasics(patch);if(Object.keys(errors).length){$('#basics-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#basics-error').scrollIntoView({block:'nearest'});return;}if(dispatch({type:'SAVE_BASICS',patch},false)){if(state.onboarding.status!=='ready'&&!state.demand)dispatch({type:'UPDATE_DRAFT',patch:{language:patch.language}},false);ui.setupBasics=null;go('setup-birth');}return;}
 case 'setup-birth':{const patch=birthFormPatch(),errors=validateBirth(patch,state.now);if(Object.keys(errors).length){$('#birth-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#birth-error').scrollIntoView({block:'nearest'});return;}return saveBirthForm(patch);}
+case 'birth-chart':{
+ if(!LIVE_WEB||landingHandoffBusy||authView.busy||!isSharedBirthChart(authView.bootstrap))return;
+ const owner=state.session.localAuthUserId;
+ let input;try{input=birthChartInput(Object.fromEntries(data));}catch(error){form.querySelector('[data-chart-error]').textContent=error.message;return;}
+ state.onboarding.birthChartDraft=structuredClone(input);save();landingHandoffBusy=true;
+ const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent='正在保存排盤…';
+ return authController.saveBirthChart(input).then(result=>{
+  if(state.session.localAuthUserId!==owner||!state.session.authenticated)return;
+  if(result.error)toast(result.error);else if(result.bootstrap?.birthChart?.status!=='ready')toast('排盤仍在處理中，請稍後重新確認狀態。');
+  render(false);
+ }).finally(()=>{landingHandoffBusy=false;});
+}
 case 'onboarding':return answerOnboarding(String(data.get('answer')||''));
 case 'companion':return sendCompanion(String(data.get('message')||''));
 case 'demand':{dispatch({type:'UPDATE_DRAFT',patch:formPatch()},false);const errors=validateDemand(state.draft,state.now);delete errors.intro;if(Object.keys(errors).length){if(errors.time||errors.area||errors.expiresAt){const options=$('.request-options');if(options)options.open=true;}$('#demand-error').innerHTML=`<p class="form-error">${esc(Object.values(errors)[0])}</p>`;$('#demand-error').scrollIntoView({block:'nearest'});return;}return go('preview');}
@@ -1151,9 +1172,10 @@ case 'report':dispatch({type:'REPORT_RELATIONSHIP',relationshipId:latestRelation
 case 'public-message':{const rel=latestRelationship();if(!rel)return;const text=String(data.get('message')||'');if(dispatch({type:'SEND_MESSAGE',relationshipId:rel.id,text,fail:consumeFailure()},false))render(false);return;}
 }});
 document.addEventListener('focusin',e=>{if(e.target.id==='private-message'&&ui.route==='home')setHomeConversation(true);});
-document.addEventListener('input',e=>{if(e.target.closest('[data-form="auth-entry-flow"]')){if(['username','password','confirmPassword'].includes(e.target.name))authFormDraft[e.target.name]=e.target.value;if(e.target.name==='username'&&authView.step!=='entry'){const position=e.target.selectionStart;clearAuthDraft();authController.changeUsername(authFormDraft.username);const input=$('#auth-username');input?.focus();input?.setSelectionRange(position,position);}updateAuthControls();return;}if(e.target.id==='network-query'){filterNetwork(e.target.value);return;}
+function saveBirthChartDraft(target){const form=target.closest('[data-form="birth-chart"]');if(form&&LIVE_WEB&&state.session.authenticated&&isSharedBirthChart(authView.bootstrap)){state.onboarding.birthChartDraft=Object.fromEntries(new FormData(form));save();}}
+document.addEventListener('input',e=>{saveBirthChartDraft(e.target);if(e.target.closest('[data-form="auth-entry-flow"]')){if(['username','password','confirmPassword'].includes(e.target.name))authFormDraft[e.target.name]=e.target.value;if(e.target.name==='username'&&authView.step!=='entry'){const position=e.target.selectionStart;clearAuthDraft();authController.changeUsername(authFormDraft.username);const input=$('#auth-username');input?.focus();input?.setSelectionRange(position,position);}updateAuthControls();return;}if(e.target.id==='network-query'){filterNetwork(e.target.value);return;}
 if(['onboarding-answer','onboarding-calendar'].includes(e.target.id)){ui.onboardingDraft=e.target.value;save();}if(e.target.closest('#setup-basics-form')){ui.setupBasics=basicsFormPatch();save();}if(e.target.closest('#setup-birth-form')){setBirthDraft(birthFormPatch());save();}if(e.target.id==='private-message'){ui.companionDrafts={...(ui.companionDrafts||{}),[actor()]:e.target.value};save();}if(e.target.id==='public-message')dispatch({type:'SET_PUBLIC_DRAFT',text:e.target.value},false);if(e.target.id==='intro-preview')dispatch({type:'UPDATE_DRAFT',patch:{intro:e.target.value}},false);});
-document.addEventListener('change',e=>{if(e.target.id==='tag-diary-month'){showSocialDiaryRecords(e.target.value,'');return;}if(e.target.id==='social-tag-mode'){const choice=$('.tag-replace-choice');if(choice)choice.hidden=e.target.value!=='replace';return;}if(e.target.closest('#demand-form')){const summary=$('[data-request-option-summary]');if(summary){const data=new FormData($('#demand-form'));summary.textContent=`${data.get('time')?formatDate(String(data.get('time'))):'選個方便的時間'}${data.get('mode')==='offline'&&data.get('area')?` · ${data.get('area')}`:''} · 尋找 ${data.get('validDays')||7} 天`;}}if(e.target.id==='card-avatar-upload'){uploadCardAvatar(e.target.files?.[0]);return;}if(e.target.name==='unknownTime'){const input=$('#birth-time');input.disabled=e.target.checked;if(e.target.checked)input.value='';setBirthDraft(birthFormPatch());save();}if(e.target.closest('#setup-basics-form')){ui.setupBasics=basicsFormPatch();save();}if(e.target.closest('#setup-birth-form')){setBirthDraft(birthFormPatch());save();}});
+document.addEventListener('change',e=>{saveBirthChartDraft(e.target);if(e.target.id==='tag-diary-month'){showSocialDiaryRecords(e.target.value,'');return;}if(e.target.id==='social-tag-mode'){const choice=$('.tag-replace-choice');if(choice)choice.hidden=e.target.value!=='replace';return;}if(e.target.closest('#demand-form')){const summary=$('[data-request-option-summary]');if(summary){const data=new FormData($('#demand-form'));summary.textContent=`${data.get('time')?formatDate(String(data.get('time'))):'選個方便的時間'}${data.get('mode')==='offline'&&data.get('area')?` · ${data.get('area')}`:''} · 尋找 ${data.get('validDays')||7} 天`;}}if(e.target.id==='card-avatar-upload'){uploadCardAvatar(e.target.files?.[0]);return;}if(e.target.name==='unknownTime'){const input=$('#birth-time');input.disabled=e.target.checked;if(e.target.checked)input.value='';setBirthDraft(birthFormPatch());save();}if(e.target.closest('#setup-basics-form')){ui.setupBasics=basicsFormPatch();save();}if(e.target.closest('#setup-birth-form')){setBirthDraft(birthFormPatch());save();}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&conversationActive&&!$('#sheet').open){e.preventDefault();setHomeConversation(false);$('#private-message')?.blur();$('.home-companion')?.focus({preventScroll:true});return;}if(e.target.matches('.visit-tab')&&['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const find=e.key==='Home'||e.key!=='End'&&e.target.dataset.action==='visit-people';runAction(find?'visit-find':'visit-people',e.target);$(`.visit-tab[data-action="visit-${find?'find':'people'}"]`)?.focus();return;}if(e.key==='Enter'&&e.target.id==='onboarding-answer'&&!e.target.value.trim()){e.preventDefault();return;}if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&['public-message','private-message','onboarding-answer'].includes(e.target.id)){e.preventDefault();e.target.closest('form').requestSubmit();}});
 $('#sheet').addEventListener('click',e=>{if(e.target===$('#sheet')){const r=$('#sheet').getBoundingClientRect();if(e.clientY<r.top||e.clientY>r.bottom||e.clientX<r.left||e.clientX>r.right)closeSheet();}});
 $('#reset-button').onclick=()=>runAction('reset');

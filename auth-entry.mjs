@@ -1,5 +1,6 @@
 // Username-first authentication. The API adapter follows frontend-login.md;
 // the default adapter is an in-memory Demo, never a production identity service.
+import {isSharedBirthChart,validBirthChart,submitBirthChart,SHARED_BIRTH_CHART_PROTOCOL} from './compat/web-naming/birth-chart.mjs';
 const clone = value => value == null ? value : JSON.parse(JSON.stringify(value));
 const plain = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const nonempty = value => typeof value === 'string' && value.length > 0;
@@ -67,6 +68,8 @@ export function createApiAuthAdapter({fetch:fetcher = globalThis.fetch, origin =
     register:(username,password,{signal}={})=>request('/api/auth/register',{body:{username,password},signal}),
     bootstrap:({signal}={})=>request('/api/auth/bootstrap',{method:'GET',signal}),
     submitLanding:(owner,submission,{signal}={})=>request('/api/auth/agent-initialization/landing',{body:submission,owner,signal}),
+    readBirthChart:(owner,{signal}={})=>request('/api/auth/onboarding/birth-chart',{method:'GET',owner,signal}),
+    saveBirthChart:(owner,form,{signal}={})=>request('/api/auth/onboarding/birth-chart',{body:form,owner,signal}),
     completeOnboarding:(owner,{signal}={})=>request('/api/auth/onboarding/complete',{body:{},owner,signal}),
     logout:({signal}={})=>{
       if (!logoutPath) throw new AuthEntryError('尚未設定服務端登出介面，請稍後再試。',{status:501,code:'logout_unavailable'});
@@ -147,13 +150,19 @@ function cleanBootstrap(value) {
   const setup = value.nextAction === 'setup_agent' && value.agent.status === 'setup_required';
   if (!bound && !setup) throw protocolError();
   const creation=value.landingCreation;
-  if(creation!==undefined&&(!plain(creation)||creation.flow!=='landing-v1'||!['awaiting_input','submitted'].includes(creation.state)))throw protocolError();
+  const shared=isSharedBirthChart(value),chart=value.birthChart;
+  if(chart!==undefined&&(!shared||!['required','pending','ready'].includes(chart.status)||(chart.status==='ready'?!validBirthChart(chart.chart):chart.chart!==null)))throw protocolError();
+  if(creation!==undefined&&(!plain(creation)||!['landing-v1',SHARED_BIRTH_CHART_PROTOCOL].includes(creation.flow)||!['awaiting_input','submitted'].includes(creation.state)))throw protocolError();
+  if(creation&&(creation.flow===SHARED_BIRTH_CHART_PROTOCOL)!==shared)throw protocolError();
   if(creation?.state==='awaiting_input'&&(!setup||value.onboarding?.status!=='required'))throw protocolError();
   if(creation?.state==='submitted'){
     const selection=creation.selection,input=creation.input,contract=input?.contract;
-    if(!nonempty(creation.requestId)||!plain(input)||!nonempty(input.userName)||!nonempty(input.agentName)||!nonempty(input.birthDate)||!nonempty(input.response)||!['birthTime','gender','birthPlace'].every(key=>input[key]===null||typeof input[key]==='string')||contract?.version!==1||!Number.isFinite(contract.signedAt)||contract.signedAt<=0||contract.userName!==input.userName||contract.companionName!==input.agentName||!plain(selection)||!['metal','wood','water','fire','earth'].includes(selection.familyId)||!nonempty(selection.personaSpecId)||!nonempty(selection.personaVersion)||!nonempty(selection.ruleVersion))throw protocolError();
+    if(!nonempty(creation.requestId)||!plain(input)||!nonempty(input.userName)||!nonempty(input.agentName)||!nonempty(input.response)||contract?.version!==1||!Number.isFinite(contract.signedAt)||contract.signedAt<=0||contract.userName!==input.userName||contract.companionName!==input.agentName||!plain(selection))throw protocolError();
+    if(shared){
+      if(chart.status!=='ready'||input.birthChartId!==chart.chart.id||input.birthChartVersion!==chart.chart.version||!validBirthChart(selection.chart)||selection.chart.id!==input.birthChartId||selection.chart.version!==input.birthChartVersion||!nonempty(selection.profileId)||!plain(selection.content)||!nonempty(selection.content.id)||!nonempty(selection.content.version)||!nonempty(selection.content.integrity)||!nonempty(selection.content.sourceSha256)||!nonempty(selection.content.creationProfileId)||['birthDate','birthTime','gender','birthPlace'].some(key=>Object.hasOwn(input,key)))throw protocolError();
+    }else if(!nonempty(input.birthDate)||!['birthTime','gender','birthPlace'].every(key=>input[key]===null||typeof input[key]==='string')||!['metal','wood','water','fire','earth'].includes(selection.familyId)||!nonempty(selection.personaSpecId)||!nonempty(selection.personaVersion)||!nonempty(selection.ruleVersion))throw protocolError();
   }
-  return {user:clone(value.user),onboarding:cleanOnboarding(value.onboarding),accountStatus:'registered',nextAction:value.nextAction,agent:clone(value.agent),memory:plain(value.memory)?clone(value.memory):{status:'not_loaded'},...(creation?{landingCreation:clone(creation)}:{}),...(value.chat?{chat:clone(value.chat)}:{}),...(value.demo===true?{demo:true,demoAccountKind:value.demoAccountKind}: {})};
+  return {user:clone(value.user),onboarding:cleanOnboarding(value.onboarding),accountStatus:'registered',nextAction:value.nextAction,agent:clone(value.agent),memory:plain(value.memory)?clone(value.memory):{status:'not_loaded'},...(creation?{landingCreation:clone(creation)}:{}),...(chart?{birthChart:clone(chart)}:{}),...(value.chat?{chat:clone(value.chat)}:{}),...(value.demo===true?{demo:true,demoAccountKind:value.demoAccountKind}: {})};
 }
 export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = () => {}, now = Date.now} = {}) {
   let state={step:'entry',username:'',passwordMode:null,busy:false,error:'',errorCode:'',retryAt:0,authenticated:false,bootstrap:null,user:null,adapterKind:adapter.kind||'api'};
@@ -248,7 +257,7 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
       return restore(begin({step:'bootstrap'}),expected);
     },
     async submitLanding(submission) {
-      if(waiting()||state.busy||!state.authenticated||state.step!=='landing'||state.bootstrap?.landingCreation?.flow!=='landing-v1'||state.bootstrap.landingCreation.state!=='awaiting_input')return snapshot();
+      if(waiting()||state.busy||!state.authenticated||state.step!=='landing'||!['landing-v1',SHARED_BIRTH_CHART_PROTOCOL].includes(state.bootstrap?.landingCreation?.flow)||state.bootstrap.landingCreation.state!=='awaiting_input')return snapshot();
       if(!plain(submission)||!nonempty(submission.requestId)||!plain(submission.input))return emit({error:'請先完成初次見面的資料。',errorCode:'invalid_landing'});
       const owner=state.user.id,username=state.user.username,token=begin();
       try{
@@ -259,6 +268,21 @@ export function createAuthEntry({adapter = createDemoAuthAdapter(), onChange = (
         if(!current(token)||error?.name==='AbortError')return snapshot();
         // A lost response may already have frozen the plan. Read it before any
         // explicit retry; never create or choose a second companion blindly.
+        if(!error.status||error.code==='invalid_response'||error.status===409)return restore(token,{recoveryUsername:username,recoveryOwner:owner});
+        return problem(error,token);
+      }
+    },
+    async saveBirthChart(form) {
+      if(waiting()||state.busy||!state.authenticated||state.step!=='landing'||!isSharedBirthChart(state.bootstrap)||state.bootstrap.landingCreation?.state!=='awaiting_input')return snapshot();
+      const owner=state.user.id,username=state.user.username,token=begin();
+      try{
+        await submitBirthChart({saveBirthChart:(input,expectedOwner,signal)=>adapter.saveBirthChart(expectedOwner,input,{signal}),bootstrap:signal=>adapter.bootstrap({signal})},owner,clone(form),{signal:token.signal});
+        if(!current(token))return snapshot();
+        return restore(token,{recoveryUsername:username,recoveryOwner:owner});
+      }catch(error){
+        if(!current(token)||error?.name==='AbortError')return snapshot();
+        // An uncertain chart write is resolved by reading the same owner;
+        // an explicit retry keeps the original form and cannot rematch an Agent.
         if(!error.status||error.code==='invalid_response'||error.status===409)return restore(token,{recoveryUsername:username,recoveryOwner:owner});
         return problem(error,token);
       }

@@ -1,7 +1,14 @@
 // Local demo only. No credentials, network requests or real messages are stored/sent.
 import { METAL_VOICES, landingComplete, accountLandingComplete, validMetalVoice } from './landing.mjs';
-import { interestTags, suggestedCardTags, NEUTRAL_CARD_TAGS, createOnboardingConversation, normalizeOnboardingConversation, advanceOnboardingConversation } from './conversation-onboarding.mjs';
+import { interestTags, suggestedCardTags, NEUTRAL_CARD_TAGS, createOnboardingConversation, normalizeOnboardingConversation as normalizeQuestionnaire, advanceOnboardingConversation as advanceQuestionnaire } from './conversation-onboarding.mjs';
+import {sharedLandingConversation} from './birth-chart.mjs';
 export { BIRTH_TIME_OPTIONS, getOnboardingTurn, getOnboardingMessages } from './conversation-onboarding.mjs';
+const normalizeOnboardingConversation=(saved,...args)=>sharedLandingConversation(saved)||normalizeQuestionnaire(saved,...args);
+function advanceOnboardingConversation(previous,action,now){
+  const confirmed=sharedLandingConversation(previous);
+  if(!confirmed)return advanceQuestionnaire(previous,action,now);
+  return action.type==='FINISH_CONVERSATION'?{conversation:{...confirmed,complete:true}}:{conversation:confirmed,error:'資料已經簽署確認，請繼續完成交接。'};
+}
 export const STORAGE_KEY = 'knokknok-prototype-v1';
 const DAY = 24 * 60 * 60 * 1000;
 const copy = value => JSON.parse(JSON.stringify(value));
@@ -323,7 +330,7 @@ export function reduce(previous, action = {}) {
       if (action.type === 'FINISH_CONVERSATION') {
         state.onboarding.status = 'ready'; state.onboarding.basicsComplete = true; state.onboarding.birthComplete = true;
         state.onboarding.initializedAt ||= state.now;
-        if (!state.users.a.cardTagsEdited) state.users.a.cardTags = suggestedCardTags(answers);
+        if (!state.users.a.cardTagsEdited) state.users.a.cardTags = state.onboarding.birthChart ? [state.onboarding.birthChart.labels.dayMaster,state.onboarding.birthChart.labels.zodiac] : suggestedCardTags(answers);
         if (state.users.a.bio === '喜歡發掘城市裡的小展覽。') {
           const tags = interestTags(/喜歡|喜欢|愛好|爱好/.test(answers.response || '') ? answers.response : '');
           state.users.a.bio = tags.length ? `喜歡${tags.join('、')}，想和新朋友慢慢聊聊。` : '想和新朋友，慢慢聊些喜歡的事。';

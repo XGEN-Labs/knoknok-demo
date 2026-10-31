@@ -87,6 +87,8 @@ const STEPS = Object.freeze([
   { key: 'companionName', prompt: '你可以叫我 Klin，想换也行', placeholder: '叫 Klin 也很好', replies: ['就叫 Klin'], canSkip: true, maxLength: 18 },
 ]);
 const keys = STEPS.map(step => step.key);
+const privateBirthKeys = new Set(['birthDate','birthTime','gender','birthPlace']);
+const chartReference = value => /^[a-f0-9]{64}$/.test(value?.id || '') && Number.isSafeInteger(value.version) && value.version > 0;
 const interactionReplies = Object.freeze({ where: '我在哪兒', contractLight: '打開我們的契約' });
 const skipped = key => key === 'companionName' ? 'Klin' : null;
 const isUnknown = text => /^(?:我)?(?:不清楚|不知道|不記得|不记得|不太清楚|暫不說|暂不说|不想說|不想说|先不說|先不说|跳過|跳过)[。！!\s]*$/.test(text);
@@ -120,9 +122,10 @@ function parseAnswer(key, text, now) {
 
 function answerText(key, value) { return value === null ? key === 'gender' ? '暫不說' : key === 'birthTime' ? '记不清了，跳过' : '不清楚' : String(value); }
 
-function messagesFor(answers, previous = [], now = Date.now(), implicitInteractions = []) {
+function messagesFor(answers, previous = [], now = Date.now(), implicitInteractions = [], chart = null) {
   const messages = [];
   for (const step of STEPS) {
+    if (chart && privateBirthKeys.has(step.key) && !own(answers, step.key)) continue;
     const acknowledgements = step.key === 'birthDate' ? ['你在敲敲彼之境'] : step.key === 'companionName' ? [`${answers.name}你好`] : [];
     acknowledgements.forEach((text,index)=>{const id=`onboarding-${step.key}-ack-${index}`;messages.push({id,role:'assistant',key:step.key,text,createdAt:previous.find(message=>message.id===id)?.createdAt??now});});
     messages.push({ id: `onboarding-${step.key}-prompt`, role: 'assistant', key: step.key, text: promptFor(step, answers), createdAt: previous.find(message => message.id === `onboarding-${step.key}-prompt`)?.createdAt ?? now });
@@ -144,6 +147,9 @@ export function normalizeOnboardingConversation(saved, now = Date.now(), { legac
   if (!plain(saved) || ![2, CONVERSATION_VERSION].includes(saved.version)) return createOnboardingConversation(now, { legacyReady });
   if (saved.migrated === true && saved.complete === true && legacyReady) return createOnboardingConversation(now, { legacyReady: true });
   const answers = {}, supplied = plain(saved.answers) ? { ...saved.answers } : {};
+  // A server-restored signed chart receipt confirms these private answers
+  // without returning them to another browser or inventing replacement values.
+  const chart = chartReference(saved.birthChart) ? {id:saved.birthChart.id,version:saved.birthChart.version} : null;
   const implicitInteractions = saved.version === 2 ? ['where']
     : Array.isArray(saved.migration?.implicitInteractions) ? [...new Set(saved.migration.implicitInteractions.filter(key => own(interactionReplies, key)))] : [];
   if (saved.version === 2) {
@@ -153,6 +159,7 @@ export function normalizeOnboardingConversation(saved, now = Date.now(), { legac
     if (own(supplied, 'response')) { supplied.contractLight = interactionReplies.contractLight; implicitInteractions.push('contractLight'); }
   }
   for (const step of STEPS) {
+    if (chart && privateBirthKeys.has(step.key) && !own(supplied, step.key)) continue;
     if (!own(supplied, step.key)) break;
     if (supplied[step.key] === null && step.canSkip) { answers[step.key] = skipped(step.key); continue; }
     const parsed = parseAnswer(step.key, supplied[step.key], now);
@@ -166,10 +173,10 @@ export function normalizeOnboardingConversation(saved, now = Date.now(), { legac
     if (raw === null && item.canSkip) drafts[item.key] = null;
     else if (typeof raw === 'string') drafts[item.key] = clean(raw).slice(0, 240);
   }
-  const step = keys.find(key => !own(answers, key)) || 'complete';
+  const step = keys.find(key => !own(answers, key) && !(chart && privateBirthKeys.has(key))) || 'complete';
   const previous = Array.isArray(saved.messages) ? saved.messages.filter(message => plain(message) && ['user', 'assistant'].includes(message.role) && typeof message.text === 'string').map(message => ({ ...message, text: clean(message.text).slice(0, 240) })) : [];
   const retainedImplicit = implicitInteractions.filter(key => own(answers, key) && !previous.some(message => message.role === 'user' && message.key === key));
-  return { version: CONVERSATION_VERSION, step, answers, ...(Object.keys(drafts).length ? { drafts } : {}), messages: messagesFor(answers, previous, now, retainedImplicit), complete: step === 'complete' && saved.complete === true,
+  return { version: CONVERSATION_VERSION, step, answers, ...(chart ? {birthChart:chart} : {}), ...(Object.keys(drafts).length ? { drafts } : {}), messages: messagesFor(answers, previous, now, retainedImplicit, chart), complete: step === 'complete' && saved.complete === true,
     ...(retainedImplicit.length ? { migration: { fromVersion: 2, implicitInteractions: retainedImplicit } } : {}) };
 }
 

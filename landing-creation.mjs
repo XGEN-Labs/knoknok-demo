@@ -1,15 +1,22 @@
 import {landingInformation} from './compat/web-naming/landing-handoff.mjs';
 import {normalizeOnboardingConversation} from './conversation-onboarding.mjs?v=20261031-product-sync';
+import {isSharedBirthChart,validBirthChart,SHARED_BIRTH_CHART_PROTOCOL} from './compat/web-naming/birth-chart.mjs';
+import {applyLandingSocialTags} from './social-tags.mjs';
 
 const clone=value=>JSON.parse(JSON.stringify(value));
 const fields=['birthDate','birthTime','gender','birthPlace','response'];
-export const isLandingCreation=bootstrap=>bootstrap?.landingCreation?.flow==='landing-v1';
+export const isLandingCreation=bootstrap=>bootstrap?.landingCreation?.flow==='landing-v1'||isSharedBirthChart(bootstrap)&&bootstrap.landingCreation?.flow===SHARED_BIRTH_CHART_PROTOCOL;
 
 // Only the actual completed questionnaire and signed paper can start creation.
 // Keep the request alongside this account's draft so explicit retries reuse it.
-export function prepareLandingSubmission(state,{randomUUID=()=>globalThis.crypto.randomUUID()}={}){
- const input=landingInformation(state),contract=state.onboarding?.contract;
- if(!input||fields.some(key=>!Object.hasOwn(input,key))||!contract||contract.version!==1||!(contract.signedAt>0)||contract.userName!==input.userName||contract.companionName!==input.agentName||state.onboarding?.conversation?.step!=='complete')return null;
+export function prepareLandingSubmission(state,{randomUUID=()=>globalThis.crypto.randomUUID(),bootstrap}={}){
+ let input=landingInformation(state);const contract=state.onboarding?.contract,shared=isSharedBirthChart(bootstrap);
+ if(!input||(!shared&&fields.some(key=>!Object.hasOwn(input,key)))||!contract||contract.version!==1||!(contract.signedAt>0)||contract.userName!==input.userName||contract.companionName!==input.agentName||state.onboarding?.conversation?.step!=='complete')return null;
+ if(shared){
+  const chart=bootstrap.birthChart.status==='ready'&&bootstrap.birthChart.chart;
+  if(!validBirthChart(chart))return null;
+  input={userName:input.userName,agentName:input.agentName,response:input.response,birthChartId:chart.id,birthChartVersion:chart.version};
+ }
  input.contract=clone(contract);
  const previous=state.onboarding.creationRequest;
  if(previous?.requestId&&JSON.stringify(previous.input)===JSON.stringify(input))return clone(previous);
@@ -23,8 +30,11 @@ export function prepareLandingSubmission(state,{randomUUID=()=>globalThis.crypto
 export function restoreLandingSubmission(state,bootstrap){
  if(!isLandingCreation(bootstrap)||bootstrap.landingCreation.state!=='submitted')return false;
  const receipt=bootstrap.landingCreation,input=receipt.input,contract=input?.contract;
- if(!input||fields.some(key=>!Object.hasOwn(input,key))||contract?.version!==1||!Number.isFinite(contract.signedAt)||contract.signedAt<=0||contract.userName!==input.userName||contract.companionName!==input.agentName)return false;
+ const shared=isSharedBirthChart(bootstrap),chart=bootstrap.birthChart?.chart;
+ if(!input||(!shared&&fields.some(key=>!Object.hasOwn(input,key)))||shared&&(!validBirthChart(chart)||input.birthChartId!==chart.id||input.birthChartVersion!==chart.version)||contract?.version!==1||!Number.isFinite(contract.signedAt)||contract.signedAt<=0||contract.userName!==input.userName||contract.companionName!==input.agentName)return false;
+ if(shared)state.onboarding.birthChart=clone(chart);
  if(bootstrap.onboarding?.status==='completed'){
+  if(shared)applyLandingSocialTags(state.private.a,state.users.a,state.now,chart.labels);
   // A fresh browser has no local nickname. Restore only the default display
   // name from the signed receipt, preserving later local edits and onboarding.
   if(!state.users.a.companionName||state.users.a.companionName==='Klin'){
@@ -35,8 +45,8 @@ export function restoreLandingSubmission(state,bootstrap){
   return true;
  }
  if(bootstrap.onboarding?.status!=='required')return false;
- const answers={where:'我在哪兒',...Object.fromEntries(fields.map(key=>[key,input[key]])),contractLight:'打開我們的契約',name:input.userName,companionName:input.agentName};
- const conversation=normalizeOnboardingConversation({version:3,answers,messages:[],complete:false,migration:{implicitInteractions:['where','contractLight']}},Math.max(state.now,Date.now()));
+ const answers={where:'我在哪兒',...Object.fromEntries((shared?['response']:fields).map(key=>[key,input[key]])),contractLight:'打開我們的契約',name:input.userName,companionName:input.agentName};
+ const conversation=normalizeOnboardingConversation({version:3,answers,...(shared?{birthChart:{id:chart.id,version:chart.version}}:{}),messages:[],complete:false,migration:{implicitInteractions:['where','contractLight']}},Math.max(state.now,Date.now()));
  if(conversation.step!=='complete')return false;
  const same=state.onboarding.creationRequest?.requestId===receipt.requestId&&JSON.stringify(state.onboarding.creationRequest.input)===JSON.stringify(input);
  if(!same||state.onboarding.conversation?.step!=='complete'){
@@ -45,8 +55,7 @@ export function restoreLandingSubmission(state,bootstrap){
   state.onboarding.contractRequired=true;
   state.onboarding.creationRequest={requestId:receipt.requestId,input:clone(input)};
   state.users.a.name=input.userName;state.users.a.companionName=input.agentName;
-  Object.assign(state.private.a.birth,{date:input.birthDate,time:input.birthTime||'',unknownTime:input.birthTime===null,place:input.birthPlace||''});
-  state.private.a.about={...(state.private.a.about||{}),gender:input.gender||''};
+  if(!shared){Object.assign(state.private.a.birth,{date:input.birthDate,time:input.birthTime||'',unknownTime:input.birthTime===null,place:input.birthPlace||''});state.private.a.about={...(state.private.a.about||{}),gender:input.gender||''};}
   state.private.a.companion.name=input.agentName;
  }
  return true;
@@ -57,5 +66,5 @@ export function creationHandoffInformation(bootstrap,state){
  if(bootstrap.landingCreation.state!=='submitted'||bootstrap.agent?.status!=='bound')return null;
  const input=bootstrap.landingCreation.input;
  if(!input)return null;
- return Object.fromEntries(['userName','agentName',...fields].map(key=>[key,input[key]]));
+ return Object.fromEntries(['userName','agentName',...(isSharedBirthChart(bootstrap)?['response']:fields)].map(key=>[key,input[key]]));
 }

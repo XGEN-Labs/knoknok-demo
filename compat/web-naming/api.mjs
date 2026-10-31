@@ -56,6 +56,9 @@ export function createApi({ fetchImpl = globalThis.fetch } = {}) {
       return userFrom(await request('/auth/login', { body: { username, password } }));
     },
     logout: () => request('/auth/logout', { body: {} }),
+    bootstrap: signal => request('/auth/bootstrap', { signal }),
+    saveBirthChart: (form, owner, signal) => request('/auth/onboarding/birth-chart', {body:form,owner,signal}),
+    submitLanding: (submission, owner, signal) => request('/auth/agent-initialization/landing', {body:submission,owner,signal}),
     completeOnboarding: (owner, signal) => request('/auth/onboarding/complete', { body: {}, owner, signal }),
     async chat(messages, owner, signal) {
       const data = await request('/web/chat', { body: { messages }, owner, signal });
