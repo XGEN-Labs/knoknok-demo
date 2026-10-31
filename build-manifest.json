@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-30T17:02:18.660Z",
+  "createdAt": "2026-10-31T15:30:55.776Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 217534650,
+  "payloadBytes": 217537619,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 146936,
-      "sha256": "b03414fbacc70c51cc41802291e73c2e1670f7d20bdf7fd631d7fba3f2f19284"
+      "bytes": 147034,
+      "sha256": "ef947974242f0b39c26efdc4d3d31c702ead756be53d0fb22cdc1d91de1e1b5c"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -2144,8 +2144,8 @@
     {
       "source": "conversation-avatar-motion.mjs",
       "path": "conversation-avatar-motion.mjs",
-      "bytes": 12897,
-      "sha256": "b0d8c9076203777c9c22031325b62945259fdde2002f086967fe845c4ebaa3e0"
+      "bytes": 13053,
+      "sha256": "437b8c6f06d18b0dcd7d19628a0ffa826c1f3682cf55ee3d3c674c2042d7b90d"
     },
     {
       "source": "conversation-edge-blur.mjs",
@@ -2366,8 +2366,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11960,
-      "sha256": "89134d9a8209742ffdad8a500d77251ab8e1ec3f44ca1012475b55e66e28a5d4"
+      "bytes": 11964,
+      "sha256": "08c63bfd188964056837e53128c742b6784334774557231f563c778680c7f8f2"
     },
     {
       "source": "journey-experience.css",
@@ -2396,8 +2396,8 @@
     {
       "source": "klin-reference-2d.mjs",
       "path": "klin-reference-2d.mjs",
-      "bytes": 30220,
-      "sha256": "857f846811288946a52c660ca4839df70c30e1b4d9f3d9d5158a4ffe593a678b"
+      "bytes": 30821,
+      "sha256": "52358402389d43199bafed4ac37f8ccad42688f3d8d0d80302064e31cdfb94e8"
     },
     {
       "source": "klin-world-2d.css",
@@ -2606,8 +2606,8 @@
     {
       "source": "personal-room-video.mjs",
       "path": "personal-room-video.mjs",
-      "bytes": 15719,
-      "sha256": "318f778d881255865c02ea024e721da62d3fa7c2a35e2ff99f465ce30eb2c7ce"
+      "bytes": 16455,
+      "sha256": "9684b46a03b1d72bbb74940cff59d4d07d86d0fa6278ef552e2d8e547a0865c0"
     },
     {
       "source": "pixel-room.mjs",
@@ -2686,6 +2686,12 @@
       "path": "registration-v41.css",
       "bytes": 2173,
       "sha256": "2ab6e5ceb6fc0df091a6d3b024a48e394bcbe9f37bdc29a82f5474bb8ad32576"
+    },
+    {
+      "source": "room-avatar-frame.mjs",
+      "path": "room-avatar-frame.mjs",
+      "bytes": 1374,
+      "sha256": "dcd4a80c764d6e71417f0257a17ffe61fff19d1097757e1747f7f2a047701ea0"
     },
     {
       "source": "room-light-assets.mjs",
@@ -4051,6 +4057,11 @@
     {
       "from": "public-card.mjs",
       "to": "card-labels.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "klin-reference-2d.mjs",
+      "to": "room-avatar-frame.mjs",
       "kind": "module"
     },
     {

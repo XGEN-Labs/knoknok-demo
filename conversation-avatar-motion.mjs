@@ -34,10 +34,10 @@ export function applyConversationAvatarSource(container,image,value) {
   if(source.crop){
     const c=source.crop;
     Object.assign(container.style,{position:'relative',overflow:'hidden',borderRadius:'50%'});
-    Object.assign(image.style,{position:'absolute',maxWidth:'none',width:`${source.width/c.width*100}%`,height:`${source.height/c.height*100}%`,left:`${-c.x/c.width*100}%`,top:`${-c.y/c.height*100}%`,objectFit:'fill'});
+    Object.assign(image.style,{position:'absolute',maxWidth:'none',padding:'0',width:`${source.width/c.width*100}%`,height:`${source.height/c.height*100}%`,left:`${-c.x/c.width*100}%`,top:`${-c.y/c.height*100}%`,objectFit:'fill'});
   }else{
     for(const key of ['position','overflow','borderRadius'])container.style[key]='';
-    for(const key of ['position','maxWidth','width','height','left','top','objectFit'])image.style[key]='';
+    for(const key of ['position','maxWidth','padding','width','height','left','top','objectFit'])image.style[key]='';
   }
   return true;
 }
@@ -59,7 +59,10 @@ export function createConversationAvatarMotion(phone, {duration = 620, imageSrc 
   const clearBlendTimer = () => { if (blendTimer !== null) clearLater(blendTimer); blendTimer = null; };
   const finish = (committed = false, notify = true) => {
     generation++; phase = 'idle'; destinationRect = null;
-    clearBlendTimer(); stopAnimation(); stopOpacity(); flight?.remove(); flight = null; flightSource = null;
+    clearBlendTimer();
+    // Detach first: cancelling a compositor effect on a visible bridge can
+    // briefly expose its source rectangle in WebKit.
+    flight?.remove(); flight = null; flightSource = null; stopAnimation(); stopOpacity();
     delete phone.dataset.conversationAvatarMotion;
     const departure = entryHandoff; entryHandoff = null; departure?.cancel();
     const previous = handoff; handoff = null;

@@ -32,7 +32,7 @@ import { friendAvatarSource } from './friend-avatars.mjs';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261031-product-sync';
 import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261031-product-sync';
 import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261031-product-sync&glass=61';
-import { createConversationAvatarMotion, applyConversationAvatarSource } from './conversation-avatar-motion.mjs?v=20261031-product-sync';
+import { createConversationAvatarMotion, applyConversationAvatarSource } from './conversation-avatar-motion.mjs?v=20261031-return-frame-104';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261031-product-sync';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261031-product-sync';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261031-product-sync';
@@ -52,7 +52,7 @@ import { landingComplete, onboardingDestination, applyAccountOnboarding } from '
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261031-product-sync';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261031-product-sync';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-reference-2d.mjs?v=20261031-product-sync';
+import { createKlinWorld } from './klin-reference-2d.mjs?v=20261031-return-frame-104';
 import {resolvePersonalRoomPresentation, personalRoomFilmAllowed, personalRoomMarkup} from './personal-room-families.mjs?v=20261031-product-sync';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261031-product-sync';
 import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261031-product-sync';
@@ -464,9 +464,10 @@ function setHomeConversation(active){
   const next=Boolean(active)&&ui.route==='home';
   if(next===conversationActive)return;
   const phone=$('#phone'),reducedMotion=prefersStillness(ui.motion);
+  const departure=next&&!reducedMotion&&!conversationAvatarMotion?.active?klinWorld?.prepareConversationEntry?.():null;
   syncPersonalRoomAvatar();
   conversationAvatarMotion ||= createConversationAvatarMotion(phone,{imageSrc:()=>currentRoomAvatar()||currentAvatar(),roomFrame:()=>klinWorld?.roomAvatarFrame});
-  conversationAvatarMotion.move(next,{reducedMotion,prepareEntry:()=>klinWorld?.prepareConversationEntry?.(),prepareReturn:()=>klinWorld?.prepareConversationReturn?.(),mutate(){
+  conversationAvatarMotion.move(next,{reducedMotion,prepareEntry:()=>departure,prepareReturn:()=>klinWorld?.prepareConversationReturn?.(),mutate(){
     conversationActive=next;phone.dataset.conversation=String(next);
     if(next&&!reducedMotion)phone.dataset.conversationEntering='true';else delete phone.dataset.conversationEntering;
     klinWorld?.setConversationMode?.(next);

@@ -30,7 +30,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
   container.append(layer);
   let active = false, held = false, reduced = !!reducedMotion, disposed = false, failed = false, blocked = false;
   let posterReady = false, desired = 'idle', showing = null, pending = null, attempt = 0, response = 0;
-  let reported = '', returnPreparation = null;
+  let reported = '', returnPreparation = null, retainedPose = null;
   let responseRequestedAt = null, responseRevealedAt = null;
   const clock = () => doc.defaultView?.performance?.now?.() ?? Date.now();
   const responseEntry = () => {const configured = Number(reactStartTime), time = Number.isFinite(configured) ? Math.max(0, configured) : 0, duration = Number(react.duration); return Number.isFinite(duration) && duration > 0 ? Math.min(time, Math.max(0, duration - 1 / 48)) : time;};
@@ -50,6 +50,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
     if (signature !== reported) {reported = signature; onChange?.();}
   };
   const pauseFilms = ({preserveFrame = false} = {}) => {
+    if (showing && !layer.hidden && films[showing].readyState >= 2 && !films[showing].seeking) retainedPose={kind:showing,time:Math.max(0,Number(films[showing].currentTime)||0)};
     attempt++; pending = null; clearSeeks();
     if (!preserveFrame) showing = null;
     for (const video of Object.values(films)) {video.pause(); if (!preserveFrame) video.hidden = true;}
@@ -111,27 +112,29 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
     returnPreparation?.cancel();
     let cancelled = false, settled = false, mode = null, revealed = false, fade = null, resolveReady;
     let seekRequested = false;
-    // Resume the decoded pose left in this film; seeking to zero causes a
-    // visible pose jump and decoder work during the trip back to the room.
-    const returnTime = idle.readyState >= 2 && !idle.seeking ? Math.max(0, Number(idle.currentTime) || 0) : 0;
+    // Resume the exact idle OR response frame frozen on departure. Returning
+    // from a reaction must not substitute a different idle pose.
+    const returnKind=retainedPose?.kind==='react' && reactSrc && react.readyState>=2 && !react.seeking ? 'react' : 'idle';
+    const returnVideo=films[returnKind];
+    const returnTime=retainedPose?.kind===returnKind ? retainedPose.time : returnVideo.readyState>=2&&!returnVideo.seeking ? Math.max(0,Number(returnVideo.currentTime)||0) : 0;
     const ready = new Promise(resolve => {resolveReady = resolve;});
     const events = ['loadedmetadata', 'loadeddata', 'canplay', 'seeked'];
     const clear = () => {
       clearTimeout(timer);
-      for (const name of events) idle.removeEventListener(name, check);
-      idle.removeEventListener('error', fallback); still.removeEventListener('load', posterLoaded);
+      for (const name of events) returnVideo.removeEventListener(name, check);
+      returnVideo.removeEventListener('error', fallback); still.removeEventListener('load', posterLoaded);
     };
     const settle = value => {if (settled) return; settled = true; clear(); resolveReady(value);};
     const posterLoaded = () => {posterReady = !!still.naturalWidth; if (mode === 'poster') settle(posterReady);};
     const fallback = () => {mode = 'poster'; if (posterReady) settle(true);};
     const check = () => {
       if (cancelled || disposed || mode === 'poster') return;
-      if (!seekRequested && idle.readyState >= 1) {
+      if (!seekRequested && returnVideo.readyState >= 1) {
         seekRequested = true;
-        try {if (Math.abs(idle.currentTime - returnTime) >= 1 / 24) idle.currentTime = returnTime;} catch {fallback(); return;}
+        try {if (Math.abs(returnVideo.currentTime - returnTime) >= 1 / 24) returnVideo.currentTime = returnTime;} catch {fallback(); return;}
       }
-      if (seekRequested && idle.readyState >= 2 && !idle.seeking && Math.abs(idle.currentTime - returnTime) < 1 / 24) {
-        mode = 'idle'; settle(true);
+      if (seekRequested && returnVideo.readyState >= 2 && !returnVideo.seeking && Math.abs(returnVideo.currentTime - returnTime) < 1 / 24) {
+        mode = returnKind; settle(true);
       }
     };
     const timer = setTimeout(() => {fallback(); settle(posterReady);}, 10000);
@@ -139,8 +142,8 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
       ready,
       reveal({duration = 150} = {}) {
         if (cancelled || disposed || !settled || !mode || (mode === 'poster' && !posterReady)) return false;
-        revealed = true; active = false; held = true; desired = 'idle';
-        blocked = mode === 'poster' && !reduced; showing = mode === 'idle' ? 'idle' : null;
+        revealed = true; active = false; held = true; desired = mode==='react'?'react':'idle';
+        blocked = mode === 'poster' && !reduced; showing = mode === 'poster' ? null : mode;
         for (const [kind, video] of Object.entries(films)) {video.pause(); video.hidden = kind !== showing;}
         // Crossfade from the same empty room to this paused decoded frame.
         // The travelling PNG fades out over this exact interval.
@@ -151,16 +154,16 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
       cancel() {
         if (cancelled) return; cancelled = true; settle(false); clear(); fade?.cancel(); fade = null;
         if (returnPreparation === ticket) returnPreparation = null;
-        if (revealed) {held = false; active = false; reset();} else idle.pause();
+        if (revealed) {held = false; active = false; reset();} else returnVideo.pause();
       },
     };
     returnPreparation = ticket;
     pauseFilms();
-    for (const name of events) idle.addEventListener(name, check);
-    idle.addEventListener('error', fallback); still.addEventListener('load', posterLoaded);
-    if (reduced || failed || !idleSrc) fallback();
+    for (const name of events) returnVideo.addEventListener(name, check);
+    returnVideo.addEventListener('error', fallback); still.addEventListener('load', posterLoaded);
+    if (reduced || failed || !(returnKind==='react'?reactSrc:idleSrc)) fallback();
     else {
-      if (!idle.getAttribute('src')) {idle.src = idleSrc; idle.preload = 'auto'; idle.load();}
+      if (!returnVideo.getAttribute('src')) {returnVideo.src = returnKind==='react'?reactSrc:idleSrc; returnVideo.preload = 'auto'; returnVideo.load();}
       check();
     }
     return ticket;
@@ -194,6 +197,7 @@ export function createPersonalRoomVideo({container, idleSrc, reactSrc, poster, p
   return {
     supported: true, layer, poster: still, idle, react, prepareReturn,
     get visible() {return ownsScene();},
+    get frame() {return showing && films[showing].readyState>=2 && !films[showing].seeking ? films[showing] : still;},
     update(options = {}) {
       if (disposed) return;
       const nextActive = options.active ?? active, nextReduced = options.reducedMotion ?? reduced;

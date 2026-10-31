@@ -1,9 +1,10 @@
+import {captureRoomAvatarFrame} from './room-avatar-frame.mjs?v=20261031-return-frame-104';
 import { klinAssets } from './klin-companion.mjs?v=20261031-product-sync';
 import { HOME_SCENE_ASSET, HOME_SCENE_VIDEO_ASSET, HOME_CHARACTER_SCENE_ASSET, HOME_CHARACTER_IDLE_ASSET, HOME_CHARACTER_REACT_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261031-product-sync';
 import {ROOM_LIGHT_THEMES} from './room-light-assets.mjs?v=20261031-product-sync';
 import {roomThemeReady, readRoomLightPreference, roomLightPeriod, createRoomLightClock, createRoomLightSwitch, captureRoomFade, prepareRoomFilm, seekRoomFilm} from './room-light-theme.mjs?v=20261031-product-sync';
 import { createRoomVideo } from './room-video.mjs?v=20261031-product-sync';
-import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261031-product-sync';
+import { createPersonalRoomVideo } from './personal-room-video.mjs?v=20261031-return-frame-104';
 
 // Home/adult uses the approved room-and-character films. Original separate
 // artwork remains available for the avatar/card bridge and other scenes/ages.
@@ -210,6 +211,8 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
   }
   // The current visible movie frame stays still while the matching PNG takes
   // ownership at the same room position. Only entry uses this short departure.
+  let conversationAvatarFrame = null;
+  const avatarCrop = () => themeConfig().head || themeConfig().actor || {x:133,y:436,width:216,height:216};
   function prepareConversationEntry() {
     conversationEntry?.cancel();
     if (!characterFilm || state.disposed || state.page !== 'home' || state.conversation || !personalRoom.visible) return null;
@@ -236,6 +239,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
       cancel: release,
     };
     conversationEntry = ticket;
+    conversationAvatarFrame = null;
     owner.update({active: false, holdFrame: true});
     return ticket;
   }
@@ -401,8 +405,13 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
     setCardPreview() {}, setParticipants: participants => {state.participants = participants || [];},
     setPortalState: value => {state.portal = value;}, setLoungeState: value => {state.lounge = {...state.lounge, ...value};}, setRealmState: value => {state.realm = {...state.realm, ...value};},
     grow: completeWithoutGrowth, signContract: completeWithoutGrowth,
-    get roomAvatar() {const theme=themeConfig();return theme.head?{src:assetURL(theme.poster),width:theme.width,height:theme.height,crop:theme.head}:null;},
-    get roomAvatarFrame() {const theme=themeConfig();if(!theme.head)return null;const {width,height}=dimensions();return personalRoomCharacterFrame(width,height,{...theme,actor:theme.head});},
+    get roomAvatar() {
+      const theme=themeConfig(), crop=avatarCrop();
+      if (conversationEntry && !conversationAvatarFrame) conversationAvatarFrame=captureRoomAvatarFrame(personalRoom.frame,{width:theme.width,height:theme.height,crop},doc);
+      if (conversationAvatarFrame && (conversationEntry || state.conversation || host.parentElement?.dataset?.conversationAvatarMotion)) return conversationAvatarFrame;
+      return {src:assetURL(theme.poster),width:theme.width,height:theme.height,crop};
+    },
+    get roomAvatarFrame() {const theme=themeConfig(),{width,height}=dimensions();return personalRoomCharacterFrame(width,height,{...theme,actor:avatarCrop()});},
     get status() {return {page: state.page, stage: state.stage, action: state.action?.kind || (personalRoom.status.responding ? 'wave' : 'idle'), world: state.layout.world, rendering: 'illustrated-2d', model: host.dataset.model, nativeReady: false, conversation: state.conversation, roomLight: roomTheme, personalRoom: personalRoom.status, transitionPhase: host.dataset.transitionPhase || 'idle', participants: state.participants.map(person => person.id), lounge: {...state.lounge}, realm: {...state.realm}, portal: state.portal, particleSamples: 0};},
   };
 }
