@@ -1,33 +1,21 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-31T15:30:55.776Z",
+  "createdAt": "2026-10-31T15:48:26.682Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 217537619,
+  "payloadBytes": 178868347,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 147034,
-      "sha256": "ef947974242f0b39c26efdc4d3d31c702ead756be53d0fb22cdc1d91de1e1b5c"
+      "bytes": 149133,
+      "sha256": "355a495806a830f85c08f39ed935157d901b2a79504f6d905d228290752f6d3b"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
       "path": "assets/brand-20261016/default-cloud-avatar.svg",
       "bytes": 1204,
       "sha256": "9d3cc206f4ed8c036c3a2b832af207ea896664e9254b123af5ec4cd135454c1d"
-    },
-    {
-      "source": "assets/brand-20261026/knoknok-handwritten-white.png",
-      "path": "assets/brand-20261026/knoknok-handwritten-white.png",
-      "bytes": 355920,
-      "sha256": "251233a9123e37055167d1957eaecd23ef03ff19e4b0853b2c4e3e8df303222a"
-    },
-    {
-      "source": "assets/brand-20261027-noknok/noknok-selected-white.png",
-      "path": "assets/brand-20261027-noknok/noknok-selected-white.png",
-      "bytes": 561648,
-      "sha256": "0f0622e4661f337a30f1fdd4b5bb8733db6184b2f9d02908b3d09c8db4650c2e"
     },
     {
       "source": "assets/brand-20261028-noknok/noknok-selected-white.png",
@@ -114,12 +102,6 @@
       "sha256": "c681cb9acff043ba66bece3d91ea4c24eae97667edd7da5f6e79f3d4a545972c"
     },
     {
-      "source": "assets/demo-avatars-20261026-45/README.md",
-      "path": "assets/demo-avatars-20261026-45/README.md",
-      "bytes": 922,
-      "sha256": "96d9c5109421175e66b5c8e94cac41e55e04e276aec8bd07022797d7acccccbc"
-    },
-    {
       "source": "assets/demo-avatars-20261026-45/b.jpg",
       "path": "assets/demo-avatars-20261026-45/b.jpg",
       "bytes": 5242,
@@ -166,6 +148,12 @@
       "path": "assets/demo-avatars-20261026-45/i.jpg",
       "bytes": 4291,
       "sha256": "ec911d836da2e0c03a0b5bacc06b1cc628ee4db4567dd684e51e3e47d2a2028e"
+    },
+    {
+      "source": "assets/demo-avatars-20261026-45/README.md",
+      "path": "assets/demo-avatars-20261026-45/README.md",
+      "bytes": 922,
+      "sha256": "96d9c5109421175e66b5c8e94cac41e55e04e276aec8bd07022797d7acccccbc"
     },
     {
       "source": "assets/demo-avatars-20261026-45/sources.json",
@@ -270,24 +258,6 @@
       "sha256": "fc25f234ce65a218f69fb9214df06fc17c1d71fe2965cea000a13ba2345016de"
     },
     {
-      "source": "assets/klin-alive-room-20261028-v02/idle.mp4",
-      "path": "assets/klin-alive-room-20261028-v02/idle.mp4",
-      "bytes": 1090010,
-      "sha256": "c7428378e16d35b979bf26e6b24ef510d4dbef0b185e7f802e7055e3db140966"
-    },
-    {
-      "source": "assets/klin-alive-room-20261028-v02/poster.jpg",
-      "path": "assets/klin-alive-room-20261028-v02/poster.jpg",
-      "bytes": 78694,
-      "sha256": "b02f3197064b7d710dd86776576a996084faa3404fb4450cd8f2393276718deb"
-    },
-    {
-      "source": "assets/klin-alive-room-20261028-v02/react.mp4",
-      "path": "assets/klin-alive-room-20261028-v02/react.mp4",
-      "bytes": 1068577,
-      "sha256": "6e6aca637935a80e0feb78983877fe45c14fcb518f388b3e5371f7bde5073ee6"
-    },
-    {
       "source": "assets/klin-avatar-20261029-v10/avatar.png",
       "path": "assets/klin-avatar-20261029-v10/avatar.png",
       "bytes": 1426664,
@@ -306,100 +276,16 @@
       "sha256": "5f98ec2beda906591b14083b3bdf8728d8e081d23b802fb88a239bbdea0ba508"
     },
     {
+      "source": "assets/klin-front-react-20261030-v01/night-react.mp4",
+      "path": "assets/klin-front-react-20261030-v01/night-react.mp4",
+      "bytes": 1292497,
+      "sha256": "5f98ec2beda906591b14083b3bdf8728d8e081d23b802fb88a239bbdea0ba508"
+    },
+    {
       "source": "assets/klin-native-20261016-0907/juvenile.png",
       "path": "assets/klin-native-20261016-0907/juvenile.png",
       "bytes": 727228,
       "sha256": "e2ef10304170cd452c0a686abffd9c479ea16e17c78a69489ddad53a6d9ba9e7"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v09/idle.mp4",
-      "path": "assets/klin-room-motion-20261029-v09/idle.mp4",
-      "bytes": 1232625,
-      "sha256": "22a2344142d7b1932974fc211d57d90124da44197c53cb6c96533f09f133fa89"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v09/poster.png",
-      "path": "assets/klin-room-motion-20261029-v09/poster.png",
-      "bytes": 686730,
-      "sha256": "c3a31a53d835621ae6f8f7b6158a1060ea6c275eaa40dcb1dad9ecabdf15c531"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v09/react.mp4",
-      "path": "assets/klin-room-motion-20261029-v09/react.mp4",
-      "bytes": 1264359,
-      "sha256": "7f8c86859c2e8c516b12937766e6c27f6b9f15ebe1b9eba911063f305c64d254"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v09/room-loop.mp4",
-      "path": "assets/klin-room-motion-20261029-v09/room-loop.mp4",
-      "bytes": 921120,
-      "sha256": "a181f123d2e6c6c90d325d28223c14ec5ff411cda3857ee7f999d062a114e1c4"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v09/room-only.png",
-      "path": "assets/klin-room-motion-20261029-v09/room-only.png",
-      "bytes": 690423,
-      "sha256": "8e00aa7fa618fc76a463be7f9a88c120f5804d91bd00f1a4f100807faa5df13d"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/idle-daylight.mp4",
-      "path": "assets/klin-room-motion-20261029-v10/idle-daylight.mp4",
-      "bytes": 1479835,
-      "sha256": "fdf8ab429ab5cfe3dab34d5ace2e745e01937ce9dac1c7c71bb041e07ecbe94d"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/idle.mp4",
-      "path": "assets/klin-room-motion-20261029-v10/idle.mp4",
-      "bytes": 1548399,
-      "sha256": "65717c514442666d9d245be000a4b192a1e3a10c3f7df8dce919ee56add68606"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/poster-daylight.png",
-      "path": "assets/klin-room-motion-20261029-v10/poster-daylight.png",
-      "bytes": 604240,
-      "sha256": "b856195f201ce1ea7417d593883ca48675631bdadd3a26fad4b8ff1fca958781"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/poster.png",
-      "path": "assets/klin-room-motion-20261029-v10/poster.png",
-      "bytes": 680900,
-      "sha256": "2bab9c29a4bfc62d7a630459c7de2669105c5d150b2c569f53c17e985c6d1f81"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/react-daylight.mp4",
-      "path": "assets/klin-room-motion-20261029-v10/react-daylight.mp4",
-      "bytes": 1114711,
-      "sha256": "9e7eae920ae03b1645585afdd0e0d696bbde810641114aa5f2e69a36c456bf20"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/react.mp4",
-      "path": "assets/klin-room-motion-20261029-v10/react.mp4",
-      "bytes": 1175317,
-      "sha256": "2e66cd752ae72c841afc865d9d655856c4e80f05a175008bec64ad240cb0fea5"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/room-loop-daylight.mp4",
-      "path": "assets/klin-room-motion-20261029-v10/room-loop-daylight.mp4",
-      "bytes": 180760,
-      "sha256": "0f010110a28425f123a49afa4d5a21b0fde50bd0261dd314d662d602ab15ad08"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/room-loop.mp4",
-      "path": "assets/klin-room-motion-20261029-v10/room-loop.mp4",
-      "bytes": 170934,
-      "sha256": "f640e15f698696925f1df9d7ad6c7a8e1c0e24bea06c3d938dbbdcb8b59ce60e"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/room-only-daylight.png",
-      "path": "assets/klin-room-motion-20261029-v10/room-only-daylight.png",
-      "bytes": 646149,
-      "sha256": "125adbbf10aacc280e9ef898c65a3206f5ddc9640b981dcee1cb961ef5e9bce0"
-    },
-    {
-      "source": "assets/klin-room-motion-20261029-v10/room-only.png",
-      "path": "assets/klin-room-motion-20261029-v10/room-only.png",
-      "bytes": 690423,
-      "sha256": "8e00aa7fa618fc76a463be7f9a88c120f5804d91bd00f1a4f100807faa5df13d"
     },
     {
       "source": "assets/klin-room-motion-20261030-v11/idle-daylight.mp4",
@@ -418,12 +304,6 @@
       "path": "assets/klin-room-motion-20261030-v11/react-daylight.mp4",
       "bytes": 628734,
       "sha256": "a46a7a00cabf0263a95855b12fef1d8d6a427386af6c8005d59e15449af104d6"
-    },
-    {
-      "source": "assets/klin-room-motion-20261030-v11/react.mp4",
-      "path": "assets/klin-room-motion-20261030-v11/react.mp4",
-      "bytes": 822573,
-      "sha256": "3cbc19247ac9c060d42b5b78e5e829a34d29bea36dfdfb0dd14fa30f7d6dfcc8"
     },
     {
       "source": "assets/klin-room-motion-20261030-v11/room-loop-daylight.mp4",
@@ -450,12 +330,6 @@
       "sha256": "7d4730bf996b3c410e999170730c8dc76715881ba8c75c1048fd155e4fa3b430"
     },
     {
-      "source": "assets/klin-room-night-20261030-v12/react.mp4",
-      "path": "assets/klin-room-night-20261030-v12/react.mp4",
-      "bytes": 832156,
-      "sha256": "106199ae6cf7a86aca4cbeec22341dd7a2d6f42b477404788cadc7fafd8eca8d"
-    },
-    {
       "source": "assets/klin-room-night-20261030-v12/room-loop.mp4",
       "path": "assets/klin-room-night-20261030-v12/room-loop.mp4",
       "bytes": 519977,
@@ -468,52 +342,10 @@
       "sha256": "30900208e6a13c39ea5bae9f43f45326178c7e804efd44702db4a77435d737b3"
     },
     {
-      "source": "assets/landing-20261027-52/34-complete-selected23-original-colors-voice.mp4",
-      "path": "assets/landing-20261027-52/34-complete-selected23-original-colors-voice.mp4",
-      "bytes": 17640685,
-      "sha256": "41ded916ae6c1771c7af415e432fb29c8620b0f1360ce0e69d3976a014d1bf79"
-    },
-    {
-      "source": "assets/landing-20261027-52/film-original-audio.m4a",
-      "path": "assets/landing-20261027-52/film-original-audio.m4a",
-      "bytes": 1663703,
-      "sha256": "a13e3de9aac8ab2e800ce5237a0bfa29ea4ea9f3ef2efd23a60098fac92c096c"
-    },
-    {
       "source": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
       "path": "assets/landing-20261028-67/35-complete-effects-voices-no-bgm.mp4",
       "bytes": 17645982,
       "sha256": "415e5049e28b1e114138abdad17792bb23e659bd85d2e656415fba64479f1633"
-    },
-    {
-      "source": "assets/landing-audio-20261027-61/background.m4a",
-      "path": "assets/landing-audio-20261027-61/background.m4a",
-      "bytes": 1247864,
-      "sha256": "6aedf6f6062c102c49315ad7bda80df73de12a41df11e4fee7cf0a00b188547c"
-    },
-    {
-      "source": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
-      "path": "assets/landing-audio-20261027-61/dialogue-actions.m4a",
-      "bytes": 575883,
-      "sha256": "55b2b4cf18c1a953e5b89ff2cd1b2fbb3bbe71c0b1119270bf4f7e5dc8466d46"
-    },
-    {
-      "source": "assets/landing-audio-20261028-63/background.m4a",
-      "path": "assets/landing-audio-20261028-63/background.m4a",
-      "bytes": 1640505,
-      "sha256": "aee0b6982a4570be210311416777f41b151f963c263732032f5330d1c55de385"
-    },
-    {
-      "source": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
-      "path": "assets/landing-audio-20261028-63/dialogue-actions.m4a",
-      "bytes": 1669000,
-      "sha256": "387f563ce3888f5d981c48ca50708c0f70a1ec1cafc32659368a8d8534099fd9"
-    },
-    {
-      "source": "assets/landing-audio-20261028-67/background.m4a",
-      "path": "assets/landing-audio-20261028-67/background.m4a",
-      "bytes": 1155461,
-      "sha256": "d691db4b632abac51073d64ab8fe9dbf8fc58316ab528df9d584ee6229049d0f"
     },
     {
       "source": "assets/landing-audio-20261028-67/dialogue-actions.m4a",
@@ -690,6 +522,66 @@
       "sha256": "6b9258d631b9c99de6d4e5e8020afa87a4e996e54778d6c5f15085a91dc0c491"
     },
     {
+      "source": "assets/noking-v05/flar/noking-alpha.webp",
+      "path": "assets/noking-v05/flar/noking-alpha.webp",
+      "bytes": 1981386,
+      "sha256": "5b02b658b2cb6a9b2b5f289513b279d634094c24e1e6768c1e2c1cef914b9bd2"
+    },
+    {
+      "source": "assets/noking-v05/flar/poster.png",
+      "path": "assets/noking-v05/flar/poster.png",
+      "bytes": 79630,
+      "sha256": "72ea804685a05f40fd6ff72918162a993abf473377d5fd38b34a3240ab4cdb83"
+    },
+    {
+      "source": "assets/noking-v05/klin/noking-alpha.webp",
+      "path": "assets/noking-v05/klin/noking-alpha.webp",
+      "bytes": 1453222,
+      "sha256": "462d0505699876106492f177d4da5c2af0041c71f65af83f1e8de10a97f45970"
+    },
+    {
+      "source": "assets/noking-v05/klin/poster.png",
+      "path": "assets/noking-v05/klin/poster.png",
+      "bytes": 74628,
+      "sha256": "34b7fcbc763addd4cd5da3fb080933eac01269e6150945d6c334bd4ca8cfc521"
+    },
+    {
+      "source": "assets/noking-v05/lumi/noking-alpha.webp",
+      "path": "assets/noking-v05/lumi/noking-alpha.webp",
+      "bytes": 1999968,
+      "sha256": "99e561ac781b3edf0eca5b2ed91fadfb8fd7c638c332509bc783597cf1ef195f"
+    },
+    {
+      "source": "assets/noking-v05/lumi/poster.png",
+      "path": "assets/noking-v05/lumi/poster.png",
+      "bytes": 88828,
+      "sha256": "04176e49000bb1cc3fd344bcd4b63ec27b4ce76b2401223f832c0d36d59dffca"
+    },
+    {
+      "source": "assets/noking-v05/spri/noking-alpha.webp",
+      "path": "assets/noking-v05/spri/noking-alpha.webp",
+      "bytes": 1949600,
+      "sha256": "8c491b2cb84e4ef189d8c27574a37f5872d78990ac48f70867ed39307cf20d2f"
+    },
+    {
+      "source": "assets/noking-v05/spri/poster.png",
+      "path": "assets/noking-v05/spri/poster.png",
+      "bytes": 84214,
+      "sha256": "c4cd6ca9b97bec473630fa5f99311328de35ca641ab69a88c5192536bbb80a80"
+    },
+    {
+      "source": "assets/noking-v05/terr/noking-alpha.webp",
+      "path": "assets/noking-v05/terr/noking-alpha.webp",
+      "bytes": 1840668,
+      "sha256": "78df83732a99e546557852bf106b5d63965d7e3f0d75148c44406fdb1934dfea"
+    },
+    {
+      "source": "assets/noking-v05/terr/poster.png",
+      "path": "assets/noking-v05/terr/poster.png",
+      "bytes": 84123,
+      "sha256": "b751f626c4ac9e48ea95bbd74dfba8b793c02b18b1c807670e5e60e7dceba685"
+    },
+    {
       "source": "assets/palette-20261021/ivory-blue-room.png",
       "path": "assets/palette-20261021/ivory-blue-room.png",
       "bytes": 2025197,
@@ -718,18 +610,6 @@
       "path": "assets/portal-scenes-20261021/onboarding-empty.png",
       "bytes": 1527227,
       "sha256": "89f9e92a23cc7f46b12992b00ab86c0d4a966a9edf7d03dffcf583f99f37b4af"
-    },
-    {
-      "source": "assets/room-motion-20261027-v54-motion-restored/room-loop.mp4",
-      "path": "assets/room-motion-20261027-v54-motion-restored/room-loop.mp4",
-      "bytes": 3055319,
-      "sha256": "5dbf11a0e9705f810912bedc7c3baac309ee71fb803637fab9a9c0d021e3e270"
-    },
-    {
-      "source": "assets/room-motion-20261027-v54-motion-restored/room.webp",
-      "path": "assets/room-motion-20261027-v54-motion-restored/room.webp",
-      "bytes": 181538,
-      "sha256": "82d658d3700a942e3f06d702515a314405cdb6b3b26e1cd194a4b95eb342dbc5"
     },
     {
       "source": "assets/room-voice-20261026-47/boop-here.m4a",
@@ -960,12 +840,6 @@
       "sha256": "925264916a0a3b146ebab923910dafff9fd216cd3712de04b750543b532407e0"
     },
     {
-      "source": "assets/scene-audio-20261023-r2/NOTICE.txt",
-      "path": "assets/scene-audio-20261023-r2/NOTICE.txt",
-      "bytes": 1413,
-      "sha256": "dbc696ea07a4cfc1e9353de4f607e480a5d699fac7de173742b05dcd0a83efaf"
-    },
-    {
       "source": "assets/scene-audio-20261023-r2/approach.m4a",
       "path": "assets/scene-audio-20261023-r2/approach.m4a",
       "bytes": 21299,
@@ -1042,6 +916,12 @@
       "path": "assets/scene-audio-20261023-r2/named-greeting.m4a",
       "bytes": 11016,
       "sha256": "9024dc23a8b3271075e058b92708b2a8cfd9d23943c2c18fec37534588d988c6"
+    },
+    {
+      "source": "assets/scene-audio-20261023-r2/NOTICE.txt",
+      "path": "assets/scene-audio-20261023-r2/NOTICE.txt",
+      "bytes": 1413,
+      "sha256": "dbc696ea07a4cfc1e9353de4f607e480a5d699fac7de173742b05dcd0a83efaf"
     },
     {
       "source": "assets/scene-audio-20261023-r2/promise.m4a",
@@ -1182,18 +1062,6 @@
       "sha256": "18b3fff19d0d1bd829abfa359b2d7ee0ce0bae139ef826a0fa794c7dec8e1b62"
     },
     {
-      "source": "assets/shared-room-20261027-61/klin-seated-v2.png",
-      "path": "assets/shared-room-20261027-61/klin-seated-v2.png",
-      "bytes": 1456452,
-      "sha256": "5e93e4b6db8efad020f016b7a0372cde2a9f40b85fdd0c57c38fba0bcb18e9c0"
-    },
-    {
-      "source": "assets/shared-room-20261027-61/klin-seated-v3.png",
-      "path": "assets/shared-room-20261027-61/klin-seated-v3.png",
-      "bytes": 1420830,
-      "sha256": "602656585c287f47f7e6ac6395b38740a6fd50b1edf5205b0a69cc8610072a4e"
-    },
-    {
       "source": "assets/shared-room-20261027-61/water.png",
       "path": "assets/shared-room-20261027-61/water.png",
       "bytes": 2796993,
@@ -1212,6 +1080,12 @@
       "sha256": "5590533436c70f10f2f524ee61456238c290175c6662fbe1c700b5f038a6d328"
     },
     {
+      "source": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "path": "assets/signature-strokes-20261020/hershey-cursive.json",
+      "bytes": 12542,
+      "sha256": "0e200d80b8f3282fdd33129879d3fdb45ec9ccbd312d1973a7ec626e8033cd2b"
+    },
+    {
       "source": "assets/signature-strokes-20261020/HERSHEY-LICENSE",
       "path": "assets/signature-strokes-20261020/HERSHEY-LICENSE",
       "bytes": 1073,
@@ -1222,12 +1096,6 @@
       "path": "assets/signature-strokes-20261020/HERSHEY-NOTICE.txt",
       "bytes": 354,
       "sha256": "cd04cc8417779cbb5a6de67be733bcdf1ce882b53b7a4492bfbbecfdaca42fbb"
-    },
-    {
-      "source": "assets/signature-strokes-20261020/hershey-cursive.json",
-      "path": "assets/signature-strokes-20261020/hershey-cursive.json",
-      "bytes": 12542,
-      "sha256": "0e200d80b8f3282fdd33129879d3fdb45ec9ccbd312d1973a7ec626e8033cd2b"
     },
     {
       "source": "assets/signature-strokes-20261020/manifest.json",
@@ -2178,12 +2046,6 @@
       "sha256": "fc17f664ac0509e2c12a9a40ede3bd0b10718d0d646c7d5ba43d2d3557b8b50d"
     },
     {
-      "source": "conversation-scroll.mjs",
-      "path": "conversation-scroll.mjs",
-      "bytes": 2852,
-      "sha256": "53c6525d5e29c42660983792e6f86963e0be202621946c59c6f391077cfe1e20"
-    },
-    {
       "source": "cosmos-background.mjs",
       "path": "cosmos-background.mjs",
       "bytes": 10831,
@@ -2366,8 +2228,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11964,
-      "sha256": "08c63bfd188964056837e53128c742b6784334774557231f563c778680c7f8f2"
+      "bytes": 12035,
+      "sha256": "a667b67d0af15b3514875fd1f11f889fbbadbee66309e764c9c051fb0d368359"
     },
     {
       "source": "journey-experience.css",
@@ -2574,6 +2436,24 @@
       "sha256": "20ec650226e28a3f0a3b981750b1155046e5c4a17e4032f5cd277b5178adb1a5"
     },
     {
+      "source": "noking-action.css",
+      "path": "noking-action.css",
+      "bytes": 871,
+      "sha256": "cd81c82b9d8e5f49dbe6aa6de7d7de1aa3f0c04643fffdb86af25c8791a217f7"
+    },
+    {
+      "source": "noking-action.mjs",
+      "path": "noking-action.mjs",
+      "bytes": 2436,
+      "sha256": "efa076761e6aa7ebe038222e8d289934346f921f011dd7459c9c985de96914b3"
+    },
+    {
+      "source": "noking-avatar-entry.mjs",
+      "path": "noking-avatar-entry.mjs",
+      "bytes": 2671,
+      "sha256": "35865741d34a0131f5f38b400e46e0d734b49ac9659730927241a6a4bfbb696f"
+    },
+    {
       "source": "notebook-motion.mjs",
       "path": "notebook-motion.mjs",
       "bytes": 3358,
@@ -2600,8 +2480,8 @@
     {
       "source": "personal-room-families.mjs",
       "path": "personal-room-families.mjs",
-      "bytes": 7222,
-      "sha256": "7f06de6cea9380384665404dacd120722f9f28d4a067a65b4e0cca680f5ff7cf"
+      "bytes": 7220,
+      "sha256": "f4099240da320e9ffd97da48def5714f111e00a8c43a57766b52c8322d9eae41"
     },
     {
       "source": "personal-room-video.mjs",
@@ -2894,20 +2774,20 @@
     {
       "source": "topic-journey-v92.mjs",
       "path": "topic-journey-v92.mjs",
-      "bytes": 15645,
-      "sha256": "858f1fc3d64a18571b12808b3425fed846124a335e916b188ad2c35e49567bd6"
+      "bytes": 15875,
+      "sha256": "b554feaab627641e8cf207e562b443f37594dede641662c99688acdfd44a55ef"
     },
     {
       "source": "topic-service-v92.mjs",
       "path": "topic-service-v92.mjs",
-      "bytes": 2561,
-      "sha256": "0e5d3bf380a37bf8515c9f76982b1afe2561f92d768be79f1e54673fe0d4d656"
+      "bytes": 2560,
+      "sha256": "4ebae46893c1eb7a3b0d01a698f9169c063826f8235fe54767c1b374dbe8581e"
     },
     {
       "source": "topic-ui-v92.mjs",
       "path": "topic-ui-v92.mjs",
-      "bytes": 3425,
-      "sha256": "36ce473e9036152982b6520cc5bbb0bdfca51b62a0d977660ed974ef4de41a01"
+      "bytes": 3609,
+      "sha256": "f74511957bca4d29618d52bd45002a1756111bedfbd90172ba0e1905331fde3a"
     },
     {
       "source": "typography.css",
@@ -3440,6 +3320,11 @@
       "kind": "resource"
     },
     {
+      "from": "demo.html",
+      "to": "noking-action.css",
+      "kind": "resource"
+    },
+    {
       "from": "app.mjs",
       "to": "notebook-motion.mjs",
       "kind": "module"
@@ -3472,6 +3357,16 @@
     {
       "from": "app.mjs",
       "to": "card-tags-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "noking-avatar-entry.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
+      "to": "noking-action.mjs",
       "kind": "module"
     },
     {
@@ -3767,6 +3662,11 @@
     {
       "from": "topic-ui-v92.mjs",
       "to": "topic-journey-v92.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "topic-ui-v92.mjs",
+      "to": "noking-action.mjs",
       "kind": "module"
     },
     {
@@ -4194,6 +4094,18 @@
     "vendor/three/LICENSE"
   ],
   "dynamicAssets": {
+    "assets/noking-v05/": [
+      "assets/noking-v05/klin/noking-alpha.webp",
+      "assets/noking-v05/klin/poster.png",
+      "assets/noking-v05/spri/noking-alpha.webp",
+      "assets/noking-v05/spri/poster.png",
+      "assets/noking-v05/lumi/noking-alpha.webp",
+      "assets/noking-v05/lumi/poster.png",
+      "assets/noking-v05/flar/noking-alpha.webp",
+      "assets/noking-v05/flar/poster.png",
+      "assets/noking-v05/terr/noking-alpha.webp",
+      "assets/noking-v05/terr/poster.png"
+    ],
     "assets/demo-avatars-20261026-45/": [
       "assets/demo-avatars-20261026-45/b.jpg",
       "assets/demo-avatars-20261026-45/c.jpg",

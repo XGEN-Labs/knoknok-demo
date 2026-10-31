@@ -1,4 +1,5 @@
-import {TOPIC_SKILLS} from './topic-journey-v92.mjs?v=20261031-product-sync';
+import {TOPIC_SKILLS} from './topic-journey-v92.mjs?v=20261031-noking-v06e';
+import {nokingActionMarkup} from './noking-action.mjs?v=20261031-noking-v06e';
 import {loadingIndicatorMarkup} from './loading-state.mjs';
 import {cardMarkup,publicCardData,DEFAULT_CARD_AVATAR} from './public-card.mjs';
 import {friendAvatarSource} from './friend-avatars.mjs';
@@ -10,7 +11,7 @@ export function topicControlsMarkup(journey,{busy=false,error='',ready=true}={})
  if(active){const controls=`${error?`<p role="alert">${esc(error)}</p>`:''}${journey.pending&&!busy?'<button data-action="topic-retry" type="button">重試</button>':''}${!busy&&!journey.pending&&journey.messages.some(m=>m.role==='user')?'<button data-action="topic-finish" type="button">先聊到這裡</button>':''}`;return controls?`<div class="topic-controls">${controls}</div>`:'';}
  return `<div class="topic-shortcuts" aria-label="想聊的主題">${TOPIC_SKILLS.map(topic=>`<button type="button" data-action="topic-start" data-topic-id="${topic.id}">${esc(topic.label)}</button>`).join('')}</div>`;
 }
-export function topicNokingMarkup(profile,{busy=false}={}){return busy?`<div class="topic-noking" role="status" aria-live="polite">${loadingIndicatorMarkup(`${profile?.name||'Nok'} 正在想一想…`)}</div>`:'';}
+export function topicNokingMarkup(profile,{busy=false,noking=null,reducedMotion=false}={}){if(busy&&noking)return nokingActionMarkup(profile,noking,{reducedMotion});return busy?`<div class="topic-noking" role="status" aria-live="polite">${loadingIndicatorMarkup(`${profile?.name||'Nok'} 正在想一想…`)}</div>`:'';}
 export function candidateCardMarkup(person,{reason=''}={}){
  if(!person)return '';
  const data=publicCardData(person,{tags:person.cardTags||[],avatar:friendAvatarSource({id:person.id},person)||DEFAULT_CARD_AVATAR});

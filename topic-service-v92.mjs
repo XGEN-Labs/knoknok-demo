@@ -1,4 +1,4 @@
-import {TOPIC_SKILLS} from './topic-journey-v92.mjs?v=20261031-product-sync';
+import {TOPIC_SKILLS} from './topic-journey-v92.mjs?v=20261031-noking-v06e';
 /** Existing Web chat gateway. Runtime execute_skill is Agent-selected from its
  * published persona pack; no Studio authoring endpoint or invented skill ID.
  * Text replies cannot establish tag/diary/match/completed business events. */

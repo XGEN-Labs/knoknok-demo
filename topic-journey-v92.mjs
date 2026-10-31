@@ -139,11 +139,13 @@ const demoCopy={
 export function createTopicAdapter({mode='production',provider,scenario='reply-only',demoCandidateId=''}={}) {
  if(mode==='production'){
   requireValue(provider&&typeof provider.run==='function','這個主題的 Agent 服務尚未配置，暫時無法使用。');
-  return Object.freeze({mode:'production',run:request=>provider.run(clone(request))});
+  return Object.freeze({mode:'production',run:(request,options)=>provider.run(clone(request),options)});
  }
  requireValue(mode==='demo'&&DEMO_TOPIC_SCENARIOS.includes(scenario),'無法使用這個主題示範配置。');
  if(scenario==='journal-with-match')requireValue(validId(demoCandidateId),'示範推薦需要明確指定示例朋友。');
- return Object.freeze({mode:'demo',scenario,label:'本地示範情境，非實際 Agent 結果',async run(request){
+ return Object.freeze({mode:'demo',scenario,label:'本地示範情境，非實際 Agent 結果',async run(request,{onSkillEvent}={}){
+  // Explicit local fixture; this is not a claimed production Skill invocation.
+  onSkillEvent?.({requestId:request.id,executionId:`demo-noking:${request.id}`,skill:'noking',status:'running'});
   const copy=demoCopy[request.topicId];requireValue(copy,'找不到這個主題示範。');
   const event=(suffix,type,payload={})=>({id:`${request.id}:${suffix}`,ownerId:request.ownerId,sessionId:request.sessionId,type,payload,source:'demo-scenario'});
   if(request.input.type==='start')return [event('reply','reply',{text:copy.question})];
