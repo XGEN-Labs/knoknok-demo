@@ -166,6 +166,8 @@ export function createConversationAvatarMotion(phone, {duration = 620, imageSrc 
     flight = doc.createElement(descriptor.crop?'span':'img'); flight.className = 'conversation-avatar-flight';
     if(descriptor.crop){const image=doc.createElement('img');image.alt='';image.draggable=false;flight.append(image);applyConversationAvatarSource(flight,image,descriptor);Object.assign(flight.style,{position:'absolute',display:'block',pointerEvents:'none',transformOrigin:'top left'});}
     else {flight.src=src;flight.alt='';flight.draggable=false;}
+    // A crop describes alpha-canvas alignment, not a circular room photograph.
+    if(descriptor.alpha)Object.assign(flight.style,{overflow:'visible',borderRadius:'0',background:'transparent',border:'0',boxShadow:'none'});
     flight.setAttribute('aria-hidden','true');
     phone.append(flight); started = win.performance.now();
     if (reducedMotion) arrive(); else if (entryHandoff) depart(source); else animateFrom(source);

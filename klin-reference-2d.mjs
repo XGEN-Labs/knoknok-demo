@@ -411,6 +411,7 @@ export function createKlinWorld({host, reducedMotion = false, roomThemes = ROOM_
       if (conversationAvatarFrame && (conversationEntry || state.conversation || host.parentElement?.dataset?.conversationAvatarMotion)) return conversationAvatarFrame;
       return {src:assetURL(theme.poster),width:theme.width,height:theme.height,crop};
     },
+    get roomCharacterFrame() {const {width,height}=dimensions(),theme=themeConfig();return personalRoomCharacterFrame(width,height,{...theme,actor:theme.actor||{x:151,y:455,width:180,height:180}});},
     get roomAvatarFrame() {const theme=themeConfig(),{width,height}=dimensions();return personalRoomCharacterFrame(width,height,{...theme,actor:avatarCrop()});},
     get status() {return {page: state.page, stage: state.stage, action: state.action?.kind || (personalRoom.status.responding ? 'wave' : 'idle'), world: state.layout.world, rendering: 'illustrated-2d', model: host.dataset.model, nativeReady: false, conversation: state.conversation, roomLight: roomTheme, personalRoom: personalRoom.status, transitionPhase: host.dataset.transitionPhase || 'idle', participants: state.participants.map(person => person.id), lounge: {...state.lounge}, realm: {...state.realm}, portal: state.portal, particleSamples: 0};},
   };

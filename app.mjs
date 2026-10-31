@@ -1,4 +1,5 @@
-import {chatHeaderAvatar,applyChatHeaderAvatar} from './chat-header-avatar.mjs?v=20261101-avatar-solid-v06f';
+import {chatTravelAvatar,chatTravelRoomFrame} from './chat-avatar-travel.mjs?v=20261101-avatar-flight-v06g';
+import {chatHeaderAvatar,applyChatHeaderAvatar} from './chat-header-avatar.mjs?v=20261101-avatar-flight-v06g';
 import { mountNotebookMotion } from './notebook-motion.mjs?v=20261031-product-sync';
 import {TOPIC_SKILLS,createTopicJourney,prepareTopicRequest,retryTopicRequest,createTopicAdapter,applyTopicAgentEvents,commitTopicResult,cancelTopicJourney} from './topic-journey-v92.mjs?v=20261031-noking-v06e';
 import {createChatTopicProvider} from './topic-service-v92.mjs?v=20261031-noking-v06e';
@@ -35,7 +36,7 @@ import { friendAvatarSource } from './friend-avatars.mjs';
 import { createConversationEntryMotion } from './conversation-entry-motion.mjs?v=20261031-product-sync';
 import { createConversationEdgeBlur } from './conversation-edge-blur.mjs?v=20261031-product-sync';
 import { createSceneControlGlass } from './scene-control-glass.mjs?v=20261031-product-sync&glass=61';
-import { createConversationAvatarMotion, applyConversationAvatarSource } from './conversation-avatar-motion.mjs?v=20261031-return-frame-104';
+import { createConversationAvatarMotion, applyConversationAvatarSource } from './conversation-avatar-motion.mjs?v=20261101-avatar-flight-v06g';
 import { createWelcomeLogoMotion } from './welcome-logo-motion.mjs?v=20261031-product-sync';
 import { createLandingVideoScene } from './landing-video-scene.mjs?v=20261031-product-sync';
 import { createLoadingState, loadingIndicatorMarkup } from './loading-state.mjs?v=20261031-product-sync';
@@ -55,7 +56,7 @@ import { landingComplete, onboardingDestination, applyAccountOnboarding } from '
 import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261031-product-sync';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261031-product-sync';
 // Current UI uses the original illustration; native model exploration stays archived.
-import { createKlinWorld } from './klin-reference-2d.mjs?v=20261031-return-frame-104';
+import { createKlinWorld } from './klin-reference-2d.mjs?v=20261101-avatar-flight-v06g';
 import {resolvePersonalRoomPresentation, personalRoomFilmAllowed, personalRoomMarkup} from './personal-room-families.mjs?v=20261031-noking-v06e';
 import { createLoginVideoScene as createLoginSceneBridge, LOGIN_VIDEO_POSTER } from './login-video-scene.mjs?v=20261031-product-sync';
 import { HOME_SCENE_ASSET, WELCOME_SCENE_ASSET, VISIT_SCENE_ASSET, SHARED_SCENE_ASSET } from './scene-assets.mjs?v=20261031-product-sync';
@@ -472,7 +473,7 @@ function setHomeConversation(active){
   const phone=$('#phone'),reducedMotion=prefersStillness(ui.motion);
   const departure=next&&!reducedMotion&&!conversationAvatarMotion?.active?klinWorld?.prepareConversationEntry?.():null;
   syncPersonalRoomAvatar();
-  conversationAvatarMotion ||= createConversationAvatarMotion(phone,{imageSrc:()=>currentRoomAvatar()||currentAvatar(),roomFrame:()=>klinWorld?.roomAvatarFrame});
+  conversationAvatarMotion ||= createConversationAvatarMotion(phone,{imageSrc:()=>chatTravelAvatar(currentHeaderElement()),roomFrame:()=>chatTravelRoomFrame(klinWorld?.roomCharacterFrame,currentHeaderElement())});
   conversationAvatarMotion.move(next,{reducedMotion,prepareEntry:()=>departure,prepareReturn:()=>klinWorld?.prepareConversationReturn?.(),mutate(){
     conversationActive=next;phone.dataset.conversation=String(next);
     if(next&&!reducedMotion)phone.dataset.conversationEntering='true';else delete phone.dataset.conversationEntering;
