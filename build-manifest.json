@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-31T15:48:26.682Z",
+  "createdAt": "2026-10-31T16:50:02.302Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 178868347,
+  "payloadBytes": 179694390,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 149133,
-      "sha256": "355a495806a830f85c08f39ed935157d901b2a79504f6d905d228290752f6d3b"
+      "bytes": 149392,
+      "sha256": "ddcdf41ab44e916ca7488ad02b226da78ffa0abe677dbdfe0779868ef99eaa87"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -76,6 +76,30 @@
       "path": "assets/card-paper-20261027/ivory-cotton.jpg",
       "bytes": 492869,
       "sha256": "3906bb76c704d172c741ec9c5ae55400d534b81598eb74ce8adc260f8ff7c805"
+    },
+    {
+      "source": "assets/chat-avatars-20261101/flar.png",
+      "path": "assets/chat-avatars-20261101/flar.png",
+      "bytes": 215607,
+      "sha256": "a8b6811ebcb9acae7b05e0ee9f3a86cdc0b82095e0811b86618e139f5b1f6cf2"
+    },
+    {
+      "source": "assets/chat-avatars-20261101/lumi.png",
+      "path": "assets/chat-avatars-20261101/lumi.png",
+      "bytes": 212945,
+      "sha256": "8f540b15522cacd31911bd59928beb792fd42958e5d641279f209c09bcc13bcd"
+    },
+    {
+      "source": "assets/chat-avatars-20261101/spri.png",
+      "path": "assets/chat-avatars-20261101/spri.png",
+      "bytes": 194815,
+      "sha256": "d154d327bad5e65df0ab6435aa06b006c43dd978433d17f17df6295bcbceb7c4"
+    },
+    {
+      "source": "assets/chat-avatars-20261101/terr.png",
+      "path": "assets/chat-avatars-20261101/terr.png",
+      "bytes": 200808,
+      "sha256": "c1da098636dc265c52254825361150c7b705a146e3649a8793c25f6014ecaa79"
     },
     {
       "source": "assets/cloud-realm-20261019/arrival.webp",
@@ -1950,6 +1974,12 @@
       "sha256": "4ef6ca316b69bba48e77b0aad45843c283e020b55b13fa7ec53fab8a6a9a3b28"
     },
     {
+      "source": "chat-header-avatar.mjs",
+      "path": "chat-header-avatar.mjs",
+      "bytes": 1603,
+      "sha256": "36819403f35965a6ec96c518dfec04420170158fb4f46c804e7dc447b4438865"
+    },
+    {
       "source": "chat-header-v41.css",
       "path": "chat-header-v41.css",
       "bytes": 10290,
@@ -2228,8 +2258,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 12035,
-      "sha256": "a667b67d0af15b3514875fd1f11f889fbbadbee66309e764c9c051fb0d368359"
+      "bytes": 12041,
+      "sha256": "124d1f82478b44533951131f203a3af01bc7e747984f923cf6a6ae21970205a7"
     },
     {
       "source": "journey-experience.css",
@@ -3326,6 +3356,11 @@
     },
     {
       "from": "app.mjs",
+      "to": "chat-header-avatar.mjs",
+      "kind": "module"
+    },
+    {
+      "from": "app.mjs",
       "to": "notebook-motion.mjs",
       "kind": "module"
     },
@@ -3648,6 +3683,11 @@
       "from": "conversation-experience.css",
       "to": "public-card.css",
       "kind": "resource"
+    },
+    {
+      "from": "chat-header-avatar.mjs",
+      "to": "conversation-avatar-motion.mjs",
+      "kind": "module"
     },
     {
       "from": "topic-journey-v92.mjs",
