@@ -1,3 +1,4 @@
+import {mountFriendWorldAfterPaint} from './friend-world-entry.mjs?v=20261101-visit-loading-107';
 import {chatTravelAvatar,chatTravelRoomFrame} from './chat-avatar-travel.mjs?v=20261101-avatar-flight-v06g';
 import {chatHeaderAvatar,applyChatHeaderAvatar} from './chat-header-avatar.mjs?v=20261101-avatar-flight-v06g';
 import { mountNotebookMotion } from './notebook-motion.mjs?v=20261031-product-sync';
@@ -22,11 +23,11 @@ import { tagManagementMarkup, historyTagPickerMarkup, tagChatMarkup, diaryCalend
 import { notebookMarkup } from './notebook-ui-v92.mjs?v=20261031-product-sync';
 import { settingsPanelMarkup, languagePanelMarkup, cardSharePanelMarkup, SETTINGS_LANGUAGES } from './product-panels-v92.mjs?v=20261031-product-sync';
 import { socialTagStickerMarkup } from './tag-stickers.mjs?v=20261031-product-sync';
-import { mountFriendWorld } from './friend-world.mjs?v=20261031-product-sync';
+import { mountFriendWorld } from './friend-world.mjs?v=20261101-visit-loading-107';
 import { mountCosmosBackground } from './cosmos-background.mjs?v=20261031-product-sync';
 let cosmosBackground=null;
 let friendWorld=null,friendWorldOrientation={yaw:0,pitch:0};
-import { renderFriendNetwork } from './friend-network.mjs?v=20261031-product-sync';
+import { renderFriendNetwork } from './friend-network.mjs?v=20261101-visit-loading-107';
 import { SHARED_MEADOW_ASSET, sharedSpaceSceneMarkup, sharedSpacePeopleMarkup } from './shared-space-v92.mjs?v=20261031-product-sync';
 import { bindSharedVoiceComposer } from './shared-voice-v92.mjs?v=20261031-product-sync';
 import { sharedMessageMarkup } from './shared-message-identity.mjs?v=20261031-product-sync';
@@ -884,7 +885,9 @@ function render(animate=false,motion={}){
   // Returning from the globe reveals the authored room directly; the legacy
   // actor travel would briefly replace the character already in that scene.
   const directRoomReturn=oldPage?.dataset.screen==='relations'&&ui.route==='home';
-  const useTransition=animate&&oldPage&&routeChanged&&!directRoomReturn&&!['welcome','login','register','verify','landing'].includes(ui.route)&&oldPage.dataset.screen!=='welcome'&&((!sceneOverlay&&!wasOverlay)||cardEntry)&&!prefersStillness(ui.motion);
+  // The visit page owns its loading stage; don't hide it behind room travel.
+  const directVisitEntry=routeChanged&&ui.route==='relations';
+  const useTransition=animate&&oldPage&&routeChanged&&!directRoomReturn&&!directVisitEntry&&!['welcome','login','register','verify','landing'].includes(ui.route)&&oldPage.dataset.screen!=='welcome'&&((!sceneOverlay&&!wasOverlay)||cardEntry)&&!prefersStillness(ui.motion);
   const previous=useTransition?oldPage:null;
   const scrollPositions=useTransition?[...oldPage.querySelectorAll('.content')].map(node=>({node,top:node.scrollTop,left:node.scrollLeft})):[];
   const source=useTransition?captureCompanion(oldPage,$('#phone')):null;
@@ -896,7 +899,7 @@ function render(animate=false,motion={}){
   app.innerHTML=views[ui.route]();
   restoreNokingNode(app,previousNoking);
   if(ui.route==='relations')cosmosBackground=mountCosmosBackground(app.querySelector('.network-scene-source'),{reducedMotion:prefersStillness(ui.motion)});
-  if(ui.route==='relations')friendWorld=mountFriendWorld(app.querySelector('.spirit-world'),{reducedMotion:prefersStillness(ui.motion),orientation:friendWorldOrientation,onRotate:value=>{friendWorldOrientation=value;}});
+  if(ui.route==='relations')friendWorld=mountFriendWorldAfterPaint(app.querySelector('.spirit-world'),{reducedMotion:prefersStillness(ui.motion),orientation:friendWorldOrientation,onRotate:value=>{friendWorldOrientation=value;}},mountFriendWorld);
   if(ui.route==='home')setHomeEntryControlsHidden(useTransition);
   cleanFormControls=initFormControls(app);cleanDatePickers=initDatePickers(app,{onConfirm:input=>{if(ui.route==='landing'&&getOnboardingTurn(state).key==='birthDate'&&input===$('#onboarding-calendar'))answerOnboarding(input.value);}});initTypography(app);
   const hourPicker=app.querySelector('[data-birth-time-picker]');

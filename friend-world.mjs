@@ -21,8 +21,8 @@ export function mountFriendWorld(root,{reducedMotion=false,orientation={yaw:0,pi
   onChange(state){
    if(disposed)return;
    root.dataset.worldState=state.status;root.setAttribute('aria-busy',String(state.status==='loading'));
-   if(loader)loader.hidden=!state.visible;
-   onStateChange(state);
+   if(loader)loader.hidden=state.status!=='loading';
+   onStateChange({...state,visible:state.status==='loading'});
   },
   onTimeout(keys){if(keys.includes('material'))useFallback();keys.forEach(key=>{if(key.startsWith('image-'))failedImage(images[Number(key.slice(6))]);});},
  });
@@ -101,5 +101,5 @@ export function mountFriendWorld(root,{reducedMotion=false,orientation={yaw:0,pi
  const observer=new ResizeObserver(resize);observer.observe(viewport);const keyboardObserver=new MutationObserver(resize);if(phone)keyboardObserver.observe(phone,{attributes:true,attributeFilter:['data-keyboard-open']});
  if(root.dataset.worldFiltered==='true'){searchOrientation={yaw,pitch};focusSearchMatch();}
  resize();
- return {ready:gate.ready,getState:gate.getState,setQuery,dispose(){if(disposed)return;gate.dispose();disposed=true;imageCleanups.forEach(clean=>clean());observer.disconnect();keyboardObserver.disconnect();viewport.removeEventListener('pointerdown',down);viewport.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);viewport.removeEventListener('lostpointercapture',cancel);viewport.removeEventListener('wheel',wheel);viewport.removeEventListener('keydown',key);root.removeEventListener('click',click,true);canvas.removeEventListener('webglcontextlost',lost);sceneRoot?.removeEventListener('kn-cosmos-tick',spaceFrame);fluid?.dispose();renderer?.dispose();}};
+ return {ready:gate.ready,getState:()=>{const state=gate.getState();return {...state,visible:state.status==='loading'};},setQuery,dispose(){if(disposed)return;gate.dispose();disposed=true;imageCleanups.forEach(clean=>clean());observer.disconnect();keyboardObserver.disconnect();viewport.removeEventListener('pointerdown',down);viewport.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',cancel);viewport.removeEventListener('lostpointercapture',cancel);viewport.removeEventListener('wheel',wheel);viewport.removeEventListener('keydown',key);root.removeEventListener('click',click,true);canvas.removeEventListener('webglcontextlost',lost);sceneRoot?.removeEventListener('kn-cosmos-tick',spaceFrame);fluid?.dispose();renderer?.dispose();}};
 }

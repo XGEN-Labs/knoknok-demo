@@ -1,15 +1,15 @@
 {
   "format": "knokknok-static-demo-v1",
-  "createdAt": "2026-10-31T18:31:44.340Z",
+  "createdAt": "2026-10-31T18:50:48.970Z",
   "entry": "index.html",
   "variant": "klin",
-  "payloadBytes": 179696970,
+  "payloadBytes": 179699764,
   "files": [
     {
       "source": "app.mjs",
       "path": "app.mjs",
-      "bytes": 149564,
-      "sha256": "23c3e9cfb24f1a107fc94ae9d7a9e56bda3b29c2617d949db04ea691ac01d66e"
+      "bytes": 149859,
+      "sha256": "d138a154b436673923fcf5bb93d2d831981920e9e4d03b6089c5f0375306eab7"
     },
     {
       "source": "assets/brand-20261016/default-cloud-avatar.svg",
@@ -2180,20 +2180,26 @@
     {
       "source": "friend-network-v41.css",
       "path": "friend-network-v41.css",
-      "bytes": 9084,
-      "sha256": "6938577d655ecd40a50f2c0e0890b7835abd22b6b281a54550e81b275bc2d2f1"
+      "bytes": 9517,
+      "sha256": "74a1642ef9792b1cbb0e32d619eaf4d0bad9a8780b56ebb2f39b5b129d8c2353"
     },
     {
       "source": "friend-network.mjs",
       "path": "friend-network.mjs",
-      "bytes": 2771,
-      "sha256": "97aa79af91583399de266fd52a5076ae87a365bf1248f114e41594b9d50dc9b0"
+      "bytes": 2851,
+      "sha256": "f1f608e14200263ae2fd94197fffde3331eddbfd194b06e6319bb899f19346f5"
     },
     {
       "source": "friend-room.mjs",
       "path": "friend-room.mjs",
       "bytes": 977,
       "sha256": "5a48a955ea87f62ca09ae3e03f368d036804dee7ad21dc938bf2305325371922"
+    },
+    {
+      "source": "friend-world-entry.mjs",
+      "path": "friend-world-entry.mjs",
+      "bytes": 1861,
+      "sha256": "07cb9b66a05c85b7d42f60b68d7c22c2e4c089b2132550bcddc80e0fc58f4383"
     },
     {
       "source": "friend-world-fluid.mjs",
@@ -2222,8 +2228,8 @@
     {
       "source": "friend-world.mjs",
       "path": "friend-world.mjs",
-      "bytes": 10364,
-      "sha256": "7fdfead5a7e6cfbe64739be1e0e832c72a3b27c975d9519fa0983b6a22a6dac9"
+      "bytes": 10484,
+      "sha256": "363d3d9d6a9e0ea840189c8d0968a60c65c91505a093f1339f6f0e4cf7c5f13b"
     },
     {
       "source": "glass-contract.css",
@@ -2264,8 +2270,8 @@
     {
       "source": "demo.html",
       "path": "index.html",
-      "bytes": 11864,
-      "sha256": "3a5ed3d357b9e004d505b9a94bf88ea783970c737fb13e2169227fd62e38b242"
+      "bytes": 11869,
+      "sha256": "5e020a914d4328528b8b109221a7c863054d44b2efd1466f91869e8a3599f663"
     },
     {
       "source": "journey-experience.css",
@@ -3359,6 +3365,11 @@
       "from": "demo.html",
       "to": "noking-action.css",
       "kind": "resource"
+    },
+    {
+      "from": "app.mjs",
+      "to": "friend-world-entry.mjs",
+      "kind": "module"
     },
     {
       "from": "app.mjs",
