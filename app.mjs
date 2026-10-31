@@ -53,7 +53,7 @@ import { initDatePickers } from './date-picker.mjs?v=20261031-product-sync';
 import { initTypography } from './typography.mjs?v=20261031-product-sync';
 import { createSceneSound } from './scene-sound.mjs?v=20261031-product-sync';
 import { landingComplete, onboardingDestination, applyAccountOnboarding } from './landing.mjs?v=20261031-product-sync';
-import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261031-product-sync';
+import { navIcon, backArrow, sendArrow, uiIcon } from './ui-icons.mjs?v=20261101-visit-history-105';
 import { DEFAULT_CARD_AVATAR, normalizePersonalityTags, normalizeCardAvatar, publicCardData, encodeCard, decodeCard, cardMarkup, cardShareURL, downloadCard, prepareCardFonts } from './public-card.mjs?v=20261031-product-sync';
 // Current UI uses the original illustration; native model exploration stays archived.
 import { createKlinWorld } from './klin-reference-2d.mjs?v=20261101-avatar-flight-v06g';
@@ -593,7 +593,7 @@ function friendsSheet(){
 function relations(){
  const friends=getDemoFriends(state),query=String(ui.networkQuery||'').trim().toLocaleLowerCase();
  const matches=friend=>!query||`${friend.name} ${(friend.interests||[]).join(' ')} ${friend.recent||''}`.toLocaleLowerCase().includes(query),visibleCount=friends.filter(matches).length;
- return shell(`<div class="network-scene-source" aria-hidden="true"><img src="assets/visit-cosmos-20261027-55/quiet-cosmos.svg" alt="" draggable="false"><canvas class="cosmos-canvas" hidden></canvas></div>`+top('串門','',`<button type="button" class="scene-icon" data-action="visit-history" aria-label="串門記錄">${uiIcon('diary')}</button>`)+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:Object.fromEntries(friends.map(friend=>[friend.id,{...state.users[friend.id],companion:displayedCompanion(friend.id)}])),query})}`,'friends-lounge');
+ return shell(`<div class="network-scene-source" aria-hidden="true"><img src="assets/visit-cosmos-20261027-55/quiet-cosmos.svg" alt="" draggable="false"><canvas class="cosmos-canvas" hidden></canvas></div>`+top('串門','',`<button type="button" class="scene-icon" data-action="visit-history" aria-label="串門記錄">${uiIcon('history')}</button>`)+`<div class="network-search">${uiIcon('search')}<input type="search" id="network-query" aria-label="搜尋朋友或話題" placeholder="搜尋朋友或話題" autocomplete="off" value="${esc(ui.networkQuery||'')}"><button type="button" data-action="clear-network-search" aria-label="清除搜尋" ${query?'':'hidden'}>×</button></div><div class="network-search-status" role="status">${query?`找到 ${visibleCount} 位朋友`:''}</div>${renderFriendNetwork({friends,users:Object.fromEntries(friends.map(friend=>[friend.id,{...state.users[friend.id],companion:displayedCompanion(friend.id)}])),query})}`,'friends-lounge');
 }
 function filterNetwork(value){
  ui.networkQuery=value;save();const query=value.trim().toLocaleLowerCase();let count=0;
